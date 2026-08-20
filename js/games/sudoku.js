@@ -136,7 +136,7 @@ window.Games.sudoku = (function () {
 
     root.innerHTML =
       '<section class="intro">' +
-        '<div class="intro__mark">▦</div>' +
+        '<div class="intro__mark">수</div>' +
         '<h2 class="intro__title">스도쿠</h2>' +
         '<p class="intro__desc">가로줄·세로줄·굵은 네모 칸마다<br>1부터 9까지 한 번씩만 들어갑니다.</p>' +
         (best ? '<p class="intro__best">나의 최고 기록 <b>' + UI.comma(best.score) + '점</b></p>' : '') +
@@ -445,7 +445,7 @@ window.Games.sudoku = (function () {
   /* ================= 진입점 ================= */
 
   return {
-    id: 'sudoku', name: '스도쿠', icon: '▦',
+    id: 'sudoku', name: '스도쿠', icon: '수',
     rules: {
       title: '스도쿠 점수 규칙',
       lines: [

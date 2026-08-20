@@ -1,7 +1,7 @@
 /* 맑은뜰 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v13';                // sw.js 의 VERSION 과 함께 올린다
+  var APP_VERSION = 'v14';                // sw.js 의 VERSION 과 함께 올린다
   var GAMES = ['sudoku', 'wordsearch', 'quiz'];
   var MAX_PER_GAME = 1250;               // 한 게임에서 받을 수 있는 최고 점수
   var MAX_DAY = MAX_PER_GAME * GAMES.length;
@@ -122,6 +122,26 @@ window.App = (function () {
 
   /* ================= 홈 ================= */
 
+  /** 오늘 점수를 고리로 보여 준다 — 얼마나 채웠는지 한눈에 보이도록 */
+  function progressRing(total) {
+    var pct = Math.max(0, Math.min(1, total / MAX_DAY));
+    var R = 34, C = 2 * Math.PI * R;
+    var doneCount = 0, best = Store.dayBest();
+    GAMES.forEach(function (g) { if (best[g] !== null) doneCount++; });
+
+    return '<div class="ring">' +
+      '<svg class="ring__svg" width="86" height="86" viewBox="0 0 86 86" aria-label="오늘 ' + Math.round(pct * 100) + '퍼센트 채움">' +
+        '<circle class="ring__track" cx="43" cy="43" r="' + R + '" fill="none" stroke-width="10"></circle>' +
+        '<circle class="ring__fill" cx="43" cy="43" r="' + R + '" fill="none" stroke-width="10" stroke-linecap="round"' +
+          ' stroke-dasharray="' + (C * pct).toFixed(1) + ' ' + C.toFixed(1) + '" transform="rotate(-90 43 43)"></circle>' +
+      '</svg>' +
+      '<div class="ring__body">' +
+        '<div class="today__score"><b>' + UI.comma(total) + '</b><span>점</span></div>' +
+        '<p class="today__meta">오늘 ' + doneCount + ' / 3 종목 완료<br>하루 만점 ' + UI.comma(MAX_DAY) + '점</p>' +
+      '</div>' +
+    '</div>';
+  }
+
   function renderHome() {
     var today = Store.dayKey();
     var best = Store.dayBest(today);
@@ -148,11 +168,7 @@ window.App = (function () {
             '<span class="today__date">' + lbl.text + '</span>' +
             (streak > 0 ? '<span class="badge">연속 ' + streak + '일째</span>' : '<span class="badge badge--soft">오늘 시작해요</span>') +
           '</div>' +
-          '<div class="today__score">' +
-            '<b>' + UI.comma(total) + '</b><span>점</span>' +
-          '</div>' +
-          '<div class="today__bar"><i style="width:' + Math.min(100, total / MAX_DAY * 100) + '%"></i></div>' +
-          '<p class="today__meta">오늘 ' + doneCount + '/3 종목 완료 · 하루 만점 ' + UI.comma(MAX_DAY) + '점</p>' +
+          progressRing(total) +
         '</div>' +
 
         '<h2 class="sec">오늘의 게임</h2>' +
@@ -161,13 +177,16 @@ window.App = (function () {
             var G = Games[g];
             var s = best[g];
             var resume = G.hasProgress();
+            var sub = resume ? '이어서 할 수 있어요' : (s !== null ? '오늘 최고 기록' : '아직 안 하셨어요');
+            var right = s !== null
+              ? '<span class="gcard__go">' + UI.comma(s) + '<small>점</small></span>'
+              : '<span class="gcard__go is-new">' + (resume ? '이어하기' : '시작하기') + '</span>';
             return '<button class="gcard" data-go="' + g + '">' +
               '<span class="gcard__ico">' + G.icon + '</span>' +
               '<span class="gcard__body">' +
                 '<span class="gcard__name">' + G.name + '</span>' +
-                '<span class="gcard__sub">' + (s !== null ? '오늘 최고 ' + UI.comma(s) + '점' : '아직 안 하셨어요') + '</span>' +
-              '</span>' +
-              '<span class="gcard__go">' + (resume ? '이어하기' : (s !== null ? '한 판 더' : '시작')) + ' →</span>' +
+                '<span class="gcard__sub">' + sub + '</span>' +
+              '</span>' + right +
             '</button>';
           }).join('') +
         '</div>' +
@@ -183,7 +202,7 @@ window.App = (function () {
           '<button class="btn btn--ghost" id="hmRecords">기록 자세히</button>' +
         '</div>' +
 
-        '<p class="tipline">💡 매일 조금씩, 세 종목을 골고루 하는 것이 두뇌 건강에 좋습니다.</p>' +
+        '<p class="tipline">매일 조금씩, 세 종목을 골고루 하는 것이 두뇌 건강에 좋습니다.</p>' +
       '</section>';
 
     view.querySelectorAll('[data-go]').forEach(function (b) {
@@ -362,7 +381,7 @@ window.App = (function () {
     var others = GAMES.concat(['records']).filter(function (g) { return g !== from; });
     var body = '<div class="switcher">' + others.map(function (g) {
       var name = g === 'records' ? '나의 기록' : Games[g].name;
-      var ico = g === 'records' ? '✦' : Games[g].icon;
+      var ico = g === 'records' ? '록' : Games[g].icon;
       var sub = g === 'records' ? '날짜별 점수 보기'
         : (Games[g].hasProgress() ? '진행 중인 판이 있습니다' : '새로 시작하기');
       return '<button class="switcher__item" data-go="' + g + '">' +

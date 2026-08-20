@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<meta name="theme-color" content="#F4EEE2">
+<meta name="theme-color" content="#FFFFFF">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="description" content="스도쿠 · 낱말찾기 · 상식퀴즈를 하루 세 판. 날짜별 점수가 기록되는 두뇌 훈련 플랫폼">
@@ -15,16 +15,14 @@
 <meta name="apple-mobile-web-app-title" content="맑은뜰">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gothic+A1:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800;900&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<div class="grain" aria-hidden="true"></div>
-
 <header class="appbar" id="appbar">
   <button class="appbar__back" id="btnBack" hidden aria-label="뒤로">←</button>
-  <div class="seal" aria-hidden="true"><span>맑</span></div>
+  <div class="seal" aria-hidden="true">맑</div>
   <div class="appbar__title">
     <h1 id="appTitle">맑은뜰</h1>
     <p id="appSub">하루 세 판, 머리가 맑아지는 시간</p>
@@ -35,11 +33,11 @@
 <main id="view" class="view" tabindex="-1"></main>
 
 <nav class="tabbar" id="tabbar" aria-label="게임 전환">
-  <button class="tab" data-route="home"><span class="tab__ico">⌂</span><span class="tab__lbl">홈</span></button>
-  <button class="tab" data-route="sudoku"><span class="tab__ico">▦</span><span class="tab__lbl">스도쿠</span></button>
-  <button class="tab" data-route="wordsearch"><span class="tab__ico">語</span><span class="tab__lbl">낱말찾기</span></button>
-  <button class="tab" data-route="quiz"><span class="tab__ico">?</span><span class="tab__lbl">상식퀴즈</span></button>
-  <button class="tab" data-route="records"><span class="tab__ico">✦</span><span class="tab__lbl">기록</span></button>
+  <button class="tab" data-route="home"><span class="tab__lbl">홈</span></button>
+  <button class="tab" data-route="sudoku"><span class="tab__lbl">스도쿠</span></button>
+  <button class="tab" data-route="wordsearch"><span class="tab__lbl">낱말찾기</span></button>
+  <button class="tab" data-route="quiz"><span class="tab__lbl">상식퀴즈</span></button>
+  <button class="tab" data-route="records"><span class="tab__lbl">기록</span></button>
 </nav>
 
 <div class="modal-root" id="modalRoot" hidden></div>

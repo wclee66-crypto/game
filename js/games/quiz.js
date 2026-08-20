@@ -116,7 +116,7 @@ window.Games.quiz = (function () {
 
     root.innerHTML =
       '<section class="intro">' +
-        '<div class="intro__mark">?</div>' +
+        '<div class="intro__mark">상</div>' +
         '<h2 class="intro__title">상식 퀴즈</h2>' +
         '<p class="intro__desc">네 개의 보기 가운데 하나를 고릅니다.<br>빨리 맞힐수록 점수가 높습니다.<br><small>어려운 판일수록 문제가 어렵고 시간도 짧습니다.</small></p>' +
         (best ? '<p class="intro__best">나의 최고 기록 <b>' + UI.comma(best.score) + '점</b></p>' : '') +
@@ -400,7 +400,7 @@ window.Games.quiz = (function () {
   }
 
   return {
-    id: 'quiz', name: '상식 퀴즈', icon: '?',
+    id: 'quiz', name: '상식 퀴즈', icon: '상',
     rules: {
       title: '상식 퀴즈 점수 규칙',
       lines: [

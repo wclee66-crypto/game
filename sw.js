@@ -4,7 +4,7 @@
  * 인터넷이 없거나 서버가 꺼져 있으면 저장해 둔 파일로 실행합니다.
  * 파일을 고친 뒤에는 아래 VERSION 을 올려 주세요. (js/app.js 의 APP_VERSION 도 같이)
  */
-var VERSION = 'malgeunddeul-v13';
+var VERSION = 'malgeunddeul-v14';
 var ASSETS = [
   './', './index.html', './manifest.json',
   './css/style.css',

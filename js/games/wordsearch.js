@@ -10,7 +10,9 @@ window.Games.wordsearch = (function () {
     hard:   { name: '어려움', size: 12, count: 10, limit: 600, bonus: 250, dirs: [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1], [-1, 0], [-1, -1], [1, -1]] }
   };
 
-  var HUES = ['#4E8C7D', '#C8452F', '#B07A1E', '#5C6BB0', '#8A5A9B', '#3F7EA6', '#A0562E', '#6B8E3A', '#B4506E', '#427C5C'];
+  /* 찾은 낱말을 칠하는 색 — 포인트 초록에서 시작해 서로 잘 구분되는 순서로 */
+  var HUES = ['#0E9E62', '#2F6FED', '#D98324', '#7C5CD6', '#0E8FA8',
+              '#D6456B', '#5B9E1E', '#C2458F', '#4C4CCB', '#A2703B'];
 
   var S = null, root = null, timer = null, els = {};
   var mounted = false;   // 이 게임이 화면에 올라와 있는가
@@ -98,7 +100,7 @@ window.Games.wordsearch = (function () {
 
     root.innerHTML =
       '<section class="intro">' +
-        '<div class="intro__mark">語</div>' +
+        '<div class="intro__mark">낱</div>' +
         '<h2 class="intro__title">낱말찾기</h2>' +
         '<p class="intro__desc">글자판 속에 숨은 낱말을<br>손가락으로 쭉 그어 찾습니다.<br><small>글자를 하나씩 눌러 이어 붙여도 됩니다.<br>고른 칸은 낱말이 될 때까지 색이 남습니다.</small></p>' +
         (best ? '<p class="intro__best">나의 최고 기록 <b>' + UI.comma(best.score) + '점</b></p>' : '') +
@@ -421,7 +423,7 @@ window.Games.wordsearch = (function () {
   }
 
   return {
-    id: 'wordsearch', name: '낱말찾기', icon: '語',
+    id: 'wordsearch', name: '낱말찾기', icon: '낱',
     rules: {
       title: '낱말찾기 점수 규칙',
       lines: [
