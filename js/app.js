@@ -1,0 +1,500 @@
+/* 맑은뜰 — 화면 전환과 홈·기록 화면 */
+window.App = (function () {
+
+  var APP_VERSION = 'v13';                // sw.js 의 VERSION 과 함께 올린다
+  var GAMES = ['sudoku', 'wordsearch', 'quiz'];
+  var MAX_PER_GAME = 1250;               // 한 게임에서 받을 수 있는 최고 점수
+  var MAX_DAY = MAX_PER_GAME * GAMES.length;
+
+  var view, current = null, here = 'home';
+
+  /* ================= 앱 설치 ================= */
+  /* 크롬 계열은 설치 조건을 만족하면 beforeinstallprompt 를 보내 준다.
+     그 순간을 잡아 두었다가 홈 화면의 '앱으로 설치' 버튼에 연결한다. */
+  var installEvent = null;
+
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    installEvent = e;
+    if (here === 'home' && view) renderHome();
+  });
+  window.addEventListener('appinstalled', function () {
+    installEvent = null;
+    UI.toast('홈 화면에 설치되었습니다.');
+    if (here === 'home' && view) renderHome();
+  });
+
+  function ua() { return navigator.userAgent || ''; }
+
+  function isStandalone() {
+    return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+           navigator.standalone === true;
+  }
+  function isIOS() {
+    return /iPad|iPhone|iPod/.test(ua()) ||
+           (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  }
+  /** 카카오톡·네이버 등 앱 안에 들어 있는 간이 브라우저 — 설치가 아예 불가능하다 */
+  function isInApp() {
+    return /KAKAOTALK|NAVER\(inapp|Instagram|FBAN|FBAV|FB_IAB|Line\/|DaumApps|everytimeApp|kakaostory|Snapchat/i.test(ua());
+  }
+  /** iOS에서 진짜 Safari인지 (크롬·엣지 등은 설치가 제대로 되지 않는다) */
+  function isIOSSafari() {
+    return isIOS() && !/CriOS|FxiOS|EdgiOS|OPiOS|Whale/i.test(ua());
+  }
+
+  function tip(title, detail) {
+    return '<div class="install install--tip">' +
+      '<span class="install__ico">⤓</span>' +
+      '<span class="install__txt">' + UI.esc(title) + '<em>' + detail + '</em></span></div>';
+  }
+
+  function installCard() {
+    if (isStandalone()) return '';                     // 이미 앱으로 실행 중 — 안내 불필요
+
+    if (isInApp()) {
+      return tip('여기서는 설치할 수 없습니다',
+        '카카오톡·네이버 앱 안에서 열린 화면입니다.<br>오른쪽 위 <b>⋮</b> 또는 <b>⋯</b> → <b>다른 브라우저로 열기</b> 를 눌러<br>크롬이나 삼성 인터넷에서 다시 열어 주세요.');
+    }
+
+    if (installEvent) {                                // 크롬 계열이 설치 가능하다고 알려 온 상태
+      return '<button class="install" id="hmInstall">' +
+        '<span class="install__ico">⤓</span>' +
+        '<span class="install__txt">앱으로 설치하기<em>홈 화면에 아이콘이 생기고, 인터넷 없이도 열립니다</em></span>' +
+        '</button>';
+    }
+
+    if (isIOSSafari()) {
+      return tip('앱으로 설치하려면',
+        '아래쪽 <b>공유 버튼 ⬆</b> → <b>홈 화면에 추가</b> 를 누르세요.<br>아이폰은 이것이 정식 설치 방법입니다.');
+    }
+    if (isIOS()) {
+      return tip('Safari로 열어 주세요',
+        '아이폰·아이패드는 <b>Safari</b>에서만 앱으로 설치됩니다.<br>이 주소를 Safari에서 다시 열어 주세요.');
+    }
+
+    return tip('앱으로 설치하려면',
+      '브라우저 메뉴 <b>⋮</b> → <b>앱 설치</b> 를 누르세요.<br>“홈 화면에 추가”만 보이면 <b>새로고침</b> 한 번 뒤 다시 열어 보세요.');
+  }
+
+  function doInstall() {
+    if (!installEvent) return;
+    installEvent.prompt();
+    installEvent.userChoice.then(function (res) {
+      if (res && res.outcome === 'accepted') installEvent = null;
+      if (here === 'home' && view) renderHome();
+    });
+  }
+
+  /* ================= 라우터 ================= */
+
+  function go(route) {
+    if (current && Games[current]) Games[current].unmount();
+    current = GAMES.indexOf(route) >= 0 ? route : null;
+    here = route;
+
+    document.querySelectorAll('.tab').forEach(function (t) {
+      t.classList.toggle('is-on', t.dataset.route === route);
+    });
+    document.getElementById('btnBack').hidden = (route === 'home');
+
+    var titles = {
+      home: ['맑은뜰', '하루 세 판, 머리가 맑아지는 시간'],
+      records: ['나의 기록', '날짜별 점수를 모아 봅니다'],
+      sudoku: ['스도쿠', '숫자로 하는 두뇌 체조'],
+      wordsearch: ['낱말찾기', '글자판 속 숨은 낱말'],
+      quiz: ['상식 퀴즈', '아는 만큼 빨리 맞히기']
+    }[route] || titles_default();
+    document.getElementById('appTitle').textContent = titles[0];
+    document.getElementById('appSub').textContent = titles[1];
+
+    view.innerHTML = '';
+    view.scrollTop = 0;
+    window.scrollTo(0, 0);
+
+    if (route === 'home') renderHome();
+    else if (route === 'records') renderRecords();
+    else Games[route].mount(view);
+
+    location.hash = route;
+  }
+  function titles_default() { return ['맑은뜰', '하루 세 판, 머리가 맑아지는 시간']; }
+
+  /* ================= 홈 ================= */
+
+  function renderHome() {
+    var today = Store.dayKey();
+    var best = Store.dayBest(today);
+    var total = Store.dayTotal(today);
+    var lbl = Store.labelOf(today);
+    var streak = Store.streak();
+
+    var days = Store.lastDays(7);
+    var chartData = days.map(function (k) {
+      var l = Store.labelOf(k);
+      return { label: l.weekday, value: Store.dayTotal(k), today: k === today };
+    });
+    var chartMax = Math.max(1000, Math.max.apply(null, chartData.map(function (d) { return d.value; })));
+
+    var doneCount = GAMES.filter(function (g) { return best[g] !== null; }).length;
+
+    view.innerHTML =
+      '<section class="home">' +
+
+        installCard() +
+
+        '<div class="card card--today">' +
+          '<div class="today__head">' +
+            '<span class="today__date">' + lbl.text + '</span>' +
+            (streak > 0 ? '<span class="badge">연속 ' + streak + '일째</span>' : '<span class="badge badge--soft">오늘 시작해요</span>') +
+          '</div>' +
+          '<div class="today__score">' +
+            '<b>' + UI.comma(total) + '</b><span>점</span>' +
+          '</div>' +
+          '<div class="today__bar"><i style="width:' + Math.min(100, total / MAX_DAY * 100) + '%"></i></div>' +
+          '<p class="today__meta">오늘 ' + doneCount + '/3 종목 완료 · 하루 만점 ' + UI.comma(MAX_DAY) + '점</p>' +
+        '</div>' +
+
+        '<h2 class="sec">오늘의 게임</h2>' +
+        '<div class="gamelist">' +
+          GAMES.map(function (g) {
+            var G = Games[g];
+            var s = best[g];
+            var resume = G.hasProgress();
+            return '<button class="gcard" data-go="' + g + '">' +
+              '<span class="gcard__ico">' + G.icon + '</span>' +
+              '<span class="gcard__body">' +
+                '<span class="gcard__name">' + G.name + '</span>' +
+                '<span class="gcard__sub">' + (s !== null ? '오늘 최고 ' + UI.comma(s) + '점' : '아직 안 하셨어요') + '</span>' +
+              '</span>' +
+              '<span class="gcard__go">' + (resume ? '이어하기' : (s !== null ? '한 판 더' : '시작')) + ' →</span>' +
+            '</button>';
+          }).join('') +
+        '</div>' +
+
+        '<h2 class="sec">최근 이레</h2>' +
+        '<div class="card">' +
+          UI.barChart(chartData, chartMax) +
+          '<p class="card__foot">막대는 그날의 총점입니다. 같은 게임을 여러 번 하면 가장 높은 점수만 더해집니다.</p>' +
+        '</div>' +
+
+        '<div class="row2">' +
+          '<button class="btn btn--ghost" id="hmRules">점수 규칙 한눈에</button>' +
+          '<button class="btn btn--ghost" id="hmRecords">기록 자세히</button>' +
+        '</div>' +
+
+        '<p class="tipline">💡 매일 조금씩, 세 종목을 골고루 하는 것이 두뇌 건강에 좋습니다.</p>' +
+      '</section>';
+
+    view.querySelectorAll('[data-go]').forEach(function (b) {
+      b.addEventListener('click', function () { go(b.dataset.go); });
+    });
+    var ib = view.querySelector('#hmInstall');
+    if (ib) ib.addEventListener('click', doInstall);
+    view.querySelector('#hmRules').addEventListener('click', function () { showRules('all'); });
+    view.querySelector('#hmRecords').addEventListener('click', function () { go('records'); });
+  }
+
+  /* ================= 기록 ================= */
+
+  function renderRecords() {
+    var st = Store.stats();
+    var today = Store.dayKey();
+    var days14 = Store.lastDays(14);
+    var chartData = days14.map(function (k) {
+      var l = Store.labelOf(k);
+      return { label: l.date, value: Store.dayTotal(k), today: k === today };
+    });
+    var chartMax = Math.max(1000, Math.max.apply(null, chartData.map(function (d) { return d.value; })));
+
+    var all = Store.allRecords();
+    var keys = Object.keys(all).sort().reverse().slice(0, 60);
+
+    view.innerHTML =
+      '<section class="records">' +
+
+        '<div class="stats">' +
+          '<div class="stat"><b>' + UI.comma(st.plays) + '</b><span>총 판수</span></div>' +
+          '<div class="stat"><b>' + UI.comma(st.days) + '</b><span>플레이한 날</span></div>' +
+          '<div class="stat"><b>' + UI.comma(Store.streak()) + '</b><span>연속 일수</span></div>' +
+          '<div class="stat"><b>' + UI.comma(st.avg) + '</b><span>판당 평균</span></div>' +
+        '</div>' +
+
+        '<h2 class="sec">최근 2주 총점</h2>' +
+        '<div class="card">' + UI.barChart(chartData, chartMax) + '</div>' +
+
+        '<h2 class="sec">게임별 최고 기록</h2>' +
+        '<div class="card bestlist">' +
+          GAMES.map(function (g) {
+            var b = Store.bestEver(g);
+            var s = st.byGame[g];
+            return '<div class="bestrow">' +
+              '<span class="bestrow__ico">' + Games[g].icon + '</span>' +
+              '<span class="bestrow__name">' + Games[g].name +
+                '<em>' + (s.plays ? s.plays + '판 · 평균 ' + Math.round(s.sum / s.plays) + '점' : '기록 없음') + '</em></span>' +
+              '<span class="bestrow__score">' + (b ? UI.comma(b.score) + '<em>점 · ' + Store.labelOf(b.day).month + '/' + Store.labelOf(b.day).date + '</em>' : '—') + '</span>' +
+            '</div>';
+          }).join('') +
+        '</div>' +
+
+        '<h2 class="sec">날짜별 기록</h2>' +
+        (keys.length ? '<div class="daylist">' + keys.map(dayBlock).join('') + '</div>'
+                     : '<div class="card empty">아직 기록이 없습니다.<br>게임을 한 판 해 보세요.</div>') +
+
+        '<div class="row2">' +
+          '<button class="btn btn--ghost" id="rcExport">기록 내보내기</button>' +
+          '<button class="btn btn--ghost" id="rcImport">기록 가져오기</button>' +
+        '</div>' +
+        '<div class="row2">' +
+          '<button class="btn btn--ghost btn--danger" id="rcReset">기록 지우기</button>' +
+        '</div>' +
+        '<input type="file" id="rcFile" accept="application/json,.json" hidden>' +
+      '</section>';
+
+    view.querySelectorAll('.day__head').forEach(function (h) {
+      h.addEventListener('click', function () { h.parentElement.classList.toggle('is-open'); });
+    });
+    view.querySelector('#rcExport').addEventListener('click', exportRecords);
+    view.querySelector('#rcImport').addEventListener('click', function () { view.querySelector('#rcFile').click(); });
+    view.querySelector('#rcFile').addEventListener('change', function (e) {
+      var f = e.target.files && e.target.files[0];
+      if (!f) return;
+      var fr = new FileReader();
+      fr.onload = function () {
+        try {
+          var n = Store.importJSON(String(fr.result));
+          UI.toast(n ? n + '판의 기록을 불러왔습니다.' : '새로 불러올 기록이 없습니다.');
+          renderRecords();
+        } catch (err) {
+          UI.modal({
+            title: '기록 가져오기',
+            body: '<p class="modal__msg">파일을 읽지 못했습니다.<br>' + UI.esc(err.message || '') + '</p>',
+            actions: [{ label: '닫기', kind: 'accent' }]
+          });
+        }
+      };
+      fr.readAsText(f);
+      e.target.value = '';
+    });
+    view.querySelector('#rcReset').addEventListener('click', function () {
+      UI.confirm('기록 지우기', '지금까지의 모든 점수 기록이 사라집니다. 정말 지울까요?', function () {
+        Store.resetRecords();
+        UI.toast('기록을 모두 지웠습니다.');
+        renderRecords();
+      }, '모두 지우기');
+    });
+  }
+
+  function dayBlock(key) {
+    var lbl = Store.labelOf(key);
+    var list = Store.dayRecords(key).slice().reverse();
+    var total = Store.dayTotal(key);
+    var best = Store.dayBest(key);
+
+    return '<div class="day' + (key === Store.dayKey() ? ' is-open' : '') + '">' +
+      '<button class="day__head">' +
+        '<span class="day__date">' + lbl.text + '</span>' +
+        '<span class="day__chips">' +
+          GAMES.map(function (g) {
+            return '<i class="dchip' + (best[g] !== null ? ' is-on' : '') + '" title="' + Games[g].name + '">' + Games[g].icon + '</i>';
+          }).join('') +
+        '</span>' +
+        '<span class="day__total">' + UI.comma(total) + '점</span>' +
+      '</button>' +
+      '<ul class="day__list">' +
+        list.map(function (r) {
+          var t = new Date(r.at);
+          var hh = String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0');
+          return '<li>' +
+            '<span class="rec__ico">' + (Games[r.game] ? Games[r.game].icon : '·') + '</span>' +
+            '<span class="rec__name">' + (Games[r.game] ? Games[r.game].name : r.game) +
+              '<em>' + UI.esc(r.difficulty) + ' · ' + hh + ' · ' + UI.fmtTime(r.duration) + '</em></span>' +
+            '<span class="rec__score">' + UI.comma(r.score) + '</span>' +
+          '</li>';
+        }).join('') +
+      '</ul>' +
+    '</div>';
+  }
+
+  function exportRecords() {
+    var text = Store.exportJSON();
+    var name = '맑은뜰-기록-' + Store.dayKey() + '.json';
+    try {
+      var blob = new Blob([text], { type: 'application/json' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+      UI.toast('기록 파일을 내려받았습니다.');
+    } catch (e) {
+      UI.modal({
+        title: '기록 내보내기',
+        body: '<p class="modal__msg">아래 내용을 복사해 보관하세요.</p><textarea class="export" readonly>' + UI.esc(text) + '</textarea>',
+        actions: [{ label: '닫기', kind: 'accent' }]
+      });
+    }
+  }
+
+  /* ================= 규칙 / 게임 전환 / 설정 ================= */
+
+  function rulesTable(g) {
+    return '<h3 class="rules__h">' + Games[g].icon + ' ' + Games[g].rules.title + '</h3>' +
+      '<table class="rules"><tbody>' +
+      Games[g].rules.lines.map(function (l) {
+        return '<tr><th>' + UI.esc(l[0]) + '</th><td>' + UI.esc(l[1]) + '</td></tr>';
+      }).join('') +
+      '</tbody></table>';
+  }
+
+  function showRules(which) {
+    var body = which === 'all'
+      ? '<p class="modal__msg">세 게임 모두 <b>기본 1,000점 만점</b>이고, 어려운 난이도를 고르면 보너스가 더해집니다. 하루 만점은 ' + UI.comma(MAX_DAY) + '점입니다.</p>' +
+        GAMES.map(rulesTable).join('') +
+        '<p class="modal__msg small">같은 게임을 여러 번 해도 그날 총점에는 <b>가장 높은 점수</b>만 반영됩니다. 판마다의 기록은 모두 남습니다.</p>'
+      : rulesTable(which);
+
+    UI.modal({ title: which === 'all' ? '점수 규칙' : '', body: body, actions: [{ label: '닫기', kind: 'accent' }] });
+  }
+
+  function gameSwitcher(from) {
+    var others = GAMES.concat(['records']).filter(function (g) { return g !== from; });
+    var body = '<div class="switcher">' + others.map(function (g) {
+      var name = g === 'records' ? '나의 기록' : Games[g].name;
+      var ico = g === 'records' ? '✦' : Games[g].icon;
+      var sub = g === 'records' ? '날짜별 점수 보기'
+        : (Games[g].hasProgress() ? '진행 중인 판이 있습니다' : '새로 시작하기');
+      return '<button class="switcher__item" data-go="' + g + '">' +
+        '<span class="switcher__ico">' + ico + '</span>' +
+        '<span class="switcher__txt">' + name + '<em>' + sub + '</em></span></button>';
+    }).join('') + '</div>';
+
+    var m = UI.modal({
+      title: '어디로 갈까요?',
+      body: body,
+      actions: [{ label: '계속 하기', kind: 'accent' }]
+    });
+    m.card.querySelectorAll('[data-go]').forEach(function (b) {
+      b.addEventListener('click', function () { m.close(); go(b.dataset.go); });
+    });
+  }
+
+  function showSettings() {
+    var s = Store.settings();
+    var body =
+      '<div class="settings">' +
+        '<div class="set">' +
+          '<span class="set__lbl">글씨 크기</span>' +
+          '<div class="seg" id="setFs">' +
+            [['md', '보통'], ['lg', '크게'], ['xl', '아주 크게']].map(function (o) {
+              return '<button data-v="' + o[0] + '"' + (s.fontScale === o[0] ? ' class="is-on"' : '') + '>' + o[1] + '</button>';
+            }).join('') +
+          '</div>' +
+        '</div>' +
+        '<div class="set">' +
+          '<span class="set__lbl">소리</span>' +
+          '<div class="seg" id="setSound">' +
+            '<button data-v="on"' + (s.sound ? ' class="is-on"' : '') + '>켜기</button>' +
+            '<button data-v="off"' + (!s.sound ? ' class="is-on"' : '') + '>끄기</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="set">' +
+          '<span class="set__lbl">버전</span>' +
+          '<span class="set__ver">' + APP_VERSION + '</span>' +
+        '</div>' +
+        '<button class="btn btn--ghost" id="setUpdate">최신 버전으로 새로 받기</button>' +
+        '<p class="modal__msg small">기록은 이 기기 안에만 저장됩니다. 앱을 지우거나 브라우저 기록을 삭제하면 점수도 함께 사라지니, 필요하면 <b>기록 내보내기</b>로 파일을 보관하세요. (새로 받아도 점수는 지워지지 않습니다.)</p>' +
+      '</div>';
+
+    var m = UI.modal({ title: '설정', body: body, actions: [{ label: '닫기', kind: 'accent' }] });
+
+    m.card.querySelectorAll('#setFs button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        Store.setSetting('fontScale', b.dataset.v);
+        applySettings();
+        m.card.querySelectorAll('#setFs button').forEach(function (x) { x.classList.remove('is-on'); });
+        b.classList.add('is-on');
+      });
+    });
+    m.card.querySelector('#setUpdate').addEventListener('click', forceUpdate);
+
+    m.card.querySelectorAll('#setSound button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        Store.setSetting('sound', b.dataset.v === 'on');
+        if (b.dataset.v === 'on') UI.beep('ok');
+        m.card.querySelectorAll('#setSound button').forEach(function (x) { x.classList.remove('is-on'); });
+        b.classList.add('is-on');
+      });
+    });
+  }
+
+  function applySettings() {
+    document.documentElement.dataset.fs = Store.settings().fontScale || 'md';
+  }
+
+  /** 서버에서 새 파일을 받아 온다. 점수 기록은 건드리지 않는다.
+   *
+   * 중요: 저장해 둔 파일을 먼저 지우면 안 된다.
+   * 서버에 연결되지 않는 상태에서 지워 버리면 새로 받지도 못하고
+   * 저장본까지 사라져 앱이 아예 열리지 않게 된다.
+   * 그래서 '연결 확인 → 서비스워커 갱신 → 다시 열기' 순서로만 진행한다.
+   * (옛 파일은 새 파일을 다 받은 뒤에 서비스워커가 알아서 정리한다.)
+   */
+  function forceUpdate() {
+    UI.toast('연결을 확인하는 중입니다…', 3000);
+
+    fetch('./index.html?probe=' + Date.now(), { cache: 'no-store' })
+      .then(function (res) {
+        if (!res || !res.ok) throw new Error('unreachable');
+
+        var step = navigator.serviceWorker
+          ? navigator.serviceWorker.getRegistrations().then(function (rs) {
+              return Promise.all(rs.map(function (r) { return r.update(); }));
+            })['catch'](function () { /* 갱신에 실패해도 다시 열기는 한다 */ })
+          : Promise.resolve();
+
+        return step.then(function () {
+          var base = location.href.split('#')[0].split('?')[0];
+          location.replace(base + '?u=' + Date.now() + '#home');
+        });
+      })['catch'](function () {
+        UI.modal({
+          title: '지금은 새로 받을 수 없습니다',
+          body: '<p class="modal__msg">인터넷에 연결되어 있지 않거나, 앱을 내려받은 주소에 연결할 수 없습니다.' +
+                '<br><br>걱정하지 않으셔도 됩니다. <b>지금 저장된 것으로 게임은 그대로 하실 수 있고, 점수도 안전합니다.</b>' +
+                ' 나중에 인터넷이 연결된 뒤 다시 눌러 주세요.</p>',
+          actions: [{ label: '확인', kind: 'accent' }]
+        });
+      });
+  }
+
+  /* ================= 시작 ================= */
+
+  function init() {
+    view = document.getElementById('view');
+    applySettings();
+
+    document.querySelectorAll('.tab').forEach(function (t) {
+      t.addEventListener('click', function () { go(t.dataset.route); });
+    });
+    document.getElementById('btnBack').addEventListener('click', function () { go('home'); });
+    document.getElementById('btnSettings').addEventListener('click', showSettings);
+
+    // 화면을 벗어날 때 진행 상황을 저장한다
+    window.addEventListener('pagehide', function () { if (current && Games[current]) Games[current].unmount(); });
+    document.addEventListener('visibilitychange', function () {
+      if (!current || !Games[current]) return;
+      if (document.hidden) Games[current].unmount();
+      else if (document.getElementById('modalRoot').hidden) Games[current].mount(view);
+    });
+
+    var start = (location.hash || '').replace('#', '');
+    go(['home', 'records'].concat(GAMES).indexOf(start) >= 0 ? start : 'home');
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+
+  return { go: go, showRules: showRules, gameSwitcher: gameSwitcher, showSettings: showSettings, MAX_PER_GAME: MAX_PER_GAME, MAX_DAY: MAX_DAY };
+})();

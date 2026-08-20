@@ -1,0 +1,19 @@
+# 로컬 도구 설정
+.claude/
+
+# 실행 중에 생기는 것들
+*.log
+web.out
+web.err
+tunnel.log
+tunnel.out
+
+# 배포용 zip 은 pack.cmd 가 상위 폴더에 만듭니다
+*.zip
+
+# 편집기 / OS
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store
