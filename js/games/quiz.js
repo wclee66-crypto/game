@@ -9,16 +9,16 @@ window.Games.quiz = (function () {
   /* 앞 두 단계는 문항을 줄이고, 시간을 늘리고, 보기 수까지 줄인다.
      보기가 넷에서 둘로 줄면 체감 난이도가 크게 낮아진다. */
   var LEVELS = {
-    step1:  { name: '첫걸음', step: 1, count: 5,  time: 40, opts: 2, bonus: 0,   pool: [1],
-              note: '5문항 · 보기 2개 · 문항당 40초 · 쉬운 문제만' },
-    step2:  { name: '가볍게', step: 2, count: 8,  time: 30, opts: 3, bonus: 0,   pool: [1],
-              note: '8문항 · 보기 3개 · 문항당 30초 · 쉬운 문제만' },
-    easy:   { name: '기본',   step: 3, count: 10, time: 25, opts: 4, bonus: 0,   pool: [1, 2],
-              note: '10문항 · 보기 4개 · 문항당 25초' },
-    normal: { name: '보통',   step: 4, count: 15, time: 16, opts: 4, bonus: 100, pool: [2, 3],
-              note: '15문항 · 보기 4개 · 문항당 16초 · 보통 이상' },
-    hard:   { name: '도전',   step: 5, count: 20, time: 10, opts: 4, bonus: 250, pool: [3],
-              note: '20문항 · 보기 4개 · 문항당 10초 · 어려운 문제만' }
+    step1:  { name: T('첫걸음'), step: 1, count: 5,  time: 40, opts: 2, bonus: 0,   pool: [1],
+              note: T('5문항 · 보기 2개 · 문항당 40초 · 쉬운 문제만') },
+    step2:  { name: T('가볍게'), step: 2, count: 8,  time: 30, opts: 3, bonus: 0,   pool: [1],
+              note: T('8문항 · 보기 3개 · 문항당 30초 · 쉬운 문제만') },
+    easy:   { name: T('기본'),   step: 3, count: 10, time: 25, opts: 4, bonus: 0,   pool: [1, 2],
+              note: T('10문항 · 보기 4개 · 문항당 25초') },
+    normal: { name: T('보통'),   step: 4, count: 15, time: 16, opts: 4, bonus: 100, pool: [2, 3],
+              note: T('15문항 · 보기 4개 · 문항당 16초 · 보통 이상') },
+    hard:   { name: T('도전'),   step: 5, count: 20, time: 10, opts: 4, bonus: 250, pool: [3],
+              note: T('20문항 · 보기 4개 · 문항당 10초 · 어려운 문제만') }
   };
   var ORDER = ['step1', 'step2', 'easy', 'normal', 'hard'];
 
@@ -98,7 +98,7 @@ window.Games.quiz = (function () {
 
   function newReview(notes) {
     var qs = buildFromNotes(notes).slice(0, 20);
-    if (!qs.length) { UI.toast('다시 풀 문제가 없습니다.'); return false; }
+    if (!qs.length) { UI.toast(T('다시 풀 문제가 없습니다.')); return false; }
     S = {
       day: Store.dayKey(), level: 'easy', cat: 'review',
       qs: qs, i: 0, picks: [], left: LEVELS.easy.time, done: false, elapsed: 0, review: true
@@ -134,33 +134,34 @@ window.Games.quiz = (function () {
 
     root.innerHTML =
       '<section class="intro">' +
-        '<h2 class="intro__title">상식 퀴즈</h2>' +
-        '<p class="intro__desc">보기 가운데 하나를 고릅니다.<br>빨리 맞힐수록 점수가 높습니다.<br><small>1단계는 보기가 둘뿐이고 시간도 넉넉합니다.<br>단계가 오를수록 문제가 어렵고 시간이 짧아집니다.</small></p>' +
-        (best ? '<p class="intro__best">나의 최고 기록 <b>' + UI.comma(best.score) + '점</b></p>' : '') +
-        (sess ? '<button class="btn btn--accent btn--big" id="qzResume">이어서 하기 <small>' + (sess.i + 1) + '번 문제부터' + (sess.review ? ' · 복습' : '') + '</small></button>' : '') +
+        ('<h2 class="intro__title">' + T('상식 퀴즈') + '</h2>') +
+        ('<p class="intro__desc">' + T('보기 가운데 하나를 고릅니다.') + '<br>' + T('빨리 맞힐수록 점수가 높습니다.') + '<br><small>' + T('1단계는 보기가 둘뿐이고 시간도 넉넉합니다.') + '<br>' + T('단계가 오를수록 문제가 어렵고 시간이 짧아집니다.') + '</small></p>') +
+        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + '점</b></p>' : '') +
+        (sess ? '<button class="btn btn--accent btn--big" id="qzResume">' + T('이어서 하기') +
+           ' <small>' + T('{n}번 문제부터', { n: sess.i + 1 }) + (sess.review ? ' · 복습' : '') + '</small></button>' : '') +
         (wrong.length
-          ? '<button class="btn btn--big btn--note" id="qzReview">틀린 문제만 다시 풀기 ' +
-            '<small>오답 노트 ' + wrong.length + '문제' + (wrong.length > 20 ? ' 중 20문제' : '') + ' · 점수는 기록되지 않습니다</small></button>'
+          ? ('<button class="btn btn--big btn--note" id="qzReview">' + T('틀린 문제만 다시 풀기') + ' ') +
+            '<small>' + T('오답 노트 {n}문제', { n: wrong.length }) + (wrong.length > 20 ? ' 중 20문제' : '') + ' · 점수는 기록되지 않습니다</small></button>'
           : '') +
-        '<h3 class="intro__sub">분야 고르기</h3>' +
+        ('<h3 class="intro__sub">' + T('분야 고르기') + '</h3>') +
         '<div class="chips" id="qzCats">' +
           QUIZ_DATA.categories.map(function (c, i) {
             return '<button class="chip' + (i === 0 ? ' is-on' : '') + '" data-cat="' + c.id + '">' + c.name + '</button>';
           }).join('') +
         '</div>' +
-        '<h3 class="intro__sub">난이도 고르기</h3>' +
+        ('<h3 class="intro__sub">' + T('난이도 고르기') + '</h3>') +
         '<div class="levels">' +
           ORDER.map(function (k) {
             var L = LEVELS[k];
             return '<button class="level" data-level="' + k + '">' +
-              '<span class="level__step">' + L.step + '단계</span>' +
+              '<span class="level__step">' + L.step + (T('단계') + '</span>') +
               '<span class="level__name">' + L.name + '</span>' +
               '<span class="level__meta">' + L.note + '</span>' +
-              '<span class="level__bonus">' + (L.bonus ? '난이도 보너스 +' + L.bonus : '기본') + '</span>' +
+              '<span class="level__bonus">' + (L.bonus ? T('난이도 보너스 +{n}', { n: L.bonus }) : T('기본')) + '</span>' +
               '</button>';
           }).join('') +
         '</div>' +
-        '<button class="linkbtn" id="qzRules">점수 규칙 보기</button>' +
+        ('<button class="linkbtn" id="qzRules">' + T('점수 규칙 보기') + '</button>') +
         (wrong.length ? '<button class="linkbtn" id="qzClearNote">오답 노트 비우기</button>' : '') +
       '</section>';
 
@@ -177,7 +178,7 @@ window.Games.quiz = (function () {
         var lv = b.dataset.level;
         var avail = QUIZ_DATA.items.filter(function (q) { return cat === 'all' || q.c === cat; }).length;
         if (avail < LEVELS[lv].count) {
-          UI.toast('이 분야에는 문제가 ' + avail + '개뿐입니다. 그만큼만 출제됩니다.');
+          UI.toast(T('이 분야에는 문제가 {n}개뿐입니다. 그만큼만 출제됩니다.', { n: avail }));
         }
         newGame(lv, cat);
         renderQuestion();
@@ -190,11 +191,11 @@ window.Games.quiz = (function () {
     root.querySelector('#qzRules').addEventListener('click', function () { App.showRules('quiz'); });
     var cn = root.querySelector('#qzClearNote');
     if (cn) cn.addEventListener('click', function () {
-      UI.confirm('오답 노트 비우기', '모아 둔 ' + wrong.length + '문제가 모두 지워집니다. 비울까요?', function () {
+      UI.confirm(T('오답 노트 비우기'), T('모아 둔 {n}문제가 모두 지워집니다. 비울까요?', { n: wrong.length }), function () {
         Store.clearWrong();
-        UI.toast('오답 노트를 비웠습니다.');
+        UI.toast(T('오답 노트를 비웠습니다.'));
         renderIntro();
-      }, '비우기');
+      }, T('비우기'));
     });
   }
 
@@ -223,8 +224,8 @@ window.Games.quiz = (function () {
           }).join('') +
         '</div>' +
         '<div class="tools">' +
-          '<button class="tool" id="qzQuit"><span>↺</span>그만두기</button>' +
-          '<button class="tool" id="qzSwitch"><span>⇄</span>다른 게임</button>' +
+          ('<button class="tool" id="qzQuit"><span>↺</span>' + T('그만두기') + '</button>') +
+          ('<button class="tool" id="qzSwitch"><span>⇄</span>' + T('다른 게임') + '</button>') +
         '</div>' +
       '</section>';
 
@@ -236,7 +237,7 @@ window.Games.quiz = (function () {
       answer(+b.dataset.i);
     });
     root.querySelector('#qzQuit').addEventListener('click', function () {
-      UI.confirm('그만두기', '지금까지 푼 만큼만 점수로 기록됩니다. 그만둘까요?', function () { finish(); }, '그만두기');
+      UI.confirm(T('그만두기'), T('지금까지 푼 만큼만 점수로 기록됩니다. 그만둘까요?'), function () { finish(); }, T('그만두기'));
     });
     root.querySelector('#qzSwitch').addEventListener('click', function () { App.gameSwitcher('quiz'); });
 
@@ -278,8 +279,8 @@ window.Games.quiz = (function () {
     // 다시 맞힌 문제는 오답 노트에서 뺀다
     var cleared = correct && Store.removeWrong(q.q);
 
-    var msg = correct ? (cleared ? '정답입니다! 오답 노트에서 지웠습니다.' : '정답입니다!')
-                      : (choice === -1 ? '시간이 지났습니다.' : '아쉽습니다.');
+    var msg = correct ? (cleared ? '정답입니다! 오답 노트에서 지웠습니다.' : T('정답입니다!'))
+                      : (choice === -1 ? '시간이 지났습니다.' : T('아쉽습니다.'));
     var badge = document.createElement('div');
     badge.className = 'qz-badge ' + (correct ? 'is-right' : 'is-wrong');
     badge.textContent = msg;
@@ -343,36 +344,36 @@ window.Games.quiz = (function () {
 
     var sc = score();
     Store.addRecord({
-      game: 'quiz', score: sc.total, difficulty: LEVELS[S.level].step + '단계 ' + LEVELS[S.level].name + ' · ' + catName(S.cat),
+      game: 'quiz', score: sc.total, difficulty: LEVELS[S.level].step + (T('단계') + ' ') + LEVELS[S.level].name + ' · ' + catName(S.cat),
       duration: S.elapsed,
       detail: { correct: sc.correct, count: sc.count, streak: sc.streak, cat: S.cat }
     });
 
     var rows = [
-      { label: '정답 점수 (' + sc.correct + '/' + sc.count + '문항)', value: sc.right },
-      { label: '속도 보너스', value: sc.speed },
-      { label: '연속 정답 보너스 (최대 ' + sc.streak + '연속)', value: sc.combo }
+      { label: T('정답 점수 ({a}/{b}문항)', { a: sc.correct, b: sc.count }), value: sc.right },
+      { label: T('속도 보너스'), value: sc.speed },
+      { label: T('연속 정답 보너스 (최대 {n}연속)', { n: sc.streak }), value: sc.combo }
     ];
-    if (sc.bonus) rows.push({ label: '난이도 보너스 (' + LEVELS[S.level].name + ')', value: sc.bonus });
+    if (sc.bonus) rows.push({ label: T('난이도 보너스 ({name})', { name: LEVELS[S.level].name }), value: sc.bonus });
 
     UI.resultModal({
-      title: '퀴즈가 끝났습니다',
+      title: T('퀴즈가 끝났습니다'),
       score: sc.total,
-      headline: sc.correct === sc.count ? '전부 맞히셨습니다. 대단합니다!' : sc.correct + '문제를 맞히셨습니다.',
+      headline: sc.correct === sc.count ? '전부 맞히셨습니다. 대단합니다!' : T('{n}문제를 맞히셨습니다.', { n: sc.correct }),
       rows: rows,
       note: missed
-        ? '틀린 ' + missed + '문제를 오답 노트에 담았습니다.'
-        : '연속 정답 보너스는 3연속부터 25점씩 올라가 최대 100점입니다.',
+        ? (T('틀린') + ' ') + missed + '문제를 오답 노트에 담았습니다.'
+        : T('연속 정답 보너스는 3연속부터 25점씩 올라가 최대 100점입니다.'),
       actions: missed
         ? [
-            { label: '다른 게임', onClick: function () { App.gameSwitcher('quiz'); } },
-            { label: '한 판 더', onClick: function () { S = null; renderIntro(); } },
-            { label: '틀린 문제만', kind: 'accent', onClick: startReviewNow }
+            { label: T('다른 게임'), onClick: function () { App.gameSwitcher('quiz'); } },
+            { label: T('한 판 더'), onClick: function () { S = null; renderIntro(); } },
+            { label: T('틀린 문제만'), kind: 'accent', onClick: startReviewNow }
           ]
         : [
-            { label: '다른 게임', onClick: function () { App.gameSwitcher('quiz'); } },
-            { label: '기록 보기', onClick: function () { App.go('records'); } },
-            { label: '한 판 더', kind: 'accent', onClick: function () { S = null; renderIntro(); } }
+            { label: T('다른 게임'), onClick: function () { App.gameSwitcher('quiz'); } },
+            { label: T('기록 보기'), onClick: function () { App.go('records'); } },
+            { label: T('한 판 더'), kind: 'accent', onClick: function () { S = null; renderIntro(); } }
           ]
     });
   }
@@ -380,7 +381,7 @@ window.Games.quiz = (function () {
   /** 오답 노트를 바로 이어서 푼다 */
   function startReviewNow() {
     var notes = shuffle(Store.getWrong().slice());
-    if (!notes.length) { UI.toast('다시 풀 문제가 없습니다.'); S = null; renderIntro(); return; }
+    if (!notes.length) { UI.toast(T('다시 풀 문제가 없습니다.')); S = null; renderIntro(); return; }
     if (newReview(notes)) renderQuestion();
   }
 
@@ -389,49 +390,49 @@ window.Games.quiz = (function () {
     var left = Store.getWrong().length;
 
     UI.resultModal({
-      title: '복습을 마쳤습니다',
+      title: T('복습을 마쳤습니다'),
       score: correct,
-      unit: '문제',
-      headline: correct + ' / ' + S.qs.length + '문제를 맞히셨습니다.' +
+      unit: T('문제'),
+      headline: T('{a} / {b}문제를 맞히셨습니다.', { a: correct, b: S.qs.length }) +
         (correct ? ' 맞힌 문제는 오답 노트에서 지웠습니다.' : ''),
       rows: [
-        { label: '맞혀서 지운 문제', value: correct },
-        { label: '오답 노트에 남은 문제', value: left, plain: true }
+        { label: T('맞혀서 지운 문제'), value: correct },
+        { label: T('오답 노트에 남은 문제'), value: left, plain: true }
       ],
-      note: '복습은 연습이라 점수로 기록되지 않습니다. 점수를 쌓으시려면 새 퀴즈를 풀어 주세요.',
+      note: T('복습은 연습이라 점수로 기록되지 않습니다. 점수를 쌓으시려면 새 퀴즈를 풀어 주세요.'),
       actions: left
         ? [
-            { label: '새 퀴즈', onClick: function () { S = null; renderIntro(); } },
-            { label: '다른 게임', onClick: function () { App.gameSwitcher('quiz'); } },
-            { label: '남은 문제 더', kind: 'accent', onClick: startReviewNow }
+            { label: T('새 퀴즈'), onClick: function () { S = null; renderIntro(); } },
+            { label: T('다른 게임'), onClick: function () { App.gameSwitcher('quiz'); } },
+            { label: T('남은 문제 더'), kind: 'accent', onClick: startReviewNow }
           ]
         : [
-            { label: '다른 게임', onClick: function () { App.gameSwitcher('quiz'); } },
-            { label: '새 퀴즈', kind: 'accent', onClick: function () { S = null; renderIntro(); } }
+            { label: T('다른 게임'), onClick: function () { App.gameSwitcher('quiz'); } },
+            { label: T('새 퀴즈'), kind: 'accent', onClick: function () { S = null; renderIntro(); } }
           ]
     });
   }
 
   function catName(id) {
     var c = QUIZ_DATA.categories.filter(function (x) { return x.id === id; })[0];
-    return c ? c.name : '전체';
+    return c ? c.name : T('전체');
   }
 
   return {
     langs: ['ko'],                                 // 문제 은행이 한국어다
-    id: 'quiz', name: '상식 퀴즈', tagline: '아는 만큼 빨리 맞히기',
+    id: 'quiz', name: T('상식 퀴즈'), tagline: T('아는 만큼 빨리 맞히기'),
     rules: {
-      title: '상식 퀴즈 점수 규칙',
+      title: T('상식 퀴즈 점수 규칙'),
       lines: [
-        ['정답 점수', '최대 700점 · 맞힌 문항 수에 비례'],
-        ['속도 보너스', '최대 200점 · 정답을 빨리 고를수록 높음'],
-        ['난이도', '1단계 첫걸음 5문항·보기 2개·40초 / 2단계 가볍게 8문항·보기 3개·30초 / 3단계 기본 10문항·25초 / 4단계 보통 15문항·16초 / 5단계 도전 20문항·10초'],
-        ['연속 정답 보너스', '최대 100점 · 3연속부터 25점씩 (3연속 25 / 4연속 50 / 5연속 75 / 6연속 이상 100)'],
-        ['오답 감점', '없음 — 틀려도 점수가 깎이지 않습니다'],
-        ['난이도 보너스', '보통(15문항) +100점, 도전(20문항) +250점 (끝까지 풀었을 때)'],
-        ['최고 점수', '기본 1,000점 / 보통 1,100점 / 도전 1,250점'],
-        ['오답 노트', '틀린 문제는 자동으로 모입니다. 시작 화면의 “틀린 문제만 다시 풀기”로 복습하고, 다시 맞히면 노트에서 지워집니다'],
-        ['복습 판', '연습이므로 점수로 기록되지 않습니다 (한 번에 최대 20문제)']
+        [T('정답 점수'), T('최대 700점 · 맞힌 문항 수에 비례')],
+        [T('속도 보너스'), T('최대 200점 · 정답을 빨리 고를수록 높음')],
+        [T('난이도'), T('1단계 첫걸음 5문항·보기 2개·40초 / 2단계 가볍게 8문항·보기 3개·30초 / 3단계 기본 10문항·25초 / 4단계 보통 15문항·16초 / 5단계 도전 20문항·10초')],
+        [T('연속 정답 보너스'), T('최대 100점 · 3연속부터 25점씩 (3연속 25 / 4연속 50 / 5연속 75 / 6연속 이상 100)')],
+        [T('오답 감점'), T('없음 — 틀려도 점수가 깎이지 않습니다')],
+        [T('난이도 보너스'), T('보통(15문항) +100점, 도전(20문항) +250점 (끝까지 풀었을 때)')],
+        [T('최고 점수'), T('기본 1,000점 / 보통 1,100점 / 도전 1,250점')],
+        [T('오답 노트'), T('틀린 문제는 자동으로 모입니다. 시작 화면의 “틀린 문제만 다시 풀기”로 복습하고, 다시 맞히면 노트에서 지워집니다')],
+        [T('복습 판'), T('연습이므로 점수로 기록되지 않습니다 (한 번에 최대 20문제)')]
       ]
     },
     mount: function (container) {

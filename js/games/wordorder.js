@@ -13,16 +13,16 @@ window.Games.wordorder = (function () {
 
   /* decoy: 고를 글자를 낱말 글자 수의 몇 배로 늘어놓을지 (1 = 낱말 글자 수만큼 더 붙임) */
   var LEVELS = {
-    step1:  { name: '첫걸음', step: 1, count: 10, limit: 240, bonus: 0,   lens: [2],    decoy: 1,
-              note: '두 글자 낱말 · 고를 글자 4개' },
-    step2:  { name: '가볍게', step: 2, count: 12, limit: 300, bonus: 0,   lens: [2, 3], decoy: 1,
-              note: '두세 글자 낱말 · 고를 글자 4~6개' },
-    easy:   { name: '쉬움',   step: 3, count: 15, limit: 360, bonus: 0,   lens: [3],    decoy: 1,
-              note: '세 글자 낱말 · 고를 글자 6개' },
-    normal: { name: '보통',   step: 4, count: 18, limit: 420, bonus: 100, lens: [3, 4], decoy: 1,
-              note: '서너 글자 낱말 · 고를 글자 6~8개' },
-    hard:   { name: '어려움', step: 5, count: 20, limit: 480, bonus: 250, lens: [4, 5], decoy: 1,
-              note: '네다섯 글자 낱말 · 고를 글자 8~10개' }
+    step1:  { name: T('첫걸음'), step: 1, count: 10, limit: 240, bonus: 0,   lens: [2],    decoy: 1,
+              note: T('두 글자 낱말 · 고를 글자 4개') },
+    step2:  { name: T('가볍게'), step: 2, count: 12, limit: 300, bonus: 0,   lens: [2, 3], decoy: 1,
+              note: T('두세 글자 낱말 · 고를 글자 4~6개') },
+    easy:   { name: T('쉬움'),   step: 3, count: 15, limit: 360, bonus: 0,   lens: [3],    decoy: 1,
+              note: T('세 글자 낱말 · 고를 글자 6개') },
+    normal: { name: T('보통'),   step: 4, count: 18, limit: 420, bonus: 100, lens: [3, 4], decoy: 1,
+              note: T('서너 글자 낱말 · 고를 글자 6~8개') },
+    hard:   { name: T('어려움'), step: 5, count: 20, limit: 480, bonus: 250, lens: [4, 5], decoy: 1,
+              note: T('네다섯 글자 낱말 · 고를 글자 8~10개') }
   };
   var ORDER = ['step1', 'step2', 'easy', 'normal', 'hard'];
 
@@ -151,28 +151,28 @@ window.Games.wordorder = (function () {
 
     root.innerHTML =
       '<section class="intro">' +
-        '<h2 class="intro__title">단어 순서 바로잡기</h2>' +
-        '<p class="intro__desc">글자가 뒤섞인 낱말을 바른 순서로 되돌립니다.<br>' +
-          '<b>기투레쓰봉</b> → <b>쓰레기봉투</b><br>' +
-          '아래 글자를 차례대로 눌러 빈칸을 채우세요.<br><small>틀려도 점수가 깎이지 않습니다.</small></p>' +
-        (best ? '<p class="intro__best">나의 최고 기록 <b>' + UI.comma(best.score) + '점</b></p>' : '') +
+        ('<h2 class="intro__title">' + T('단어 순서 바로잡기') + '</h2>') +
+        ('<p class="intro__desc">' + T('글자가 뒤섞인 낱말을 바른 순서로 되돌립니다.') + '<br>') +
+          ('<b>' + T('기투레쓰봉') + '</b> → <b>' + T('쓰레기봉투') + '</b><br>') +
+          (T('아래 글자를 차례대로 눌러 빈칸을 채우세요.') + '<br><small>' + T('틀려도 점수가 깎이지 않습니다.') + '</small></p>') +
+        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + '점</b></p>' : '') +
         (sess && LEVELS[sess.level]
-          ? '<button class="btn btn--accent btn--big" id="woResume">이어서 하기 <small>' +
+          ? ('<button class="btn btn--accent btn--big" id="woResume">' + T('이어서 하기') + ' <small>') +
             LEVELS[sess.level].name + ' · ' + (sess.i + 1) + '번 문제부터</small></button>'
           : '') +
         '<div class="levels">' +
           ORDER.map(function (k) {
             var L = LEVELS[k];
             return '<button class="level" data-level="' + k + '">' +
-              '<span class="level__step">' + L.step + '단계</span>' +
+              '<span class="level__step">' + L.step + (T('단계') + '</span>') +
               '<span class="level__name">' + L.name + '</span>' +
-              '<span class="level__meta">' + L.note + ' · ' + L.count + '문제 · 제한 ' + Math.round(L.limit / 60) + '분</span>' +
-              '<span class="level__bonus">' + (L.bonus ? '난이도 보너스 +' + L.bonus : '기본') + '</span>' +
+              '<span class="level__meta">' + L.note + ' · ' + L.count + (T('문제 · 제한') + ' ') + Math.round(L.limit / 60) + (T('분') + '</span>') +
+              '<span class="level__bonus">' + (L.bonus ? T('난이도 보너스 +{n}', { n: L.bonus }) : T('기본')) + '</span>' +
               '</button>';
           }).join('') +
         '</div>' +
-        '<button class="btn btn--ghost btn--print" id="woPrint">종이로 풀 문제 만들기 <small>A4 인쇄 · PDF 저장</small></button>' +
-        '<button class="linkbtn" id="woRules">점수 규칙 보기</button>' +
+        ('<button class="btn btn--ghost btn--print" id="woPrint">' + T('종이로 풀 문제 만들기') + ' <small>' + T('A4 인쇄 · PDF 저장') + '</small></button>') +
+        ('<button class="linkbtn" id="woRules">' + T('점수 규칙 보기') + '</button>') +
       '</section>';
 
     root.querySelectorAll('.level').forEach(function (b) {
@@ -197,14 +197,14 @@ window.Games.wordorder = (function () {
     root.innerHTML =
       '<section class="game wordorder">' +
         '<div class="hud">' +
-          '<div class="hud__item"><span class="hud__lbl">난이도</span><b>' + L.name + '</b></div>' +
-          '<div class="hud__item"><span class="hud__lbl">남은 시간</span><b id="woTime">0:00</b></div>' +
-          '<div class="hud__item"><span class="hud__lbl">문제</span><b id="woNo">' + (S.i + 1) + '/' + S.probs.length + '</b></div>' +
-          '<div class="hud__item"><span class="hud__lbl">맞힘</span><b id="woRight">' + right + '</b></div>' +
+          ('<div class="hud__item"><span class="hud__lbl">' + T('난이도') + '</span><b>') + L.name + '</b></div>' +
+          ('<div class="hud__item"><span class="hud__lbl">' + T('남은 시간') + '</span><b id="woTime">0:00</b></div>') +
+          ('<div class="hud__item"><span class="hud__lbl">' + T('문제') + '</span><b id="woNo">') + (S.i + 1) + '/' + S.probs.length + '</b></div>' +
+          ('<div class="hud__item"><span class="hud__lbl">' + T('맞힘') + '</span><b id="woRight">') + right + '</b></div>' +
         '</div>' +
 
         '<div class="wo-card">' +
-          '<p class="wo-label">뒤섞인 낱말</p>' +
+          ('<p class="wo-label">' + T('뒤섞인 낱말') + '</p>') +
           '<div class="wo-scr">' + UI.esc(p.s) + '</div>' +
           '<div class="wo-down" aria-hidden="true">↓</div>' +
           '<div class="wo-slots" id="woSlots">' +
@@ -212,8 +212,8 @@ window.Games.wordorder = (function () {
               return '<button class="wo-slot is-empty" data-s="' + k + '"></button>';
             }).join('') +
           '</div>' +
-          '<p class="wo-msg" id="woMsg">글자를 차례대로 눌러 주세요</p>' +
-          '<button class="wo-hintbtn" id="woHint">힌트 보기</button>' +
+          ('<p class="wo-msg" id="woMsg">' + T('글자를 차례대로 눌러 주세요') + '</p>') +
+          ('<button class="wo-hintbtn" id="woHint">' + T('힌트 보기') + '</button>') +
         '</div>' +
 
         '<div class="wo-tiles" id="woTiles">' +
@@ -223,13 +223,13 @@ window.Games.wordorder = (function () {
         '</div>' +
 
         '<div class="row2 wo-acts">' +
-          '<button class="btn btn--ghost" id="woBack">한 글자 지우기</button>' +
-          '<button class="btn btn--accent" id="woOk">확인</button>' +
+          ('<button class="btn btn--ghost" id="woBack">' + T('한 글자 지우기') + '</button>') +
+          ('<button class="btn btn--accent" id="woOk">' + T('확인') + '</button>') +
         '</div>' +
 
         '<div class="tools">' +
-          '<button class="tool" id="woQuit"><span>↺</span>그만두기</button>' +
-          '<button class="tool" id="woSwitch"><span>⇄</span>다른 게임</button>' +
+          ('<button class="tool" id="woQuit"><span>↺</span>' + T('그만두기') + '</button>') +
+          ('<button class="tool" id="woSwitch"><span>⇄</span>' + T('다른 게임') + '</button>') +
         '</div>' +
       '</section>';
 
@@ -253,12 +253,12 @@ window.Games.wordorder = (function () {
     });
     root.querySelector('#woHint').addEventListener('click', function () {
       // 뜻을 몰라 막힐 때만 쓰는 도움말 — 점수와는 상관이 없다
-      this.outerHTML = '<p class="wo-hint"><span>힌트</span>' + UI.esc(p.h) + '</p>';
+      this.outerHTML = ('<p class="wo-hint"><span>' + T('힌트') + '</span>') + UI.esc(p.h) + '</p>';
     });
     root.querySelector('#woBack').addEventListener('click', function () { if (!locked) back(); });
     root.querySelector('#woOk').addEventListener('click', function () { if (!locked) submit(); });
     root.querySelector('#woQuit').addEventListener('click', function () {
-      UI.confirm('그만두기', '지금까지 푼 만큼만 점수로 기록됩니다. 그만둘까요?', function () { finish(); }, '그만두기');
+      UI.confirm(T('그만두기'), T('지금까지 푼 만큼만 점수로 기록됩니다. 그만둘까요?'), function () { finish(); }, T('그만두기'));
     });
     root.querySelector('#woSwitch').addEventListener('click', function () { App.gameSwitcher('wordorder'); });
 
@@ -270,7 +270,7 @@ window.Games.wordorder = (function () {
   function place(tileIndex) {
     var p = S.probs[S.i];
     if (S.slots.indexOf(tileIndex) >= 0) return;      // 이미 넣은 글자
-    if (S.slots.length >= p.w.length) { UI.toast('빈칸이 다 찼습니다. 확인을 누르세요.'); return; }
+    if (S.slots.length >= p.w.length) { UI.toast(T('빈칸이 다 찼습니다. 확인을 누르세요.')); return; }
     S.slots.push(tileIndex);
     paint();
   }
@@ -302,14 +302,14 @@ window.Games.wordorder = (function () {
       el.classList.toggle('is-used', S.slots.indexOf(k) >= 0);
     });
     if (!locked) {
-      els.msg.textContent = full ? '다 채우셨습니다. 확인을 누르세요.' : '글자를 차례대로 눌러 주세요';
+      els.msg.textContent = full ? '다 채우셨습니다. 확인을 누르세요.' : T('글자를 차례대로 눌러 주세요');
       els.msg.className = 'wo-msg' + (full ? ' is-ready' : '');
     }
   }
 
   function submit() {
     var p = S.probs[S.i];
-    if (S.slots.length < p.w.length) { UI.toast('빈칸을 모두 채워 주세요.'); return; }
+    if (S.slots.length < p.w.length) { UI.toast(T('빈칸을 모두 채워 주세요.')); return; }
 
     locked = true;
     stopTimer();
@@ -325,7 +325,7 @@ window.Games.wordorder = (function () {
     els.msg.className = 'wo-msg ' + (ok ? 'is-ok' : 'is-no');
     els.msg.innerHTML = ok
       ? '<b>잘하셨습니다!</b>'
-      : '<b>바른 낱말은 ' + UI.esc(p.w) + '입니다</b>';
+      : ('<b>' + T('바른 낱말은') + ' ') + UI.esc(p.w) + (T('입니다') + '</b>');
     if (ok) els.right.textContent = S.picks.filter(function (x) { return x.correct; }).length;
     UI.beep(ok ? 'ok' : 'no');
 
@@ -391,28 +391,28 @@ window.Games.wordorder = (function () {
 
     var L = lv(), sc = score();
     Store.addRecord({
-      game: 'wordorder', score: sc.total, difficulty: L.step + '단계 ' + L.name,
+      game: 'wordorder', score: sc.total, difficulty: L.step + (T('단계') + ' ') + L.name,
       duration: S.elapsed,
       detail: { correct: sc.correct, count: sc.count, streak: sc.streak }
     });
 
     var rows = [
-      { label: '정답 점수 (' + sc.correct + '/' + sc.count + '문제)', value: sc.right }
+      { label: T('정답 점수 ({a}/{b}문제)', { a: sc.correct, b: sc.count }), value: sc.right }
     ];
-    if (sc.all) rows.push({ label: '시간 보너스 (' + UI.fmtTime(Math.max(0, L.limit - S.elapsed)) + ' 남김)', value: sc.time });
-    rows.push({ label: '연속 정답 보너스 (최대 ' + sc.streak + '연속)', value: sc.combo });
-    if (sc.bonus) rows.push({ label: '난이도 보너스 (' + L.name + ')', value: sc.bonus });
+    if (sc.all) rows.push({ label: T('시간 보너스 ({t} 남김)', { t: UI.fmtTime(Math.max(0, L.limit - S.elapsed)) }), value: sc.time });
+    rows.push({ label: T('연속 정답 보너스 (최대 {n}연속)', { n: sc.streak }), value: sc.combo });
+    if (sc.bonus) rows.push({ label: T('난이도 보너스 ({name})', { name: L.name }), value: sc.bonus });
 
     UI.resultModal({
-      title: '단어 순서를 마쳤습니다',
+      title: T('단어 순서를 마쳤습니다'),
       score: sc.total,
-      headline: sc.correct === sc.count ? '전부 맞히셨습니다. 대단합니다!' : sc.correct + '낱말을 바로잡으셨습니다.',
+      headline: sc.correct === sc.count ? '전부 맞히셨습니다. 대단합니다!' : T('{n}낱말을 바로잡으셨습니다.', { n: sc.correct }),
       rows: rows,
-      note: sc.all ? '' : '끝까지 풀어야 시간 보너스와 난이도 보너스를 받습니다.',
+      note: sc.all ? '' : T('끝까지 풀어야 시간 보너스와 난이도 보너스를 받습니다.'),
       actions: [
-        { label: '다른 게임', onClick: function () { App.gameSwitcher('wordorder'); } },
-        { label: '기록 보기', onClick: function () { App.go('records'); } },
-        { label: '한 판 더', kind: 'accent', onClick: function () { S = null; renderIntro(); } }
+        { label: T('다른 게임'), onClick: function () { App.gameSwitcher('wordorder'); } },
+        { label: T('기록 보기'), onClick: function () { App.go('records'); } },
+        { label: T('한 판 더'), kind: 'accent', onClick: function () { S = null; renderIntro(); } }
       ]
     });
   }
@@ -435,21 +435,21 @@ window.Games.wordorder = (function () {
 
   return {
     langs: ['ko'],                                 // 한글 글자를 뒤섞는 놀이다
-    id: 'wordorder', name: '단어 순서', tagline: '뒤섞인 글자를 바로잡기',
+    id: 'wordorder', name: T('단어 순서'), tagline: T('뒤섞인 글자를 바로잡기'),
     rules: {
-      title: '단어 순서 바로잡기 점수 규칙',
+      title: T('단어 순서 바로잡기 점수 규칙'),
       lines: [
-        ['푸는 법', '뒤섞인 낱말을 보고, 아래 글자를 차례대로 눌러 빈칸을 채웁니다. 빈칸을 다시 누르면 그 글자가 빠집니다'],
-        ['난이도', '1단계 두 글자 · 2단계 두세 글자 · 3단계 세 글자 · 4단계 서너 글자 · 5단계 네다섯 글자'],
-        ['고를 글자', '낱말 글자 수의 두 배로 늘어놓습니다(다섯 글자 낱말이면 열 글자). 절반은 낱말에 없는 글자이니 남겨 두면 됩니다'],
-        ['힌트', '「힌트 보기」를 누르면 낱말의 뜻을 한 줄 보여 줍니다. 점수는 깎이지 않습니다'],
-        ['정답 점수', '최대 600점 · 맞힌 문제 수에 비례'],
-        ['시간 보너스', '최대 300점 · 끝까지 풀었을 때만, 남은 시간에 비례'],
-        ['연속 정답 보너스', '최대 100점 · 3연속 25 / 4연속 50 / 5연속 75 / 6연속 이상 100'],
-        ['오답 감점', '없음 — 틀리면 바른 낱말을 보여 주고 다음 문제로 넘어갑니다'],
-        ['난이도 보너스', '보통 +100점, 어려움 +250점 (끝까지 풀었을 때)'],
-        ['최고 점수', '1~3단계 1,000점 / 보통 1,100점 / 어려움 1,250점'],
-        ['자판', 'PC에서는 Backspace 한 글자 지우기, Enter 확인']
+        [T('푸는 법'), T('뒤섞인 낱말을 보고, 아래 글자를 차례대로 눌러 빈칸을 채웁니다. 빈칸을 다시 누르면 그 글자가 빠집니다')],
+        [T('난이도'), T('1단계 두 글자 · 2단계 두세 글자 · 3단계 세 글자 · 4단계 서너 글자 · 5단계 네다섯 글자')],
+        [T('고를 글자'), T('낱말 글자 수의 두 배로 늘어놓습니다(다섯 글자 낱말이면 열 글자). 절반은 낱말에 없는 글자이니 남겨 두면 됩니다')],
+        [T('힌트'), T('「힌트 보기」를 누르면 낱말의 뜻을 한 줄 보여 줍니다. 점수는 깎이지 않습니다')],
+        [T('정답 점수'), T('최대 600점 · 맞힌 문제 수에 비례')],
+        [T('시간 보너스'), T('최대 300점 · 끝까지 풀었을 때만, 남은 시간에 비례')],
+        [T('연속 정답 보너스'), T('최대 100점 · 3연속 25 / 4연속 50 / 5연속 75 / 6연속 이상 100')],
+        [T('오답 감점'), T('없음 — 틀리면 바른 낱말을 보여 주고 다음 문제로 넘어갑니다')],
+        [T('난이도 보너스'), T('보통 +100점, 어려움 +250점 (끝까지 풀었을 때)')],
+        [T('최고 점수'), T('1~3단계 1,000점 / 보통 1,100점 / 어려움 1,250점')],
+        [T('자판'), T('PC에서는 Backspace 한 글자 지우기, Enter 확인')]
       ]
     },
     mount: function (container) {
@@ -471,7 +471,7 @@ window.Games.wordorder = (function () {
       var key = LEVELS[level] ? level : 'easy';
       var L = LEVELS[key];
       return {
-        level: key, levelName: L.step + '단계 ' + L.name,
+        level: key, levelName: L.step + (T('단계') + ' ') + L.name,
         note: L.note,
         items: makeSet(key, count || 12)
       };

@@ -9,16 +9,16 @@ window.Games = window.Games || {};
 window.Games.sudoku = (function () {
 
   var LEVELS = {
-    step1:  { name: '첫걸음', step: 1, n: 4, br: 2, bc: 2, givens: 8,  limit: 240,  bonus: 0,
-              note: '4칸 판 · 숫자 1~4' },
-    step2:  { name: '가볍게', step: 2, n: 6, br: 2, bc: 3, givens: 20, limit: 420,  bonus: 0,
-              note: '6칸 판 · 숫자 1~6' },
-    easy:   { name: '쉬움',   step: 3, n: 9, br: 3, bc: 3, givens: 45, limit: 480,  bonus: 0,
-              note: '9칸 판 · 숫자 45개로 시작' },
-    normal: { name: '보통',   step: 4, n: 9, br: 3, bc: 3, givens: 34, limit: 720,  bonus: 100,
-              note: '9칸 판 · 숫자 34개로 시작' },
-    hard:   { name: '어려움', step: 5, n: 9, br: 3, bc: 3, givens: 28, limit: 1080, bonus: 250,
-              note: '9칸 판 · 숫자 28개로 시작' }
+    step1:  { name: T('첫걸음'), step: 1, n: 4, br: 2, bc: 2, givens: 8,  limit: 240,  bonus: 0,
+              note: T('4칸 판 · 숫자 1~4') },
+    step2:  { name: T('가볍게'), step: 2, n: 6, br: 2, bc: 3, givens: 20, limit: 420,  bonus: 0,
+              note: T('6칸 판 · 숫자 1~6') },
+    easy:   { name: T('쉬움'),   step: 3, n: 9, br: 3, bc: 3, givens: 45, limit: 480,  bonus: 0,
+              note: T('9칸 판 · 숫자 45개로 시작') },
+    normal: { name: T('보통'),   step: 4, n: 9, br: 3, bc: 3, givens: 34, limit: 720,  bonus: 100,
+              note: T('9칸 판 · 숫자 34개로 시작') },
+    hard:   { name: T('어려움'), step: 5, n: 9, br: 3, bc: 3, givens: 28, limit: 1080, bonus: 250,
+              note: T('9칸 판 · 숫자 28개로 시작') }
   };
   var ORDER = ['step1', 'step2', 'easy', 'normal', 'hard'];
 
@@ -159,33 +159,33 @@ window.Games.sudoku = (function () {
 
     root.innerHTML =
       '<section class="intro">' +
-        '<h2 class="intro__title">스도쿠</h2>' +
-        '<p class="intro__desc">가로줄·세로줄·굵은 네모 칸마다<br>숫자가 한 번씩만 들어갑니다.<br><small>처음이시면 1단계부터 해 보세요.</small></p>' +
-        (best ? '<p class="intro__best">나의 최고 기록 <b>' + UI.comma(best.score) + '점</b></p>' : '') +
+        ('<h2 class="intro__title">' + T('스도쿠') + '</h2>') +
+        ('<p class="intro__desc">' + T('가로줄·세로줄·굵은 네모 칸마다') + '<br>' + T('숫자가 한 번씩만 들어갑니다.') + '<br><small>' + T('처음이시면 1단계부터 해 보세요.') + '</small></p>') +
+        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + '점</b></p>' : '') +
         (sess && LEVELS[sess.level]
-          ? '<button class="btn btn--accent btn--big" id="sdResume">이어서 하기 <small>' +
+          ? ('<button class="btn btn--accent btn--big" id="sdResume">' + T('이어서 하기') + ' <small>') +
             LEVELS[sess.level].name + ' · ' + UI.fmtTime(sess.elapsed) + ' 경과</small></button>'
           : '') +
         '<div class="levels">' +
           ORDER.map(function (k) {
             var L = LEVELS[k];
             return '<button class="level" data-level="' + k + '">' +
-              '<span class="level__step">' + L.step + '단계</span>' +
+              '<span class="level__step">' + L.step + (T('단계') + '</span>') +
               '<span class="level__name">' + L.name + '</span>' +
-              '<span class="level__meta">' + L.note + ' · 제한 ' + Math.round(L.limit / 60) + '분</span>' +
-              '<span class="level__bonus">' + (L.bonus ? '난이도 보너스 +' + L.bonus : '기본') + '</span>' +
+              '<span class="level__meta">' + L.note + (' ' + T('· 제한') + ' ') + Math.round(L.limit / 60) + (T('분') + '</span>') +
+              '<span class="level__bonus">' + (L.bonus ? T('난이도 보너스 +{n}', { n: L.bonus }) : T('기본')) + '</span>' +
               '</button>';
           }).join('') +
         '</div>' +
-        '<button class="btn btn--ghost btn--print" id="sdPrint">종이로 풀 문제 만들기 <small>A4 인쇄 · PDF 저장</small></button>' +
-        '<button class="linkbtn" id="sdRules">점수 규칙 보기</button>' +
+        ('<button class="btn btn--ghost btn--print" id="sdPrint">' + T('종이로 풀 문제 만들기') + ' <small>' + T('A4 인쇄 · PDF 저장') + '</small></button>') +
+        ('<button class="linkbtn" id="sdRules">' + T('점수 규칙 보기') + '</button>') +
       '</section>';
 
     root.querySelectorAll('.level').forEach(function (b) {
       b.addEventListener('click', function () {
         var k = b.dataset.level;
         b.classList.add('is-loading');
-        b.querySelector('.level__meta').textContent = '문제를 만드는 중…';
+        b.querySelector('.level__meta').textContent = T('문제를 만드는 중…');
         setTimeout(function () { newGame(k); renderBoard(); }, 30);
       });
     });
@@ -204,23 +204,23 @@ window.Games.sudoku = (function () {
     root.innerHTML =
       '<section class="game">' +
         '<div class="hud">' +
-          '<div class="hud__item"><span class="hud__lbl">난이도</span><b id="sdLevel">' + L.name + '</b></div>' +
-          '<div class="hud__item"><span class="hud__lbl">시간</span><b id="sdTime">0:00</b></div>' +
-          '<div class="hud__item"><span class="hud__lbl">실수</span><b id="sdMiss">0</b></div>' +
-          '<div class="hud__item"><span class="hud__lbl">힌트</span><b id="sdHint">0</b></div>' +
+          ('<div class="hud__item"><span class="hud__lbl">' + T('난이도') + '</span><b id="sdLevel">') + L.name + '</b></div>' +
+          ('<div class="hud__item"><span class="hud__lbl">' + T('시간') + '</span><b id="sdTime">0:00</b></div>') +
+          ('<div class="hud__item"><span class="hud__lbl">' + T('실수') + '</span><b id="sdMiss">0</b></div>') +
+          ('<div class="hud__item"><span class="hud__lbl">' + T('힌트') + '</span><b id="sdHint">0</b></div>') +
         '</div>' +
         '<div class="sd-grid" id="sdGrid" style="--n:' + N + '"></div>' +
         '<div class="pad" id="sdPad">' +
           Array.from({ length: N }, function (_, i) {
             return '<button class="pad__key" data-n="' + (i + 1) + '"><span>' + (i + 1) + '</span><em class="pad__left"></em></button>';
           }).join('') +
-          '<button class="pad__key pad__key--fn" data-act="erase">지우기</button>' +
+          ('<button class="pad__key pad__key--fn" data-act="erase">' + T('지우기') + '</button>') +
         '</div>' +
         '<div class="tools">' +
-          '<button class="tool" id="sdNote"><span>✎</span>메모</button>' +
-          '<button class="tool" id="sdHintBtn"><span>?</span>힌트</button>' +
-          '<button class="tool" id="sdRestart"><span>↺</span>새 문제</button>' +
-          '<button class="tool" id="sdSwitch"><span>⇄</span>다른 게임</button>' +
+          ('<button class="tool" id="sdNote"><span>✎</span>' + T('메모') + '</button>') +
+          ('<button class="tool" id="sdHintBtn"><span>?</span>' + T('힌트') + '</button>') +
+          ('<button class="tool" id="sdRestart"><span>↺</span>' + T('새 문제') + '</button>') +
+          ('<button class="tool" id="sdSwitch"><span>⇄</span>' + T('다른 게임') + '</button>') +
         '</div>' +
       '</section>';
 
@@ -264,14 +264,14 @@ window.Games.sudoku = (function () {
     els.note.addEventListener('click', function () {
       S.noteMode = !S.noteMode;
       els.note.classList.toggle('is-on', S.noteMode);
-      UI.toast(S.noteMode ? '메모 모드입니다. 숫자를 작게 적어 둡니다.' : '메모 모드를 껐습니다.');
+      UI.toast(S.noteMode ? '메모 모드입니다. 숫자를 작게 적어 둡니다.' : T('메모 모드를 껐습니다.'));
     });
     root.querySelector('#sdHintBtn').addEventListener('click', useHint);
     root.querySelector('#sdRestart').addEventListener('click', function () {
-      UI.confirm('새 문제', '지금 풀던 문제는 사라집니다. 새로 시작할까요?', function () {
+      UI.confirm(T('새 문제'), T('지금 풀던 문제는 사라집니다. 새로 시작할까요?'), function () {
         Store.clearSession('sudoku');
         S = null; renderIntro();
-      }, '새로 시작');
+      }, T('새로 시작'));
     });
     root.querySelector('#sdSwitch').addEventListener('click', function () { App.gameSwitcher('sudoku'); });
 
@@ -283,7 +283,7 @@ window.Games.sudoku = (function () {
 
   function input(n) {
     var i = S.sel;
-    if (i < 0) { UI.toast('먼저 빈칸을 눌러 주세요.'); return; }
+    if (i < 0) { UI.toast(T('먼저 빈칸을 눌러 주세요.')); return; }
     if (S.puzzle[i]) return;
 
     if (S.noteMode) {
@@ -349,7 +349,7 @@ window.Games.sudoku = (function () {
     clearNotes(i, S.solution[i]);
     UI.beep('ok');
     paint(); persist();
-    UI.toast('힌트 한 칸을 채웠습니다. (−50점)');
+    UI.toast(T('힌트 한 칸을 채웠습니다. (−50점)'));
     if (isComplete()) finish();
   }
 
@@ -445,55 +445,55 @@ window.Games.sudoku = (function () {
     var L = lv();
     var sc = score();
     Store.addRecord({
-      game: 'sudoku', score: sc.total, difficulty: L.step + '단계 ' + L.name,
+      game: 'sudoku', score: sc.total, difficulty: L.step + (T('단계') + ' ') + L.name,
       duration: S.elapsed,
       detail: { mistakes: S.mistakes, hints: S.hints, size: L.n, time: sc.time, acc: sc.acc, bonus: sc.bonus }
     });
 
     var rows = [
-      { label: '완성 기본 점수', value: sc.base },
-      { label: '시간 보너스 (' + UI.fmtTime(S.elapsed) + ' / ' + UI.fmtTime(L.limit) + ')', value: sc.time },
-      { label: '정확도 보너스 (실수 ' + S.mistakes + '회)', value: sc.acc }
+      { label: T('완성 기본 점수'), value: sc.base },
+      { label: T('시간 보너스 ({a} / {b})', { a: UI.fmtTime(S.elapsed), b: UI.fmtTime(L.limit) }), value: sc.time },
+      { label: T('정확도 보너스 (실수 {n}회)', { n: S.mistakes }), value: sc.acc }
     ];
-    if (sc.bonus) rows.push({ label: '난이도 보너스 (' + L.name + ')', value: sc.bonus });
-    if (sc.penalty) rows.push({ label: '힌트 사용 (' + S.hints + '회)', value: sc.penalty, minus: true });
+    if (sc.bonus) rows.push({ label: T('난이도 보너스 ({name})', { name: L.name }), value: sc.bonus });
+    if (sc.penalty) rows.push({ label: T('힌트 사용 ({n}회)', { n: S.hints }), value: sc.penalty, minus: true });
 
     UI.resultModal({
-      title: '스도쿠를 다 풀었습니다!',
+      title: T('스도쿠를 다 풀었습니다!'),
       score: sc.total,
       headline: praise(sc.total),
       rows: rows,
-      note: '오늘 스도쿠 최고 기록: ' + UI.comma(Store.dayBest()['sudoku'] || sc.total) + '점',
+      note: T('오늘 스도쿠 최고 기록: {n}점', { n: UI.comma(Store.dayBest()['sudoku'] || sc.total) }),
       actions: [
-        { label: '다른 게임', onClick: function () { App.gameSwitcher('sudoku'); } },
-        { label: '기록 보기', onClick: function () { App.go('records'); } },
-        { label: '한 판 더', kind: 'accent', onClick: function () { S = null; renderIntro(); } }
+        { label: T('다른 게임'), onClick: function () { App.gameSwitcher('sudoku'); } },
+        { label: T('기록 보기'), onClick: function () { App.go('records'); } },
+        { label: T('한 판 더'), kind: 'accent', onClick: function () { S = null; renderIntro(); } }
       ]
     });
   }
 
   function praise(n) {
-    if (n >= 1000) return '아주 훌륭합니다. 오늘 머리가 맑으시네요!';
-    if (n >= 700) return '잘하셨습니다. 꾸준함이 힘입니다.';
-    if (n >= 400) return '좋습니다. 한 판 더 해 볼까요?';
-    return '끝까지 푸신 것이 가장 큰 성과입니다.';
+    if (n >= 1000) return T('아주 훌륭합니다. 오늘 머리가 맑으시네요!');
+    if (n >= 700) return T('잘하셨습니다. 꾸준함이 힘입니다.');
+    if (n >= 400) return T('좋습니다. 한 판 더 해 볼까요?');
+    return T('끝까지 푸신 것이 가장 큰 성과입니다.');
   }
 
   /* ================= 진입점 ================= */
 
   return {
-    id: 'sudoku', name: '스도쿠', tagline: '숫자로 하는 두뇌 체조',
+    id: 'sudoku', name: T('스도쿠'), tagline: T('숫자로 하는 두뇌 체조'),
     rules: {
-      title: '스도쿠 점수 규칙',
+      title: T('스도쿠 점수 규칙'),
       lines: [
-        ['난이도', '1단계 첫걸음(4칸) · 2단계 가볍게(6칸) · 3단계 쉬움 · 4단계 보통 · 5단계 어려움 (3~5단계는 9칸 판)'],
-        ['완성 기본', '문제를 다 풀면 500점'],
-        ['시간 보너스', '최대 300점 · 제한 시간이 많이 남을수록 높음 (4분 / 7분 / 8분 / 12분 / 18분)'],
-        ['정확도 보너스', '최대 200점 · 실수 1회마다 40점씩 줄어듦'],
-        ['힌트 감점', '힌트 1회마다 50점 차감'],
-        ['난이도 보너스', '보통 +100점, 어려움 +250점 (1~3단계는 보너스 없음)'],
-        ['최고 점수', '1~3단계 1,000점 / 보통 1,100점 / 어려움 1,250점'],
-        ['주의', '다 풀지 않고 나가면 점수는 기록되지 않습니다 (진행 상황은 저장됩니다)']
+        [T('난이도'), T('1단계 첫걸음(4칸) · 2단계 가볍게(6칸) · 3단계 쉬움 · 4단계 보통 · 5단계 어려움 (3~5단계는 9칸 판)')],
+        [T('완성 기본'), T('문제를 다 풀면 500점')],
+        [T('시간 보너스'), T('최대 300점 · 제한 시간이 많이 남을수록 높음 (4분 / 7분 / 8분 / 12분 / 18분)')],
+        [T('정확도 보너스'), T('최대 200점 · 실수 1회마다 40점씩 줄어듦')],
+        [T('힌트 감점'), T('힌트 1회마다 50점 차감')],
+        [T('난이도 보너스'), T('보통 +100점, 어려움 +250점 (1~3단계는 보너스 없음)')],
+        [T('최고 점수'), T('1~3단계 1,000점 / 보통 1,100점 / 어려움 1,250점')],
+        [T('주의'), T('다 풀지 않고 나가면 점수는 기록되지 않습니다 (진행 상황은 저장됩니다)')]
       ]
     },
     mount: function (container) {
@@ -516,7 +516,7 @@ window.Games.sudoku = (function () {
       var L = LEVELS[key];
       var made = makePuzzle(key);
       return {
-        level: key, levelName: L.step + '단계 ' + L.name,
+        level: key, levelName: L.step + (T('단계') + ' ') + L.name,
         n: L.n, br: L.br, bc: L.bc,
         puzzle: made.puzzle, solution: made.solution
       };

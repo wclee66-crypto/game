@@ -10,11 +10,11 @@ window.Games = window.Games || {};
 window.Games.coloring = (function () {
 
   var LEVELS = {
-    step1:  { name: '첫걸음', step: 1, detail: 1, colors: 4,  bonus: 0,   note: '아주 큰 칸 · 색 4가지' },
-    step2:  { name: '가볍게', step: 2, detail: 2, colors: 5,  bonus: 0,   note: '큰 칸 · 색 5가지' },
-    easy:   { name: '쉬움',   step: 3, detail: 3, colors: 6,  bonus: 0,   note: '칸 30개쯤 · 색 6가지' },
-    normal: { name: '보통',   step: 4, detail: 4, colors: 8,  bonus: 100, note: '칸 40개쯤 · 색 8가지' },
-    hard:   { name: '어려움', step: 5, detail: 5, colors: 10, bonus: 250, note: '칸 50개쯤 · 색 10가지' }
+    step1:  { name: T('첫걸음'), step: 1, detail: 1, colors: 4,  bonus: 0,   note: T('아주 큰 칸 · 색 4가지') },
+    step2:  { name: T('가볍게'), step: 2, detail: 2, colors: 5,  bonus: 0,   note: T('큰 칸 · 색 5가지') },
+    easy:   { name: T('쉬움'),   step: 3, detail: 3, colors: 6,  bonus: 0,   note: T('칸 30개쯤 · 색 6가지') },
+    normal: { name: T('보통'),   step: 4, detail: 4, colors: 8,  bonus: 100, note: T('칸 40개쯤 · 색 8가지') },
+    hard:   { name: T('어려움'), step: 5, detail: 5, colors: 10, bonus: 250, note: T('칸 50개쯤 · 색 10가지') }
   };
   var ORDER = ['step1', 'step2', 'easy', 'normal', 'hard'];
 
@@ -93,42 +93,42 @@ window.Games.coloring = (function () {
 
     root.innerHTML =
       '<section class="intro">' +
-        '<h2 class="intro__title">색칠 공부</h2>' +
-        '<p class="intro__desc">색을 하나 고른 다음<br>같은 번호가 적힌 칸을 누르면 칠해집니다.<br>' +
-          '<small>다 칠한 그림은 종이로 인쇄할 수 있습니다.</small></p>' +
-        (best ? '<p class="intro__best">나의 최고 기록 <b>' + UI.comma(best.score) + '점</b></p>' : '') +
-        (sess ? '<button class="btn btn--accent btn--big" id="clResume">이어서 하기 <small>' +
+        ('<h2 class="intro__title">' + T('색칠 공부') + '</h2>') +
+        ('<p class="intro__desc">' + T('색을 하나 고른 다음') + '<br>' + T('같은 번호가 적힌 칸을 누르면 칠해집니다.') + '<br>') +
+          ('<small>' + T('다 칠한 그림은 종이로 인쇄할 수 있습니다.') + '</small></p>') +
+        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + '점</b></p>' : '') +
+        (sess ? ('<button class="btn btn--accent btn--big" id="clResume">' + T('이어서 하기') + ' <small>') +
                   LEVELS[sess.level].name + ' · ' + sess.fills.filter(Boolean).length + '/' + sess.fills.length + '칸 칠함</small></button>' : '') +
 
-        '<h3 class="intro__sub">어떻게 칠할까요?</h3>' +
+        ('<h3 class="intro__sub">' + T('어떻게 칠할까요?') + '</h3>') +
         '<div class="row2 cl-modes" id="clMode">' +
-          '<button class="btn is-on" data-mode="num">번호대로<small>점수가 기록됩니다</small></button>' +
-          '<button class="btn" data-mode="free">마음대로<small>점수 없이 편하게</small></button>' +
+          ('<button class="btn is-on" data-mode="num">' + T('번호대로') + '<small>' + T('점수가 기록됩니다') + '</small></button>') +
+          ('<button class="btn" data-mode="free">' + T('마음대로') + '<small>' + T('점수 없이 편하게') + '</small></button>') +
         '</div>' +
 
-        '<h3 class="intro__sub">어떤 그림을 칠할까요?</h3>' +
+        ('<h3 class="intro__sub">' + T('어떤 그림을 칠할까요?') + '</h3>') +
         '<div class="chips" id="clPics">' +
-          '<button class="chip is-on" data-pic="random">아무거나</button>' +
+          ('<button class="chip is-on" data-pic="random">' + T('아무거나') + '</button>') +
           PICTURES.list.map(function (p) {
             return '<button class="chip" data-pic="' + p.id + '">' + UI.esc(p.name) + '</button>';
           }).join('') +
         '</div>' +
 
-        '<h3 class="intro__sub">단계를 누르면 시작합니다</h3>' +
+        ('<h3 class="intro__sub">' + T('단계를 누르면 시작합니다') + '</h3>') +
         '<div class="levels">' +
           ORDER.map(function (k) {
             var L = LEVELS[k];
             return '<button class="level" data-level="' + k + '">' +
-              '<span class="level__step">' + L.step + '단계</span>' +
+              '<span class="level__step">' + L.step + (T('단계') + '</span>') +
               '<span class="level__name">' + L.name + '</span>' +
               '<span class="level__meta">' + L.note + '</span>' +
-              '<span class="level__bonus">' + (L.bonus ? '난이도 보너스 +' + L.bonus : '기본') + '</span>' +
+              '<span class="level__bonus">' + (L.bonus ? T('난이도 보너스 +{n}', { n: L.bonus }) : T('기본')) + '</span>' +
               '</button>';
           }).join('') +
         '</div>' +
 
-        '<button class="btn btn--ghost btn--print" id="clPrint">종이 도안 만들기 <small>A4 인쇄 · PDF 저장</small></button>' +
-        '<button class="linkbtn" id="clRules">점수 규칙 보기</button>' +
+        ('<button class="btn btn--ghost btn--print" id="clPrint">' + T('종이 도안 만들기') + ' <small>' + T('A4 인쇄 · PDF 저장') + '</small></button>') +
+        ('<button class="linkbtn" id="clRules">' + T('점수 규칙 보기') + '</button>') +
       '</section>';
 
     var wantPic = 'random', wantFree = false;
@@ -142,7 +142,7 @@ window.Games.coloring = (function () {
           var L = LEVELS[lv.dataset.level];
           lv.querySelector('.level__bonus').textContent = wantFree
             ? '번호 없이 마음대로'
-            : (L.bonus ? '난이도 보너스 +' + L.bonus : '기본');
+            : (L.bonus ? T('난이도 보너스 +{n}', { n: L.bonus }) : T('기본'));
         });
       });
     });
@@ -166,7 +166,7 @@ window.Games.coloring = (function () {
 
   function svgMarkup() {
     var s = '<svg class="cl-svg" id="clSvg" viewBox="' + pic.viewBox + '" ' +
-            'xmlns="http://www.w3.org/2000/svg" role="img" aria-label="' + UI.esc(pic.name) + ' 색칠 그림">';
+            'xmlns="http://www.w3.org/2000/svg" role="img" aria-label="' + UI.esc(pic.name) + ' ' + T('색칠 그림') + '">';
     pic.regions.forEach(function (r, i) {
       s += '<path class="cl-rg" data-i="' + i + '" d="' + r.d + '" fill="#FFFFFF"></path>';
     });
@@ -197,7 +197,7 @@ window.Games.coloring = (function () {
           '<span class="cl-color__nm">' + PICTURES.nameOf(n) + '</span></button>';
       }).join('') +
       '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="지우개">' +
-        '<span class="cl-color__dot">↺</span><span class="cl-color__nm">지우개</span></button>' +
+        ('<span class="cl-color__dot">↺</span><span class="cl-color__nm">' + T('지우개') + '</span></button>') +
     '</div>';
   }
 
@@ -208,19 +208,19 @@ window.Games.coloring = (function () {
     root.innerHTML =
       '<section class="game coloring">' +
         '<div class="hud">' +
-          '<div class="hud__item"><span class="hud__lbl">그림</span><b>' + UI.esc(pic.name) + '</b></div>' +
-          '<div class="hud__item"><span class="hud__lbl">칠한 칸</span><b id="clDone">0</b></div>' +
-          '<div class="hud__item"><span class="hud__lbl">' + (S.free ? '단계' : '실수') + '</span><b id="clWrong">0</b></div>' +
-          '<div class="hud__item"><span class="hud__lbl">시간</span><b id="clTime">0:00</b></div>' +
+          ('<div class="hud__item"><span class="hud__lbl">' + T('그림') + '</span><b>') + UI.esc(pic.name) + '</b></div>' +
+          ('<div class="hud__item"><span class="hud__lbl">' + T('칠한 칸') + '</span><b id="clDone">0</b></div>') +
+          '<div class="hud__item"><span class="hud__lbl">' + (S.free ? '단계' : T('실수')) + '</span><b id="clWrong">0</b></div>' +
+          ('<div class="hud__item"><span class="hud__lbl">' + T('시간') + '</span><b id="clTime">0:00</b></div>') +
         '</div>' +
         '<div class="cl-stage">' + svgMarkup() + '</div>' +
-        '<p class="cl-tip" id="clTip">아래에서 색을 고른 뒤, 그 번호가 적힌 칸을 누르세요.</p>' +
+        ('<p class="cl-tip" id="clTip">' + T('아래에서 색을 고른 뒤, 그 번호가 적힌 칸을 누르세요.') + '</p>') +
         paletteMarkup() +
         '<div class="tools">' +
-          (S.free ? '' : '<button class="tool" id="clHint"><span>💡</span>어디에 칠하나</button>') +
-          '<button class="tool" id="clPrintNow"><span>🖨</span>종이로 인쇄</button>' +
-          '<button class="tool" id="clNew"><span>↺</span>새 그림</button>' +
-          '<button class="tool" id="clSwitch"><span>⇄</span>다른 게임</button>' +
+          (S.free ? '' : ('<button class="tool" id="clHint"><span>💡</span>' + T('어디에 칠하나') + '</button>')) +
+          ('<button class="tool" id="clPrintNow"><span>🖨</span>' + T('종이로 인쇄') + '</button>') +
+          ('<button class="tool" id="clNew"><span>↺</span>' + T('새 그림') + '</button>') +
+          ('<button class="tool" id="clSwitch"><span>⇄</span>' + T('다른 게임') + '</button>') +
         '</div>' +
       '</section>';
 
@@ -231,7 +231,7 @@ window.Games.coloring = (function () {
       time: root.querySelector('#clTime'),
       tip: root.querySelector('#clTip')
     };
-    if (S.free) els.wrong.textContent = L.step + '단계';
+    if (S.free) els.wrong.textContent = T('{n}단계', { n: L.step });
 
     els.svg.addEventListener('click', onTap);
     root.querySelectorAll('.cl-color').forEach(function (b) {
@@ -241,11 +241,11 @@ window.Games.coloring = (function () {
     if (hb) hb.addEventListener('click', useHint);
     root.querySelector('#clPrintNow').addEventListener('click', printThis);
     root.querySelector('#clNew').addEventListener('click', function () {
-      UI.confirm('새 그림', '지금 칠하던 그림은 사라집니다. 새로 시작할까요?', function () {
+      UI.confirm(T('새 그림'), T('지금 칠하던 그림은 사라집니다. 새로 시작할까요?'), function () {
         Store.clearSession('coloring');
         S = null; pic = null;
         renderIntro();
-      }, '새로 시작');
+      }, T('새로 시작'));
     });
     root.querySelector('#clSwitch').addEventListener('click', function () { App.gameSwitcher('coloring'); });
 
@@ -270,12 +270,12 @@ window.Games.coloring = (function () {
       b.classList.toggle('is-on', +b.dataset.c === n);
     });
     if (n === -1) {
-      els.tip.textContent = '지우고 싶은 칸을 누르세요.';
+      els.tip.textContent = T('지우고 싶은 칸을 누르세요.');
     } else if (S.free) {
-      els.tip.textContent = josa(PICTURES.nameOf(n), '을', '를') + ' 골랐습니다. 칠하고 싶은 칸을 누르세요.';
+      els.tip.textContent = josa(PICTURES.nameOf(n), T('을'), T('를')) + (' ' + T('골랐습니다. 칠하고 싶은 칸을 누르세요.'));
     } else {
-      els.tip.textContent = n + '번 ' + PICTURES.nameOf(n) + ' — ' +
-        numJosa(n, '이', '가') + ' 적힌 칸을 누르세요.';
+      els.tip.textContent = n + (T('번') + ' ') + PICTURES.nameOf(n) + ' — ' +
+        numJosa(n, T('이'), T('가')) + (' ' + T('적힌 칸을 누르세요.'));
     }
   }
 
@@ -288,7 +288,7 @@ window.Games.coloring = (function () {
     if (!t || !t.classList || !t.classList.contains('cl-rg')) return;
     var i = +t.dataset.i;
 
-    if (picked === 0) { UI.toast('먼저 아래에서 색을 고르세요.'); return; }
+    if (picked === 0) { UI.toast(T('먼저 아래에서 색을 고르세요.')); return; }
 
     if (picked === -1) {                                 // 지우개
       if (!S.fills[i]) return;
@@ -330,7 +330,7 @@ window.Games.coloring = (function () {
       el.classList.remove('is-miss');
       if (num) num.classList.remove('is-miss');
     }, 600);
-    els.tip.textContent = '그 칸은 ' + pic.regions[i].c + '번 ' + PICTURES.nameOf(pic.regions[i].c) + ' 자리입니다.';
+    els.tip.textContent = (T('그 칸은') + ' ') + pic.regions[i].c + (T('번') + ' ') + PICTURES.nameOf(pic.regions[i].c) + (' ' + T('자리입니다.'));
   }
 
   function paintOne(i) {
@@ -361,13 +361,13 @@ window.Games.coloring = (function () {
 
   function useHint() {
     if (!S || S.done) return;
-    if (picked <= 0) { UI.toast('먼저 아래에서 색을 고르세요.'); return; }
+    if (picked <= 0) { UI.toast(T('먼저 아래에서 색을 고르세요.')); return; }
 
     var hit = [];
     pic.regions.forEach(function (r, i) { if (r.c === picked && !S.fills[i]) hit.push(i); });
     if (!hit.length) {
-      UI.toast(picked + '번 ' + josa(PICTURES.nameOf(picked), '은', '는') +
-               ' 다 칠했습니다. 다른 색을 골라 보세요.');
+      UI.toast(picked + (T('번') + ' ') + josa(PICTURES.nameOf(picked), T('은'), T('는')) +
+               (' ' + T('다 칠했습니다. 다른 색을 골라 보세요.')));
       return;
     }
 
@@ -378,7 +378,7 @@ window.Games.coloring = (function () {
     hit.forEach(function (i) {
       els.svg.querySelector('.cl-rg[data-i="' + i + '"]').classList.add('is-blink');
     });
-    UI.toast(picked + '번 칸 ' + hit.length + '곳이 반짝입니다. (−30점)');
+    UI.toast(T('{c}번 칸 {n}곳이 반짝입니다. (−30점)', { c: picked, n: hit.length }));
     blinkTimer = setTimeout(stopBlink, 3200);
   }
 
@@ -401,19 +401,19 @@ window.Games.coloring = (function () {
   function printThis() {
     if (!pic) return;
     var m = UI.modal({
-      title: '종이로 인쇄',
-      body: '<p class="modal__msg">지금 이 그림을 A4 한 장으로 인쇄합니다.<br>' +
-            'PDF 파일로 저장하시려면 인쇄 창의 <b>프린터</b>를 <b>“Microsoft Print to PDF”</b> 또는 <b>“PDF로 저장”</b>으로 바꾸세요.</p>' +
-            '<div class="settings"><div class="set"><span class="set__lbl">무엇을</span>' +
+      title: T('종이로 인쇄'),
+      body: ('<p class="modal__msg">' + T('지금 이 그림을 A4 한 장으로 인쇄합니다.') + '<br>') +
+            (T('PDF 파일로 저장하시려면 인쇄 창의') + ' <b>' + T('프린터') + '</b>' + T('를') + ' <b>“Microsoft Print to PDF”</b> ' + T('또는') + ' <b>' + T('“PDF로 저장”') + '</b>' + T('으로 바꾸세요.') + '</p>') +
+            ('<div class="settings"><div class="set"><span class="set__lbl">' + T('무엇을') + '</span>') +
             '<div class="seg" id="clPrKind">' +
-              '<button data-v="blank" class="is-on">빈 도안</button>' +
-              '<button data-v="mine">지금 칠한 그림</button>' +
+              ('<button data-v="blank" class="is-on">' + T('빈 도안') + '</button>') +
+              ('<button data-v="mine">' + T('지금 칠한 그림') + '</button>') +
             '</div></div></div>' +
-            '<p class="modal__msg small">빈 도안에는 번호와 색깔표가 함께 인쇄됩니다. ' +
-            '크레파스나 색연필로 칠해 보세요.</p>',
+            ('<p class="modal__msg small">' + T('빈 도안에는 번호와 색깔표가 함께 인쇄됩니다.') + ' ') +
+            (T('크레파스나 색연필로 칠해 보세요.') + '</p>'),
       actions: [
-        { label: '취소' },
-        { label: '인쇄하기', kind: 'accent', onClick: function () {
+        { label: T('취소') },
+        { label: T('인쇄하기'), kind: 'accent', onClick: function () {
             Print.coloringNow(pic, kind === 'mine' ? S.fills : null, S.free);
           } }
       ]
@@ -462,14 +462,14 @@ window.Games.coloring = (function () {
 
     if (S.free) {                                          // 쉼터 모드 — 점수를 매기지 않는다
       UI.modal({
-        title: '다 칠했습니다!',
-        body: '<p class="modal__msg">‘' + UI.esc(pic.name) + '’ 그림을 곱게 완성하셨습니다.<br>' +
-              '종이로 인쇄해 두면 오래 남습니다.</p>',
+        title: T('다 칠했습니다!'),
+        body: '<p class="modal__msg">‘' + UI.esc(pic.name) + (T('’ 그림을 곱게 완성하셨습니다.') + '<br>') +
+              (T('종이로 인쇄해 두면 오래 남습니다.') + '</p>'),
         dismissable: false,
         actions: [
-          { label: '인쇄하기', keepOpen: true, onClick: printDone },
-          { label: '다른 게임', onClick: function () { App.gameSwitcher('coloring'); } },
-          { label: '한 장 더', kind: 'accent', onClick: function () { S = null; pic = null; renderIntro(); } }
+          { label: T('인쇄하기'), keepOpen: true, onClick: printDone },
+          { label: T('다른 게임'), onClick: function () { App.gameSwitcher('coloring'); } },
+          { label: T('한 장 더'), kind: 'accent', onClick: function () { S = null; pic = null; renderIntro(); } }
         ]
       });
       return;
@@ -478,29 +478,29 @@ window.Games.coloring = (function () {
     var sc = score();
     Store.addRecord({
       game: 'coloring', score: sc.total,
-      difficulty: LEVELS[S.level].step + '단계 ' + LEVELS[S.level].name,
+      difficulty: LEVELS[S.level].step + (T('단계') + ' ') + LEVELS[S.level].name,
       duration: S.elapsed,
       detail: { picture: pic.name, cells: S.fills.length, wrong: S.wrong, hints: S.hints }
     });
 
     var rows = [
-      { label: '칠한 칸 (' + S.fills.length + '칸 모두)', value: sc.fill },
-      { label: '정확도 보너스 (실수 ' + S.wrong + '회)', value: sc.acc },
-      { label: '시간 보너스 (' + UI.fmtTime(S.elapsed) + ' 걸림)', value: sc.time }
+      { label: T('칠한 칸 ({n}칸 모두)', { n: S.fills.length }), value: sc.fill },
+      { label: T('정확도 보너스 (실수 {n}회)', { n: S.wrong }), value: sc.acc },
+      { label: T('시간 보너스 ({t} 걸림)', { t: UI.fmtTime(S.elapsed) }), value: sc.time }
     ];
-    if (sc.bonus) rows.push({ label: '난이도 보너스 (' + LEVELS[S.level].name + ')', value: sc.bonus });
-    if (sc.penalty) rows.push({ label: '힌트 사용 (' + S.hints + '회)', value: sc.penalty, minus: true });
+    if (sc.bonus) rows.push({ label: T('난이도 보너스 ({name})', { name: LEVELS[S.level].name }), value: sc.bonus });
+    if (sc.penalty) rows.push({ label: T('힌트 사용 ({n}회)', { n: S.hints }), value: sc.penalty, minus: true });
 
     UI.resultModal({
-      title: '그림을 다 칠했습니다!',
+      title: T('그림을 다 칠했습니다!'),
       score: sc.total,
-      headline: '‘' + pic.name + '’ 완성',
+      headline: T('‘{p}’ 완성', { p: pic.name }),
       rows: rows,
-      note: '칠한 그림은 “인쇄하기”로 종이에 남길 수 있습니다.',
+      note: T('칠한 그림은 “인쇄하기”로 종이에 남길 수 있습니다.'),
       actions: [
-        { label: '인쇄하기', keepOpen: true, onClick: printDone },
-        { label: '기록 보기', onClick: function () { App.go('records'); } },
-        { label: '한 장 더', kind: 'accent', onClick: function () { S = null; pic = null; renderIntro(); } }
+        { label: T('인쇄하기'), keepOpen: true, onClick: printDone },
+        { label: T('기록 보기'), onClick: function () { App.go('records'); } },
+        { label: T('한 장 더'), kind: 'accent', onClick: function () { S = null; pic = null; renderIntro(); } }
       ]
     });
   }
@@ -508,18 +508,18 @@ window.Games.coloring = (function () {
   /* ================= 바깥으로 ================= */
 
   return {
-    id: 'coloring', name: '색칠 공부', tagline: '번호대로 색을 채워 가는 시간',
+    id: 'coloring', name: T('색칠 공부'), tagline: T('번호대로 색을 채워 가는 시간'),
     rules: {
-      title: '색칠 공부 점수 규칙',
+      title: T('색칠 공부 점수 규칙'),
       lines: [
-        ['난이도', '1단계 첫걸음(색 4가지) · 2단계 가볍게(색 5가지) · 3단계 쉬움(색 6가지) · 4단계 보통(색 8가지) · 5단계 어려움(색 10가지)'],
-        ['칠한 칸', '최대 700점 · 칠한 칸 수에 비례 (모두 칠하면 700점)'],
-        ['정확도 보너스', '최대 200점 · 색을 잘못 고른 횟수 1회마다 20점씩 줄어듦'],
-        ['시간 보너스', '최대 100점 · 시간 제한은 없고, 천천히 해도 점수가 남습니다'],
-        ['힌트 감점', '힌트 1회마다 30점 차감'],
-        ['난이도 보너스', '보통 +100점, 어려움 +250점 (다 칠했을 때 · 1~3단계는 보너스 없음)'],
-        ['최고 점수', '1~3단계 1,000점 / 보통 1,100점 / 어려움 1,250점'],
-        ['마음대로 칠하기', '번호도 점수도 없습니다. 기록에 남지 않습니다']
+        [T('난이도'), T('1단계 첫걸음(색 4가지) · 2단계 가볍게(색 5가지) · 3단계 쉬움(색 6가지) · 4단계 보통(색 8가지) · 5단계 어려움(색 10가지)')],
+        [T('칠한 칸'), T('최대 700점 · 칠한 칸 수에 비례 (모두 칠하면 700점)')],
+        [T('정확도 보너스'), T('최대 200점 · 색을 잘못 고른 횟수 1회마다 20점씩 줄어듦')],
+        [T('시간 보너스'), T('최대 100점 · 시간 제한은 없고, 천천히 해도 점수가 남습니다')],
+        [T('힌트 감점'), T('힌트 1회마다 30점 차감')],
+        [T('난이도 보너스'), T('보통 +100점, 어려움 +250점 (다 칠했을 때 · 1~3단계는 보너스 없음)')],
+        [T('최고 점수'), T('1~3단계 1,000점 / 보통 1,100점 / 어려움 1,250점')],
+        [T('마음대로 칠하기'), T('번호도 점수도 없습니다. 기록에 남지 않습니다')]
       ]
     },
     mount: function (container) {

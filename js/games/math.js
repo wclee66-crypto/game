@@ -8,16 +8,16 @@ window.Games = window.Games || {};
 window.Games.math = (function () {
 
   var LEVELS = {
-    step1:  { name: '첫걸음', step: 1, count: 10, limit: 300, bonus: 0,   kind: 'a1',
-              note: '한 자리 더하기 · 답이 10 이하' },
-    step2:  { name: '가볍게', step: 2, count: 12, limit: 300, bonus: 0,   kind: 'a2',
-              note: '한 자리 더하기와 빼기' },
-    easy:   { name: '쉬움',   step: 3, count: 15, limit: 360, bonus: 0,   kind: 'a3',
-              note: '두 자리 ± 한 자리 · 받아올림 없음' },
-    normal: { name: '보통',   step: 4, count: 18, limit: 420, bonus: 100, kind: 'a4',
-              note: '두 자리 ± 두 자리 · 받아올림 있음' },
-    hard:   { name: '어려움', step: 5, count: 20, limit: 480, bonus: 250, kind: 'a5',
-              note: '두 자리 계산 + 세 수 이어 계산' }
+    step1:  { name: T('첫걸음'), step: 1, count: 10, limit: 300, bonus: 0,   kind: 'a1',
+              note: T('한 자리 더하기 · 답이 10 이하') },
+    step2:  { name: T('가볍게'), step: 2, count: 12, limit: 300, bonus: 0,   kind: 'a2',
+              note: T('한 자리 더하기와 빼기') },
+    easy:   { name: T('쉬움'),   step: 3, count: 15, limit: 360, bonus: 0,   kind: 'a3',
+              note: T('두 자리 ± 한 자리 · 받아올림 없음') },
+    normal: { name: T('보통'),   step: 4, count: 18, limit: 420, bonus: 100, kind: 'a4',
+              note: T('두 자리 ± 두 자리 · 받아올림 있음') },
+    hard:   { name: T('어려움'), step: 5, count: 20, limit: 480, bonus: 250, kind: 'a5',
+              note: T('두 자리 계산 + 세 수 이어 계산') }
   };
   var ORDER = ['step1', 'step2', 'easy', 'normal', 'hard'];
 
@@ -140,26 +140,26 @@ window.Games.math = (function () {
 
     root.innerHTML =
       '<section class="intro">' +
-        '<h2 class="intro__title">숫자 계산</h2>' +
-        '<p class="intro__desc">더하기와 빼기를 암산으로 풉니다.<br>답은 숫자판을 눌러 직접 넣습니다.<br><small>틀려도 점수가 깎이지 않습니다.</small></p>' +
-        (best ? '<p class="intro__best">나의 최고 기록 <b>' + UI.comma(best.score) + '점</b></p>' : '') +
+        ('<h2 class="intro__title">' + T('숫자 계산') + '</h2>') +
+        ('<p class="intro__desc">' + T('더하기와 빼기를 암산으로 풉니다.') + '<br>' + T('답은 숫자판을 눌러 직접 넣습니다.') + '<br><small>' + T('틀려도 점수가 깎이지 않습니다.') + '</small></p>') +
+        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + '점</b></p>' : '') +
         (sess && LEVELS[sess.level]
-          ? '<button class="btn btn--accent btn--big" id="mtResume">이어서 하기 <small>' +
+          ? ('<button class="btn btn--accent btn--big" id="mtResume">' + T('이어서 하기') + ' <small>') +
             LEVELS[sess.level].name + ' · ' + (sess.i + 1) + '번 문제부터</small></button>'
           : '') +
         '<div class="levels">' +
           ORDER.map(function (k) {
             var L = LEVELS[k];
             return '<button class="level" data-level="' + k + '">' +
-              '<span class="level__step">' + L.step + '단계</span>' +
+              '<span class="level__step">' + L.step + (T('단계') + '</span>') +
               '<span class="level__name">' + L.name + '</span>' +
-              '<span class="level__meta">' + L.note + ' · ' + L.count + '문제 · 제한 ' + Math.round(L.limit / 60) + '분</span>' +
-              '<span class="level__bonus">' + (L.bonus ? '난이도 보너스 +' + L.bonus : '기본') + '</span>' +
+              '<span class="level__meta">' + L.note + ' · ' + L.count + (T('문제 · 제한') + ' ') + Math.round(L.limit / 60) + (T('분') + '</span>') +
+              '<span class="level__bonus">' + (L.bonus ? T('난이도 보너스 +{n}', { n: L.bonus }) : T('기본')) + '</span>' +
               '</button>';
           }).join('') +
         '</div>' +
-        '<button class="btn btn--ghost btn--print" id="mtPrint">종이로 풀 문제 만들기 <small>A4 인쇄 · PDF 저장</small></button>' +
-        '<button class="linkbtn" id="mtRules">점수 규칙 보기</button>' +
+        ('<button class="btn btn--ghost btn--print" id="mtPrint">' + T('종이로 풀 문제 만들기') + ' <small>' + T('A4 인쇄 · PDF 저장') + '</small></button>') +
+        ('<button class="linkbtn" id="mtRules">' + T('점수 규칙 보기') + '</button>') +
       '</section>';
 
     root.querySelectorAll('.level').forEach(function (b) {
@@ -184,30 +184,30 @@ window.Games.math = (function () {
     root.innerHTML =
       '<section class="game math">' +
         '<div class="hud">' +
-          '<div class="hud__item"><span class="hud__lbl">난이도</span><b>' + L.name + '</b></div>' +
-          '<div class="hud__item"><span class="hud__lbl">남은 시간</span><b id="mtTime">0:00</b></div>' +
-          '<div class="hud__item"><span class="hud__lbl">문제</span><b id="mtNo">' + (S.i + 1) + '/' + S.probs.length + '</b></div>' +
-          '<div class="hud__item"><span class="hud__lbl">맞힘</span><b id="mtRight">' + right + '</b></div>' +
+          ('<div class="hud__item"><span class="hud__lbl">' + T('난이도') + '</span><b>') + L.name + '</b></div>' +
+          ('<div class="hud__item"><span class="hud__lbl">' + T('남은 시간') + '</span><b id="mtTime">0:00</b></div>') +
+          ('<div class="hud__item"><span class="hud__lbl">' + T('문제') + '</span><b id="mtNo">') + (S.i + 1) + '/' + S.probs.length + '</b></div>' +
+          ('<div class="hud__item"><span class="hud__lbl">' + T('맞힘') + '</span><b id="mtRight">') + right + '</b></div>' +
         '</div>' +
 
         '<div class="mt-card">' +
           '<div class="mt-q"><span class="mt-expr">' + p.q + '</span><span class="mt-eq">=</span>' +
             '<span class="mt-ans" id="mtAns"></span></div>' +
-          '<p class="mt-hint" id="mtMsg">답을 누른 뒤 <b>확인</b>을 누르세요</p>' +
+          ('<p class="mt-hint" id="mtMsg">' + T('답을 누른 뒤') + ' <b>' + T('확인') + '</b>' + T('을 누르세요') + '</p>') +
         '</div>' +
 
         '<div class="pad mt-pad" id="mtPad">' +
           [1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (n) {
             return '<button class="pad__key" data-n="' + n + '">' + n + '</button>';
           }).join('') +
-          '<button class="pad__key pad__key--fn" data-act="back">지우기</button>' +
+          ('<button class="pad__key pad__key--fn" data-act="back">' + T('지우기') + '</button>') +
           '<button class="pad__key" data-n="0">0</button>' +
-          '<button class="pad__key pad__key--ok" data-act="ok">확인</button>' +
+          ('<button class="pad__key pad__key--ok" data-act="ok">' + T('확인') + '</button>') +
         '</div>' +
 
         '<div class="tools">' +
-          '<button class="tool" id="mtQuit"><span>↺</span>그만두기</button>' +
-          '<button class="tool" id="mtSwitch"><span>⇄</span>다른 게임</button>' +
+          ('<button class="tool" id="mtQuit"><span>↺</span>' + T('그만두기') + '</button>') +
+          ('<button class="tool" id="mtSwitch"><span>⇄</span>' + T('다른 게임') + '</button>') +
         '</div>' +
       '</section>';
 
@@ -227,7 +227,7 @@ window.Games.math = (function () {
       else type(k.dataset.n);
     });
     root.querySelector('#mtQuit').addEventListener('click', function () {
-      UI.confirm('그만두기', '지금까지 푼 만큼만 점수로 기록됩니다. 그만둘까요?', function () { finish(); }, '그만두기');
+      UI.confirm(T('그만두기'), T('지금까지 푼 만큼만 점수로 기록됩니다. 그만둘까요?'), function () { finish(); }, T('그만두기'));
     });
     root.querySelector('#mtSwitch').addEventListener('click', function () { App.gameSwitcher('math'); });
 
@@ -249,7 +249,7 @@ window.Games.math = (function () {
   }
 
   function submit() {
-    if (!S.input) { UI.toast('답을 먼저 눌러 주세요.'); return; }
+    if (!S.input) { UI.toast(T('답을 먼저 눌러 주세요.')); return; }
     locked = true;
     stopTimer();
 
@@ -261,7 +261,7 @@ window.Games.math = (function () {
     els.ans.classList.add(ok ? 'is-right' : 'is-wrong');
     els.msg.innerHTML = ok
       ? '<b class="mt-ok">잘하셨습니다!</b>'
-      : '<b class="mt-no">정답은 ' + p.a + '입니다</b>';
+      : ('<b class="mt-no">' + T('정답은') + ' ') + p.a + (T('입니다') + '</b>');
     if (ok) els.right.textContent = S.picks.filter(function (x) { return x.correct; }).length;
     UI.beep(ok ? 'ok' : 'no');
 
@@ -327,28 +327,28 @@ window.Games.math = (function () {
 
     var L = lv(), sc = score();
     Store.addRecord({
-      game: 'math', score: sc.total, difficulty: L.step + '단계 ' + L.name,
+      game: 'math', score: sc.total, difficulty: L.step + (T('단계') + ' ') + L.name,
       duration: S.elapsed,
       detail: { correct: sc.correct, count: sc.count, streak: sc.streak }
     });
 
     var rows = [
-      { label: '정답 점수 (' + sc.correct + '/' + sc.count + '문제)', value: sc.right }
+      { label: T('정답 점수 ({a}/{b}문제)', { a: sc.correct, b: sc.count }), value: sc.right }
     ];
-    if (sc.all) rows.push({ label: '시간 보너스 (' + UI.fmtTime(Math.max(0, L.limit - S.elapsed)) + ' 남김)', value: sc.time });
-    rows.push({ label: '연속 정답 보너스 (최대 ' + sc.streak + '연속)', value: sc.combo });
-    if (sc.bonus) rows.push({ label: '난이도 보너스 (' + L.name + ')', value: sc.bonus });
+    if (sc.all) rows.push({ label: T('시간 보너스 ({t} 남김)', { t: UI.fmtTime(Math.max(0, L.limit - S.elapsed)) }), value: sc.time });
+    rows.push({ label: T('연속 정답 보너스 (최대 {n}연속)', { n: sc.streak }), value: sc.combo });
+    if (sc.bonus) rows.push({ label: T('난이도 보너스 ({name})', { name: L.name }), value: sc.bonus });
 
     UI.resultModal({
-      title: '숫자 계산을 마쳤습니다',
+      title: T('숫자 계산을 마쳤습니다'),
       score: sc.total,
-      headline: sc.correct === sc.count ? '전부 맞히셨습니다. 대단합니다!' : sc.correct + '문제를 맞히셨습니다.',
+      headline: sc.correct === sc.count ? '전부 맞히셨습니다. 대단합니다!' : T('{n}문제를 맞히셨습니다.', { n: sc.correct }),
       rows: rows,
-      note: sc.all ? '' : '끝까지 풀어야 시간 보너스와 난이도 보너스를 받습니다.',
+      note: sc.all ? '' : T('끝까지 풀어야 시간 보너스와 난이도 보너스를 받습니다.'),
       actions: [
-        { label: '다른 게임', onClick: function () { App.gameSwitcher('math'); } },
-        { label: '기록 보기', onClick: function () { App.go('records'); } },
-        { label: '한 판 더', kind: 'accent', onClick: function () { S = null; renderIntro(); } }
+        { label: T('다른 게임'), onClick: function () { App.gameSwitcher('math'); } },
+        { label: T('기록 보기'), onClick: function () { App.go('records'); } },
+        { label: T('한 판 더'), kind: 'accent', onClick: function () { S = null; renderIntro(); } }
       ]
     });
   }
@@ -371,18 +371,18 @@ window.Games.math = (function () {
   }
 
   return {
-    id: 'math', name: '숫자 계산', tagline: '더하기 빼기로 머리 깨우기',
+    id: 'math', name: T('숫자 계산'), tagline: T('더하기 빼기로 머리 깨우기'),
     rules: {
-      title: '숫자 계산 점수 규칙',
+      title: T('숫자 계산 점수 규칙'),
       lines: [
-        ['난이도', '1단계 한 자리 더하기 · 2단계 한 자리 더하기·빼기 · 3단계 두 자리 ± 한 자리(받아올림 없음) · 4단계 두 자리 ± 두 자리 · 5단계 세 수 이어 계산'],
-        ['정답 점수', '최대 600점 · 맞힌 문제 수에 비례'],
-        ['시간 보너스', '최대 300점 · 끝까지 풀었을 때만, 남은 시간에 비례'],
-        ['연속 정답 보너스', '최대 100점 · 3연속 25 / 4연속 50 / 5연속 75 / 6연속 이상 100'],
-        ['오답 감점', '없음 — 틀리면 정답을 보여 주고 다음 문제로 넘어갑니다'],
-        ['난이도 보너스', '보통 +100점, 어려움 +250점 (끝까지 풀었을 때)'],
-        ['최고 점수', '1~3단계 1,000점 / 보통 1,100점 / 어려움 1,250점'],
-        ['자판', 'PC에서는 숫자 키로 입력, Backspace 지우기, Enter 확인']
+        [T('난이도'), T('1단계 한 자리 더하기 · 2단계 한 자리 더하기·빼기 · 3단계 두 자리 ± 한 자리(받아올림 없음) · 4단계 두 자리 ± 두 자리 · 5단계 세 수 이어 계산')],
+        [T('정답 점수'), T('최대 600점 · 맞힌 문제 수에 비례')],
+        [T('시간 보너스'), T('최대 300점 · 끝까지 풀었을 때만, 남은 시간에 비례')],
+        [T('연속 정답 보너스'), T('최대 100점 · 3연속 25 / 4연속 50 / 5연속 75 / 6연속 이상 100')],
+        [T('오답 감점'), T('없음 — 틀리면 정답을 보여 주고 다음 문제로 넘어갑니다')],
+        [T('난이도 보너스'), T('보통 +100점, 어려움 +250점 (끝까지 풀었을 때)')],
+        [T('최고 점수'), T('1~3단계 1,000점 / 보통 1,100점 / 어려움 1,250점')],
+        [T('자판'), T('PC에서는 숫자 키로 입력, Backspace 지우기, Enter 확인')]
       ]
     },
     mount: function (container) {
@@ -404,7 +404,7 @@ window.Games.math = (function () {
       var key = LEVELS[level] ? level : 'easy';
       var L = LEVELS[key];
       return {
-        level: key, levelName: L.step + '단계 ' + L.name,
+        level: key, levelName: L.step + (T('단계') + ' ') + L.name,
         note: L.note,
         items: makeSet(key, count || 24)
       };

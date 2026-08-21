@@ -7,16 +7,16 @@ window.Games.wordsearch = (function () {
   /* 앞 두 단계는 판을 작게, 낱말을 짧게, 방향을 줄인다.
      maxLen 은 낼 수 있는 낱말의 최대 글자 수. */
   var LEVELS = {
-    step1:  { name: '첫걸음', step: 1, size: 6,  count: 4,  maxLen: 3, limit: 300, bonus: 0,
-              dirs: [[0, 1], [1, 0]], note: '6칸 판 · 낱말 4개 · 가로와 세로만' },
-    step2:  { name: '가볍게', step: 2, size: 7,  count: 5,  maxLen: 3, limit: 300, bonus: 0,
-              dirs: [[0, 1], [1, 0], [1, 1]], note: '7칸 판 · 낱말 5개 · 대각선 추가' },
-    easy:   { name: '쉬움',   step: 3, size: 8,  count: 6,  maxLen: 8, limit: 360, bonus: 0,
-              dirs: [[0, 1], [1, 0], [1, 1]], note: '8칸 판 · 낱말 6개' },
-    normal: { name: '보통',   step: 4, size: 10, count: 8,  maxLen: 10, limit: 480, bonus: 100,
-              dirs: [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1]], note: '10칸 판 · 낱말 8개 · 거꾸로도 나옴' },
-    hard:   { name: '어려움', step: 5, size: 12, count: 10, maxLen: 12, limit: 600, bonus: 250,
-              dirs: [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1], [-1, 0], [-1, -1], [1, -1]], note: '12칸 판 · 낱말 10개 · 여덟 방향' }
+    step1:  { name: T('첫걸음'), step: 1, size: 6,  count: 4,  maxLen: 3, limit: 300, bonus: 0,
+              dirs: [[0, 1], [1, 0]], note: T('6칸 판 · 낱말 4개 · 가로와 세로만') },
+    step2:  { name: T('가볍게'), step: 2, size: 7,  count: 5,  maxLen: 3, limit: 300, bonus: 0,
+              dirs: [[0, 1], [1, 0], [1, 1]], note: T('7칸 판 · 낱말 5개 · 대각선 추가') },
+    easy:   { name: T('쉬움'),   step: 3, size: 8,  count: 6,  maxLen: 8, limit: 360, bonus: 0,
+              dirs: [[0, 1], [1, 0], [1, 1]], note: T('8칸 판 · 낱말 6개') },
+    normal: { name: T('보통'),   step: 4, size: 10, count: 8,  maxLen: 10, limit: 480, bonus: 100,
+              dirs: [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1]], note: T('10칸 판 · 낱말 8개 · 거꾸로도 나옴') },
+    hard:   { name: T('어려움'), step: 5, size: 12, count: 10, maxLen: 12, limit: 600, bonus: 250,
+              dirs: [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1], [-1, 0], [-1, -1], [1, -1]], note: T('12칸 판 · 낱말 10개 · 여덟 방향') }
   };
   var ORDER = ['step1', 'step2', 'easy', 'normal', 'hard'];
 
@@ -118,23 +118,23 @@ window.Games.wordsearch = (function () {
 
     root.innerHTML =
       '<section class="intro">' +
-        '<h2 class="intro__title">낱말찾기</h2>' +
-        '<p class="intro__desc">글자판 속에 숨은 낱말을<br>손가락으로 쭉 그어 찾습니다.<br><small>글자를 하나씩 눌러 이어 붙여도 됩니다.<br>고른 칸은 낱말이 될 때까지 색이 남습니다.</small></p>' +
-        (best ? '<p class="intro__best">나의 최고 기록 <b>' + UI.comma(best.score) + '점</b></p>' : '') +
-        (sess ? '<button class="btn btn--accent btn--big" id="wsResume">이어서 하기 <small>' + LEVELS[sess.level].name + ' · ' + sess.found.length + '/' + sess.placed.length + '개 찾음</small></button>' : '') +
+        ('<h2 class="intro__title">' + T('낱말찾기') + '</h2>') +
+        ('<p class="intro__desc">' + T('글자판 속에 숨은 낱말을') + '<br>' + T('손가락으로 쭉 그어 찾습니다.') + '<br><small>' + T('글자를 하나씩 눌러 이어 붙여도 됩니다.') + '<br>' + T('고른 칸은 낱말이 될 때까지 색이 남습니다.') + '</small></p>') +
+        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + '점</b></p>' : '') +
+        (sess ? ('<button class="btn btn--accent btn--big" id="wsResume">' + T('이어서 하기') + ' <small>') + LEVELS[sess.level].name + ' · ' + sess.found.length + '/' + sess.placed.length + '개 찾음</small></button>' : '') +
         '<div class="levels">' +
           ORDER.map(function (k) {
             var L = LEVELS[k];
             return '<button class="level" data-level="' + k + '">' +
-              '<span class="level__step">' + L.step + '단계</span>' +
+              '<span class="level__step">' + L.step + (T('단계') + '</span>') +
               '<span class="level__name">' + L.name + '</span>' +
-              '<span class="level__meta">' + L.note + ' · 제한 ' + Math.round(L.limit / 60) + '분</span>' +
-              '<span class="level__bonus">' + (L.bonus ? '난이도 보너스 +' + L.bonus : '기본') + '</span>' +
+              '<span class="level__meta">' + L.note + (' ' + T('· 제한') + ' ') + Math.round(L.limit / 60) + (T('분') + '</span>') +
+              '<span class="level__bonus">' + (L.bonus ? T('난이도 보너스 +{n}', { n: L.bonus }) : T('기본')) + '</span>' +
               '</button>';
           }).join('') +
         '</div>' +
-        '<button class="btn btn--ghost btn--print" id="wsPrint">종이로 풀 문제 만들기 <small>A4 인쇄 · PDF 저장</small></button>' +
-        '<button class="linkbtn" id="wsRules">점수 규칙 보기</button>' +
+        ('<button class="btn btn--ghost btn--print" id="wsPrint">' + T('종이로 풀 문제 만들기') + ' <small>' + T('A4 인쇄 · PDF 저장') + '</small></button>') +
+        ('<button class="linkbtn" id="wsRules">' + T('점수 규칙 보기') + '</button>') +
       '</section>';
 
     root.querySelectorAll('.level').forEach(function (b) {
@@ -154,17 +154,17 @@ window.Games.wordsearch = (function () {
     root.innerHTML =
       '<section class="game">' +
         '<div class="hud">' +
-          '<div class="hud__item"><span class="hud__lbl">주제</span><b>' + UI.esc(S.theme) + '</b></div>' +
-          '<div class="hud__item"><span class="hud__lbl">남은 시간</span><b id="wsTime">0:00</b></div>' +
-          '<div class="hud__item"><span class="hud__lbl">찾음</span><b id="wsFound">0</b></div>' +
-          '<div class="hud__item"><span class="hud__lbl">힌트</span><b id="wsHint">0</b></div>' +
+          ('<div class="hud__item"><span class="hud__lbl">' + T('주제') + '</span><b>') + UI.esc(S.theme) + '</b></div>' +
+          ('<div class="hud__item"><span class="hud__lbl">' + T('남은 시간') + '</span><b id="wsTime">0:00</b></div>') +
+          ('<div class="hud__item"><span class="hud__lbl">' + T('찾음') + '</span><b id="wsFound">0</b></div>') +
+          ('<div class="hud__item"><span class="hud__lbl">' + T('힌트') + '</span><b id="wsHint">0</b></div>') +
         '</div>' +
         '<div class="ws-wrap"><div class="ws-grid" id="wsGrid" style="--cols:' + S.size + '"></div></div>' +
         '<ul class="ws-words" id="wsWords"></ul>' +
         '<div class="tools">' +
-          '<button class="tool" id="wsHintBtn"><span>💡</span>힌트</button>' +
-          '<button class="tool" id="wsRestart"><span>↺</span>새 판</button>' +
-          '<button class="tool" id="wsSwitch"><span>⇄</span>다른 게임</button>' +
+          ('<button class="tool" id="wsHintBtn"><span>💡</span>' + T('힌트') + '</button>') +
+          ('<button class="tool" id="wsRestart"><span>↺</span>' + T('새 판') + '</button>') +
+          ('<button class="tool" id="wsSwitch"><span>⇄</span>' + T('다른 게임') + '</button>') +
         '</div>' +
       '</section>';
 
@@ -189,9 +189,9 @@ window.Games.wordsearch = (function () {
     bindSelection();
     root.querySelector('#wsHintBtn').addEventListener('click', useHint);
     root.querySelector('#wsRestart').addEventListener('click', function () {
-      UI.confirm('새 판', '지금 판은 사라집니다. 새로 시작할까요?', function () {
+      UI.confirm(T('새 판'), T('지금 판은 사라집니다. 새로 시작할까요?'), function () {
         Store.clearSession('wordsearch'); S = null; renderIntro();
-      }, '새로 시작');
+      }, T('새로 시작'));
     });
     root.querySelector('#wsSwitch').addEventListener('click', function () { App.gameSwitcher('wordsearch'); });
 
@@ -278,7 +278,7 @@ window.Games.wordsearch = (function () {
       if (!drag.moved) {              // 끌지 않고 눌렀다 → 눌러서 고르기로 이어 간다
         if (!drag.anchored) {
           drag.anchored = true;
-          UI.toast('글자를 차례로 눌러 낱말을 만들어 보세요.');
+          UI.toast(T('글자를 차례로 눌러 낱말을 만들어 보세요.'));
         }
         return;
       }
@@ -337,7 +337,7 @@ window.Games.wordsearch = (function () {
     S.hints++;
     UI.beep('tick');
     paintFound(); paintWords(); persist();
-    UI.toast('‘' + pick.word + '’의 첫 글자에 표시했습니다. (−50점)');
+    UI.toast(T('‘{w}’의 첫 글자에 표시했습니다. (−50점)', { w: pick.word }));
     els.hint.textContent = S.hints;
   }
 
@@ -414,46 +414,46 @@ window.Games.wordsearch = (function () {
 
     var sc = score();
     Store.addRecord({
-      game: 'wordsearch', score: sc.total, difficulty: LEVELS[S.level].step + '단계 ' + LEVELS[S.level].name,
+      game: 'wordsearch', score: sc.total, difficulty: LEVELS[S.level].step + (T('단계') + ' ') + LEVELS[S.level].name,
       duration: S.elapsed,
       detail: { found: S.found.length, total: S.placed.length, wrong: S.wrong, hints: S.hints, theme: S.theme, timeUp: !!timeUp }
     });
 
-    var rows = [{ label: '찾은 낱말 (' + S.found.length + '/' + S.placed.length + '개)', value: sc.words }];
-    if (sc.all) rows.push({ label: '시간 보너스 (' + UI.fmtTime(LEVELS[S.level].limit - S.elapsed) + ' 남김)', value: sc.time });
-    rows.push({ label: '정확도 보너스 (헛선택 ' + S.wrong + '회)', value: sc.acc });
-    if (sc.bonus) rows.push({ label: '난이도 보너스 (' + LEVELS[S.level].name + ')', value: sc.bonus });
-    if (sc.penalty) rows.push({ label: '힌트 사용 (' + S.hints + '회)', value: sc.penalty, minus: true });
+    var rows = [{ label: T('찾은 낱말 ({a}/{b}개)', { a: S.found.length, b: S.placed.length }), value: sc.words }];
+    if (sc.all) rows.push({ label: T('시간 보너스 ({t} 남김)', { t: UI.fmtTime(LEVELS[S.level].limit - S.elapsed) }), value: sc.time });
+    rows.push({ label: T('정확도 보너스 (헛선택 {n}회)', { n: S.wrong }), value: sc.acc });
+    if (sc.bonus) rows.push({ label: T('난이도 보너스 ({name})', { name: LEVELS[S.level].name }), value: sc.bonus });
+    if (sc.penalty) rows.push({ label: T('힌트 사용 ({n}회)', { n: S.hints }), value: sc.penalty, minus: true });
 
     UI.resultModal({
-      title: timeUp ? '시간이 다 되었습니다' : '낱말을 모두 찾았습니다!',
+      title: timeUp ? '시간이 다 되었습니다' : T('낱말을 모두 찾았습니다!'),
       score: sc.total,
-      headline: timeUp ? '남은 낱말: ' + S.placed.filter(function (p) { return S.found.indexOf(p.word) < 0; }).map(function (p) { return p.word; }).join(', ')
-                       : '주제 ‘' + S.theme + '’ 완주!',
+      headline: timeUp ? (T('남은 낱말:') + ' ') + S.placed.filter(function (p) { return S.found.indexOf(p.word) < 0; }).map(function (p) { return p.word; }).join(', ')
+                       : T('주제 ‘{t}’ 완주!', { t: S.theme }),
       rows: rows,
-      note: sc.all ? '' : '모든 낱말을 찾아야 시간 보너스와 난이도 보너스를 받습니다.',
+      note: sc.all ? '' : T('모든 낱말을 찾아야 시간 보너스와 난이도 보너스를 받습니다.'),
       actions: [
-        { label: '다른 게임', onClick: function () { App.gameSwitcher('wordsearch'); } },
-        { label: '기록 보기', onClick: function () { App.go('records'); } },
-        { label: '한 판 더', kind: 'accent', onClick: function () { S = null; renderIntro(); } }
+        { label: T('다른 게임'), onClick: function () { App.gameSwitcher('wordsearch'); } },
+        { label: T('기록 보기'), onClick: function () { App.go('records'); } },
+        { label: T('한 판 더'), kind: 'accent', onClick: function () { S = null; renderIntro(); } }
       ]
     });
   }
 
   return {
     langs: ['ko'],                                 // 한글 글자판과 낱말 모음이 있어야 한다
-    id: 'wordsearch', name: '낱말찾기', tagline: '글자판 속 숨은 낱말',
+    id: 'wordsearch', name: T('낱말찾기'), tagline: T('글자판 속 숨은 낱말'),
     rules: {
-      title: '낱말찾기 점수 규칙',
+      title: T('낱말찾기 점수 규칙'),
       lines: [
-        ['난이도', '1단계 첫걸음(6칸·낱말 4개·가로세로만) · 2단계 가볍게(7칸·5개) · 3단계 쉬움(8칸·6개) · 4단계 보통(10칸·8개) · 5단계 어려움(12칸·10개)'],
-        ['낱말 점수', '최대 600점 · 찾은 낱말 수에 비례 (모두 찾으면 600점)'],
-        ['시간 보너스', '최대 300점 · 모든 낱말을 찾았을 때만, 남은 시간에 비례'],
-        ['정확도 보너스', '최대 100점 · 잘못 그은 횟수 1회마다 10점씩 줄어듦'],
-        ['힌트 감점', '힌트 1회마다 50점 차감'],
-        ['난이도 보너스', '보통 +100점, 어려움 +250점 (모두 찾았을 때 · 1~3단계는 보너스 없음)'],
-        ['최고 점수', '1~3단계 1,000점 / 보통 1,100점 / 어려움 1,250점'],
-        ['시간이 끝나면', '찾은 만큼만 점수로 기록됩니다']
+        [T('난이도'), T('1단계 첫걸음(6칸·낱말 4개·가로세로만) · 2단계 가볍게(7칸·5개) · 3단계 쉬움(8칸·6개) · 4단계 보통(10칸·8개) · 5단계 어려움(12칸·10개)')],
+        [T('낱말 점수'), T('최대 600점 · 찾은 낱말 수에 비례 (모두 찾으면 600점)')],
+        [T('시간 보너스'), T('최대 300점 · 모든 낱말을 찾았을 때만, 남은 시간에 비례')],
+        [T('정확도 보너스'), T('최대 100점 · 잘못 그은 횟수 1회마다 10점씩 줄어듦')],
+        [T('힌트 감점'), T('힌트 1회마다 50점 차감')],
+        [T('난이도 보너스'), T('보통 +100점, 어려움 +250점 (모두 찾았을 때 · 1~3단계는 보너스 없음)')],
+        [T('최고 점수'), T('1~3단계 1,000점 / 보통 1,100점 / 어려움 1,250점')],
+        [T('시간이 끝나면'), T('찾은 만큼만 점수로 기록됩니다')]
       ]
     },
     mount: function (container) {
