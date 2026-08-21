@@ -1,8 +1,14 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v20';                // sw.js 의 VERSION 과 함께 올린다
-  var GAMES = ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot'];
+  var APP_VERSION = 'v21';                // sw.js 의 VERSION 과 함께 올린다
+
+  /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
+   * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
+   * index.html 에 <script> 한 줄만 더하면 홈·게임 고르기·기록 화면에 함께 나타난다.
+   * 보이는 순서를 바꾸고 싶으면 index.html 의 <script> 순서를 바꾸면 된다. */
+  var GAMES = Object.keys(window.Games || {});
+
   var MAX_PER_GAME = 1250;               // 한 게임에서 받을 수 있는 최고 점수
   var MAX_DAY = MAX_PER_GAME * GAMES.length;
   var DAY_GOAL = 3;                      // 하루에 이만큼 종목을 하면 목표 달성
@@ -102,18 +108,15 @@ window.App = (function () {
     });
     document.getElementById('btnBack').hidden = (route === 'home');
 
-    var titles = {
-      home: ['새록', '매일 조금씩, 기억이 새록새록'],
-      games: ['게임 고르기', '오늘은 무엇을 해 볼까요'],
-      records: ['나의 기록', '날짜별 점수를 모아 봅니다'],
-      sudoku: ['스도쿠', '숫자로 하는 두뇌 체조'],
-      wordsearch: ['낱말찾기', '글자판 속 숨은 낱말'],
-      math: ['산수', '더하기 빼기로 머리 깨우기'],
-      wordorder: ['단어 순서', '뒤섞인 글자를 바로잡기'],
-      quiz: ['상식 퀴즈', '아는 만큼 빨리 맞히기'],
-      coloring: ['색칠 공부', '번호대로 색을 채워 가는 시간'],
-      spot: ['틀린그림찾기', '두 그림을 견주어 보는 눈']
-    }[route] || titles_default();
+    /* 화면 위 제목 — 게임 화면의 제목·설명은 게임 파일이 스스로 들고 있다.
+     * (name 과 tagline) 그래서 게임이 늘어도 여기는 손대지 않는다. */
+    var FIXED = {
+      home:    ['새록', '매일 조금씩, 기억이 새록새록'],
+      games:   ['게임 고르기', '오늘은 무엇을 해 볼까요'],
+      records: ['나의 기록', '날짜별 점수를 모아 봅니다']
+    };
+    var titles = FIXED[route] ||
+      (Games[route] ? [Games[route].name, Games[route].tagline || ''] : titles_default());
     document.getElementById('appTitle').textContent = titles[0];
     document.getElementById('appSub').textContent = titles[1];
 
@@ -150,12 +153,12 @@ window.App = (function () {
         '<circle class="ring__track" cx="43" cy="43" r="' + R + '" fill="none" stroke-width="10"></circle>' +
         '<circle class="ring__fill" cx="43" cy="43" r="' + R + '" fill="none" stroke-width="10" stroke-linecap="round"' +
           ' stroke-dasharray="' + (C * pct).toFixed(1) + ' ' + C.toFixed(1) + '" transform="rotate(-90 43 43)"></circle>' +
-        '<text class="ring__txt" x="43" y="48" text-anchor="middle">' + doneCount + '/' + goal + '</text>' +
+        '<text class="ring__txt" x="43" y="48" text-anchor="middle">' + (doneCount >= goal ? '다 함' : doneCount + '/' + goal) + '</text>' +
       '</svg>' +
       '<div class="ring__body">' +
         '<div class="today__score"><b>' + UI.comma(total) + '</b><span>점</span></div>' +
         '<p class="today__meta">' +
-          (doneCount >= goal ? '오늘 목표를 채우셨습니다' : '오늘 ' + doneCount + '종목 완료 · 목표 ' + goal + '종목') +
+          (doneCount >= goal ? '오늘 ' + doneCount + '종목 · 목표를 채우셨습니다' : '오늘 ' + doneCount + '종목 완료 · 목표 ' + goal + '종목') +
         '</p>' +
       '</div>' +
     '</div>';

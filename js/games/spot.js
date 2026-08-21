@@ -428,6 +428,7 @@ window.Games.spot = (function () {
             '</button>';
           }).join('') +
         '</div>' +
+        '<button class="btn btn--ghost btn--print" id="spPrint">종이로 풀 문제 만들기 <small>A4 인쇄 · PDF 저장</small></button>' +
         '<button class="linkbtn" id="spRules">점수 규칙 보기</button>' +
       '</section>';
 
@@ -437,6 +438,7 @@ window.Games.spot = (function () {
     var rb = root.querySelector('#spResume');
     if (rb) rb.addEventListener('click', function () { restore(sess); renderBoard(); });
     root.querySelector('#spRules').addEventListener('click', function () { App.showRules('spot'); });
+    root.querySelector('#spPrint').addEventListener('click', function () { Print.dialog('spot'); });
   }
 
   /* ================= 화면: 판 ================= */
@@ -669,7 +671,7 @@ window.Games.spot = (function () {
   /* ================= 바깥에 내보내기 ================= */
 
   return {
-    id: 'spot', name: '틀린그림찾기', icon: '틀',
+    id: 'spot', name: '틀린그림찾기', icon: '틀', tagline: '두 그림을 견주어 보는 눈',
     rules: {
       title: '틀린그림찾기 점수 규칙',
       lines: [
@@ -695,6 +697,24 @@ window.Games.spot = (function () {
     unmount: function () { mounted = false; stopTimer(); persist(); },
     hasProgress: function () { return !!Store.getSession('spot'); },
     levels: LEVELS,
-    levelOrder: ORDER
+    levelOrder: ORDER,
+
+    /** 종이로 풀 문제를 한 판 새로 만든다.
+     *  화면에서 하던 판(S)은 건드리지 않는다 — 인쇄했다고 진행 중인 판이 사라지면 안 된다. */
+    makeForPrint: function (level) {
+      var L = LEVELS[level] ? LEVELS[level] : LEVELS.easy;
+      var items = buildItems(L);
+      var diffs = buildDiffs(items, L);
+      return {
+        levelName: L.step + '단계 ' + L.name,
+        note: L.note,
+        w: W, h: H,
+        count: diffs.length,
+        first: items.map(drawItem).join(''),
+        second: rightItems(items, diffs).map(drawItem).join(''),
+        marksA: diffs.map(function (d, i) { return markOf(d.a, 'miss', String(i + 1)); }).join(''),
+        marksB: diffs.map(function (d, i) { return markOf(d.b, 'miss', String(i + 1)); }).join('')
+      };
+    }
   };
 })();

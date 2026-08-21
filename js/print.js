@@ -175,6 +175,42 @@ window.Print = (function () {
     return pages.join('');
   }
 
+  /* ---------------- 틀린그림찾기 ---------------- */
+
+  /** 두 그림을 위아래로 놓는다. 정답지에는 다른 곳에 번호와 동그라미가 붙는다. */
+  function spotPanel(b, body, marks, cap) {
+    return '<figure class="ps-sp">' +
+      '<figcaption>' + esc(cap) + '</figcaption>' +
+      '<svg viewBox="0 0 ' + b.w + ' ' + b.h + '" xmlns="http://www.w3.org/2000/svg">' +
+        body + (marks || '') +
+      '</svg>' +
+    '</figure>';
+  }
+
+  function spotSheets(o) {
+    var pages = [];
+    for (var n = 0; n < o.count; n++) {
+      var b = Games.spot.makeForPrint(o.level);
+      var no = o.count > 1 ? ' · ' + (n + 1) + '번' : '';
+
+      pages.push('<section class="ps-sheet">' +
+        sheetHead('틀린그림찾기', b.levelName + no,
+          '두 그림을 견주어 보고, 모양이 다른 곳 ' + b.count + '군데를 찾아 동그라미를 치세요.') +
+        spotPanel(b, b.first, '', '첫째 그림') +
+        spotPanel(b, b.second, '', '둘째 그림') +
+      '</section>');
+
+      if (o.answer) {
+        pages.push('<section class="ps-sheet ps-sheet--ans">' +
+          sheetHead('틀린그림찾기 정답', b.levelName + no, '') +
+          spotPanel(b, b.first, b.marksA, '첫째 그림') +
+          spotPanel(b, b.second, b.marksB, '둘째 그림') +
+        '</section>');
+      }
+    }
+    return pages.join('');
+  }
+
   /* ---------------- 색칠 공부 ---------------- */
 
   /** 도안 한 장.
@@ -257,7 +293,8 @@ window.Print = (function () {
     wordsearch: wordsearchSheets,
     math: mathSheets,
     wordorder: wordorderSheets,
-    coloring: coloringSheets
+    coloring: coloringSheets,
+    spot: spotSheets
   };
 
   /* 인쇄 내용은 **인쇄 창이 닫힌 뒤에** 지운다.
@@ -268,7 +305,12 @@ window.Print = (function () {
    * afterprint 를 받지 못하는 브라우저를 위해 넉넉한 예비 시간도 함께 둔다.
    */
   function run(game, o) {
-    printHtml((SHEETS[game] || wordsearchSheets)(o));
+    var make = SHEETS[game];
+    if (!make) {                                  // 인쇄 방법을 아직 안 만든 게임
+      UI.toast('이 게임은 아직 종이로 만들 수 없습니다.');
+      return;
+    }
+    printHtml(make(o));
   }
 
   /** 만들어진 종이를 인쇄 창에 올리고, 창이 닫힌 뒤에 지운다 */

@@ -509,7 +509,7 @@ window.Games.coloring = (function () {
   /* ================= 바깥으로 ================= */
 
   return {
-    id: 'coloring', name: '색칠 공부', icon: '색',
+    id: 'coloring', name: '색칠 공부', icon: '색', tagline: '번호대로 색을 채워 가는 시간',
     rules: {
       title: '색칠 공부 점수 규칙',
       lines: [

@@ -4,25 +4,50 @@
  * 인터넷이 없거나 서버가 꺼져 있으면 저장해 둔 파일로 실행합니다.
  * 파일을 고친 뒤에는 아래 VERSION 을 올려 주세요. (js/app.js 의 APP_VERSION 도 같이)
  */
-var VERSION = 'malgeunddeul-v20';
+var VERSION = 'malgeunddeul-v21';
+/* 아래 목록은 '최소한 이것만은 저장해 둔다'는 안전망이다.
+ * 실제로 저장할 파일은 install 때 index.html 을 읽어서 스스로 찾아낸다.
+ * 그래서 새 게임 파일을 index.html 에 한 줄 넣으면 이 목록은 손대지 않아도 된다. */
 var ASSETS = [
   './', './index.html', './manifest.json',
   './css/style.css',
   './js/storage.js', './js/ui.js', './js/print.js', './js/app.js',
-  './js/data/quiz-data.js', './js/data/words.js', './js/data/order-words.js', './js/data/pictures.js',
-  './js/games/sudoku.js', './js/games/wordsearch.js', './js/games/math.js', './js/games/wordorder.js', './js/games/quiz.js', './js/games/coloring.js', './js/games/spot.js',
   './icons/favicon-32.png', './icons/favicon-64.png', './icons/apple-touch-icon.png',
   './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png'
 ];
 
+/* index.html 안의 <script src="..."> 와 <link href="..."> 를 훑어
+ * 우리 폴더 안의 파일 주소를 모은다. (다른 사이트 주소는 건너뛴다) */
+function discover() {
+  return fetch('./index.html', { cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.text() : ''; })
+    .then(function (html) {
+      var found = [], re = /(?:src|href)\s*=\s*"([^"]+)"/g, m;
+      while ((m = re.exec(html))) {
+        var u = m[1];
+        if (/^(https?:|data:|#|\/\/)/.test(u)) continue;   // 바깥 주소는 저장하지 않는다
+        found.push('./' + u.replace(/^\.\//, ''));
+      }
+      return found;
+    })
+    .catch(function () { return []; });                    // 못 읽어도 안전망 목록으로 간다
+}
+
 self.addEventListener('install', function (e) {
   e.waitUntil(
-    caches.open(VERSION)
-      .then(function (c) { return c.addAll(ASSETS); })
-      .then(function () { return self.skipWaiting(); })
+    discover().then(function (extra) {
+      var all = ASSETS.concat(extra).filter(function (u, i, a) { return a.indexOf(u) === i; });
+      return caches.open(VERSION).then(function (c) {
+        /* 한 파일이라도 없으면 addAll 은 통째로 실패한다.
+         * 게임이 늘어나는 동안 목록이 어긋날 수 있으므로 한 개씩 담고, 실패는 넘어간다. */
+        return Promise.all(all.map(function (u) {
+          return c.add(u).catch(function () {});
+        }));
+      });
+    }).then(function () { return self.skipWaiting(); })
   );
-});
 
+});
 self.addEventListener('activate', function (e) {
   e.waitUntil(
     caches.keys().then(function (keys) {

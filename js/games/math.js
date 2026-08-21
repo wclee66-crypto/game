@@ -372,7 +372,7 @@ window.Games.math = (function () {
   }
 
   return {
-    id: 'math', name: '산수', icon: '산',
+    id: 'math', name: '산수', icon: '산', tagline: '더하기 빼기로 머리 깨우기',
     rules: {
       title: '산수 점수 규칙',
       lines: [

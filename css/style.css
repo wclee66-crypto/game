@@ -934,4 +934,24 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
     border: 0.5pt solid #000; margin-right: 1.5mm; vertical-align: -0.8mm;
     -webkit-print-color-adjust: exact; print-color-adjust: exact;
   }
+
+  /* ---- 틀린그림찾기 ---- */
+  .ps-sp { margin: 0 0 4mm; }
+  .ps-sp figcaption {
+    display: inline-block; margin: 0 0 1.5mm;
+    border: 0.8pt solid #000; border-radius: 2mm; padding: 1mm 3.5mm;
+    font-size: 11pt; font-weight: 700;
+  }
+  .ps-sp svg {
+    display: block; margin: 0 auto; width: 132mm; height: 99mm;   /* 4:3 — 두 장이 A4 한 쪽에 넉넉히 들어가는 크기 */
+    border: 1pt solid #000; border-radius: 2mm;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .ps-sp svg * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  /* 정답지의 동그라미 — 화면과 달리 검정 실선으로 또렷하게 */
+  .ps-sp .sp-mark circle { fill: none; stroke: #000; stroke-width: 1.1; }
+  .ps-sp .sp-mark text {
+    font-size: 5px; font-weight: 800; fill: #000; text-anchor: middle;
+    font-family: 'Manrope', sans-serif;
+  }
 }

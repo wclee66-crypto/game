@@ -435,7 +435,7 @@ window.Games.wordorder = (function () {
   }
 
   return {
-    id: 'wordorder', name: '단어 순서', icon: '순',
+    id: 'wordorder', name: '단어 순서', icon: '순', tagline: '뒤섞인 글자를 바로잡기',
     rules: {
       title: '단어 순서 바로잡기 점수 규칙',
       lines: [

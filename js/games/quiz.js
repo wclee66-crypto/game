@@ -419,7 +419,7 @@ window.Games.quiz = (function () {
   }
 
   return {
-    id: 'quiz', name: '상식 퀴즈', icon: '상',
+    id: 'quiz', name: '상식 퀴즈', icon: '상', tagline: '아는 만큼 빨리 맞히기',
     rules: {
       title: '상식 퀴즈 점수 규칙',
       lines: [
@@ -441,6 +441,8 @@ window.Games.quiz = (function () {
       else renderIntro();
     },
     unmount: function () { mounted = false; stopTimer(); clearPending(); persist(); },
-    hasProgress: function () { return !!Store.getSession('quiz'); }
+    hasProgress: function () { return !!Store.getSession('quiz'); },
+    levels: LEVELS,
+    levelOrder: ORDER
   };
 })();
