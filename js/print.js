@@ -109,7 +109,7 @@ window.Print = (function () {
     return pages.join('');
   }
 
-  /* ---------------- 산수 ---------------- */
+  /* ---------------- 숫자 계산 ---------------- */
 
   function mathSheets(o) {
     var pages = [];
@@ -120,14 +120,14 @@ window.Print = (function () {
       }).join('') + '</ol>';
 
       pages.push('<section class="ps-sheet ps-sheet--left">' +
-        sheetHead('산수', b.levelName + (o.count > 1 ? ' · ' + (n + 1) + '번' : ''),
+        sheetHead('숫자 계산', b.levelName + (o.count > 1 ? ' · ' + (n + 1) + '번' : ''),
           '빈칸에 답을 적으세요.') +
         body +
       '</section>');
 
       if (o.answer) {
         pages.push('<section class="ps-sheet ps-sheet--left ps-sheet--ans">' +
-          sheetHead('산수 정답', b.levelName + (o.count > 1 ? ' · ' + (n + 1) + '번' : ''), '') +
+          sheetHead('숫자 계산 정답', b.levelName + (o.count > 1 ? ' · ' + (n + 1) + '번' : ''), '') +
           '<ol class="ps-math">' + b.items.map(function (it) {
             return '<li><span class="pm-q">' + esc(it.q) + ' =</span><span class="pm-a">' + it.a + '</span></li>';
           }).join('') + '</ol>' +

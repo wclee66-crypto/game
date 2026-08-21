@@ -1,4 +1,4 @@
-/* 새록 — 산수
+/* 새록 — 숫자 계산
  * 점수: 정답 600 + 시간 300 + 연속 100 + 난이도 보너스
  *
  * 답은 보기에서 고르지 않고 숫자판으로 직접 넣는다.
@@ -141,7 +141,7 @@ window.Games.math = (function () {
     root.innerHTML =
       '<section class="intro">' +
         '<div class="intro__mark">산</div>' +
-        '<h2 class="intro__title">산수</h2>' +
+        '<h2 class="intro__title">숫자 계산</h2>' +
         '<p class="intro__desc">더하기와 빼기를 암산으로 풉니다.<br>답은 숫자판을 눌러 직접 넣습니다.<br><small>틀려도 점수가 깎이지 않습니다.</small></p>' +
         (best ? '<p class="intro__best">나의 최고 기록 <b>' + UI.comma(best.score) + '점</b></p>' : '') +
         (sess && LEVELS[sess.level]
@@ -341,7 +341,7 @@ window.Games.math = (function () {
     if (sc.bonus) rows.push({ label: '난이도 보너스 (' + L.name + ')', value: sc.bonus });
 
     UI.resultModal({
-      title: '산수를 마쳤습니다',
+      title: '숫자 계산을 마쳤습니다',
       score: sc.total,
       headline: sc.correct === sc.count ? '전부 맞히셨습니다. 대단합니다!' : sc.correct + '문제를 맞히셨습니다.',
       rows: rows,
@@ -372,9 +372,9 @@ window.Games.math = (function () {
   }
 
   return {
-    id: 'math', name: '산수', icon: '산', tagline: '더하기 빼기로 머리 깨우기',
+    id: 'math', name: '숫자 계산', icon: '숫', tagline: '더하기 빼기로 머리 깨우기',
     rules: {
-      title: '산수 점수 규칙',
+      title: '숫자 계산 점수 규칙',
       lines: [
         ['난이도', '1단계 한 자리 더하기 · 2단계 한 자리 더하기·빼기 · 3단계 두 자리 ± 한 자리(받아올림 없음) · 4단계 두 자리 ± 두 자리 · 5단계 세 수 이어 계산'],
         ['정답 점수', '최대 600점 · 맞힌 문제 수에 비례'],
