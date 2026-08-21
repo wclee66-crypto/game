@@ -137,18 +137,79 @@ window.Print = (function () {
     return pages.join('');
   }
 
+  /* ---------------- 단어 순서 바로잡기 ---------------- */
+
+  /** 한 줄 = 뒤섞인 낱말 · 화살표 · 답 쓸 네모
+   *  종이에서는 연필로 쓰면 되므로, 화면에서 쓰는 '고를 글자'는 넣지 않는다. */
+  function woRows(items, answer) {
+    return '<table class="ps-wo"><tbody>' + items.map(function (it) {
+      var boxes = it.w.split('').map(function (ch) {
+        return '<span class="pw-box' + (answer ? ' ans' : '') + '">' + (answer ? esc(ch) : '') + '</span>';
+      }).join('');
+      return '<tr>' +
+        '<td class="pw-q">' + esc(it.s) + '</td>' +
+        '<td class="pw-arrow">···▸</td>' +
+        '<td class="pw-a">' + boxes + '</td>' +
+      '</tr>';
+    }).join('') + '</tbody></table>';
+  }
+
+  function wordorderSheets(o) {
+    var pages = [];
+    for (var n = 0; n < o.count; n++) {
+      var b = Games.wordorder.makeForPrint(o.level, 10);
+
+      pages.push('<section class="ps-sheet">' +
+        sheetHead('단어 순서 바로잡기', b.levelName + (o.count > 1 ? ' · ' + (n + 1) + '번' : ''),
+          '글자 순서가 뒤섞인 낱말입니다. 바른 순서로 오른쪽 네모에 한 글자씩 적으세요.') +
+        woRows(b.items, false) +
+      '</section>');
+
+      if (o.answer) {
+        pages.push('<section class="ps-sheet ps-sheet--ans">' +
+          sheetHead('단어 순서 정답', b.levelName + (o.count > 1 ? ' · ' + (n + 1) + '번' : ''), '') +
+          woRows(b.items, true) +
+        '</section>');
+      }
+    }
+    return pages.join('');
+  }
+
   /* ---------------- 인쇄 실행 ---------------- */
 
+  /** 게임마다 문제지를 만드는 함수 — 새 게임을 지원할 때 여기에 한 줄 더한다 */
+  var SHEETS = {
+    sudoku: sudokuSheets,
+    wordsearch: wordsearchSheets,
+    math: mathSheets,
+    wordorder: wordorderSheets
+  };
+
+  /* 인쇄 내용은 **인쇄 창이 닫힌 뒤에** 지운다.
+   *
+   * 예전에는 1초 뒤에 지웠는데, 인쇄 창을 열어 놓고 'PDF로 저장'을 고르는 동안
+   * 내용이 사라져 빈 종이가 저장되는 일이 생긴다.
+   * (크롬은 window.print() 가 창이 닫힐 때까지 멈춰 있지만, 휴대폰·다른 브라우저는 그렇지 않다.)
+   * afterprint 를 받지 못하는 브라우저를 위해 넉넉한 예비 시간도 함께 둔다.
+   */
   function run(game, o) {
     var root = document.getElementById('printRoot');
-    root.innerHTML = game === 'sudoku' ? sudokuSheets(o)
-                   : game === 'math'   ? mathSheets(o)
-                   : wordsearchSheets(o);
+    root.innerHTML = (SHEETS[game] || wordsearchSheets)(o);
+
+    var cleared = false;
+    function cleanup() {
+      if (cleared) return;
+      cleared = true;
+      window.removeEventListener('afterprint', cleanup);
+      root.innerHTML = '';
+    }
+    window.addEventListener('afterprint', cleanup);
+
     // 글꼴·표가 자리를 잡은 뒤 인쇄 창을 연다
     setTimeout(function () {
       window.print();
-      setTimeout(function () { root.innerHTML = ''; }, 1000);
-    }, 120);
+      setTimeout(cleanup, 180000);              // 3분 — 저장을 다 마칠 때까지 기다려 준다
+    }, 200);
   }
 
   /* ---------------- 설정 창 ---------------- */

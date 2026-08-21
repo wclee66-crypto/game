@@ -1,8 +1,8 @@
 /* 맑은뜰 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v17';                // sw.js 의 VERSION 과 함께 올린다
-  var GAMES = ['sudoku', 'wordsearch', 'math', 'quiz'];
+  var APP_VERSION = 'v18';                // sw.js 의 VERSION 과 함께 올린다
+  var GAMES = ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz'];
   var MAX_PER_GAME = 1250;               // 한 게임에서 받을 수 있는 최고 점수
   var MAX_DAY = MAX_PER_GAME * GAMES.length;
   var DAY_GOAL = 3;                      // 하루에 이만큼 종목을 하면 목표 달성
@@ -109,6 +109,7 @@ window.App = (function () {
       sudoku: ['스도쿠', '숫자로 하는 두뇌 체조'],
       wordsearch: ['낱말찾기', '글자판 속 숨은 낱말'],
       math: ['산수', '더하기 빼기로 머리 깨우기'],
+      wordorder: ['단어 순서', '뒤섞인 글자를 바로잡기'],
       quiz: ['상식 퀴즈', '아는 만큼 빨리 맞히기']
     }[route] || titles_default();
     document.getElementById('appTitle').textContent = titles[0];
@@ -424,7 +425,7 @@ window.App = (function () {
 
   function showRules(which) {
     var body = which === 'all'
-      ? '<p class="modal__msg">세 게임 모두 <b>기본 1,000점 만점</b>이고, 어려운 난이도를 고르면 보너스가 더해집니다. 하루 만점은 ' + UI.comma(MAX_DAY) + '점입니다.</p>' +
+      ? '<p class="modal__msg">모든 게임이 <b>기본 1,000점 만점</b>이고, 어려운 난이도를 고르면 보너스가 더해집니다. 하루 만점은 ' + UI.comma(MAX_DAY) + '점입니다.</p>' +
         GAMES.map(rulesTable).join('') +
         '<p class="modal__msg small">같은 게임을 여러 번 해도 그날 총점에는 <b>가장 높은 점수</b>만 반영됩니다. 판마다의 기록은 모두 남습니다.</p>'
       : rulesTable(which);

@@ -385,6 +385,64 @@ button.install:active { transform: scale(.99); }
 .pad__key--ok { background: var(--accent); border-color: var(--accent); color: #fff; font-family: var(--font-body); font-size: .95rem; font-weight: 800; }
 .pad__key--ok:active { background: var(--accent-d); }
 
+/* ================= 단어 순서 바로잡기 ================= */
+
+.wo-card {
+  background: var(--surf); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 1.2rem .8rem 1rem; text-align: center;
+}
+.wo-label { margin: 0 0 .35rem; font-size: .68rem; font-weight: 700; color: var(--ink-3); letter-spacing: .04em; }
+.wo-scr {
+  font-size: clamp(1.9rem, 9.5vw, 2.6rem); font-weight: 900;
+  letter-spacing: .06em; line-height: 1.15; color: var(--ink);
+  word-break: keep-all;
+}
+.wo-down { margin: .3rem 0 .5rem; font-size: 1rem; color: var(--ink-3); }
+
+.wo-hintbtn {
+  margin-top: .7rem; padding: .3rem .8rem;
+  background: none; border: 0; border-bottom: 1px solid var(--line-2);
+  font-size: .8rem; font-weight: 700; color: var(--ink-3);
+}
+.wo-hint { margin: .7rem 0 0; font-size: .88rem; color: var(--ink-2); font-weight: 600; }
+.wo-hint span {
+  display: inline-block; margin-right: .45rem; padding: .1rem .5rem;
+  border-radius: 999px; background: var(--accent-s); color: var(--accent-d);
+  font-size: .66rem; font-weight: 800; vertical-align: .12em;
+}
+
+.wo-slots { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem; }
+.wo-slot {
+  width: clamp(2.7rem, 14vw, 3.4rem); height: clamp(3rem, 15vw, 3.8rem);
+  display: grid; place-items: center;
+  border: 2px dashed var(--line-2); border-radius: 12px; background: var(--bg);
+  font-size: clamp(1.4rem, 7vw, 1.8rem); font-weight: 800; line-height: 1; color: var(--ink);
+}
+.wo-slot:not(.is-empty) {
+  border-style: solid; border-color: var(--accent);
+  background: var(--accent-s); color: var(--accent-d);
+}
+.wo-slot.is-next { border-color: var(--accent); background: var(--surf-2); }
+.wo-slot.is-right { border-style: solid; background: var(--accent); border-color: var(--accent); color: #fff; }
+.wo-slot.is-wrong { border-style: solid; background: var(--bad-s); border-color: #F0C9C7; color: var(--bad); }
+
+.wo-msg { margin: .9rem 0 0; font-size: .84rem; color: var(--ink-3); }
+.wo-msg.is-ready { color: var(--accent-d); font-weight: 700; }
+.wo-msg.is-ok b { color: var(--accent-d); font-size: 1rem; }
+.wo-msg.is-no b { color: var(--bad); font-size: 1rem; }
+
+.wo-tiles { display: flex; flex-wrap: wrap; justify-content: center; gap: .45rem; margin-top: 1rem; }
+.wo-tile {
+  width: clamp(3rem, 15vw, 3.6rem); height: clamp(3rem, 15vw, 3.6rem);
+  display: grid; place-items: center;
+  background: var(--surf); border: 1px solid var(--line-2); border-radius: 14px;
+  font-size: clamp(1.4rem, 7vw, 1.8rem); font-weight: 800; line-height: 1;
+  transition: opacity .12s ease, transform .1s ease;
+}
+.wo-tile:active { transform: scale(.96); background: var(--accent-s); }
+.wo-tile.is-used { opacity: .25; }
+.wo-acts { margin-top: .9rem; }
+
 /* ================= 낱말찾기 ================= */
 
 .ws-wrap { display: flex; justify-content: center; }
@@ -727,6 +785,22 @@ button.install:active { transform: scale(.99); }
   .pm-q { white-space: nowrap; }
   .pm-blank { flex: 1; border-bottom: 0.8pt solid #000; min-width: 18mm; height: 8mm; }
   .pm-a { color: #444; }
+
+  /* 10문제가 A4 한 장을 꽉 채우도록 줄 높이와 글씨를 크게 잡았다 (한 줄 약 23mm) */
+  .ps-wo { border-collapse: collapse; width: 100%; margin: 0 auto; }
+  .ps-wo td {
+    border: 0.7pt solid #000; padding: 4.5mm 2mm;
+    text-align: center; vertical-align: middle;
+  }
+  .ps-wo td.pw-q { width: 40%; font-size: 26pt; font-weight: 800; letter-spacing: .06em; }
+  .ps-wo td.pw-arrow { width: 12%; font-size: 15pt; letter-spacing: .1em; }
+  .ps-wo td.pw-a { width: 48%; }
+  .pw-box {
+    display: inline-block; width: 14mm; height: 14mm; margin: 0 1.2mm;
+    border: 0.7pt solid #888; border-radius: 1.5mm;
+    font-size: 20pt; font-weight: 800; line-height: 14mm; vertical-align: middle;
+  }
+  .pw-box.ans { color: #444; }
 
   .ps-ws-words {
     list-style: none; margin: 0; padding: 0;
