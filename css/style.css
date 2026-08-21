@@ -181,6 +181,15 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .gcard__go.is-new { font-family: var(--font-body); font-size: .78rem; font-weight: 800; color: var(--accent); }
 
 .tipline { margin: 1.5rem .2rem 0; font-size: .76rem; color: var(--ink-3); line-height: 1.6; text-align: center; }
+.btn--wide { width: 100%; margin-top: .7rem; min-height: 2.9rem; font-size: .9rem; }
+
+.ring__txt {
+  font-family: var(--font-num); font-size: 15px; font-weight: 800;
+  fill: var(--accent-d); letter-spacing: -.02em;
+}
+
+.picker__lead { margin: .4rem .2rem 1.1rem; font-size: .92rem; color: var(--ink-2); line-height: 1.6; }
+.picker__lead b { color: var(--accent-d); font-weight: 800; }
 
 /* ================= 막대 그래프 ================= */
 
@@ -346,6 +355,35 @@ button.install:active { transform: scale(.99); }
   font-weight: 700; color: var(--ink-3);
 }
 .pad__key.is-done { opacity: .32; }
+
+/* ================= 산수 ================= */
+
+.mt-card {
+  background: var(--surf); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 1.6rem 1rem 1.1rem; text-align: center;
+}
+.mt-q {
+  display: flex; align-items: baseline; justify-content: center; flex-wrap: wrap;
+  gap: .5rem; font-family: var(--font-num); font-weight: 800;
+  letter-spacing: -.02em; line-height: 1.2;
+}
+.mt-expr { font-size: clamp(1.9rem, 9vw, 2.8rem); }
+.mt-eq { font-size: clamp(1.6rem, 7vw, 2.2rem); color: var(--ink-3); }
+.mt-ans {
+  min-width: 3.2rem; padding: 0 .5rem .15rem;
+  font-size: clamp(1.9rem, 9vw, 2.8rem); color: var(--accent);
+  border-bottom: 3px solid var(--line-2);
+}
+.mt-ans.is-empty::after { content: '\00a0'; }
+.mt-ans.is-right { color: var(--accent); border-bottom-color: var(--accent); }
+.mt-ans.is-wrong { color: var(--bad); border-bottom-color: var(--bad); }
+.mt-hint { margin: 1rem 0 0; font-size: .82rem; color: var(--ink-3); }
+.mt-ok { color: var(--accent-d); font-size: 1rem; }
+.mt-no { color: var(--bad); font-size: 1rem; }
+
+.mt-pad { grid-template-columns: repeat(3, 1fr); }
+.pad__key--ok { background: var(--accent); border-color: var(--accent); color: #fff; font-family: var(--font-body); font-size: .95rem; font-weight: 800; }
+.pad__key--ok:active { background: var(--accent-d); }
 
 /* ================= 낱말찾기 ================= */
 
@@ -579,7 +617,7 @@ button.install:active { transform: scale(.99); }
 
 .tabbar {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
-  display: grid; grid-template-columns: repeat(5, 1fr);
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;   /* 탭 개수에 맞춰 자동 분할 */
   gap: .2rem; padding: .4rem .4rem 0;
   background: var(--bg); border-top: 1px solid var(--line);
   padding-bottom: env(safe-area-inset-bottom);
@@ -589,7 +627,7 @@ button.install:active { transform: scale(.99); }
   display: flex; align-items: center; justify-content: center;
   color: var(--ink-3); border-radius: 12px;
 }
-.tab__lbl { font-size: .74rem; font-weight: 700; letter-spacing: -.02em; }
+.tab__lbl { font-size: .82rem; font-weight: 700; letter-spacing: -.02em; }
 .tab.is-on { color: var(--accent-d); background: var(--accent-s); }
 
 /* ================= 토스트 ================= */
@@ -669,6 +707,26 @@ button.install:active { transform: scale(.99); }
     font-weight: 700; font-size: calc(90mm / var(--n));
   }
   .ps-ws td.ans { border: 1.4pt solid #000; background: #e2e2e2; }
+
+  .ps-sheet--left { text-align: left; }
+
+  .ps-math {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 7mm 12mm;
+    counter-reset: pm;
+  }
+  .ps-math li {
+    counter-increment: pm;
+    display: flex; align-items: baseline; gap: 3mm;
+    font-family: 'Manrope', sans-serif; font-size: 17pt; font-weight: 700;
+  }
+  .ps-math li::before {
+    content: counter(pm) '.';
+    font-size: 10pt; font-weight: 400; color: #666; min-width: 7mm;
+  }
+  .pm-q { white-space: nowrap; }
+  .pm-blank { flex: 1; border-bottom: 0.8pt solid #000; min-width: 18mm; height: 8mm; }
+  .pm-a { color: #444; }
 
   .ps-ws-words {
     list-style: none; margin: 0; padding: 0;

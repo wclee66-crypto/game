@@ -109,11 +109,41 @@ window.Print = (function () {
     return pages.join('');
   }
 
+  /* ---------------- 산수 ---------------- */
+
+  function mathSheets(o) {
+    var pages = [];
+    for (var n = 0; n < o.count; n++) {
+      var b = Games.math.makeForPrint(o.level, 24);
+      var body = '<ol class="ps-math">' + b.items.map(function (it) {
+        return '<li><span class="pm-q">' + esc(it.q) + ' =</span><span class="pm-blank"></span></li>';
+      }).join('') + '</ol>';
+
+      pages.push('<section class="ps-sheet ps-sheet--left">' +
+        sheetHead('산수', b.levelName + (o.count > 1 ? ' · ' + (n + 1) + '번' : ''),
+          b.note + ' · 빈칸에 답을 적으세요.') +
+        body +
+      '</section>');
+
+      if (o.answer) {
+        pages.push('<section class="ps-sheet ps-sheet--left ps-sheet--ans">' +
+          sheetHead('산수 정답', b.levelName + (o.count > 1 ? ' · ' + (n + 1) + '번' : ''), '') +
+          '<ol class="ps-math">' + b.items.map(function (it) {
+            return '<li><span class="pm-q">' + esc(it.q) + ' =</span><span class="pm-a">' + it.a + '</span></li>';
+          }).join('') + '</ol>' +
+        '</section>');
+      }
+    }
+    return pages.join('');
+  }
+
   /* ---------------- 인쇄 실행 ---------------- */
 
   function run(game, o) {
     var root = document.getElementById('printRoot');
-    root.innerHTML = (game === 'sudoku' ? sudokuSheets(o) : wordsearchSheets(o));
+    root.innerHTML = game === 'sudoku' ? sudokuSheets(o)
+                   : game === 'math'   ? mathSheets(o)
+                   : wordsearchSheets(o);
     // 글꼴·표가 자리를 잡은 뒤 인쇄 창을 연다
     setTimeout(function () {
       window.print();

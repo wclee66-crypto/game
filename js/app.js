@@ -1,10 +1,12 @@
 /* 맑은뜰 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v16';                // sw.js 의 VERSION 과 함께 올린다
-  var GAMES = ['sudoku', 'wordsearch', 'quiz'];
+  var APP_VERSION = 'v17';                // sw.js 의 VERSION 과 함께 올린다
+  var GAMES = ['sudoku', 'wordsearch', 'math', 'quiz'];
   var MAX_PER_GAME = 1250;               // 한 게임에서 받을 수 있는 최고 점수
   var MAX_DAY = MAX_PER_GAME * GAMES.length;
+  var DAY_GOAL = 3;                      // 하루에 이만큼 종목을 하면 목표 달성
+  var HOME_GAMES = 3;                    // 홈에는 이만큼만 추려서 보여 준다
 
   var view, current = null, here = 'home';
 
@@ -93,16 +95,20 @@ window.App = (function () {
     current = GAMES.indexOf(route) >= 0 ? route : null;
     here = route;
 
+    // 게임 화면에 있을 때는 '게임 고르기' 탭이 켜진 것으로 본다
+    var tabRoute = GAMES.indexOf(route) >= 0 ? 'games' : route;
     document.querySelectorAll('.tab').forEach(function (t) {
-      t.classList.toggle('is-on', t.dataset.route === route);
+      t.classList.toggle('is-on', t.dataset.route === tabRoute);
     });
     document.getElementById('btnBack').hidden = (route === 'home');
 
     var titles = {
-      home: ['맑은뜰', '하루 세 판, 머리가 맑아지는 시간'],
+      home: ['맑은뜰', '매일 조금씩, 머리가 맑아지는 시간'],
+      games: ['게임 고르기', '오늘은 무엇을 해 볼까요'],
       records: ['나의 기록', '날짜별 점수를 모아 봅니다'],
       sudoku: ['스도쿠', '숫자로 하는 두뇌 체조'],
       wordsearch: ['낱말찾기', '글자판 속 숨은 낱말'],
+      math: ['산수', '더하기 빼기로 머리 깨우기'],
       quiz: ['상식 퀴즈', '아는 만큼 빨리 맞히기']
     }[route] || titles_default();
     document.getElementById('appTitle').textContent = titles[0];
@@ -113,33 +119,94 @@ window.App = (function () {
     window.scrollTo(0, 0);
 
     if (route === 'home') renderHome();
+    else if (route === 'games') renderPicker();
     else if (route === 'records') renderRecords();
     else Games[route].mount(view);
 
     location.hash = route;
   }
-  function titles_default() { return ['맑은뜰', '하루 세 판, 머리가 맑아지는 시간']; }
+  function titles_default() { return ['맑은뜰', '매일 조금씩, 머리가 맑아지는 시간']; }
 
   /* ================= 홈 ================= */
 
-  /** 오늘 점수를 고리로 보여 준다 — 얼마나 채웠는지 한눈에 보이도록 */
+  /** 오늘 점수를 고리로 보여 준다.
+   *
+   * 고리는 '점수 대비 만점'이 아니라 **오늘 몇 종목을 했는가**를 나타낸다.
+   * 게임이 계속 늘어나면 하루 만점도 끝없이 커져서 고리가 늘 텅 비어 보이기 때문이다.
+   * 목표는 하루 GOAL 종목이고, 그 이상 하면 고리가 가득 찬다.
+   */
   function progressRing(total) {
-    var pct = Math.max(0, Math.min(1, total / MAX_DAY));
+    var best = Store.dayBest();
+    var doneCount = GAMES.filter(function (g) { return best[g] != null; }).length;
+    var goal = Math.min(DAY_GOAL, GAMES.length);
+    var pct = Math.max(0, Math.min(1, doneCount / goal));
     var R = 34, C = 2 * Math.PI * R;
-    var doneCount = 0, best = Store.dayBest();
-    GAMES.forEach(function (g) { if (best[g] !== null) doneCount++; });
 
     return '<div class="ring">' +
-      '<svg class="ring__svg" width="86" height="86" viewBox="0 0 86 86" aria-label="오늘 ' + Math.round(pct * 100) + '퍼센트 채움">' +
+      '<svg class="ring__svg" width="86" height="86" viewBox="0 0 86 86" aria-label="오늘 ' + doneCount + '종목 완료">' +
         '<circle class="ring__track" cx="43" cy="43" r="' + R + '" fill="none" stroke-width="10"></circle>' +
         '<circle class="ring__fill" cx="43" cy="43" r="' + R + '" fill="none" stroke-width="10" stroke-linecap="round"' +
           ' stroke-dasharray="' + (C * pct).toFixed(1) + ' ' + C.toFixed(1) + '" transform="rotate(-90 43 43)"></circle>' +
+        '<text class="ring__txt" x="43" y="48" text-anchor="middle">' + doneCount + '/' + goal + '</text>' +
       '</svg>' +
       '<div class="ring__body">' +
         '<div class="today__score"><b>' + UI.comma(total) + '</b><span>점</span></div>' +
-        '<p class="today__meta">오늘 ' + doneCount + ' / 3 종목 완료<br>하루 만점 ' + UI.comma(MAX_DAY) + '점</p>' +
+        '<p class="today__meta">' +
+          (doneCount >= goal ? '오늘 목표를 채우셨습니다' : '오늘 ' + doneCount + '종목 완료 · 목표 ' + goal + '종목') +
+        '</p>' +
       '</div>' +
     '</div>';
+  }
+
+  /** 게임 한 칸. 홈과 '게임 고르기' 화면이 같은 모양을 쓴다. */
+  function gameCard(g) {
+    var G = Games[g];
+    var s = Store.dayBest()[g];
+    var resume = G.hasProgress();
+    var sub = resume ? '이어서 할 수 있어요' : (s != null ? '오늘 최고 기록' : '아직 안 하셨어요');
+    var right = s != null
+      ? '<span class="gcard__go">' + UI.comma(s) + '<small>점</small></span>'
+      : '<span class="gcard__go is-new">' + (resume ? '이어하기' : '시작하기') + '</span>';
+    return '<button class="gcard" data-go="' + g + '">' +
+      '<span class="gcard__ico">' + G.icon + '</span>' +
+      '<span class="gcard__body">' +
+        '<span class="gcard__name">' + G.name + '</span>' +
+        '<span class="gcard__sub">' + sub + '</span>' +
+      '</span>' + right +
+    '</button>';
+  }
+
+  /** 홈에 올릴 몇 가지를 고른다 — 이어서 할 것 > 아직 안 한 것 > 이미 한 것 */
+  function pickForHome(best) {
+    var rank = function (g) {
+      if (Games[g].hasProgress()) return 0;
+      if (best[g] == null) return 1;
+      return 2;
+    };
+    return GAMES.slice()
+      .map(function (g, i) { return { g: g, r: rank(g), i: i }; })
+      .sort(function (a, b) { return a.r - b.r || a.i - b.i; })
+      .slice(0, HOME_GAMES)
+      .map(function (x) { return x.g; });
+  }
+
+  /* ================= 게임 고르기 ================= */
+
+  function renderPicker() {
+    var best = Store.dayBest();
+    var done = GAMES.filter(function (g) { return best[g] != null; }).length;
+
+    view.innerHTML =
+      '<section class="picker">' +
+        '<p class="picker__lead">오늘 <b>' + done + '가지</b>를 하셨습니다. ' +
+          '골고루 하실수록 좋습니다.</p>' +
+        '<div class="gamelist">' + GAMES.map(gameCard).join('') + '</div>' +
+        '<p class="tipline">게임은 앞으로 계속 늘어납니다.<br>새 게임이 생기면 이 화면에 나타납니다.</p>' +
+      '</section>';
+
+    view.querySelectorAll('[data-go]').forEach(function (b) {
+      b.addEventListener('click', function () { go(b.dataset.go); });
+    });
   }
 
   function renderHome() {
@@ -156,7 +223,7 @@ window.App = (function () {
     });
     var chartMax = Math.max(1000, Math.max.apply(null, chartData.map(function (d) { return d.value; })));
 
-    var doneCount = GAMES.filter(function (g) { return best[g] !== null; }).length;
+    var doneCount = GAMES.filter(function (g) { return best[g] != null; }).length;
 
     view.innerHTML =
       '<section class="home">' +
@@ -172,24 +239,10 @@ window.App = (function () {
         '</div>' +
 
         '<h2 class="sec">오늘의 게임</h2>' +
-        '<div class="gamelist">' +
-          GAMES.map(function (g) {
-            var G = Games[g];
-            var s = best[g];
-            var resume = G.hasProgress();
-            var sub = resume ? '이어서 할 수 있어요' : (s !== null ? '오늘 최고 기록' : '아직 안 하셨어요');
-            var right = s !== null
-              ? '<span class="gcard__go">' + UI.comma(s) + '<small>점</small></span>'
-              : '<span class="gcard__go is-new">' + (resume ? '이어하기' : '시작하기') + '</span>';
-            return '<button class="gcard" data-go="' + g + '">' +
-              '<span class="gcard__ico">' + G.icon + '</span>' +
-              '<span class="gcard__body">' +
-                '<span class="gcard__name">' + G.name + '</span>' +
-                '<span class="gcard__sub">' + sub + '</span>' +
-              '</span>' + right +
-            '</button>';
-          }).join('') +
-        '</div>' +
+        '<div class="gamelist">' + pickForHome(best).map(gameCard).join('') + '</div>' +
+        (GAMES.length > HOME_GAMES
+          ? '<button class="btn btn--ghost btn--wide" id="hmMore">게임 모두 보기 (' + GAMES.length + '가지)</button>'
+          : '') +
 
         '<h2 class="sec">최근 이레</h2>' +
         '<div class="card">' +
@@ -202,7 +255,7 @@ window.App = (function () {
           '<button class="btn btn--ghost" id="hmRecords">기록 자세히</button>' +
         '</div>' +
 
-        '<p class="tipline">매일 조금씩, 세 종목을 골고루 하는 것이 두뇌 건강에 좋습니다.</p>' +
+        '<p class="tipline">매일 조금씩, 여러 종목을 골고루 하는 것이 두뇌 건강에 좋습니다.</p>' +
       '</section>';
 
     view.querySelectorAll('[data-go]').forEach(function (b) {
@@ -210,6 +263,8 @@ window.App = (function () {
     });
     var ib = view.querySelector('#hmInstall');
     if (ib) ib.addEventListener('click', doInstall);
+    var mb = view.querySelector('#hmMore');
+    if (mb) mb.addEventListener('click', function () { go('games'); });
     view.querySelector('#hmRules').addEventListener('click', function () { showRules('all'); });
     view.querySelector('#hmRecords').addEventListener('click', function () { go('records'); });
   }
@@ -246,7 +301,7 @@ window.App = (function () {
         '<div class="card bestlist">' +
           GAMES.map(function (g) {
             var b = Store.bestEver(g);
-            var s = st.byGame[g];
+            var s = st.byGame[g] || { plays: 0, sum: 0, best: 0 };
             return '<div class="bestrow">' +
               '<span class="bestrow__ico">' + Games[g].icon + '</span>' +
               '<span class="bestrow__name">' + Games[g].name +
@@ -315,7 +370,7 @@ window.App = (function () {
         '<span class="day__date">' + lbl.text + '</span>' +
         '<span class="day__chips">' +
           GAMES.map(function (g) {
-            return '<i class="dchip' + (best[g] !== null ? ' is-on' : '') + '" title="' + Games[g].name + '">' + Games[g].icon + '</i>';
+            return '<i class="dchip' + (best[g] != null ? ' is-on' : '') + '" title="' + Games[g].name + '">' + Games[g].icon + '</i>';
           }).join('') +
         '</span>' +
         '<span class="day__total">' + UI.comma(total) + '점</span>' +

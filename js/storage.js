@@ -19,7 +19,7 @@ window.Store = (function () {
       v: 1,
       settings: { fontScale: 'md', sound: true },
       records: {},
-      sessions: { sudoku: null, wordsearch: null, quiz: null },
+      sessions: { sudoku: null, wordsearch: null, math: null, quiz: null },
       quizWrong: []
     };
   }
@@ -35,7 +35,7 @@ window.Store = (function () {
     if (!db || typeof db !== 'object') db = blank();
     if (!db.settings) db.settings = blank().settings;
     if (!db.records) db.records = {};
-    if (!db.sessions) db.sessions = { sudoku: null, wordsearch: null, quiz: null };
+    if (!db.sessions) db.sessions = { sudoku: null, wordsearch: null, math: null, quiz: null };
     if (!Array.isArray(db.quizWrong)) db.quizWrong = [];
     return db;
   }
@@ -107,20 +107,21 @@ window.Store = (function () {
     return (load().records[key || dayKey()] || []).slice();
   }
 
-  /** 그날 게임별 최고점 { sudoku: n|null, ... } */
+  /** 그날 게임별 최고점 — 그날 실제로 한 게임만 담긴다.
+   *  게임 종류가 늘어나도 고칠 곳이 없도록 기록에서 바로 뽑는다. */
   function dayBest(key) {
-    var out = { sudoku: null, wordsearch: null, quiz: null };
+    var out = {};
     dayRecords(key).forEach(function (r) {
-      if (!(r.game in out)) return;
-      if (out[r.game] === null || r.score > out[r.game]) out[r.game] = r.score;
+      if (out[r.game] == null || r.score > out[r.game]) out[r.game] = r.score;
     });
     return out;
   }
 
   /** 그날의 총점 = 게임별 최고점의 합 (여러 번 해도 최고 기록만 합산) */
   function dayTotal(key) {
-    var b = dayBest(key);
-    return (b.sudoku || 0) + (b.wordsearch || 0) + (b.quiz || 0);
+    var b = dayBest(key), sum = 0;
+    Object.keys(b).forEach(function (g) { sum += b[g] || 0; });
+    return sum;
   }
 
   /** 게임별 역대 최고 기록 (없으면 null) */
@@ -145,17 +146,15 @@ window.Store = (function () {
 
   function stats() {
     var d = load(), plays = 0, sum = 0, days = 0, byGame = {};
-    ['sudoku', 'wordsearch', 'quiz'].forEach(function (g) { byGame[g] = { plays: 0, sum: 0, best: 0 }; });
     Object.keys(d.records).forEach(function (k) {
       var list = d.records[k];
       if (list.length) days++;
       list.forEach(function (r) {
         plays++; sum += r.score;
-        if (byGame[r.game]) {
-          byGame[r.game].plays++;
-          byGame[r.game].sum += r.score;
-          if (r.score > byGame[r.game].best) byGame[r.game].best = r.score;
-        }
+        if (!byGame[r.game]) byGame[r.game] = { plays: 0, sum: 0, best: 0 };
+        byGame[r.game].plays++;
+        byGame[r.game].sum += r.score;
+        if (r.score > byGame[r.game].best) byGame[r.game].best = r.score;
       });
     });
     return { plays: plays, days: days, avg: plays ? Math.round(sum / plays) : 0, byGame: byGame };
