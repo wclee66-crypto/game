@@ -804,12 +804,28 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
 /* ================= 태블릿·PC ================= */
 
 @media (min-width: 720px) {
-  .view { max-width: 640px; padding-top: 1rem; }
+  /* 본문은 가운데 한 줄로 모으고, 위·아래 막대도 그 폭에 맞춘다.
+   * (막대를 통째로 좁히면 배경과 경계선이 끊기므로, 좌우 여백만 늘려 속만 모은다) */
+  :root { --col: 640px; --gut: calc((100% - var(--col)) / 2); }
+
+  .view { max-width: var(--col); padding-top: 1rem; }
+  .appbar { padding-left: calc(var(--gut) + 1rem); padding-right: calc(var(--gut) + 1rem); }
+  .tabbar { padding-left: calc(var(--gut) + .4rem); padding-right: calc(var(--gut) + .4rem); }
+
   .sd-grid, .pad, .hud, .tools { max-width: 540px; margin-left: auto; margin-right: auto; }
   .qz-q { font-size: 1.45rem; }
   /* 화면이 넓으면 두 그림을 나란히 놓는다 */
   .sp-wrap { flex-direction: row; }
   .sp-panel { flex: 1; min-width: 0; }
+}
+
+/* 큰 모니터 — 휴대폰 폭 그대로 두면 글씨가 너무 작아 보인다.
+   폭을 조금 넓히고 글씨를 한 단계 키워 눈이 편하게 한다. */
+@media (min-width: 1100px) {
+  html { font-size: 19px; }
+  html[data-fs="lg"] { font-size: 22px; }
+  html[data-fs="xl"] { font-size: 25px; }
+  :root { --col: 760px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
