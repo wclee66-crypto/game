@@ -87,15 +87,15 @@ window.App = (function () {
 
     if (isIOSSafari()) {
       return tip(T('앱으로 설치하려면'),
-        (T('아래쪽') + ' <b>' + T('공유 버튼 ⬆') + '</b> → <b>' + T('홈 화면에 추가') + '</b> ' + T('를 누르세요.') + '<br>' + T('아이폰은 이것이 정식 설치 방법입니다.')));
+        T('아래쪽 <b>공유 버튼 ⬆</b> → <b>홈 화면에 추가</b> 를 누르세요.<br>아이폰은 이것이 정식 설치 방법입니다.'));
     }
     if (isIOS()) {
       return tip(T('Safari로 열어 주세요'),
-        (T('아이폰·아이패드는') + ' <b>Safari</b>' + T('에서만 앱으로 설치됩니다.') + '<br>' + T('이 주소를 Safari에서 다시 열어 주세요.')));
+        T('아이폰·아이패드는 <b>Safari</b>에서만 앱으로 설치됩니다.<br>이 주소를 Safari에서 다시 열어 주세요.'));
     }
 
     return tip(T('앱으로 설치하려면'),
-      (T('브라우저 메뉴') + ' <b>⋮</b> → <b>' + T('앱 설치') + '</b> ' + T('를 누르세요.') + '<br>' + T('“홈 화면에 추가”만 보이면') + ' <b>' + T('새로고침') + '</b> ' + T('한 번 뒤 다시 열어 보세요.')));
+      T('브라우저 메뉴 <b>⋮</b> → <b>앱 설치</b> 를 누르세요.<br>“홈 화면에 추가”만 보이면 <b>새로고침</b> 한 번 뒤 다시 열어 보세요.'));
   }
 
   function doInstall() {
@@ -265,7 +265,7 @@ window.App = (function () {
         ('<h2 class="sec">' + T('오늘의 게임') + '</h2>') +
         '<div class="gamelist">' + pickForHome(best).map(gameCard).join('') + '</div>' +
         (GAMES.length > HOME_GAMES
-          ? ('<button class="btn btn--ghost btn--wide" id="hmMore">' + T('게임 모두 보기 (')) + GAMES.length + '가지)</button>'
+          ? '<button class="btn btn--ghost btn--wide" id="hmMore">' + T('게임 모두 보기 ({n}가지)', { n: GAMES.length }) + '</button>'
           : '') +
 
         ('<h2 class="sec">' + T('최근 이레') + '</h2>') +
@@ -328,7 +328,7 @@ window.App = (function () {
             var s = st.byGame[g] || { plays: 0, sum: 0, best: 0 };
             return '<div class="bestrow">' +
               '<span class="bestrow__name">' + Games[g].name +
-                '<em>' + (s.plays ? s.plays + (T('판 · 평균') + ' ') + Math.round(s.sum / s.plays) + '점' : T('기록 없음')) + '</em></span>' +
+                '<em>' + (s.plays ? T('{p}판 · 평균 {avg}점', { p: s.plays, avg: Math.round(s.sum / s.plays) }) : T('기록 없음')) + '</em></span>' +
               '<span class="bestrow__score">' + (b ? UI.comma(b.score) + '<em>' + T('점 · {m}/{d}', { m: Store.labelOf(b.day).month, d: Store.labelOf(b.day).date }) + '</em>' : '—') + '</span>' +
             '</div>';
           }).join('') +
@@ -444,7 +444,7 @@ window.App = (function () {
 
   function showRules(which) {
     var body = which === 'all'
-      ? ('<p class="modal__msg">' + T('모든 게임이') + ' <b>' + T('기본 1,000점 만점') + '</b>' + T('이고, 어려운 난이도를 고르면 보너스가 더해집니다. 하루 만점은') + ' ') + UI.comma(MAX_DAY) + (T('점입니다.') + '</p>') +
+      ? '<p class="modal__msg">' + T('모든 게임이 <b>기본 1,000점 만점</b>이고, 어려운 난이도를 고르면 보너스가 더해집니다. 하루 만점은 {n}점입니다.', { n: UI.comma(MAX_DAY) }) + '</p>' +
         GAMES.map(rulesTable).join('') +
         '<p class="modal__msg small">같은 게임을 여러 번 해도 그날 총점에는 <b>가장 높은 점수</b>만 반영됩니다. 판마다의 기록은 모두 남습니다.</p>'
       : rulesTable(which);
@@ -514,10 +514,9 @@ window.App = (function () {
       b.addEventListener('click', function () {
         if (I18N.get() === b.dataset.v) return;
         Store.setSetting('lang', b.dataset.v);
-        I18N.set(b.dataset.v);
-        relist();                          // 그 말로 못 하는 게임은 목록에서 빠진다
-        m.close();
-        go('home');
+        /* 게임 이름·설명은 파일을 처음 읽을 때 정해지므로 화면만 다시 그려서는 안 바뀐다.
+           통째로 다시 열어야 모든 글이 새 말로 바뀐다. 점수 기록은 그대로 남는다. */
+        location.reload();
       });
     });
 

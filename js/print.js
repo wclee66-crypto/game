@@ -258,7 +258,7 @@ window.Print = (function () {
     var sub = !fills
       ? (noNumbers ? '마음대로 색을 골라 칠해 보세요.'
                    : T('칸마다 적힌 번호를 보고, 아래 색깔표대로 칠하세요.'))
-      : (left ? (T('남은') + ' ') + left + '칸은 번호대로 칠해 보세요.' : '');
+      : (left ? T('남은 {n}칸은 번호대로 칠해 보세요.', { n: left }) : '');
 
     return '<section class="ps-sheet ps-sheet--cl">' +
       sheetHead(title, pic.name + (tag || ''), sub) +
@@ -358,8 +358,8 @@ window.Print = (function () {
     var body =
       (cl
         ? '<p class="modal__msg">크레파스나 색연필로 칠할 <b>A4 색칠 도안</b>을 만듭니다. 번호와 색깔표가 함께 인쇄됩니다.</p>'
-        : ('<p class="modal__msg">' + T('연필로 풀 수 있는') + ' <b>' + T('A4 문제지') + '</b>' + T('를 만듭니다.') + '</p>')) +
-      ('<p class="modal__msg small">' + T('종이에 찍지 않고') + ' <b>' + T('PDF 파일로 저장') + '</b>' + T('하시려면, 인쇄 창의') + ' <b>' + T('프린터') + '</b>' + T('를') + ' <b>“Microsoft Print to PDF”</b> ' + T('또는') + ' <b>' + T('“PDF로 저장”') + '</b>' + T('으로 바꾸고 인쇄를 누르세요.') + '</p>') +
+        : '<p class="modal__msg">' + T('연필로 풀 수 있는 <b>A4 문제지</b>를 만듭니다.') + '</p>') +
+      '<p class="modal__msg small">' + T('종이에 찍지 않고 <b>PDF 파일로 저장</b>하시려면, 인쇄 창의 <b>프린터</b>를 <b>“Microsoft Print to PDF”</b> 또는 <b>“PDF로 저장”</b>으로 바꾸고 인쇄를 누르세요.') + '</p>' +
       '<div class="settings">' +
         ('<div class="set set--stack"><span class="set__lbl">' + T('난이도') + '</span>') + seg('prLevel', levelItems, pick.level) +
           '<span class="set__hint" id="prHint">' + esc(G.levels[pick.level].note || '') + '</span></div>' +

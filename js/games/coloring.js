@@ -272,10 +272,11 @@ window.Games.coloring = (function () {
     if (n === -1) {
       els.tip.textContent = T('지우고 싶은 칸을 누르세요.');
     } else if (S.free) {
-      els.tip.textContent = josa(PICTURES.nameOf(n), T('을'), T('를')) + (' ' + T('골랐습니다. 칠하고 싶은 칸을 누르세요.'));
+      els.tip.textContent = T('{c} 골랐습니다. 칠하고 싶은 칸을 누르세요.',
+        { c: josa(PICTURES.nameOf(n), '을', '를') });
     } else {
-      els.tip.textContent = n + (T('번') + ' ') + PICTURES.nameOf(n) + ' — ' +
-        numJosa(n, T('이'), T('가')) + (' ' + T('적힌 칸을 누르세요.'));
+      els.tip.textContent = T('{n}번 {c} — {j} 적힌 칸을 누르세요.',
+        { n: n, c: PICTURES.nameOf(n), j: numJosa(n, '이', '가') });
     }
   }
 
@@ -330,7 +331,8 @@ window.Games.coloring = (function () {
       el.classList.remove('is-miss');
       if (num) num.classList.remove('is-miss');
     }, 600);
-    els.tip.textContent = (T('그 칸은') + ' ') + pic.regions[i].c + (T('번') + ' ') + PICTURES.nameOf(pic.regions[i].c) + (' ' + T('자리입니다.'));
+    els.tip.textContent = T('그 칸은 {n}번 {c} 자리입니다.',
+      { n: pic.regions[i].c, c: PICTURES.nameOf(pic.regions[i].c) });
   }
 
   function paintOne(i) {
@@ -366,7 +368,7 @@ window.Games.coloring = (function () {
     var hit = [];
     pic.regions.forEach(function (r, i) { if (r.c === picked && !S.fills[i]) hit.push(i); });
     if (!hit.length) {
-      UI.toast(picked + (T('번') + ' ') + josa(PICTURES.nameOf(picked), T('은'), T('는')) +
+      UI.toast(T('{n}번 {c}', { n: picked, c: josa(PICTURES.nameOf(picked), '은', '는') }) +
                (' ' + T('다 칠했습니다. 다른 색을 골라 보세요.')));
       return;
     }
@@ -403,7 +405,7 @@ window.Games.coloring = (function () {
     var m = UI.modal({
       title: T('종이로 인쇄'),
       body: ('<p class="modal__msg">' + T('지금 이 그림을 A4 한 장으로 인쇄합니다.') + '<br>') +
-            (T('PDF 파일로 저장하시려면 인쇄 창의') + ' <b>' + T('프린터') + '</b>' + T('를') + ' <b>“Microsoft Print to PDF”</b> ' + T('또는') + ' <b>' + T('“PDF로 저장”') + '</b>' + T('으로 바꾸세요.') + '</p>') +
+            T('PDF 파일로 저장하시려면 인쇄 창의 <b>프린터</b>를 <b>“Microsoft Print to PDF”</b> 또는 <b>“PDF로 저장”</b>으로 바꾸세요.') + '</p>' +
             ('<div class="settings"><div class="set"><span class="set__lbl">' + T('무엇을') + '</span>') +
             '<div class="seg" id="clPrKind">' +
               ('<button data-v="blank" class="is-on">' + T('빈 도안') + '</button>') +

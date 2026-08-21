@@ -461,7 +461,7 @@ window.Games.spot = (function () {
             svgOf(rightItems(S.items, S.diffs), 'spSvgB') + '</figure>' +
         '</div>' +
         '<div class="sp-dots" id="spDots"></div>' +
-        ('<p class="sp-note" id="spNote">' + T('모양이 다른 곳') + ' ') + S.diffs.length + (T('군데를 찾아 눌러 보세요.') + '</p>') +
+        '<p class="sp-note" id="spNote">' + T('모양이 다른 곳 {n}군데를 찾아 눌러 보세요.', { n: S.diffs.length }) + '</p>' +
         '<div class="tools" id="spTools">' +
           ('<button class="tool" id="spHintBtn"><span>💡</span>' + T('힌트') + '</button>') +
           ('<button class="tool" id="spRestart"><span>↺</span>' + T('새 판') + '</button>') +
@@ -643,8 +643,8 @@ window.Games.spot = (function () {
       title: timeUp ? '시간이 다 되었습니다' : T('다 찾으셨습니다!'),
       score: sc.total,
       headline: sc.all
-        ? (T('다른 곳') + ' ') + S.diffs.length + '군데를 모두 찾으셨습니다.'
-        : (T('못 찾으신 곳:') + ' ') + missed.join(', '),
+        ? T('다른 곳 {n}군데를 모두 찾으셨습니다.', { n: S.diffs.length })
+        : T('못 찾으신 곳: {list}', { list: missed.join(', ') }),
       rows: rows,
       note: sc.all ? '' : T('「그림 보기」를 누르시면 못 찾은 곳을 점선 동그라미로 알려 드립니다.'),
       actions: [
