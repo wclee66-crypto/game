@@ -2,7 +2,7 @@
 window.App = (function () {
 
   var APP_VERSION = 'v20';                // sw.js 의 VERSION 과 함께 올린다
-  var GAMES = ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring'];
+  var GAMES = ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot'];
   var MAX_PER_GAME = 1250;               // 한 게임에서 받을 수 있는 최고 점수
   var MAX_DAY = MAX_PER_GAME * GAMES.length;
   var DAY_GOAL = 3;                      // 하루에 이만큼 종목을 하면 목표 달성
@@ -111,7 +111,8 @@ window.App = (function () {
       math: ['산수', '더하기 빼기로 머리 깨우기'],
       wordorder: ['단어 순서', '뒤섞인 글자를 바로잡기'],
       quiz: ['상식 퀴즈', '아는 만큼 빨리 맞히기'],
-      coloring: ['색칠 공부', '번호대로 색을 채워 가는 시간']
+      coloring: ['색칠 공부', '번호대로 색을 채워 가는 시간'],
+      spot: ['틀린그림찾기', '두 그림을 견주어 보는 눈']
     }[route] || titles_default();
     document.getElementById('appTitle').textContent = titles[0];
     document.getElementById('appSub').textContent = titles[1];

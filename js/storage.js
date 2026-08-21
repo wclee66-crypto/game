@@ -5,7 +5,7 @@
  *   v: 1,
  *   settings: { fontScale:'md'|'lg'|'xl', sound:true },
  *   records: { "2026-08-19": [ {game,score,difficulty,detail,duration,at}, ... ] },
- *   sessions: { sudoku:{...}|null, wordsearch:{...}|null, quiz:{...}|null }
+ *   sessions: { <게임id>: {...}|null, ... }   — 게임이 늘 때마다 저절로 늘어난다
  * }
  */
 window.Store = (function () {
@@ -19,7 +19,7 @@ window.Store = (function () {
       v: 1,
       settings: { fontScale: 'md', sound: true },
       records: {},
-      sessions: { sudoku: null, wordsearch: null, math: null, quiz: null },
+      sessions: {},                              /* 게임이 늘어나도 손댈 곳이 없도록 빈 채로 둔다 */
       quizWrong: []
     };
   }
@@ -35,7 +35,7 @@ window.Store = (function () {
     if (!db || typeof db !== 'object') db = blank();
     if (!db.settings) db.settings = blank().settings;
     if (!db.records) db.records = {};
-    if (!db.sessions) db.sessions = { sudoku: null, wordsearch: null, math: null, quiz: null };
+    if (!db.sessions) db.sessions = {};
     if (!Array.isArray(db.quizWrong)) db.quizWrong = [];
     return db;
   }

@@ -10,7 +10,7 @@ var ASSETS = [
   './css/style.css',
   './js/storage.js', './js/ui.js', './js/print.js', './js/app.js',
   './js/data/quiz-data.js', './js/data/words.js', './js/data/order-words.js', './js/data/pictures.js',
-  './js/games/sudoku.js', './js/games/wordsearch.js', './js/games/math.js', './js/games/wordorder.js', './js/games/quiz.js', './js/games/coloring.js',
+  './js/games/sudoku.js', './js/games/wordsearch.js', './js/games/math.js', './js/games/wordorder.js', './js/games/quiz.js', './js/games/coloring.js', './js/games/spot.js',
   './icons/favicon-32.png', './icons/favicon-64.png', './icons/apple-touch-icon.png',
   './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png'
 ];
