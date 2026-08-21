@@ -822,13 +822,22 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
   .sp-panel { flex: 1; min-width: 0; }
 }
 
-/* 큰 모니터 — 휴대폰 폭 그대로 두면 글씨가 너무 작아 보인다.
-   폭을 조금 넓히고 글씨를 한 단계 키워 눈이 편하게 한다. */
+/* 큰 모니터 — 휴대폰 폭 그대로 한 줄로 세우면 좌우가 텅 빈다.
+   폭을 넓히고 글씨를 키우고, 게임 칸은 두 줄로 늘어놓아 빈 곳을 채운다.
+   태블릿·휴대폰은 한 줄 그대로 둔다 — 손가락으로 누르기에는 큰 칸 하나가 낫다. */
 @media (min-width: 1100px) {
   html { font-size: 19px; }
   html[data-fs="lg"] { font-size: 22px; }
   html[data-fs="xl"] { font-size: 25px; }
-  :root { --col: 760px; }
+  :root { --col: 1000px; }
+
+  .gamelist { display: grid; grid-template-columns: 1fr 1fr; gap: .55rem; }
+}
+
+/* 아주 넓은 모니터 — 세 줄까지 늘어놓는다 */
+@media (min-width: 1500px) {
+  :root { --col: 1290px; }
+  .gamelist { grid-template-columns: 1fr 1fr 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
