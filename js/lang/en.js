@@ -107,7 +107,7 @@ window.I18N.dict.en = {
   '계속 하기': 'Keep playing',
 
   /* ---------- 설정 ---------- */
-  '말': 'Language',
+  '언어': 'Language',
   '글씨 크기': 'Text size',
   '보통': 'Normal',
   '크게': 'Large',

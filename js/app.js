@@ -477,7 +477,7 @@ window.App = (function () {
     var body =
       '<div class="settings">' +
         '<div class="set">' +
-          '<span class="set__lbl">' + T(T('말')) + '</span>' +
+          '<span class="set__lbl">' + T('언어') + '</span>' +
           '<div class="seg" id="setLang">' +
             I18N.langs.map(function (o) {
               return '<button data-v="' + o.code + '"' + (I18N.get() === o.code ? ' class="is-on"' : '') +
