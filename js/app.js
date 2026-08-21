@@ -170,11 +170,15 @@ window.App = (function () {
     var s = Store.dayBest()[g];
     var resume = G.hasProgress();
     var sub = resume ? '이어서 할 수 있어요' : (s != null ? '오늘 최고 기록' : '아직 안 하셨어요');
+
+    /* 오늘 한 게임은 칸 전체를 옅은 초록으로 물들인다 —
+       기호를 없앤 대신 '무엇을 했는지'가 한눈에 보이도록. */
+    var state = s != null ? ' is-done' : (resume ? ' is-resume' : '');
     var right = s != null
       ? '<span class="gcard__go">' + UI.comma(s) + '<small>점</small></span>'
-      : '<span class="gcard__go is-new">' + (resume ? '이어하기' : '시작하기') + '</span>';
-    return '<button class="gcard" data-go="' + g + '">' +
-      '<span class="gcard__ico">' + G.icon + '</span>' +
+      : '<span class="gcard__go is-new' + (resume ? ' is-resume' : '') + '">' +
+        (resume ? '이어하기' : '시작하기') + '</span>';
+    return '<button class="gcard' + state + '" data-go="' + g + '">' +
       '<span class="gcard__body">' +
         '<span class="gcard__name">' + G.name + '</span>' +
         '<span class="gcard__sub">' + sub + '</span>' +
@@ -309,7 +313,6 @@ window.App = (function () {
             var b = Store.bestEver(g);
             var s = st.byGame[g] || { plays: 0, sum: 0, best: 0 };
             return '<div class="bestrow">' +
-              '<span class="bestrow__ico">' + Games[g].icon + '</span>' +
               '<span class="bestrow__name">' + Games[g].name +
                 '<em>' + (s.plays ? s.plays + '판 · 평균 ' + Math.round(s.sum / s.plays) + '점' : '기록 없음') + '</em></span>' +
               '<span class="bestrow__score">' + (b ? UI.comma(b.score) + '<em>점 · ' + Store.labelOf(b.day).month + '/' + Store.labelOf(b.day).date + '</em>' : '—') + '</span>' +
@@ -374,10 +377,8 @@ window.App = (function () {
     return '<div class="day' + (key === Store.dayKey() ? ' is-open' : '') + '">' +
       '<button class="day__head">' +
         '<span class="day__date">' + lbl.text + '</span>' +
-        '<span class="day__chips">' +
-          GAMES.map(function (g) {
-            return '<i class="dchip' + (best[g] != null ? ' is-on' : '') + '" title="' + Games[g].name + '">' + Games[g].icon + '</i>';
-          }).join('') +
+        '<span class="day__count">' +
+          GAMES.filter(function (g) { return best[g] != null; }).length + '종목' +
         '</span>' +
         '<span class="day__total">' + UI.comma(total) + '점</span>' +
       '</button>' +
@@ -386,7 +387,6 @@ window.App = (function () {
           var t = new Date(r.at);
           var hh = String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0');
           return '<li>' +
-            '<span class="rec__ico">' + (Games[r.game] ? Games[r.game].icon : '·') + '</span>' +
             '<span class="rec__name">' + (Games[r.game] ? Games[r.game].name : r.game) +
               '<em>' + UI.esc(r.difficulty) + ' · ' + hh + ' · ' + UI.fmtTime(r.duration) + '</em></span>' +
             '<span class="rec__score">' + UI.comma(r.score) + '</span>' +
@@ -420,7 +420,7 @@ window.App = (function () {
   /* ================= 규칙 / 게임 전환 / 설정 ================= */
 
   function rulesTable(g) {
-    return '<h3 class="rules__h">' + Games[g].icon + ' ' + Games[g].rules.title + '</h3>' +
+    return '<h3 class="rules__h">' + Games[g].rules.title + '</h3>' +
       '<table class="rules"><tbody>' +
       Games[g].rules.lines.map(function (l) {
         return '<tr><th>' + UI.esc(l[0]) + '</th><td>' + UI.esc(l[1]) + '</td></tr>';
@@ -442,11 +442,9 @@ window.App = (function () {
     var others = GAMES.concat(['records']).filter(function (g) { return g !== from; });
     var body = '<div class="switcher">' + others.map(function (g) {
       var name = g === 'records' ? '나의 기록' : Games[g].name;
-      var ico = g === 'records' ? '록' : Games[g].icon;
       var sub = g === 'records' ? '날짜별 점수 보기'
         : (Games[g].hasProgress() ? '진행 중인 판이 있습니다' : '새로 시작하기');
       return '<button class="switcher__item" data-go="' + g + '">' +
-        '<span class="switcher__ico">' + ico + '</span>' +
         '<span class="switcher__txt">' + name + '<em>' + sub + '</em></span></button>';
     }).join('') + '</div>';
 

@@ -442,7 +442,7 @@ window.Games.wordsearch = (function () {
   }
 
   return {
-    id: 'wordsearch', name: '낱말찾기', icon: '낱', tagline: '글자판 속 숨은 낱말',
+    id: 'wordsearch', name: '낱말찾기', tagline: '글자판 속 숨은 낱말',
     rules: {
       title: '낱말찾기 점수 규칙',
       lines: [

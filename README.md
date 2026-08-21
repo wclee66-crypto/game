@@ -450,7 +450,7 @@ js/games/coloring.js   색칠 공부 (도안 생성 · 칠하기 · 채점)
 
 ```js
 window.Games.myGame = {
-  id: 'myGame', name: '새 게임', icon: '★',       // icon 은 한 글자 (동그라미 안에 들어감)
+  id: 'myGame', name: '새 게임',                 // 목록에 크게 나오는 이름
   tagline: '한 줄 설명',                          // 화면 맨 위 제목 밑에 나옵니다
   rules: { title: '…', lines: [['항목', '설명']] },
   mount: function (container) { /* 화면 그리기 */ },

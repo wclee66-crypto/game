@@ -671,7 +671,7 @@ window.Games.spot = (function () {
   /* ================= 바깥에 내보내기 ================= */
 
   return {
-    id: 'spot', name: '틀린그림찾기', icon: '틀', tagline: '두 그림을 견주어 보는 눈',
+    id: 'spot', name: '틀린그림찾기', tagline: '두 그림을 견주어 보는 눈',
     rules: {
       title: '틀린그림찾기 점수 규칙',
       lines: [

@@ -483,7 +483,7 @@ window.Games.sudoku = (function () {
   /* ================= 진입점 ================= */
 
   return {
-    id: 'sudoku', name: '스도쿠', icon: '수', tagline: '숫자로 하는 두뇌 체조',
+    id: 'sudoku', name: '스도쿠', tagline: '숫자로 하는 두뇌 체조',
     rules: {
       title: '스도쿠 점수 규칙',
       lines: [

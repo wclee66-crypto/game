@@ -372,7 +372,7 @@ window.Games.math = (function () {
   }
 
   return {
-    id: 'math', name: '숫자 계산', icon: '숫', tagline: '더하기 빼기로 머리 깨우기',
+    id: 'math', name: '숫자 계산', tagline: '더하기 빼기로 머리 깨우기',
     rules: {
       title: '숫자 계산 점수 규칙',
       lines: [

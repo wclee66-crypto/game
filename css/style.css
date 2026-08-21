@@ -156,27 +156,46 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .today__meta { margin: .4rem 0 0; font-size: .72rem; color: var(--ink-3); line-height: 1.5; }
 
 .gamelist { display: flex; flex-direction: column; gap: .5rem; }
+/* 게임 이름이 주인공이다. 앞에 붙던 기호 동그라미는 없앴다 —
+   종류가 늘수록 한 글자 기호로는 구별이 안 되고, 이름 읽는 것을 방해했다.
+   대신 오늘 한 게임은 칸 전체를 옅은 초록으로 물들여 한눈에 보이게 한다. */
+
 .gcard {
-  display: flex; align-items: center; gap: .75rem; width: 100%; text-align: left;
+  display: flex; align-items: center; gap: .8rem; width: 100%; text-align: left;
   background: var(--surf); border: 1px solid var(--line);
-  border-radius: var(--r); padding: .8rem .85rem;
-  transition: transform .1s ease;
+  border-radius: var(--r); padding: 1rem 1.05rem;
+  transition: transform .1s ease, background .15s ease, border-color .15s ease;
 }
 .gcard:active { transform: scale(.99); }
-.gcard__ico {
-  flex: none; width: 2.5rem; height: 2.5rem; border-radius: 50%;
-  display: grid; place-items: center; font-size: .95rem; font-weight: 800;
-  background: var(--bg); border: 1px solid var(--line); color: var(--accent);
-}
+
+/* 오늘 한 게임 — 옅은 초록 바탕 */
+.gcard.is-done { background: var(--accent-s); border-color: #C6E7D6; }
+/* 하다 만 게임 — 초록 테두리만 */
+.gcard.is-resume { background: var(--bg); border-color: #C6E7D6; }
+
 .gcard__body { flex: 1; min-width: 0; display: block; }
-.gcard__name { display: block; font-weight: 700; font-size: 1rem; letter-spacing: -.02em; }
-.gcard__sub { display: block; font-size: .72rem; color: var(--ink-3); font-weight: 500; }
-.gcard__go {
-  flex: none; font-family: var(--font-num); font-size: 1.05rem; font-weight: 800;
-  font-variant-numeric: tabular-nums; letter-spacing: -.03em;
+.gcard__name {
+  display: block; font-weight: 800; font-size: 1.28rem;
+  letter-spacing: -.035em; line-height: 1.25;
 }
-.gcard__go small { font-family: var(--font-body); font-size: .62rem; color: var(--ink-3); font-weight: 600; margin-left: .1rem; }
-.gcard__go.is-new { font-family: var(--font-body); font-size: .78rem; font-weight: 800; color: var(--accent); }
+.gcard__sub {
+  display: block; margin-top: .15rem;
+  font-size: .76rem; color: var(--ink-3); font-weight: 600;
+}
+.gcard.is-done .gcard__sub { color: var(--accent-d); }
+
+.gcard__go {
+  flex: none; font-family: var(--font-num); font-size: 1.35rem; font-weight: 800;
+  font-variant-numeric: tabular-nums; letter-spacing: -.03em; color: var(--accent-d);
+}
+.gcard__go small { font-family: var(--font-body); font-size: .66rem; color: var(--accent-d); font-weight: 700; margin-left: .12rem; opacity: .75; }
+
+/* 아직 안 한 게임 — 눌러 달라고 알약 모양으로 */
+.gcard__go.is-new {
+  font-family: var(--font-body); font-size: .84rem; font-weight: 800; color: #fff;
+  background: var(--accent); border-radius: 999px; padding: .42rem .85rem; letter-spacing: -.02em;
+}
+.gcard__go.is-new.is-resume { background: var(--bg); color: var(--accent-d); box-shadow: inset 0 0 0 1.5px var(--accent); }
 
 .tipline { margin: 1.5rem .2rem 0; font-size: .76rem; color: var(--ink-3); line-height: 1.6; text-align: center; }
 .btn--wide { width: 100%; margin-top: .7rem; min-height: 2.9rem; font-size: .9rem; }
@@ -191,15 +210,17 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 /* ================= 막대 그래프 ================= */
 
-.chart { display: flex; align-items: flex-end; gap: .45rem; height: 96px; }
-.chart__col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: .4rem; height: 100%; }
+/* 칸이 14개라 글씨를 아주 크게 하면 넘친다 — 칸이 줄어들 수 있게 두고 사이도 좁힌다 */
+.chart { display: flex; align-items: flex-end; gap: .28rem; height: 96px; }
+.chart__col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: .4rem; height: 100%; }
 .chart__track { flex: 1; width: 100%; display: flex; align-items: flex-end; justify-content: center; }
 .chart__bar {
   width: 100%; max-width: 1.6rem; min-height: 5px; border-radius: 7px; background: var(--track);
   transition: height .5s cubic-bezier(.2,.8,.2,1);
 }
 .chart__col.is-today .chart__bar { background: var(--accent); }
-.chart__lbl { font-size: .66rem; color: var(--ink-3); font-weight: 600; }
+.chart__lbl { font-size: .66rem; color: var(--ink-3); font-weight: 600; white-space: nowrap; }
+html[data-fs="lg"] .chart__lbl, html[data-fs="xl"] .chart__lbl { font-size: .58rem; }
 .chart__col.is-today .chart__lbl { color: var(--accent); font-weight: 800; }
 
 /* ================= 앱 설치 안내 ================= */
@@ -643,12 +664,7 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
 .bestlist { padding: .3rem .9rem; }
 .bestrow { display: flex; align-items: center; gap: .8rem; padding: .8rem 0; border-bottom: 1px solid var(--line); }
 .bestrow:last-child { border-bottom: 0; }
-.bestrow__ico {
-  flex: none; width: 2.2rem; height: 2.2rem; border-radius: 50%; background: var(--bg);
-  border: 1px solid var(--line); display: grid; place-items: center;
-  font-size: .82rem; font-weight: 800; color: var(--accent);
-}
-.bestrow__name { flex: 1; font-weight: 700; font-size: .94rem; }
+.bestrow__name { flex: 1; font-weight: 800; font-size: 1.08rem; letter-spacing: -.03em; }
 .bestrow__name em, .bestrow__score em { display: block; font-style: normal; font-size: .68rem; color: var(--ink-3); font-weight: 500; }
 .bestrow__score {
   text-align: right; font-family: var(--font-num); font-size: 1.15rem; font-weight: 800;
@@ -662,13 +678,12 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
   background: none; border: 0; padding: .85rem .9rem; text-align: left;
 }
 .day__date { font-weight: 700; font-size: .92rem; }
-.day__chips { display: flex; gap: .2rem; margin-left: auto; }
-.dchip {
-  width: 1.4rem; height: 1.4rem; border-radius: 50%; display: grid; place-items: center;
-  background: var(--bg); border: 1px solid var(--line); color: var(--ink-3);
-  font-size: .62rem; font-style: normal; font-weight: 800;
+/* 게임이 늘어나도 좁아지지 않도록, 동그라미를 줄줄이 놓지 않고 숫자로 적는다 */
+.day__count {
+  margin-left: auto; padding: .2rem .55rem; border-radius: 999px;
+  background: var(--accent-s); color: var(--accent-d);
+  font-size: .72rem; font-weight: 800; letter-spacing: -.02em;
 }
-.dchip.is-on { background: var(--accent); border-color: var(--accent); color: #fff; }
 .day__total {
   font-family: var(--font-num); font-weight: 800; font-size: 1.02rem;
   min-width: 4.2rem; text-align: right; letter-spacing: -.03em; font-variant-numeric: tabular-nums;
@@ -676,8 +691,7 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
 .day__list { display: none; list-style: none; margin: 0; padding: 0 .9rem .6rem; }
 .day.is-open .day__list { display: block; }
 .day__list li { display: flex; align-items: center; gap: .7rem; padding: .6rem 0; border-top: 1px solid var(--line); }
-.rec__ico { flex: none; width: 1.6rem; text-align: center; font-weight: 800; color: var(--accent); font-size: .82rem; }
-.rec__name { flex: 1; font-size: .88rem; font-weight: 700; }
+.rec__name { flex: 1; font-size: 1rem; font-weight: 800; letter-spacing: -.03em; }
 .rec__name em { display: block; font-style: normal; font-size: .66rem; color: var(--ink-3); font-weight: 500; }
 .rec__score { font-family: var(--font-num); font-weight: 800; font-size: 1rem; font-variant-numeric: tabular-nums; }
 
@@ -743,13 +757,8 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
   background: var(--surf); border: 1px solid var(--line); border-radius: var(--r);
   padding: .8rem .9rem;
 }
-.switcher__ico {
-  flex: none; width: 2.4rem; height: 2.4rem; border-radius: 50%; background: var(--bg);
-  border: 1px solid var(--line); display: grid; place-items: center;
-  font-size: .9rem; font-weight: 800; color: var(--accent);
-}
-.switcher__txt { font-weight: 700; }
-.switcher__txt em { display: block; font-style: normal; font-size: .74rem; color: var(--ink-3); font-weight: 500; }
+.switcher__txt { font-weight: 800; font-size: 1.14rem; letter-spacing: -.03em; }
+.switcher__txt em { display: block; margin-top: .1rem; font-style: normal; font-size: .74rem; color: var(--ink-3); font-weight: 600; letter-spacing: 0; }
 
 /* 설정 */
 .settings { display: flex; flex-direction: column; gap: 1rem; }
