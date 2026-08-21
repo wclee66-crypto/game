@@ -1,4 +1,4 @@
-/* 맑은뜰 — 공용 UI 도우미 */
+/* 새록 — 공용 UI 도우미 */
 window.UI = (function () {
 
   function h(html) {

@@ -1,10 +1,10 @@
-﻿# 맑은뜰 — 배포용 zip 만들기
+﻿# 새록 — 배포용 zip 만들기
 #
 #   pack.cmd 를 두 번 눌러 실행하면 됩니다.
 #
 #   1) 버전 번호를 하나 올립니다 (js/app.js 의 APP_VERSION, sw.js 의 VERSION 을 함께).
 #      → 휴대폰의 앱이 새 파일임을 알아채고 자동으로 갱신합니다.
-#   2) 실행에 필요한 파일만 골라 C:\coding\맑은뜰-배포용.zip 을 새로 만듭니다.
+#   2) 실행에 필요한 파일만 골라 C:\coding\새록-배포용.zip 을 새로 만듭니다.
 #      → 이 파일 하나를 호스팅에 끌어다 놓으면 배포 끝입니다.
 
 $ErrorActionPreference = 'Stop'
@@ -41,7 +41,7 @@ New-Item -ItemType Directory -Force $stage | Out-Null
 Copy-Item (Join-Path $root 'index.html'), (Join-Path $root 'manifest.json'), $swJs -Destination $stage
 Copy-Item (Join-Path $root 'css'), (Join-Path $root 'js'), (Join-Path $root 'icons') -Destination $stage -Recurse
 
-$zip = Join-Path (Split-Path $root -Parent) '맑은뜰-배포용.zip'
+$zip = Join-Path (Split-Path $root -Parent) '새록-배포용.zip'
 if (Test-Path $zip) { Remove-Item -LiteralPath $zip -Force }
 
 $sep = [string][char]92     # 역슬래시

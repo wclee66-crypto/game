@@ -28,4 +28,4 @@ http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': TYPES[path.extname(file).toLowerCase()] || 'application/octet-stream' });
     res.end(buf);
   });
-}).listen(PORT, () => console.log('맑은뜰 → http://localhost:' + PORT));
+}).listen(PORT, () => console.log('새록 → http://localhost:' + PORT));

@@ -6,13 +6,13 @@
 <meta name="theme-color" content="#FFFFFF">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="description" content="스도쿠 · 낱말찾기 · 산수 · 단어 순서 · 상식퀴즈를 하루 세 판. 날짜별 점수가 기록되는 두뇌 훈련 플랫폼">
-<title>맑은뜰 · 두뇌 훈련</title>
+<meta name="description" content="스도쿠·낱말찾기·산수·단어 순서·상식퀴즈를 매일 조금씩. 날짜별 점수가 기록되는 치매 예방 두뇌 훈련 앱">
+<title>새록 · 두뇌 훈련</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icons/favicon-32.png" sizes="32x32">
 <link rel="icon" href="icons/favicon-64.png" sizes="64x64">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-title" content="맑은뜰">
+<meta name="apple-mobile-web-app-title" content="새록">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800;900&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
@@ -22,10 +22,17 @@
 
 <header class="appbar" id="appbar">
   <button class="appbar__back" id="btnBack" hidden aria-label="뒤로">←</button>
-  <div class="seal" aria-hidden="true">맑</div>
+  <svg class="seal" viewBox="0 0 100 100" aria-hidden="true">
+    <rect width="100" height="100" rx="26" fill="currentColor"></rect>
+    <g fill="#fff">
+      <path d="M45 80 Q40.8 58.8 22 48 Q26.2 69.3 45 80 Z" opacity=".55"></path>
+      <path d="M56 80 Q75.2 66.4 77 43 Q57.8 56.6 56 80 Z" opacity=".78"></path>
+      <path d="M50 81 Q61.5 49 50 17 Q38.5 49 50 81 Z"></path>
+    </g>
+  </svg>
   <div class="appbar__title">
-    <h1 id="appTitle">맑은뜰</h1>
-    <p id="appSub">매일 조금씩, 머리가 맑아지는 시간</p>
+    <h1 id="appTitle">새록</h1>
+    <p id="appSub">매일 조금씩, 기억이 새록새록</p>
   </div>
   <button class="appbar__gear" id="btnSettings" aria-label="설정">⚙</button>
 </header>

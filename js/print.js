@@ -1,4 +1,4 @@
-/* 맑은뜰 — 인쇄(PDF 저장)
+/* 새록 — 인쇄(PDF 저장)
  *
  * 화면용 게임과는 별개로, 연필로 풀 수 있는 A4 문제지를 만든다.
  * 시간·힌트·실수 같은 화면용 정보는 넣지 않고 문제만 크게 담는다.
@@ -12,7 +12,7 @@ window.Print = (function () {
   function sheetHead(title, level, sub) {
     return '<div class="ps-head">' +
       '<div class="ps-head__left">' +
-        '<span class="ps-seal">맑</span>' +
+        '<span class="ps-seal">새</span>' +
         '<span class="ps-title">' + esc(title) + '<em>' + esc(level) + '</em></span>' +
       '</div>' +
       '<div class="ps-name">이름 <span class="ps-blank"></span> 날짜 <span class="ps-blank ps-blank--sm"></span></div>' +

@@ -1,0 +1,653 @@
+<title>맑은뜰 새 이름 후보</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800;900&family=Manrope:wght@500;600;700;800&display=swap">
+
+<style>
+:root{
+  --bg:#FFFFFF; --surf:#F5F8F6; --surf2:#EDF2EF;
+  --ink:#0E1A14; --ink2:#4F6459; --ink3:#8A9E93;
+  --line:#E5EDE8; --line2:#D3E0D8;
+  --accent:#0E9E62; --accent-d:#0A7B4C; --accent-s:#E2F4EB;
+  --warn:#C98A16;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D1310; --surf:#151D18; --surf2:#1D2822;
+    --ink:#E8EFEA; --ink2:#A3B5AB; --ink3:#75887E;
+    --line:#243029; --line2:#314137;
+    --accent:#3FBF87; --accent-d:#7BD9AC; --accent-s:#17322492;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D1310; --surf:#151D18; --surf2:#1D2822;
+  --ink:#E8EFEA; --ink2:#A3B5AB; --ink3:#75887E;
+  --line:#243029; --line2:#314137;
+  --accent:#3FBF87; --accent-d:#7BD9AC; --accent-s:#17322492;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'Gothic A1',-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  line-height:1.65; letter-spacing:-.01em; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px; margin:0 auto; padding:clamp(2rem,5vw,4rem) clamp(1rem,4vw,2.5rem) 5rem}
+
+.eyebrow{
+  font-family:'Manrope',sans-serif; font-size:.72rem; font-weight:800; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--accent); margin:0 0 .9rem
+}
+.lead{max-width:56ch; margin-bottom:2.4rem}
+.lead h1{font-size:clamp(1.8rem,4.4vw,2.6rem); font-weight:800; letter-spacing:-.035em; line-height:1.22; margin:0 0 1rem; text-wrap:balance}
+.lead p{color:var(--ink2); margin:0 0 .7rem; font-size:1rem}
+.lead b{color:var(--ink); font-weight:800}
+
+.why{
+  background:var(--surf); border:1px solid var(--line); border-radius:16px;
+  padding:1.1rem 1.2rem; margin-bottom:3rem; max-width:56ch;
+}
+.why h2{margin:0 0 .6rem; font-size:.95rem; font-weight:800}
+.why p{margin:0 0 .5rem; font-size:.9rem; color:var(--ink2)}
+.why p:last-child{margin:0}
+.say{font-family:'Manrope',sans-serif; font-weight:700; color:var(--warn)}
+
+.cand{
+  display:grid; grid-template-columns:auto 1fr; gap:1.4rem 1.6rem;
+  padding:2.2rem 0; border-top:1px solid var(--line);
+}
+.cand__mark{grid-row:1 / 3}
+.cand__head{align-self:center}
+.rank{
+  display:inline-block; font-family:'Manrope',sans-serif; font-size:.68rem; font-weight:800;
+  letter-spacing:.1em; color:var(--accent-d); background:var(--accent-s);
+  padding:.16rem .5rem; border-radius:999px; margin-bottom:.5rem;
+}
+.cand h2{margin:0; font-size:clamp(1.7rem,4vw,2.3rem); font-weight:900; letter-spacing:-.045em}
+.read{margin:.25rem 0 0; font-size:.82rem; color:var(--ink3); font-family:'Manrope',sans-serif; font-weight:600}
+.tag{margin:.5rem 0 0; font-size:1rem; color:var(--accent-d); font-weight:800}
+.cand__body{grid-column:2}
+.cand__body p{margin:0 0 .7rem; color:var(--ink2); font-size:.94rem; max-width:60ch}
+.cand__body p b{color:var(--ink); font-weight:700}
+
+.pros{display:flex; flex-wrap:wrap; gap:.4rem; margin:.9rem 0 1.1rem}
+.pros span{font-size:.78rem; font-weight:700; padding:.26rem .6rem; border-radius:999px}
+.good{background:var(--accent-s); color:var(--accent-d)}
+.bad{background:var(--surf2); color:var(--ink3)}
+
+.shots{display:flex; flex-wrap:wrap; gap:1rem; align-items:flex-start}
+.shot{display:flex; flex-direction:column; gap:.45rem}
+.shot figcaption{font-size:.7rem; color:var(--ink3); font-weight:600; font-family:'Manrope',sans-serif; letter-spacing:.04em}
+
+/* 홈 화면 아이콘 */
+.home-ico{
+  width:78px; display:flex; flex-direction:column; align-items:center; gap:.4rem;
+  padding:.7rem .3rem; background:var(--surf2); border-radius:14px;
+}
+.home-ico span{font-size:.66rem; font-weight:700; color:var(--ink2)}
+
+/* 앱 상단 바 */
+.bar{
+  width:250px; display:flex; align-items:center; gap:.55rem;
+  background:var(--bg); border:1px solid var(--line); border-radius:14px; padding:.7rem .8rem;
+}
+.bar__t{min-width:0}
+.bar__t b{display:block; font-size:1rem; font-weight:800; letter-spacing:-.03em; line-height:1.2}
+.bar__t em{display:block; font-style:normal; font-size:.58rem; color:var(--ink3)}
+
+.batch{
+  margin:3.4rem 0 .5rem; padding-top:2.4rem; border-top:3px solid var(--accent);
+  font-size:clamp(1.2rem,2.8vw,1.5rem); font-weight:800; letter-spacing:-.03em;
+}
+.batch__lead{margin:0 0 .5rem; color:var(--ink2); font-size:.95rem; max-width:60ch}
+.batch__lead b{color:var(--ink); font-weight:800}
+code{
+  font-family:'Manrope',ui-monospace,monospace; font-size:.86em; font-weight:700;
+  background:var(--surf2); padding:.1rem .35rem; border-radius:5px;
+}
+
+.tbl-wrap{overflow-x:auto; margin:2.6rem 0 0}
+table{border-collapse:collapse; width:100%; font-size:.88rem; min-width:600px}
+th,td{text-align:left; padding:.7rem .6rem; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-weight:800; color:var(--ink3); font-size:.74rem; letter-spacing:.04em; white-space:nowrap}
+td b{font-weight:800}
+.dot{font-family:'Manrope',sans-serif; font-weight:800; color:var(--accent)}
+.dim{color:var(--ink3)}
+
+.close{margin-top:3rem; padding-top:2rem; border-top:1px solid var(--line); max-width:62ch}
+.close h2{font-size:1.2rem; font-weight:800; margin:0 0 .8rem; letter-spacing:-.03em}
+.close p{color:var(--ink2); margin:0 0 .8rem; font-size:.95rem}
+.close ul{color:var(--ink2); padding-left:1.1rem; margin:0 0 .9rem; font-size:.95rem}
+.close li{margin-bottom:.4rem}
+.close b{color:var(--ink); font-weight:800}
+.warn{
+  background:var(--surf); border:1px solid var(--line); border-left:4px solid var(--warn);
+  border-radius:0 12px 12px 0; padding:1rem 1.1rem; margin-top:1.4rem;
+}
+.warn h3{margin:0 0 .5rem; font-size:.92rem; font-weight:800}
+.warn p{margin:0 0 .5rem; font-size:.88rem; color:var(--ink2)}
+.warn p:last-child{margin:0}
+
+@media (max-width:640px){
+  .cand{grid-template-columns:1fr; gap:1rem}
+  .cand__mark{grid-row:auto}
+  .cand__body{grid-column:1}
+}
+@media (prefers-reduced-motion:no-preference){
+  .cand{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+  .cand:nth-of-type(2){animation-delay:.06s}
+  .cand:nth-of-type(3){animation-delay:.12s}
+  .cand:nth-of-type(4){animation-delay:.18s}
+  .cand:nth-of-type(5){animation-delay:.24s}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}}
+}
+</style>
+
+<div class="wrap">
+
+  <div class="lead">
+    <p class="eyebrow">이름 다시 짓기</p>
+    <h1>부르기 쉽고, 뜻이 바로 오는 이름 열 가지</h1>
+    <p>지금 이름이 걸리신다는 말씀이 맞습니다. 아래에 왜 그런지 적어 두었습니다.</p>
+    <p>후보마다 <b>아이콘·홈 화면 모습·앱 상단 바</b>를 함께 그렸습니다. 이름만 보면 감이 안 오지만, 화면에 놓아 보면 달라집니다.</p>
+    <p><b>주소도 함께 바꾸기로 하셨으니</b>, 영문 주소가 짧고 읽기 쉬운지도 기준에 넣었습니다.
+       실제로 <code>netlify.app</code> 에 비어 있는지 하나하나 확인해 표에 적어 두었습니다.</p>
+  </div>
+
+  <div class="why">
+    <h2>맑은뜰이 어려운 이유</h2>
+    <p><b>겹받침이 걸립니다.</b> ‘맑은’은 <span class="say">[말근]</span>으로 읽힙니다. 글자와 소리가 달라서, 듣고 적기도 보고 읽기도 한 번 더 생각해야 합니다.</p>
+    <p><b>된소리가 이어집니다.</b> 뒤의 ‘뜰’이 <span class="say">[뜰]</span>로 세게 나서 <span class="say">[말근뜰]</span>이 됩니다. 어르신께 전화로 불러 드리기 어렵습니다.</p>
+    <p><b>뜻이 늦게 옵니다.</b> ‘맑은 뜰’은 예쁘지만, 두뇌 훈련과 바로 이어지지 않습니다.</p>
+  </div>
+
+  <!-- ================= 1 ================= -->
+  <section class="cand">
+    <div class="cand__mark">
+      <svg width="132" height="132" viewBox="0 0 100 100" role="img" aria-label="또랑또랑 아이콘">
+        <rect width="100" height="100" rx="24" fill="#0E9E62"></rect>
+        <circle cx="39" cy="50" r="17" fill="none" stroke="#fff" stroke-width="7"></circle>
+        <circle cx="61" cy="50" r="17" fill="none" stroke="#fff" stroke-width="7" opacity=".62"></circle>
+      </svg>
+    </div>
+    <div class="cand__head">
+      <span class="rank">후보 1</span>
+      <h2>또랑또랑</h2>
+      <p class="read">[또랑또랑] · ttorang</p>
+      <p class="tag">“오늘도 머리가 또랑또랑”</p>
+    </div>
+    <div class="cand__body">
+      <p>어르신들이 실제로 쓰는 말입니다. <b>“정신이 또랑또랑하다”</b> — 이 앱이 바라는 상태를 그대로 이름으로 삼았습니다. 무엇을 위한 앱인지 설명이 필요 없습니다.</p>
+      <p>소리 내어 보면 리듬이 있어 잘 붙습니다. 받침도 ㄹ·ㅇ뿐이라 발음이 부드럽습니다. 아이콘은 <b>또렷하게 겹친 두 개의 동그라미</b> — 반복되는 리듬과 맑은 눈을 함께 담았습니다.</p>
+      <div class="pros">
+        <span class="good">뜻이 바로 옴</span><span class="good">발음 쉬움</span><span class="good">정겨움</span>
+        <span class="bad">네 글자</span>
+      </div>
+      <div class="shots">
+        <figure class="shot" style="margin:0">
+          <div class="home-ico">
+            <svg width="46" height="46" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><circle cx="39" cy="50" r="17" fill="none" stroke="#fff" stroke-width="7"></circle><circle cx="61" cy="50" r="17" fill="none" stroke="#fff" stroke-width="7" opacity=".62"></circle></svg>
+            <span>또랑또랑</span>
+          </div>
+          <figcaption>홈 화면</figcaption>
+        </figure>
+        <figure class="shot" style="margin:0">
+          <div class="bar">
+            <svg width="34" height="34" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><circle cx="39" cy="50" r="17" fill="none" stroke="#fff" stroke-width="7"></circle><circle cx="61" cy="50" r="17" fill="none" stroke="#fff" stroke-width="7" opacity=".62"></circle></svg>
+            <span class="bar__t"><b>또랑또랑</b><em>매일 조금씩, 머리가 또랑또랑</em></span>
+          </div>
+          <figcaption>앱 상단</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 2 ================= -->
+  <section class="cand">
+    <div class="cand__mark">
+      <svg width="132" height="132" viewBox="0 0 100 100" role="img" aria-label="두루 아이콘">
+        <rect width="100" height="100" rx="24" fill="#0E9E62"></rect>
+        <circle cx="50" cy="50" r="9" fill="#fff"></circle>
+        <circle cx="50" cy="26" r="6.5" fill="#fff" opacity=".85"></circle>
+        <circle cx="74" cy="50" r="6.5" fill="#fff" opacity=".7"></circle>
+        <circle cx="50" cy="74" r="6.5" fill="#fff" opacity=".55"></circle>
+        <circle cx="26" cy="50" r="6.5" fill="#fff" opacity=".4"></circle>
+      </svg>
+    </div>
+    <div class="cand__head">
+      <span class="rank">후보 2</span>
+      <h2>두루</h2>
+      <p class="read">[두루] · duru</p>
+      <p class="tag">“오늘도 두루두루”</p>
+    </div>
+    <div class="cand__body">
+      <p>이 앱의 핵심은 <b>여러 가지를 골고루</b> 한다는 것입니다. 스도쿠만, 퀴즈만 해서는 안 되고 두루 해야 좋습니다. 그 원칙이 그대로 이름이 됩니다.</p>
+      <p>두 글자라 가장 짧고, 전화로 불러 주기도 쉽습니다. 아이콘은 <b>가운데를 둘러싼 네 개의 점</b> — 종목이 늘어나도 그대로 쓸 수 있는 모양입니다.</p>
+      <div class="pros">
+        <span class="good">가장 짧음</span><span class="good">앱 원칙과 일치</span><span class="good">현대적</span>
+        <span class="bad">뜻이 다소 추상적</span>
+      </div>
+      <div class="shots">
+        <figure class="shot" style="margin:0">
+          <div class="home-ico">
+            <svg width="46" height="46" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><circle cx="50" cy="50" r="9" fill="#fff"></circle><circle cx="50" cy="26" r="6.5" fill="#fff" opacity=".85"></circle><circle cx="74" cy="50" r="6.5" fill="#fff" opacity=".7"></circle><circle cx="50" cy="74" r="6.5" fill="#fff" opacity=".55"></circle><circle cx="26" cy="50" r="6.5" fill="#fff" opacity=".4"></circle></svg>
+            <span>두루</span>
+          </div>
+          <figcaption>홈 화면</figcaption>
+        </figure>
+        <figure class="shot" style="margin:0">
+          <div class="bar">
+            <svg width="34" height="34" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><circle cx="50" cy="50" r="9" fill="#fff"></circle><circle cx="50" cy="26" r="6.5" fill="#fff" opacity=".85"></circle><circle cx="74" cy="50" r="6.5" fill="#fff" opacity=".7"></circle><circle cx="50" cy="74" r="6.5" fill="#fff" opacity=".55"></circle><circle cx="26" cy="50" r="6.5" fill="#fff" opacity=".4"></circle></svg>
+            <span class="bar__t"><b>두루</b><em>매일 조금씩, 두루두루</em></span>
+          </div>
+          <figcaption>앱 상단</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 3 ================= -->
+  <section class="cand">
+    <div class="cand__mark">
+      <svg width="132" height="132" viewBox="0 0 100 100" role="img" aria-label="징검다리 아이콘">
+        <rect width="100" height="100" rx="24" fill="#0E9E62"></rect>
+        <path d="M16 74 Q30 68 44 74 T72 74 T100 74" fill="none" stroke="#fff" stroke-width="4" opacity=".38" stroke-linecap="round"></path>
+        <rect x="18" y="56" width="20" height="13" rx="5" fill="#fff" opacity=".55"></rect>
+        <rect x="40" y="44" width="20" height="13" rx="5" fill="#fff" opacity=".8"></rect>
+        <rect x="62" y="32" width="20" height="13" rx="5" fill="#fff"></rect>
+      </svg>
+    </div>
+    <div class="cand__head">
+      <span class="rank">후보 3</span>
+      <h2>징검다리</h2>
+      <p class="read">[징검다리] · jinggeom</p>
+      <p class="tag">“하루에 한 걸음씩”</p>
+    </div>
+    <div class="cand__body">
+      <p>이 앱에서 가장 중요한 것은 점수가 아니라 <b>하루도 거르지 않는 것</b>입니다. 연속 며칠째인지를 세는 것도 그래서입니다. 징검다리는 그 마음을 그대로 담습니다.</p>
+      <p>돌 하나가 하루입니다. 오늘 하나 밟고, 내일 또 하나. 아이콘은 <b>물 위에 놓인 돌 세 개</b>가 위로 올라가는 모양 — 쌓여 간다는 느낌까지 함께 줍니다.</p>
+      <div class="pros">
+        <span class="good">진정성 있음</span><span class="good">그림이 선명</span><span class="good">꾸준함을 말함</span>
+        <span class="bad">네 글자로 김</span><span class="bad">두뇌와 직접 연결은 약함</span>
+      </div>
+      <div class="shots">
+        <figure class="shot" style="margin:0">
+          <div class="home-ico">
+            <svg width="46" height="46" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><path d="M16 74 Q30 68 44 74 T72 74 T100 74" fill="none" stroke="#fff" stroke-width="4" opacity=".38" stroke-linecap="round"></path><rect x="18" y="56" width="20" height="13" rx="5" fill="#fff" opacity=".55"></rect><rect x="40" y="44" width="20" height="13" rx="5" fill="#fff" opacity=".8"></rect><rect x="62" y="32" width="20" height="13" rx="5" fill="#fff"></rect></svg>
+            <span>징검다리</span>
+          </div>
+          <figcaption>홈 화면</figcaption>
+        </figure>
+        <figure class="shot" style="margin:0">
+          <div class="bar">
+            <svg width="34" height="34" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><path d="M16 74 Q30 68 44 74 T72 74 T100 74" fill="none" stroke="#fff" stroke-width="4" opacity=".38" stroke-linecap="round"></path><rect x="18" y="56" width="20" height="13" rx="5" fill="#fff" opacity=".55"></rect><rect x="40" y="44" width="20" height="13" rx="5" fill="#fff" opacity=".8"></rect><rect x="62" y="32" width="20" height="13" rx="5" fill="#fff"></rect></svg>
+            <span class="bar__t"><b>징검다리</b><em>하루에 한 걸음씩</em></span>
+          </div>
+          <figcaption>앱 상단</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 4 ================= -->
+  <section class="cand">
+    <div class="cand__mark">
+      <svg width="132" height="132" viewBox="0 0 100 100" role="img" aria-label="새참 아이콘">
+        <rect width="100" height="100" rx="24" fill="#0E9E62"></rect>
+        <path d="M42 26 q-6 6 0 12 M50 22 q-6 7 0 14 M58 26 q-6 6 0 12"
+              fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".55"></path>
+        <path d="M24 52 h52 l-7 20 q-19 7 -38 0 z" fill="#fff"></path>
+        <rect x="20" y="47" width="60" height="7" rx="3.5" fill="#fff"></rect>
+      </svg>
+    </div>
+    <div class="cand__head">
+      <span class="rank">후보 4</span>
+      <h2>새참</h2>
+      <p class="read">[새참] · saecham</p>
+      <p class="tag">“하루 한 번, 머리에 주는 새참”</p>
+    </div>
+    <div class="cand__body">
+      <p>새참은 일하다 잠깐 앉아 먹는 참입니다. 어르신 세대에게는 설명이 필요 없는 말이고, <b>부담 없이 잠깐</b>이라는 이 앱의 성격과 정확히 맞습니다.</p>
+      <p>“공부해야 한다”가 아니라 “새참 드시듯 잠깐 하세요”가 됩니다. 훈련이라는 말이 주는 부담을 덜어 줍니다. 아이콘은 <b>김이 오르는 그릇</b>입니다.</p>
+      <div class="pros">
+        <span class="good">가장 참신함</span><span class="good">부담이 없음</span><span class="good">두 글자</span>
+        <span class="bad">음식 앱으로 오해 가능</span>
+      </div>
+      <div class="shots">
+        <figure class="shot" style="margin:0">
+          <div class="home-ico">
+            <svg width="46" height="46" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><path d="M42 26 q-6 6 0 12 M50 22 q-6 7 0 14 M58 26 q-6 6 0 12" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".55"></path><path d="M24 52 h52 l-7 20 q-19 7 -38 0 z" fill="#fff"></path><rect x="20" y="47" width="60" height="7" rx="3.5" fill="#fff"></rect></svg>
+            <span>새참</span>
+          </div>
+          <figcaption>홈 화면</figcaption>
+        </figure>
+        <figure class="shot" style="margin:0">
+          <div class="bar">
+            <svg width="34" height="34" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><path d="M42 26 q-6 6 0 12 M50 22 q-6 7 0 14 M58 26 q-6 6 0 12" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".55"></path><path d="M24 52 h52 l-7 20 q-19 7 -38 0 z" fill="#fff"></path><rect x="20" y="47" width="60" height="7" rx="3.5" fill="#fff"></rect></svg>
+            <span class="bar__t"><b>새참</b><em>하루 한 번, 머리에 주는 새참</em></span>
+          </div>
+          <figcaption>앱 상단</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 5 ================= -->
+  <section class="cand">
+    <div class="cand__mark">
+      <svg width="132" height="132" viewBox="0 0 100 100" role="img" aria-label="오늘한판 아이콘">
+        <rect width="100" height="100" rx="24" fill="#0E9E62"></rect>
+        <g fill="#fff">
+          <rect x="24" y="24" width="15" height="15" rx="4" opacity=".4"></rect>
+          <rect x="43" y="24" width="15" height="15" rx="4" opacity=".4"></rect>
+          <rect x="62" y="24" width="15" height="15" rx="4" opacity=".4"></rect>
+          <rect x="24" y="43" width="15" height="15" rx="4" opacity=".4"></rect>
+          <rect x="43" y="43" width="15" height="15" rx="4"></rect>
+          <rect x="62" y="43" width="15" height="15" rx="4" opacity=".4"></rect>
+          <rect x="24" y="62" width="15" height="15" rx="4" opacity=".4"></rect>
+          <rect x="43" y="62" width="15" height="15" rx="4" opacity=".4"></rect>
+          <rect x="62" y="62" width="15" height="15" rx="4" opacity=".4"></rect>
+        </g>
+      </svg>
+    </div>
+    <div class="cand__head">
+      <span class="rank">후보 5</span>
+      <h2>오늘한판</h2>
+      <p class="read">[오늘한판] · oneulhanpan</p>
+      <p class="tag">“오늘 한 판 하셨어요?”</p>
+    </div>
+    <div class="cand__body">
+      <p>다섯 중 <b>전달성이 가장 좋습니다.</b> 이름만 듣고도 무엇을 하는 앱인지 압니다. 설치를 권할 때 설명이 한 문장 줄어듭니다.</p>
+      <p>가족이 안부 묻듯 <b>“오늘 한 판 하셨어요?”</b> 라고 물을 수 있다는 점이 특히 좋습니다. 아이콘은 <b>아홉 칸 중 한 칸이 채워진 판</b>입니다.</p>
+      <div class="pros">
+        <span class="good">전달성 최고</span><span class="good">일상 대화가 됨</span><span class="good">발음 쉬움</span>
+        <span class="bad">참신함은 보통</span><span class="bad">‘한 판’이 놀이 쪽으로 기움</span>
+      </div>
+      <div class="shots">
+        <figure class="shot" style="margin:0">
+          <div class="home-ico">
+            <svg width="46" height="46" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><g fill="#fff"><rect x="24" y="24" width="15" height="15" rx="4" opacity=".4"></rect><rect x="43" y="24" width="15" height="15" rx="4" opacity=".4"></rect><rect x="62" y="24" width="15" height="15" rx="4" opacity=".4"></rect><rect x="24" y="43" width="15" height="15" rx="4" opacity=".4"></rect><rect x="43" y="43" width="15" height="15" rx="4"></rect><rect x="62" y="43" width="15" height="15" rx="4" opacity=".4"></rect><rect x="24" y="62" width="15" height="15" rx="4" opacity=".4"></rect><rect x="43" y="62" width="15" height="15" rx="4" opacity=".4"></rect><rect x="62" y="62" width="15" height="15" rx="4" opacity=".4"></rect></g></svg>
+            <span>오늘한판</span>
+          </div>
+          <figcaption>홈 화면</figcaption>
+        </figure>
+        <figure class="shot" style="margin:0">
+          <div class="bar">
+            <svg width="34" height="34" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><g fill="#fff"><rect x="24" y="24" width="15" height="15" rx="4" opacity=".4"></rect><rect x="43" y="24" width="15" height="15" rx="4" opacity=".4"></rect><rect x="62" y="24" width="15" height="15" rx="4" opacity=".4"></rect><rect x="24" y="43" width="15" height="15" rx="4" opacity=".4"></rect><rect x="43" y="43" width="15" height="15" rx="4"></rect><rect x="62" y="43" width="15" height="15" rx="4" opacity=".4"></rect><rect x="24" y="62" width="15" height="15" rx="4" opacity=".4"></rect><rect x="43" y="62" width="15" height="15" rx="4" opacity=".4"></rect><rect x="62" y="62" width="15" height="15" rx="4" opacity=".4"></rect></g></svg>
+            <span class="bar__t"><b>오늘한판</b><em>오늘 한 판 하셨어요?</em></span>
+          </div>
+          <figcaption>앱 상단</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <h2 class="batch">두 번째 후보 — 소리는 더 짧게, 뜻은 더 또렷하게</h2>
+  <p class="batch__lead">앞의 다섯이 다 걸리셨을 때를 대비해 결이 다른 다섯을 더 뽑았습니다.
+    <b>두 글자 위주</b>로, 그리고 <b>기억·생각</b>이라는 말이 이름 안에 직접 들어가도록 했습니다.</p>
+
+  <!-- ================= 6 ================= -->
+  <section class="cand">
+    <div class="cand__mark">
+      <svg width="132" height="132" viewBox="0 0 100 100" role="img" aria-label="곰곰 아이콘">
+        <rect width="100" height="100" rx="24" fill="#0E9E62"></rect>
+        <path d="M50 72 C33 72 26 60 32 49 C38 38 62 38 68 49 C74 60 67 72 50 72 Z"
+              fill="none" stroke="#fff" stroke-width="6" stroke-linejoin="round"></path>
+        <circle cx="41" cy="55" r="4" fill="#fff"></circle>
+        <circle cx="50" cy="55" r="4" fill="#fff" opacity=".7"></circle>
+        <circle cx="59" cy="55" r="4" fill="#fff" opacity=".45"></circle>
+        <circle cx="50" cy="27" r="5" fill="#fff" opacity=".6"></circle>
+      </svg>
+    </div>
+    <div class="cand__head">
+      <span class="rank">후보 6</span>
+      <h2>곰곰</h2>
+      <p class="read">[곰곰] · gomgom</p>
+      <p class="tag">“오늘도 곰곰”</p>
+    </div>
+    <div class="cand__body">
+      <p><b>곰곰이 생각하다</b> — ‘생각한다’는 뜻이 이름 안에 그대로 들어 있습니다. 두 글자이고, 받침이 ㅁ 하나뿐이라 소리가 부드럽고 잘 붙습니다.</p>
+      <p>영문 주소 <code>gomgom</code> 은 짧고 누구나 읽습니다. 아이콘은 <b>생각 풍선 안의 점 세 개</b> — 곰곰이 따져 보는 모습입니다.</p>
+      <div class="pros">
+        <span class="good">두 글자</span><span class="good">뜻이 정확</span><span class="good">주소 짧음</span>
+        <span class="bad">동물 곰으로 읽힐 수 있음</span>
+      </div>
+      <div class="shots">
+        <figure class="shot" style="margin:0">
+          <div class="home-ico">
+            <svg width="46" height="46" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><path d="M50 72 C33 72 26 60 32 49 C38 38 62 38 68 49 C74 60 67 72 50 72 Z" fill="none" stroke="#fff" stroke-width="6" stroke-linejoin="round"></path><circle cx="41" cy="55" r="4" fill="#fff"></circle><circle cx="50" cy="55" r="4" fill="#fff" opacity=".7"></circle><circle cx="59" cy="55" r="4" fill="#fff" opacity=".45"></circle><circle cx="50" cy="27" r="5" fill="#fff" opacity=".6"></circle></svg>
+            <span>곰곰</span>
+          </div>
+          <figcaption>홈 화면</figcaption>
+        </figure>
+        <figure class="shot" style="margin:0">
+          <div class="bar">
+            <svg width="34" height="34" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><path d="M50 72 C33 72 26 60 32 49 C38 38 62 38 68 49 C74 60 67 72 50 72 Z" fill="none" stroke="#fff" stroke-width="6" stroke-linejoin="round"></path><circle cx="41" cy="55" r="4" fill="#fff"></circle><circle cx="50" cy="55" r="4" fill="#fff" opacity=".7"></circle><circle cx="59" cy="55" r="4" fill="#fff" opacity=".45"></circle><circle cx="50" cy="27" r="5" fill="#fff" opacity=".6"></circle></svg>
+            <span class="bar__t"><b>곰곰</b><em>하루 한 번, 곰곰이</em></span>
+          </div>
+          <figcaption>앱 상단</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 7 ================= -->
+  <section class="cand">
+    <div class="cand__mark">
+      <svg width="132" height="132" viewBox="0 0 100 100" role="img" aria-label="새록 아이콘">
+        <rect width="100" height="100" rx="24" fill="#0E9E62"></rect>
+        <path d="M50 76 V44" stroke="#fff" stroke-width="6" stroke-linecap="round"></path>
+        <path d="M50 50 C38 50 30 42 30 32 C42 32 50 40 50 50 Z" fill="#fff"></path>
+        <path d="M50 58 C62 58 70 50 70 40 C58 40 50 48 50 58 Z" fill="#fff" opacity=".62"></path>
+      </svg>
+    </div>
+    <div class="cand__head">
+      <span class="rank">후보 7</span>
+      <h2>새록</h2>
+      <p class="read">[새록] · saerok</p>
+      <p class="tag">“기억이 새록새록”</p>
+    </div>
+    <div class="cand__body">
+      <p><b>새록새록 기억나다</b> — 이 앱이 하려는 일을 그대로 말합니다. 잊었던 것이 다시 돋아난다는 뜻이라, 치매 예방이라는 목적과 가장 가깝게 닿아 있습니다.</p>
+      <p>‘새’에 <b>새싹</b>의 느낌도 겹칩니다. 아이콘은 <b>돋아나는 잎 두 장</b> — 초록 바탕과도 한 몸처럼 맞습니다.</p>
+      <div class="pros">
+        <span class="good">목적에 가장 가까움</span><span class="good">두 글자</span><span class="good">주소 깨끗</span>
+        <span class="bad">‘새록’만 쓰면 낯설 수 있음</span>
+      </div>
+      <div class="shots">
+        <figure class="shot" style="margin:0">
+          <div class="home-ico">
+            <svg width="46" height="46" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><path d="M50 76 V44" stroke="#fff" stroke-width="6" stroke-linecap="round"></path><path d="M50 50 C38 50 30 42 30 32 C42 32 50 40 50 50 Z" fill="#fff"></path><path d="M50 58 C62 58 70 50 70 40 C58 40 50 48 50 58 Z" fill="#fff" opacity=".62"></path></svg>
+            <span>새록</span>
+          </div>
+          <figcaption>홈 화면</figcaption>
+        </figure>
+        <figure class="shot" style="margin:0">
+          <div class="bar">
+            <svg width="34" height="34" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><path d="M50 76 V44" stroke="#fff" stroke-width="6" stroke-linecap="round"></path><path d="M50 50 C38 50 30 42 30 32 C42 32 50 40 50 50 Z" fill="#fff"></path><path d="M50 58 C62 58 70 50 70 40 C58 40 50 48 50 58 Z" fill="#fff" opacity=".62"></path></svg>
+            <span class="bar__t"><b>새록</b><em>기억이 새록새록</em></span>
+          </div>
+          <figcaption>앱 상단</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 8 ================= -->
+  <section class="cand">
+    <div class="cand__mark">
+      <svg width="132" height="132" viewBox="0 0 100 100" role="img" aria-label="초롱초롱 아이콘">
+        <rect width="100" height="100" rx="24" fill="#0E9E62"></rect>
+        <path d="M50 20 V27" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".7"></path>
+        <rect x="32" y="27" width="36" height="6" rx="3" fill="#fff"></rect>
+        <path d="M35 33 h30 q8 14 0 28 h-30 q-8 -14 0 -28 z" fill="none" stroke="#fff" stroke-width="5.5" stroke-linejoin="round"></path>
+        <circle cx="50" cy="47" r="6" fill="#fff"></circle>
+        <rect x="40" y="63" width="20" height="5" rx="2.5" fill="#fff"></rect>
+        <path d="M50 68 v8" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".5"></path>
+      </svg>
+    </div>
+    <div class="cand__head">
+      <span class="rank">후보 8</span>
+      <h2>초롱초롱</h2>
+      <p class="read">[초롱초롱] · chorongchorong</p>
+      <p class="tag">“눈이 초롱초롱”</p>
+    </div>
+    <div class="cand__body">
+      <p>‘또랑또랑’과 사촌이지만 결이 다릅니다. <b>초롱</b>은 원래 <b>등불</b>입니다. 어두운 데를 밝힌다는 뜻이 이름 안에 이미 들어 있습니다.</p>
+      <p>그래서 아이콘이 예쁘게 나옵니다 — <b>불 밝힌 청사초롱</b>. 눈이 초롱초롱하다는 상태와 등불이라는 사물, 두 뜻이 한 이름에 겹칩니다.</p>
+      <div class="pros">
+        <span class="good">뜻이 두 겹</span><span class="good">아이콘이 예쁨</span><span class="good">발음 쉬움</span>
+        <span class="bad">네 글자</span><span class="bad">아이 느낌이 살짝</span>
+      </div>
+      <div class="shots">
+        <figure class="shot" style="margin:0">
+          <div class="home-ico">
+            <svg width="46" height="46" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><path d="M50 20 V27" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".7"></path><rect x="32" y="27" width="36" height="6" rx="3" fill="#fff"></rect><path d="M35 33 h30 q8 14 0 28 h-30 q-8 -14 0 -28 z" fill="none" stroke="#fff" stroke-width="5.5" stroke-linejoin="round"></path><circle cx="50" cy="47" r="6" fill="#fff"></circle><rect x="40" y="63" width="20" height="5" rx="2.5" fill="#fff"></rect><path d="M50 68 v8" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".5"></path></svg>
+            <span>초롱초롱</span>
+          </div>
+          <figcaption>홈 화면</figcaption>
+        </figure>
+        <figure class="shot" style="margin:0">
+          <div class="bar">
+            <svg width="34" height="34" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><path d="M50 20 V27" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".7"></path><rect x="32" y="27" width="36" height="6" rx="3" fill="#fff"></rect><path d="M35 33 h30 q8 14 0 28 h-30 q-8 -14 0 -28 z" fill="none" stroke="#fff" stroke-width="5.5" stroke-linejoin="round"></path><circle cx="50" cy="47" r="6" fill="#fff"></circle><rect x="40" y="63" width="20" height="5" rx="2.5" fill="#fff"></rect><path d="M50 68 v8" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".5"></path></svg>
+            <span class="bar__t"><b>초롱초롱</b><em>눈이 초롱초롱, 머리가 환하게</em></span>
+          </div>
+          <figcaption>앱 상단</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 9 ================= -->
+  <section class="cand">
+    <div class="cand__mark">
+      <svg width="132" height="132" viewBox="0 0 100 100" role="img" aria-label="되새김 아이콘">
+        <rect width="100" height="100" rx="24" fill="#0E9E62"></rect>
+        <path d="M72 44 A24 24 0 1 0 74 60" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"></path>
+        <path d="M60 40 L74 42 L70 56" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </div>
+    <div class="cand__head">
+      <span class="rank">후보 9</span>
+      <h2>되새김</h2>
+      <p class="read">[되새김] · doesaegim</p>
+      <p class="tag">“오늘도 한 번 되새겨요”</p>
+    </div>
+    <div class="cand__body">
+      <p><b>되새기다</b> — 지난 것을 다시 곱씹어 새긴다는 뜻입니다. 오답 노트로 틀린 문제를 다시 푸는 이 앱의 방식과 정확히 같은 말입니다.</p>
+      <p>다섯 중 <b>가장 어른스러운</b> 이름입니다. 가볍지 않고, 무엇을 하려는 앱인지 분명합니다. 아이콘은 <b>되돌아오는 화살표</b>입니다.</p>
+      <div class="pros">
+        <span class="good">뜻이 깊음</span><span class="good">앱 기능과 일치</span><span class="good">어른스러움</span>
+        <span class="bad">다소 무거움</span><span class="bad">주소가 긺</span>
+      </div>
+      <div class="shots">
+        <figure class="shot" style="margin:0">
+          <div class="home-ico">
+            <svg width="46" height="46" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><path d="M72 44 A24 24 0 1 0 74 60" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"></path><path d="M60 40 L74 42 L70 56" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span>되새김</span>
+          </div>
+          <figcaption>홈 화면</figcaption>
+        </figure>
+        <figure class="shot" style="margin:0">
+          <div class="bar">
+            <svg width="34" height="34" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><path d="M72 44 A24 24 0 1 0 74 60" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"></path><path d="M60 40 L74 42 L70 56" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span class="bar__t"><b>되새김</b><em>오늘도 한 번 되새겨요</em></span>
+          </div>
+          <figcaption>앱 상단</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 10 ================= -->
+  <section class="cand">
+    <div class="cand__mark">
+      <svg width="132" height="132" viewBox="0 0 100 100" role="img" aria-label="하루한번 아이콘">
+        <rect width="100" height="100" rx="24" fill="#0E9E62"></rect>
+        <circle cx="50" cy="50" r="26" fill="none" stroke="#fff" stroke-width="6" opacity=".35"
+                stroke-dasharray="7 8" stroke-linecap="round"></circle>
+        <path d="M50 24 A26 26 0 0 1 76 50" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"></path>
+        <circle cx="50" cy="50" r="7" fill="#fff"></circle>
+      </svg>
+    </div>
+    <div class="cand__head">
+      <span class="rank">후보 10</span>
+      <h2>하루한번</h2>
+      <p class="read">[하루한번] · haruhanbeon</p>
+      <p class="tag">“하루 한 번이면 됩니다”</p>
+    </div>
+    <div class="cand__body">
+      <p>이름이 곧 <b>약속</b>입니다. 많이 하라는 것도, 잘하라는 것도 아니고 <b>하루 한 번</b>이면 된다고 말합니다. 부담을 덜어 주는 이름입니다.</p>
+      <p>매일 여는 습관이 이 앱의 전부라는 점에서, 가장 정직한 이름이기도 합니다. 아이콘은 <b>한 바퀴 도는 하루</b> — 점선은 남은 하루, 굵은 선은 오늘 채운 만큼입니다.</p>
+      <div class="pros">
+        <span class="good">약속이 분명</span><span class="good">부담 없음</span><span class="good">발음 쉬움</span>
+        <span class="bad">네 글자</span><span class="bad">이름만으로는 무슨 앱인지 모름</span>
+      </div>
+      <div class="shots">
+        <figure class="shot" style="margin:0">
+          <div class="home-ico">
+            <svg width="46" height="46" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><circle cx="50" cy="50" r="26" fill="none" stroke="#fff" stroke-width="6" opacity=".35" stroke-dasharray="7 8" stroke-linecap="round"></circle><path d="M50 24 A26 26 0 0 1 76 50" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"></path><circle cx="50" cy="50" r="7" fill="#fff"></circle></svg>
+            <span>하루한번</span>
+          </div>
+          <figcaption>홈 화면</figcaption>
+        </figure>
+        <figure class="shot" style="margin:0">
+          <div class="bar">
+            <svg width="34" height="34" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><circle cx="50" cy="50" r="26" fill="none" stroke="#fff" stroke-width="6" opacity=".35" stroke-dasharray="7 8" stroke-linecap="round"></circle><path d="M50 24 A26 26 0 0 1 76 50" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"></path><circle cx="50" cy="50" r="7" fill="#fff"></circle></svg>
+            <span class="bar__t"><b>하루한번</b><em>하루 한 번이면 됩니다</em></span>
+          </div>
+          <figcaption>앱 상단</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>이름</th><th>글자</th><th>주소</th><th>주소 상태</th><th>뜻이 오는 속도</th><th>어울리는 자리</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>또랑또랑</b></td><td>4</td><td><code>ttorang</code></td><td class="dot">비어 있음</td><td class="dot">빠름</td><td>어르신 본인이 쓰는 앱</td></tr>
+        <tr><td><b>두루</b></td><td class="dot">2</td><td><code>duru</code></td><td class="dim">이미 쓰임</td><td>보통</td><td>종목을 계속 늘릴 때</td></tr>
+        <tr><td><b>징검다리</b></td><td>4</td><td><code>jinggeomdari</code></td><td class="dot">비어 있음</td><td>느림</td><td>꾸준함을 앞세울 때</td></tr>
+        <tr><td><b>새참</b></td><td class="dot">2</td><td><code>saecham</code></td><td class="dot">비어 있음</td><td class="dim">느림</td><td>부담 없음을 앞세울 때</td></tr>
+        <tr><td><b>오늘한판</b></td><td>4</td><td><code>oneulhanpan</code></td><td class="dot">비어 있음</td><td class="dot">가장 빠름</td><td>가족이 권해서 쓰게 할 때</td></tr>
+        <tr><td><b>곰곰</b></td><td class="dot">2</td><td><code>gomgom</code></td><td class="dot">비어 있음</td><td class="dot">빠름</td><td>짧고 또렷한 이름을 원할 때</td></tr>
+        <tr><td><b>새록</b></td><td class="dot">2</td><td><code>saerok</code></td><td class="dot">비어 있음</td><td class="dot">빠름</td><td>기억을 앞세울 때</td></tr>
+        <tr><td><b>초롱초롱</b></td><td>4</td><td><code>chorongchorong</code></td><td class="dot">비어 있음</td><td class="dot">빠름</td><td>밝고 예쁜 결을 원할 때</td></tr>
+        <tr><td><b>되새김</b></td><td>3</td><td><code>doesaegim</code></td><td class="dot">비어 있음</td><td class="dot">빠름</td><td>어른스러운 결을 원할 때</td></tr>
+        <tr><td><b>하루한번</b></td><td>4</td><td><code>haruhanbeon</code></td><td class="dot">비어 있음</td><td class="dim">느림</td><td>습관을 앞세울 때</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="close">
+    <h2>제 추천 — 셋으로 좁히면</h2>
+    <p><b>새록</b>을 첫째로 권합니다. 두 글자로 짧고, 주소 <code>saerok</code> 도 깨끗하고,
+      무엇보다 <b>“기억이 새록새록”</b> 이라는 말이 이 앱의 목적과 가장 정확히 겹칩니다.
+      초록 바탕에 새싹 아이콘이 한 몸처럼 맞는 것도 덤입니다.</p>
+    <p>정겨움을 더 원하시면 <b>또랑또랑</b>, 어른스러운 무게를 원하시면 <b>되새김</b> 입니다.</p>
+    <ul>
+      <li><b>새록</b> — 목적에 가장 가깝고 짧음. 다만 ‘새록’만 떼면 조금 낯섦.</li>
+      <li><b>또랑또랑</b> — 어르신이 실제로 쓰는 말. 다만 네 글자.</li>
+      <li><b>되새김</b> — 오답 노트라는 기능과 뜻이 그대로 겹침. 다만 다소 무거움.</li>
+      <li><b>곰곰</b> — 가장 짧고 뜻도 분명. 다만 동물 곰으로 읽힐 수 있음.</li>
+      <li><b>초롱초롱</b> — 아이콘이 가장 예쁨. 다만 아이 느낌이 살짝.</li>
+      <li><b>오늘한판 · 하루한번</b> — 설명이 필요 없음. 다만 무난함.</li>
+      <li><b>새참 · 징검다리 · 두루</b> — 결은 좋으나 뜻이 한 번 더 설명되어야 함.</li>
+    </ul>
+
+    <div class="warn">
+      <h3>주소까지 바꿀 때 할 일</h3>
+      <p>아직 밖으로 나간 것이 없으니 <b>지금이 가장 좋은 때</b>가 맞습니다. 순서는 이렇습니다.</p>
+      <p>① Netlify에서 프로젝트 이름을 새 주소로 변경 → ② 앱 안의 이름·아이콘·문구 교체 → ③ 새 zip 올리기
+        → ④ 테스트용으로 설치해 두신 앱을 <b>지우고 새 주소로 다시 설치</b>.</p>
+      <p>지금까지의 테스트 점수가 아깝다면, 지우기 전에 <b>기록 내보내기</b>로 파일을 받아 두었다가
+        새 주소에서 <b>기록 가져오기</b>로 넣으시면 그대로 옮겨집니다.</p>
+    </div>
+
+    <p style="margin-top:1.4rem">마음에 드는 번호를 알려 주시면 <b>이름·아이콘·앱 문구·주소까지 전부 바꿔서</b> 적용하겠습니다.
+      열 개 다 아니면, 어떤 결이 가까운지만 말씀해 주셔도 됩니다.</p>
+  </div>
+
+</div>

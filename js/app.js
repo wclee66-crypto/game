@@ -1,7 +1,7 @@
-/* 맑은뜰 — 화면 전환과 홈·기록 화면 */
+/* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v18';                // sw.js 의 VERSION 과 함께 올린다
+  var APP_VERSION = 'v19';                // sw.js 의 VERSION 과 함께 올린다
   var GAMES = ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz'];
   var MAX_PER_GAME = 1250;               // 한 게임에서 받을 수 있는 최고 점수
   var MAX_DAY = MAX_PER_GAME * GAMES.length;
@@ -103,7 +103,7 @@ window.App = (function () {
     document.getElementById('btnBack').hidden = (route === 'home');
 
     var titles = {
-      home: ['맑은뜰', '매일 조금씩, 머리가 맑아지는 시간'],
+      home: ['새록', '매일 조금씩, 기억이 새록새록'],
       games: ['게임 고르기', '오늘은 무엇을 해 볼까요'],
       records: ['나의 기록', '날짜별 점수를 모아 봅니다'],
       sudoku: ['스도쿠', '숫자로 하는 두뇌 체조'],
@@ -126,7 +126,7 @@ window.App = (function () {
 
     location.hash = route;
   }
-  function titles_default() { return ['맑은뜰', '매일 조금씩, 머리가 맑아지는 시간']; }
+  function titles_default() { return ['새록', '매일 조금씩, 기억이 새록새록']; }
 
   /* ================= 홈 ================= */
 
@@ -393,7 +393,7 @@ window.App = (function () {
 
   function exportRecords() {
     var text = Store.exportJSON();
-    var name = '맑은뜰-기록-' + Store.dayKey() + '.json';
+    var name = '새록-기록-' + Store.dayKey() + '.json';
     try {
       var blob = new Blob([text], { type: 'application/json' });
       var a = document.createElement('a');
