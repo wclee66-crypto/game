@@ -48,6 +48,17 @@
 <div class="modal-root" id="modalRoot" hidden></div>
 <div class="toast" id="toast" hidden></div>
 
+<!-- 건의하기 — Netlify 가 배포할 때 이 form 을 읽어 받는 곳을 만든다.
+     화면에는 보이지 않고, 실제 입력은 설정 창에서 받아 이리로 보낸다.
+     bot-field 는 사람 눈에 안 보이는 미끼 칸이다 (자동 광고 글 거르기). -->
+<form name="suggest" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+  <input type="text" name="bot-field">
+  <textarea name="message"></textarea>
+  <input type="email" name="email">
+  <input type="text" name="lang">
+  <input type="text" name="version">
+</form>
+
 <!-- 인쇄(PDF 저장) 전용 영역 — 화면에는 보이지 않고 인쇄할 때만 나타난다 -->
 <div id="printRoot" aria-hidden="true"></div>
 
@@ -67,6 +78,7 @@
 <script src="js/games/coloring.js"></script>
 <script src="js/games/spot.js"></script>
 <script src="js/print.js"></script>
+<script src="js/suggest.js"></script>
 <script src="js/app.js"></script>
 <script>
   /* 인터넷이 끊겨도 열리도록 (파일을 직접 열었을 때는 건너뜀) */

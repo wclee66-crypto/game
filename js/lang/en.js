@@ -132,6 +132,24 @@ window.I18N.dict.en = {
   '나중에 인터넷이 연결된 뒤 다시 눌러 주세요.': 'Try again once you are back online.',
   '확인': 'OK',
 
+  /* ---------- 건의하기 ---------- */
+  '건의하기': 'Send a suggestion',
+  '새록에 넣었으면 하는 게임이나, 고쳤으면 하는 곳을 적어 주세요.':
+    'Tell us about a game you would like to see, or anything you think should be better.',
+  '하고 싶은 말': 'Your message',
+  '이메일': 'Email',
+  '(답을 받고 싶으실 때만)': '(only if you would like a reply)',
+  '적어 주신 이메일은 답장에만 씁니다. 다른 곳에 쓰거나 남에게 넘기지 않습니다.':
+    'Your email is used only to reply. It is never used for anything else or given to anyone.',
+  '보내기': 'Send',
+  '보내는 중…': 'Sending…',
+  '하고 싶은 말을 조금만 더 적어 주세요.': 'Please write a little more.',
+  '이메일 주소를 다시 봐 주세요.': 'Please check the email address.',
+  '지금은 보낼 수 없습니다. 인터넷 연결을 확인하고 잠시 뒤 다시 눌러 주세요.':
+    'Cannot send right now. Check your connection and try again in a moment.',
+  '보냈습니다': 'Sent',
+  '읽어 보고 반영하겠습니다. 고맙습니다.': 'We will read it and take it on board. Thank you.',
+
   /* ---------- 인쇄 ---------- */
   '이름': 'Name',
   '날짜': 'Date',

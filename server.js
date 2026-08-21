@@ -19,6 +19,13 @@ const TYPES = {
 };
 
 http.createServer((req, res) => {
+  /* 건의하기는 배포한 곳(Netlify)이 받아 준다. 여기서는 받는 곳이 없으므로
+     정직하게 못 받았다고 알린다 — 그래야 실패했을 때 화면이 어떻게 되는지 확인할 수 있다. */
+  if (req.method !== 'GET' && req.method !== 'HEAD') {
+    res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end('확인용 서버에는 건의 받는 곳이 없습니다 (배포한 주소에서는 됩니다)');
+    return;
+  }
   let rel = decodeURIComponent(req.url.split('?')[0]);
   if (rel === '/') rel = '/index.html';
   const file = path.join(ROOT, path.normalize(rel).replace(/^([/\\])+/, ''));

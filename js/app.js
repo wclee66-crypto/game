@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v29';                // sw.js 의 VERSION 과 함께 올린다
+  var APP_VERSION = 'v30';                // sw.js 의 VERSION 과 함께 올린다
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -287,6 +287,8 @@ window.App = (function () {
           ('<button class="btn btn--ghost" id="hmRecords">' + T('기록 자세히') + '</button>') +
         '</div>' +
 
+        ('<button class="linkbtn" id="hmSuggest">' + T('건의하기') + '</button>') +
+
         ('<p class="tipline">' + T('매일 조금씩, 여러 종목을 골고루 하는 것이 두뇌 건강에 좋습니다.') + '</p>') +
       '</section>';
 
@@ -299,6 +301,7 @@ window.App = (function () {
     if (mb) mb.addEventListener('click', function () { go('games'); });
     view.querySelector('#hmRules').addEventListener('click', function () { showRules('all'); });
     view.querySelector('#hmRecords').addEventListener('click', function () { go('records'); });
+    view.querySelector('#hmSuggest').addEventListener('click', function () { Suggest.open(); });
   }
 
   /* ================= 기록 ================= */
@@ -512,6 +515,7 @@ window.App = (function () {
           ('<span class="set__lbl">' + T('버전') + '</span>') +
           '<span class="set__ver">' + APP_VERSION + '</span>' +
         '</div>' +
+        ('<button class="btn btn--ghost" id="setSuggest">' + T('건의하기') + '</button>') +
         ('<button class="btn btn--ghost" id="setUpdate">' + T('최신 버전으로 새로 받기') + '</button>') +
         ('<p class="modal__msg small">' + T('기록은 이 기기 안에만 저장됩니다. 앱을 지우거나 브라우저 기록을 삭제하면 점수도 함께 사라지니, 필요하면') + ' <b>' + T('기록 내보내기') + '</b>' + T('로 파일을 보관하세요. (새로 받아도 점수는 지워지지 않습니다.)') + '</p>') +
       '</div>';
@@ -536,6 +540,7 @@ window.App = (function () {
         b.classList.add('is-on');
       });
     });
+    m.card.querySelector('#setSuggest').addEventListener('click', function () { m.close(); Suggest.open(); });
     m.card.querySelector('#setUpdate').addEventListener('click', forceUpdate);
 
     m.card.querySelectorAll('#setSound button').forEach(function (b) {
@@ -638,5 +643,9 @@ window.App = (function () {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 
-  return { go: go, showRules: showRules, gameSwitcher: gameSwitcher, showSettings: showSettings, MAX_PER_GAME: MAX_PER_GAME, MAX_DAY: MAX_DAY };
+  return {
+    go: go, showRules: showRules, gameSwitcher: gameSwitcher, showSettings: showSettings,
+    version: function () { return APP_VERSION; },
+    MAX_PER_GAME: MAX_PER_GAME, MAX_DAY: MAX_DAY
+  };
 })();

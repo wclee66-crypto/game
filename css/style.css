@@ -774,6 +774,21 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
 .seg button.is-on { background: var(--bg); color: var(--ink); }
 .export { width: 100%; height: 9rem; font-size: .7rem; font-family: monospace; border-radius: var(--r-sm); border: 1px solid var(--line); padding: .6rem; }
 
+/* 건의하기 — 글씨가 크고 칸이 넉넉해야 어르신이 쓰기 편하다 */
+.sg-field { display: block; margin-top: 1rem; }
+.sg-field:first-child { margin-top: 0; }
+.sg-lbl { display: block; font-size: .84rem; font-weight: 800; margin-bottom: .35rem; }
+.sg-lbl em { font-style: normal; font-weight: 600; color: var(--ink-3); }
+.sg-text, .sg-mail {
+  width: 100%; border: 1px solid var(--line); border-radius: var(--r-sm);
+  background: var(--surf); color: var(--ink);
+  font-family: inherit; font-size: 1rem; line-height: 1.6; padding: .7rem .8rem;
+}
+.sg-text { height: 8rem; resize: vertical; }
+.sg-text:focus, .sg-mail:focus { outline: none; border-color: var(--accent); background: var(--bg); }
+.sg-note { margin: .8rem 0 0; font-size: .74rem; color: var(--ink-3); line-height: 1.6; }
+.sg-bad { margin: .5rem 0 0; font-size: .78rem; font-weight: 700; color: var(--bad); }
+
 /* ================= 아래 탭 ================= */
 
 .tabbar {
