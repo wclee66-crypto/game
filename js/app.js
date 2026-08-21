@@ -25,7 +25,9 @@ window.App = (function () {
   var MAX_PER_GAME = 1250;               // 한 게임에서 받을 수 있는 최고 점수
   var MAX_DAY = MAX_PER_GAME * GAMES.length;   // relist() 에서 다시 센다
   var DAY_GOAL = 3;                      // 하루에 이만큼 종목을 하면 목표 달성
-  var HOME_GAMES = 3;                    // 홈에는 이만큼만 추려서 보여 준다
+  /* 홈에도 게임을 모두 보여 준다. 넓은 화면에서는 두세 줄로 놓여 자리가 넉넉하고,
+     '게임 모두 보기' 를 한 번 더 누르게 하는 것보다 바로 고르는 편이 낫다.
+     차례는 pickForHome() 이 정한다 — 하다 만 것, 아직 안 한 것이 앞에 온다. */
 
   var view, current = null, here = 'home';
 
@@ -210,7 +212,6 @@ window.App = (function () {
     return GAMES.slice()
       .map(function (g, i) { return { g: g, r: rank(g), i: i }; })
       .sort(function (a, b) { return a.r - b.r || a.i - b.i; })
-      .slice(0, HOME_GAMES)
       .map(function (x) { return x.g; });
   }
 
@@ -264,9 +265,6 @@ window.App = (function () {
 
         ('<h2 class="sec">' + T('오늘의 게임') + '</h2>') +
         '<div class="gamelist">' + pickForHome(best).map(gameCard).join('') + '</div>' +
-        (GAMES.length > HOME_GAMES
-          ? '<button class="btn btn--ghost btn--wide" id="hmMore">' + T('게임 모두 보기 ({n}가지)', { n: GAMES.length }) + '</button>'
-          : '') +
 
         ('<h2 class="sec">' + T('최근 이레') + '</h2>') +
         '<div class="card">' +
@@ -287,8 +285,6 @@ window.App = (function () {
     });
     var ib = view.querySelector('#hmInstall');
     if (ib) ib.addEventListener('click', doInstall);
-    var mb = view.querySelector('#hmMore');
-    if (mb) mb.addEventListener('click', function () { go('games'); });
     view.querySelector('#hmRules').addEventListener('click', function () { showRules('all'); });
     view.querySelector('#hmRecords').addEventListener('click', function () { go('records'); });
   }
