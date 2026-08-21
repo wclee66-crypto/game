@@ -155,10 +155,10 @@ window.Games.wordorder = (function () {
         ('<p class="intro__desc">' + T('글자가 뒤섞인 낱말을 바른 순서로 되돌립니다.') + '<br>') +
           ('<b>' + T('기투레쓰봉') + '</b> → <b>' + T('쓰레기봉투') + '</b><br>') +
           (T('아래 글자를 차례대로 눌러 빈칸을 채우세요.') + '<br><small>' + T('틀려도 점수가 깎이지 않습니다.') + '</small></p>') +
-        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + '점</b></p>' : '') +
+        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + T('점</b></p>') : '') +
         (sess && LEVELS[sess.level]
           ? ('<button class="btn btn--accent btn--big" id="woResume">' + T('이어서 하기') + ' <small>') +
-            LEVELS[sess.level].name + ' · ' + (sess.i + 1) + '번 문제부터</small></button>'
+            LEVELS[sess.level].name + ' · ' + (sess.i + 1) + T('번 문제부터</small></button>')
           : '') +
         '<div class="levels">' +
           ORDER.map(function (k) {
@@ -302,7 +302,7 @@ window.Games.wordorder = (function () {
       el.classList.toggle('is-used', S.slots.indexOf(k) >= 0);
     });
     if (!locked) {
-      els.msg.textContent = full ? '다 채우셨습니다. 확인을 누르세요.' : T('글자를 차례대로 눌러 주세요');
+      els.msg.textContent = full ? T('다 채우셨습니다. 확인을 누르세요.') : T('글자를 차례대로 눌러 주세요');
       els.msg.className = 'wo-msg' + (full ? ' is-ready' : '');
     }
   }
@@ -324,7 +324,7 @@ window.Games.wordorder = (function () {
     });
     els.msg.className = 'wo-msg ' + (ok ? 'is-ok' : 'is-no');
     els.msg.innerHTML = ok
-      ? '<b>잘하셨습니다!</b>'
+      ? T('<b>잘하셨습니다!</b>')
       : ('<b>' + T('바른 낱말은') + ' ') + UI.esc(p.w) + (T('입니다') + '</b>');
     if (ok) els.right.textContent = S.picks.filter(function (x) { return x.correct; }).length;
     UI.beep(ok ? 'ok' : 'no');
@@ -406,7 +406,7 @@ window.Games.wordorder = (function () {
     UI.resultModal({
       title: T('단어 순서를 마쳤습니다'),
       score: sc.total,
-      headline: sc.correct === sc.count ? '전부 맞히셨습니다. 대단합니다!' : T('{n}낱말을 바로잡으셨습니다.', { n: sc.correct }),
+      headline: sc.correct === sc.count ? T('전부 맞히셨습니다. 대단합니다!') : T('{n}낱말을 바로잡으셨습니다.', { n: sc.correct }),
       rows: rows,
       note: sc.all ? '' : T('끝까지 풀어야 시간 보너스와 난이도 보너스를 받습니다.'),
       actions: [

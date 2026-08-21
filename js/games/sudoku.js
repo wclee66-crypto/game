@@ -161,10 +161,10 @@ window.Games.sudoku = (function () {
       '<section class="intro">' +
         ('<h2 class="intro__title">' + T('스도쿠') + '</h2>') +
         ('<p class="intro__desc">' + T('가로줄·세로줄·굵은 네모 칸마다') + '<br>' + T('숫자가 한 번씩만 들어갑니다.') + '<br><small>' + T('처음이시면 1단계부터 해 보세요.') + '</small></p>') +
-        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + '점</b></p>' : '') +
+        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + (T('점') + '</b></p>') : '') +
         (sess && LEVELS[sess.level]
           ? ('<button class="btn btn--accent btn--big" id="sdResume">' + T('이어서 하기') + ' <small>') +
-            LEVELS[sess.level].name + ' · ' + UI.fmtTime(sess.elapsed) + ' 경과</small></button>'
+            LEVELS[sess.level].name + ' · ' + UI.fmtTime(sess.elapsed) + (T(' 경과') + '</small></button>')
           : '') +
         '<div class="levels">' +
           ORDER.map(function (k) {
@@ -264,7 +264,7 @@ window.Games.sudoku = (function () {
     els.note.addEventListener('click', function () {
       S.noteMode = !S.noteMode;
       els.note.classList.toggle('is-on', S.noteMode);
-      UI.toast(S.noteMode ? '메모 모드입니다. 숫자를 작게 적어 둡니다.' : T('메모 모드를 껐습니다.'));
+      UI.toast(S.noteMode ? T('메모 모드입니다. 숫자를 작게 적어 둡니다.') : T('메모 모드를 껐습니다.'));
     });
     root.querySelector('#sdHintBtn').addEventListener('click', useHint);
     root.querySelector('#sdRestart').addEventListener('click', function () {

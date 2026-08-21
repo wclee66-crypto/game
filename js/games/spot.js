@@ -411,10 +411,10 @@ window.Games.spot = (function () {
         ('<p class="intro__desc">' + T('두 그림을 견주어 보고') + '<br>' + T('모양이 다른 것을 눌러 주세요.') + '<br>') +
           ('<small>' + T('물건 수는 두 그림이 똑같습니다.') + '<br>' + T('모양 · 색 · 다른 물건으로만 달라집니다.') + '<br>') +
           (T('어느 쪽 그림을 눌러도 되고, 틀려도 점수가 깎이지 않습니다.') + '</small></p>') +
-        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + '점</b></p>' : '') +
+        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + (T('점') + '</b></p>') : '') +
         (sess && LEVELS[sess.level]
           ? ('<button class="btn btn--accent btn--big" id="spResume">' + T('이어서 하기') + ' <small>') +
-            LEVELS[sess.level].name + ' · ' + (sess.found || []).length + '/' + sess.diffs.length + '군데 찾음</small></button>'
+            LEVELS[sess.level].name + ' · ' + (sess.found || []).length + '/' + sess.diffs.length + (T('군데 찾음') + '</small></button>')
           : '') +
         '<div class="levels">' +
           ORDER.map(function (k) {
@@ -640,7 +640,7 @@ window.Games.spot = (function () {
     });
 
     UI.resultModal({
-      title: timeUp ? '시간이 다 되었습니다' : T('다 찾으셨습니다!'),
+      title: timeUp ? T('시간이 다 되었습니다') : T('다 찾으셨습니다!'),
       score: sc.total,
       headline: sc.all
         ? T('다른 곳 {n}군데를 모두 찾으셨습니다.', { n: S.diffs.length })

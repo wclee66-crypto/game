@@ -54,7 +54,7 @@ window.UI = (function () {
     }
     var acts = document.createElement('div');
     acts.className = 'modal__actions';
-    (opts.actions || [{ label: '확인' }]).forEach(function (a) {
+    (opts.actions || [{ label: T('확인') }]).forEach(function (a) {
       var b = h('<button class="btn ' + (a.kind ? 'btn--' + a.kind : 'btn--ghost') + '">' + esc(a.label) + '</button>');
       b.addEventListener('click', function () {
         if (!a.keepOpen) close();
@@ -92,8 +92,8 @@ window.UI = (function () {
       title: title,
       body: '<p class="modal__msg">' + esc(message) + '</p>',
       actions: [
-        { label: '취소' },
-        { label: yesLabel || '확인', kind: 'accent', onClick: onYes }
+        { label: T('취소') },
+        { label: yesLabel || T('확인'), kind: 'accent', onClick: onYes }
       ]
     });
   }
@@ -137,7 +137,7 @@ window.UI = (function () {
     var body =
       '<div class="score">' +
         '<div class="score__big"><span class="score__num">' + comma(o.score) + '</span>' +
-          '<span class="score__unit">' + esc(o.unit || '점') + '</span></div>' +
+          '<span class="score__unit">' + esc(o.unit || T('점')) + '</span></div>' +
         (o.headline ? '<p class="score__headline">' + esc(o.headline) + '</p>' : '') +
         '<ul class="score__rows">' + rows + '</ul>' +
         (o.note ? '<p class="score__note">' + esc(o.note) + '</p>' : '') +

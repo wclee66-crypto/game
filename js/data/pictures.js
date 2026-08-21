@@ -11,16 +11,16 @@ window.PICTURES = (function () {
   /* ================= 색 ================= */
   /* 번호와 색은 항상 같은 짝입니다. 단계가 올라가면 뒤쪽 색이 더해집니다. */
   var PALETTE = [
-    { n: 1,  name: '빨강', hex: '#E03A2F' },
-    { n: 2,  name: '노랑', hex: '#F2BE1A' },
-    { n: 3,  name: '파랑', hex: '#2C63C9' },
-    { n: 4,  name: '초록', hex: '#3E9E4E' },
-    { n: 5,  name: '주황', hex: '#EE7F26' },
-    { n: 6,  name: '보라', hex: '#8A55C0' },
-    { n: 7,  name: '분홍', hex: '#F08BB0' },
-    { n: 8,  name: '하늘', hex: '#5FBCEA' },
-    { n: 9,  name: '갈색', hex: '#8B5A34' },
-    { n: 10, name: '회색', hex: '#78847E' }
+    { n: 1,  name: T('빨강'), hex: '#E03A2F' },
+    { n: 2,  name: T('노랑'), hex: '#F2BE1A' },
+    { n: 3,  name: T('파랑'), hex: '#2C63C9' },
+    { n: 4,  name: T('초록'), hex: '#3E9E4E' },
+    { n: 5,  name: T('주황'), hex: '#EE7F26' },
+    { n: 6,  name: T('보라'), hex: '#8A55C0' },
+    { n: 7,  name: T('분홍'), hex: '#F08BB0' },
+    { n: 8,  name: T('하늘'), hex: '#5FBCEA' },
+    { n: 9,  name: T('갈색'), hex: '#8B5A34' },
+    { n: 10, name: T('회색'), hex: '#78847E' }
   ];
 
   function hexOf(n) { var p = PALETTE[n - 1]; return p ? p.hex : '#FFFFFF'; }
@@ -858,16 +858,16 @@ window.PICTURES = (function () {
   /* ================= 그림 목록 ================= */
 
   var LIST = [
-    { id: 'mandala',   name: '고운 무늬', make: mandala },
-    { id: 'patchwork', name: '조각보',    make: patchwork },
-    { id: 'flower',    name: '해바라기',  make: flower },
-    { id: 'butterfly', name: '나비',      make: butterfly },
-    { id: 'fish',      name: '물고기',    make: fish },
-    { id: 'turtle',    name: '거북이',    make: turtle },
-    { id: 'tulip',     name: '꽃',        make: tulip },
-    { id: 'boat',      name: '배',        make: boat },
-    { id: 'bird',      name: '새',        make: bird },
-    { id: 'fruit',     name: '과일',      make: fruit }
+    { id: 'mandala',   name: T('고운 무늬'), make: mandala },
+    { id: 'patchwork', name: T('조각보'),    make: patchwork },
+    { id: 'flower',    name: T('해바라기'),  make: flower },
+    { id: 'butterfly', name: T('나비'),      make: butterfly },
+    { id: 'fish',      name: T('물고기'),    make: fish },
+    { id: 'turtle',    name: T('거북이'),    make: turtle },
+    { id: 'tulip',     name: T('꽃'),        make: tulip },
+    { id: 'boat',      name: T('배'),        make: boat },
+    { id: 'bird',      name: T('새'),        make: bird },
+    { id: 'fruit',     name: T('과일'),      make: fruit }
   ];
 
   /* ================= 만들기 ================= */

@@ -120,8 +120,8 @@ window.Games.wordsearch = (function () {
       '<section class="intro">' +
         ('<h2 class="intro__title">' + T('낱말찾기') + '</h2>') +
         ('<p class="intro__desc">' + T('글자판 속에 숨은 낱말을') + '<br>' + T('손가락으로 쭉 그어 찾습니다.') + '<br><small>' + T('글자를 하나씩 눌러 이어 붙여도 됩니다.') + '<br>' + T('고른 칸은 낱말이 될 때까지 색이 남습니다.') + '</small></p>') +
-        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + '점</b></p>' : '') +
-        (sess ? ('<button class="btn btn--accent btn--big" id="wsResume">' + T('이어서 하기') + ' <small>') + LEVELS[sess.level].name + ' · ' + sess.found.length + '/' + sess.placed.length + '개 찾음</small></button>' : '') +
+        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + T('점</b></p>') : '') +
+        (sess ? ('<button class="btn btn--accent btn--big" id="wsResume">' + T('이어서 하기') + ' <small>') + LEVELS[sess.level].name + ' · ' + sess.found.length + '/' + sess.placed.length + T('개 찾음</small></button>') : '') +
         '<div class="levels">' +
           ORDER.map(function (k) {
             var L = LEVELS[k];
@@ -426,7 +426,7 @@ window.Games.wordsearch = (function () {
     if (sc.penalty) rows.push({ label: T('힌트 사용 ({n}회)', { n: S.hints }), value: sc.penalty, minus: true });
 
     UI.resultModal({
-      title: timeUp ? '시간이 다 되었습니다' : T('낱말을 모두 찾았습니다!'),
+      title: timeUp ? T('시간이 다 되었습니다') : T('낱말을 모두 찾았습니다!'),
       score: sc.total,
       headline: timeUp ? (T('남은 낱말:') + ' ') + S.placed.filter(function (p) { return S.found.indexOf(p.word) < 0; }).map(function (p) { return p.word; }).join(', ')
                        : T('주제 ‘{t}’ 완주!', { t: S.theme }),

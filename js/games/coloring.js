@@ -96,9 +96,9 @@ window.Games.coloring = (function () {
         ('<h2 class="intro__title">' + T('색칠 공부') + '</h2>') +
         ('<p class="intro__desc">' + T('색을 하나 고른 다음') + '<br>' + T('같은 번호가 적힌 칸을 누르면 칠해집니다.') + '<br>') +
           ('<small>' + T('다 칠한 그림은 종이로 인쇄할 수 있습니다.') + '</small></p>') +
-        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + '점</b></p>' : '') +
+        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + (T('점') + '</b></p>') : '') +
         (sess ? ('<button class="btn btn--accent btn--big" id="clResume">' + T('이어서 하기') + ' <small>') +
-                  LEVELS[sess.level].name + ' · ' + sess.fills.filter(Boolean).length + '/' + sess.fills.length + '칸 칠함</small></button>' : '') +
+                  LEVELS[sess.level].name + ' · ' + sess.fills.filter(Boolean).length + '/' + sess.fills.length + (T('칸 칠함') + '</small></button>') : '') +
 
         ('<h3 class="intro__sub">' + T('어떻게 칠할까요?') + '</h3>') +
         '<div class="row2 cl-modes" id="clMode">' +
@@ -141,7 +141,7 @@ window.Games.coloring = (function () {
         root.querySelectorAll('.level').forEach(function (lv) {
           var L = LEVELS[lv.dataset.level];
           lv.querySelector('.level__bonus').textContent = wantFree
-            ? '번호 없이 마음대로'
+            ? T('번호 없이 마음대로')
             : (L.bonus ? T('난이도 보너스 +{n}', { n: L.bonus }) : T('기본'));
         });
       });
@@ -196,7 +196,7 @@ window.Games.coloring = (function () {
           '<span class="cl-color__dot' + dark + '" style="background:' + PICTURES.hexOf(n) + '">' + (S.free ? '' : n) + '</span>' +
           '<span class="cl-color__nm">' + PICTURES.nameOf(n) + '</span></button>';
       }).join('') +
-      '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="지우개">' +
+      T('<button class="cl-color cl-color--eraser" data-c="-1" aria-label="지우개">') +
         ('<span class="cl-color__dot">↺</span><span class="cl-color__nm">' + T('지우개') + '</span></button>') +
     '</div>';
   }
@@ -210,7 +210,7 @@ window.Games.coloring = (function () {
         '<div class="hud">' +
           ('<div class="hud__item"><span class="hud__lbl">' + T('그림') + '</span><b>') + UI.esc(pic.name) + '</b></div>' +
           ('<div class="hud__item"><span class="hud__lbl">' + T('칠한 칸') + '</span><b id="clDone">0</b></div>') +
-          '<div class="hud__item"><span class="hud__lbl">' + (S.free ? '단계' : T('실수')) + '</span><b id="clWrong">0</b></div>' +
+          '<div class="hud__item"><span class="hud__lbl">' + (S.free ? T('단계') : T('실수')) + '</span><b id="clWrong">0</b></div>' +
           ('<div class="hud__item"><span class="hud__lbl">' + T('시간') + '</span><b id="clTime">0:00</b></div>') +
         '</div>' +
         '<div class="cl-stage">' + svgMarkup() + '</div>' +
@@ -273,10 +273,10 @@ window.Games.coloring = (function () {
       els.tip.textContent = T('지우고 싶은 칸을 누르세요.');
     } else if (S.free) {
       els.tip.textContent = T('{c} 골랐습니다. 칠하고 싶은 칸을 누르세요.',
-        { c: josa(PICTURES.nameOf(n), '을', '를') });
+        { c: josa(PICTURES.nameOf(n), T('을'), T('를')) });
     } else {
       els.tip.textContent = T('{n}번 {c} — {j} 적힌 칸을 누르세요.',
-        { n: n, c: PICTURES.nameOf(n), j: numJosa(n, '이', '가') });
+        { n: n, c: PICTURES.nameOf(n), j: numJosa(n, T('이'), T('가')) });
     }
   }
 
@@ -368,7 +368,7 @@ window.Games.coloring = (function () {
     var hit = [];
     pic.regions.forEach(function (r, i) { if (r.c === picked && !S.fills[i]) hit.push(i); });
     if (!hit.length) {
-      UI.toast(T('{n}번 {c}', { n: picked, c: josa(PICTURES.nameOf(picked), '은', '는') }) +
+      UI.toast(T('{n}번 {c}', { n: picked, c: josa(PICTURES.nameOf(picked), T('은'), T('는')) }) +
                (' ' + T('다 칠했습니다. 다른 색을 골라 보세요.')));
       return;
     }

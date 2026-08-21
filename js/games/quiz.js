@@ -136,12 +136,12 @@ window.Games.quiz = (function () {
       '<section class="intro">' +
         ('<h2 class="intro__title">' + T('상식 퀴즈') + '</h2>') +
         ('<p class="intro__desc">' + T('보기 가운데 하나를 고릅니다.') + '<br>' + T('빨리 맞힐수록 점수가 높습니다.') + '<br><small>' + T('1단계는 보기가 둘뿐이고 시간도 넉넉합니다.') + '<br>' + T('단계가 오를수록 문제가 어렵고 시간이 짧아집니다.') + '</small></p>') +
-        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + '점</b></p>' : '') +
+        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + T('점</b></p>') : '') +
         (sess ? '<button class="btn btn--accent btn--big" id="qzResume">' + T('이어서 하기') +
-           ' <small>' + T('{n}번 문제부터', { n: sess.i + 1 }) + (sess.review ? ' · 복습' : '') + '</small></button>' : '') +
+           ' <small>' + T('{n}번 문제부터', { n: sess.i + 1 }) + (sess.review ? T(' · 복습') : '') + '</small></button>' : '') +
         (wrong.length
           ? ('<button class="btn btn--big btn--note" id="qzReview">' + T('틀린 문제만 다시 풀기') + ' ') +
-            '<small>' + T('오답 노트 {n}문제', { n: wrong.length }) + (wrong.length > 20 ? ' 중 20문제' : '') + ' · 점수는 기록되지 않습니다</small></button>'
+            '<small>' + T('오답 노트 {n}문제', { n: wrong.length }) + (wrong.length > 20 ? T(' 중 20문제') : '') + T(' · 점수는 기록되지 않습니다</small></button>')
           : '') +
         ('<h3 class="intro__sub">' + T('분야 고르기') + '</h3>') +
         '<div class="chips" id="qzCats">' +
@@ -162,7 +162,7 @@ window.Games.quiz = (function () {
           }).join('') +
         '</div>' +
         ('<button class="linkbtn" id="qzRules">' + T('점수 규칙 보기') + '</button>') +
-        (wrong.length ? '<button class="linkbtn" id="qzClearNote">오답 노트 비우기</button>' : '') +
+        (wrong.length ? T('<button class="linkbtn" id="qzClearNote">오답 노트 비우기</button>') : '') +
       '</section>';
 
     var cat = 'all';
@@ -212,7 +212,7 @@ window.Games.quiz = (function () {
       '<section class="game quiz">' +
         '<div class="qz-top">' +
           '<span class="qz-count">' + (S.i + 1) + ' / ' + S.qs.length + '</span>' +
-          (S.review ? '<span class="chip chip--note">복습</span>' : '') +
+          (S.review ? T('<span class="chip chip--note">복습</span>') : '') +
           '<span class="chip chip--tag">' + UI.esc(q.c) + '</span>' +
           '<span class="qz-clock" id="qzClock">' + qtime() + '</span>' +
         '</div>' +
@@ -279,8 +279,8 @@ window.Games.quiz = (function () {
     // 다시 맞힌 문제는 오답 노트에서 뺀다
     var cleared = correct && Store.removeWrong(q.q);
 
-    var msg = correct ? (cleared ? '정답입니다! 오답 노트에서 지웠습니다.' : T('정답입니다!'))
-                      : (choice === -1 ? '시간이 지났습니다.' : T('아쉽습니다.'));
+    var msg = correct ? (cleared ? T('정답입니다! 오답 노트에서 지웠습니다.') : T('정답입니다!'))
+                      : (choice === -1 ? T('시간이 지났습니다.') : T('아쉽습니다.'));
     var badge = document.createElement('div');
     badge.className = 'qz-badge ' + (correct ? 'is-right' : 'is-wrong');
     badge.textContent = msg;
@@ -359,10 +359,10 @@ window.Games.quiz = (function () {
     UI.resultModal({
       title: T('퀴즈가 끝났습니다'),
       score: sc.total,
-      headline: sc.correct === sc.count ? '전부 맞히셨습니다. 대단합니다!' : T('{n}문제를 맞히셨습니다.', { n: sc.correct }),
+      headline: sc.correct === sc.count ? T('전부 맞히셨습니다. 대단합니다!') : T('{n}문제를 맞히셨습니다.', { n: sc.correct }),
       rows: rows,
       note: missed
-        ? (T('틀린') + ' ') + missed + '문제를 오답 노트에 담았습니다.'
+        ? (T('틀린') + ' ') + missed + T('문제를 오답 노트에 담았습니다.')
         : T('연속 정답 보너스는 3연속부터 25점씩 올라가 최대 100점입니다.'),
       actions: missed
         ? [
@@ -394,7 +394,7 @@ window.Games.quiz = (function () {
       score: correct,
       unit: T('문제'),
       headline: T('{a} / {b}문제를 맞히셨습니다.', { a: correct, b: S.qs.length }) +
-        (correct ? ' 맞힌 문제는 오답 노트에서 지웠습니다.' : ''),
+        (correct ? T(' 맞힌 문제는 오답 노트에서 지웠습니다.') : ''),
       rows: [
         { label: T('맞혀서 지운 문제'), value: correct },
         { label: T('오답 노트에 남은 문제'), value: left, plain: true }

@@ -142,10 +142,10 @@ window.Games.math = (function () {
       '<section class="intro">' +
         ('<h2 class="intro__title">' + T('숫자 계산') + '</h2>') +
         ('<p class="intro__desc">' + T('더하기와 빼기를 암산으로 풉니다.') + '<br>' + T('답은 숫자판을 눌러 직접 넣습니다.') + '<br><small>' + T('틀려도 점수가 깎이지 않습니다.') + '</small></p>') +
-        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + '점</b></p>' : '') +
+        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + (T('점') + '</b></p>') : '') +
         (sess && LEVELS[sess.level]
           ? ('<button class="btn btn--accent btn--big" id="mtResume">' + T('이어서 하기') + ' <small>') +
-            LEVELS[sess.level].name + ' · ' + (sess.i + 1) + '번 문제부터</small></button>'
+            LEVELS[sess.level].name + ' · ' + (sess.i + 1) + (T('번 문제부터') + '</small></button>')
           : '') +
         '<div class="levels">' +
           ORDER.map(function (k) {
@@ -260,7 +260,7 @@ window.Games.math = (function () {
 
     els.ans.classList.add(ok ? 'is-right' : 'is-wrong');
     els.msg.innerHTML = ok
-      ? '<b class="mt-ok">잘하셨습니다!</b>'
+      ? ('<b class="mt-ok">' + T('잘하셨습니다!') + '</b>')
       : ('<b class="mt-no">' + T('정답은') + ' ') + p.a + (T('입니다') + '</b>');
     if (ok) els.right.textContent = S.picks.filter(function (x) { return x.correct; }).length;
     UI.beep(ok ? 'ok' : 'no');
@@ -342,7 +342,7 @@ window.Games.math = (function () {
     UI.resultModal({
       title: T('숫자 계산을 마쳤습니다'),
       score: sc.total,
-      headline: sc.correct === sc.count ? '전부 맞히셨습니다. 대단합니다!' : T('{n}문제를 맞히셨습니다.', { n: sc.correct }),
+      headline: sc.correct === sc.count ? T('전부 맞히셨습니다. 대단합니다!') : T('{n}문제를 맞히셨습니다.', { n: sc.correct }),
       rows: rows,
       note: sc.all ? '' : T('끝까지 풀어야 시간 보너스와 난이도 보너스를 받습니다.'),
       actions: [

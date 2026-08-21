@@ -31,7 +31,7 @@ window.App = (function () {
 
   /* ================= 앱 설치 ================= */
   /* 크롬 계열은 설치 조건을 만족하면 beforeinstallprompt 를 보내 준다.
-     그 순간을 잡아 두었다가 홈 화면의 '앱으로 설치' 버튼에 연결한다. */
+     그 순간을 잡아 두었다가 홈 화면의 T('앱으로 설치') 버튼에 연결한다. */
   var installEvent = null;
 
   window.addEventListener('beforeinstallprompt', function (e) {
@@ -166,7 +166,7 @@ window.App = (function () {
         '<circle class="ring__track" cx="43" cy="43" r="' + R + '" fill="none" stroke-width="10"></circle>' +
         '<circle class="ring__fill" cx="43" cy="43" r="' + R + '" fill="none" stroke-width="10" stroke-linecap="round"' +
           ' stroke-dasharray="' + (C * pct).toFixed(1) + ' ' + C.toFixed(1) + '" transform="rotate(-90 43 43)"></circle>' +
-        '<text class="ring__txt" x="43" y="48" text-anchor="middle">' + (doneCount >= goal ? '다 함' : doneCount + '/' + goal) + '</text>' +
+        '<text class="ring__txt" x="43" y="48" text-anchor="middle">' + (doneCount >= goal ? T('다 함') : doneCount + '/' + goal) + '</text>' +
       '</svg>' +
       '<div class="ring__body">' +
         '<div class="today__score"><b>' + UI.comma(total) + ('</b><span>' + T('점') + '</span></div>') +
@@ -183,15 +183,15 @@ window.App = (function () {
     var G = Games[g];
     var s = Store.dayBest()[g];
     var resume = G.hasProgress();
-    var sub = resume ? '이어서 할 수 있어요' : (s != null ? '오늘 최고 기록' : T('아직 안 하셨어요'));
+    var sub = resume ? T('이어서 할 수 있어요') : (s != null ? T('오늘 최고 기록') : T('아직 안 하셨어요'));
 
     /* 오늘 한 게임은 칸 전체를 옅은 초록으로 물들인다 —
-       기호를 없앤 대신 '무엇을 했는지'가 한눈에 보이도록. */
+       기호를 없앤 대신 T('무엇을 했는지')가 한눈에 보이도록. */
     var state = s != null ? ' is-done' : (resume ? ' is-resume' : '');
     var right = s != null
-      ? '<span class="gcard__go">' + UI.comma(s) + '<small>점</small></span>'
+      ? '<span class="gcard__go">' + UI.comma(s) + ('<small>' + T('점') + '</small></span>')
       : '<span class="gcard__go is-new' + (resume ? ' is-resume' : '') + '">' +
-        (resume ? '이어하기' : T('시작하기')) + '</span>';
+        (resume ? T('이어하기') : T('시작하기')) + '</span>';
     return '<button class="gcard' + state + '" data-go="' + g + '">' +
       '<span class="gcard__body">' +
         '<span class="gcard__name">' + G.name + '</span>' +
@@ -360,7 +360,7 @@ window.App = (function () {
       fr.onload = function () {
         try {
           var n = Store.importJSON(String(fr.result));
-          UI.toast(n ? n + '판의 기록을 불러왔습니다.' : T('새로 불러올 기록이 없습니다.'));
+          UI.toast(n ? n + T('판의 기록을 불러왔습니다.') : T('새로 불러올 기록이 없습니다.'));
           renderRecords();
         } catch (err) {
           UI.modal({
@@ -446,18 +446,18 @@ window.App = (function () {
     var body = which === 'all'
       ? '<p class="modal__msg">' + T('모든 게임이 <b>기본 1,000점 만점</b>이고, 어려운 난이도를 고르면 보너스가 더해집니다. 하루 만점은 {n}점입니다.', { n: UI.comma(MAX_DAY) }) + '</p>' +
         GAMES.map(rulesTable).join('') +
-        '<p class="modal__msg small">같은 게임을 여러 번 해도 그날 총점에는 <b>가장 높은 점수</b>만 반영됩니다. 판마다의 기록은 모두 남습니다.</p>'
+        ('<p class="modal__msg small">' + T('같은 게임을 여러 번 해도 그날 총점에는 <b>가장 높은 점수</b>만 반영됩니다. 판마다의 기록은 모두 남습니다.') + '</p>')
       : rulesTable(which);
 
-    UI.modal({ title: which === 'all' ? '점수 규칙' : '', body: body, actions: [{ label: T('닫기'), kind: 'accent' }] });
+    UI.modal({ title: which === 'all' ? T('점수 규칙') : '', body: body, actions: [{ label: T('닫기'), kind: 'accent' }] });
   }
 
   function gameSwitcher(from) {
     var others = GAMES.concat(['records']).filter(function (g) { return g !== from; });
     var body = '<div class="switcher">' + others.map(function (g) {
-      var name = g === 'records' ? '나의 기록' : Games[g].name;
-      var sub = g === 'records' ? '날짜별 점수 보기'
-        : (Games[g].hasProgress() ? '진행 중인 판이 있습니다' : T('새로 시작하기'));
+      var name = g === 'records' ? T('나의 기록') : Games[g].name;
+      var sub = g === 'records' ? T('날짜별 점수 보기')
+        : (Games[g].hasProgress() ? T('진행 중인 판이 있습니다') : T('새로 시작하기'));
       return '<button class="switcher__item" data-go="' + g + '">' +
         '<span class="switcher__txt">' + name + '<em>' + sub + '</em></span></button>';
     }).join('') + '</div>';
@@ -582,10 +582,23 @@ window.App = (function () {
 
   /* ================= 시작 ================= */
 
+  /* index.html 에 박혀 있는 글(아래 탭·브라우저 제목·설명)을 고른 말로 바꾼다 */
+  function localizeShell() {
+    var TABS = { home: T('홈'), games: T('게임 고르기'), records: T('나의 기록') };
+    document.querySelectorAll('.tab').forEach(function (t) {
+      var lbl = t.querySelector('.tab__lbl');
+      if (lbl && TABS[t.dataset.route]) lbl.textContent = T(TABS[t.dataset.route]);
+    });
+    document.title = T('새록 · 두뇌 훈련');
+    var meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute('content', T('스도쿠·낱말찾기·숫자 계산·단어 순서·상식퀴즈·색칠 공부·틀린그림찾기를 매일 조금씩. 날짜별 점수가 기록되는 치매 예방 두뇌 훈련 앱'));
+  }
+
+
   function init() {
     view = document.getElementById('view');
-    I18N.start();                        // 저장된 말, 없으면 브라우저 말
-    relist();
+    relist();                            // 말은 js/i18n.js 에서 이미 정해졌다
+    localizeShell();
     applySettings();
 
     document.querySelectorAll('.tab').forEach(function (t) {

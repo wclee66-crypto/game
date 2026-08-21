@@ -74,8 +74,12 @@ window.Store = (function () {
   function labelOf(key) {
     var p = key.split('-');
     var d = new Date(+p[0], +p[1] - 1, +p[2]);
-    var wd = ['일', '월', '화', '수', '목', '금', '토'][d.getDay()];
-    return { month: +p[1], date: +p[2], weekday: wd, text: +p[1] + '월 ' + +p[2] + '일 (' + wd + ')' };
+    var wd = T('일 월 화 수 목 금 토').split(' ')[d.getDay()];
+    var mn = T('1월 2월 3월 4월 5월 6월 7월 8월 9월 10월 11월 12월').split(' ')[+p[1] - 1];
+    return {
+      month: +p[1], date: +p[2], weekday: wd,
+      text: T('{m} {d}일 ({w})', { m: mn, d: +p[2], w: wd })
+    };
   }
 
   /* ---------- 기록 ---------- */
@@ -215,7 +219,7 @@ window.Store = (function () {
   function importJSON(text) {
     var incoming = JSON.parse(text);
     if (!incoming || typeof incoming !== 'object' || !incoming.records) {
-      throw new Error('새록에서 내보낸 파일이 아닙니다.');
+      throw new Error(T('새록에서 내보낸 파일이 아닙니다.'));
     }
     var d = load(), added = 0;
     Object.keys(incoming.records).forEach(function (day) {

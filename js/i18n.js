@@ -92,3 +92,8 @@ window.I18N = (function () {
 
 /* 어디서나 짧게 쓰도록 */
 window.T = function (s, vars) { return window.I18N.t(s, vars); };
+
+/* 게임 파일들보다 먼저 말을 정해 둔다.
+   게임의 이름·설명·난이도 이름은 파일을 읽을 때 한 번만 정해지므로,
+   그 전에 말이 정해져 있지 않으면 한국어로 굳어 버린다. */
+window.I18N.start();
