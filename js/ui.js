@@ -70,9 +70,19 @@ window.UI = (function () {
     root.appendChild(wrap);
     requestAnimationFrame(function () { wrap.classList.add('is-on'); });
 
+    /* 닫기는 사라지는 효과 때문에 0.2초 뒤에 실제로 지운다.
+     *
+     * 그 사이에 새 창이 열릴 수 있다 — 결과창의 “다른 게임” 처럼
+     * 창을 닫으면서 곧바로 다음 창을 여는 자리가 그렇다.
+     * 그래서 통째로 비우지 말고 **내 창만** 걷어 낸다.
+     * (예전에는 root 를 통째로 비워서, 방금 연 창이 곧바로 사라지고
+     *  끝낸 게임 화면이 그대로 보였다.) */
     function close() {
       wrap.classList.remove('is-on');
-      setTimeout(function () { root.hidden = true; root.innerHTML = ''; }, 200);
+      setTimeout(function () {
+        if (wrap.parentNode === root) root.removeChild(wrap);
+        if (!root.children.length) root.hidden = true;
+      }, 200);
     }
     return { close: close, card: card };
   }
