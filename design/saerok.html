@@ -1,0 +1,378 @@
+<title>새록 아이덴티티</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800;900&family=Manrope:wght@500;600;700;800&display=swap">
+
+<style>
+:root{
+  --ink:#08130D;          /* 짙은 숲 */
+  --ink-2:#0F2419;
+  --paper:#FBFDFB;
+  --paper-2:#F1F6F2;
+  --line:#E2ECE5;
+  --fg:#0C1B13;
+  --fg-2:#4A6153;
+  --fg-3:#8AA294;
+  --leaf:#0E9E62;
+  --leaf-l:#3FBF87;
+  --leaf-s:#E2F4EB;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--fg);
+  font-family:'Gothic A1',-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  line-height:1.6; letter-spacing:-.012em; -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- 머리 ---------- */
+.hero{
+  position:relative; overflow:hidden;
+  background:
+    radial-gradient(120% 90% at 12% 0%, #123D2A 0%, rgba(18,61,42,0) 58%),
+    radial-gradient(90% 70% at 100% 100%, #0B2E1F 0%, rgba(11,46,31,0) 60%),
+    var(--ink);
+  color:#EAF4EE; padding:clamp(3rem,8vw,6rem) clamp(1.2rem,5vw,3rem) clamp(3rem,7vw,5rem);
+}
+.hero__in{max-width:1000px; margin:0 auto; display:flex; align-items:center; gap:clamp(1.5rem,5vw,4rem); flex-wrap:wrap}
+.hero__mark{flex:none}
+.hero h1{
+  font-size:clamp(3.6rem,13vw,7rem); font-weight:900; letter-spacing:-.06em;
+  margin:0; line-height:.9;
+}
+.hero .rom{
+  font-family:'Manrope',sans-serif; font-weight:700; font-size:.86rem;
+  letter-spacing:.32em; text-transform:uppercase; color:#7FCBA6; margin:.9rem 0 0;
+}
+.hero p{margin:1rem 0 0; color:#A9C6B7; font-size:1.02rem; max-width:34ch}
+.hero p b{color:#EAF4EE; font-weight:800}
+
+/* ---------- 본문 ---------- */
+.wrap{max-width:1000px; margin:0 auto; padding:clamp(2.5rem,6vw,4.5rem) clamp(1.2rem,5vw,3rem) 5rem}
+.eyebrow{
+  font-family:'Manrope',sans-serif; font-size:.7rem; font-weight:800; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--leaf); margin:0 0 .8rem
+}
+h2.sec{font-size:clamp(1.3rem,3vw,1.7rem); font-weight:900; letter-spacing:-.035em; margin:0 0 .6rem}
+.sec-lead{color:var(--fg-2); margin:0 0 2rem; max-width:58ch; font-size:.96rem}
+.sec-lead b{color:var(--fg); font-weight:800}
+
+/* ---------- 마크 후보 ---------- */
+.marks{display:grid; gap:1rem; grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.mark{
+  border:1px solid var(--line); border-radius:20px; overflow:hidden; background:#fff;
+  display:flex; flex-direction:column;
+}
+.mark.is-pick{border-color:var(--leaf); box-shadow:0 0 0 3px var(--leaf-s)}
+.mark__top{display:flex}
+.mark__half{flex:1; display:grid; place-items:center; padding:1.6rem 0}
+.mark__half--dark{background:var(--ink)}
+.mark__half--light{background:var(--paper-2)}
+.mark__body{padding:1rem 1.1rem 1.2rem; border-top:1px solid var(--line)}
+.mark__name{display:flex; align-items:center; gap:.5rem; margin-bottom:.35rem}
+.mark__name b{font-size:1.02rem; font-weight:900; letter-spacing:-.03em}
+.pick{
+  font-family:'Manrope',sans-serif; font-size:.6rem; font-weight:800; letter-spacing:.1em;
+  background:var(--leaf); color:#fff; padding:.14rem .45rem; border-radius:999px;
+}
+.mark__body p{margin:0 0 .7rem; font-size:.85rem; color:var(--fg-2); line-height:1.55}
+.sizes{display:flex; align-items:flex-end; gap:.55rem; padding-top:.6rem; border-top:1px dashed var(--line)}
+.sizes span{display:block}
+.sizes em{
+  display:block; font-style:normal; font-family:'Manrope',sans-serif;
+  font-size:.55rem; color:var(--fg-3); text-align:center; margin-top:.25rem; font-weight:700;
+}
+
+/* ---------- 홈 화면 목업 ---------- */
+.phone{
+  width:288px; border-radius:30px; padding:1.1rem .9rem 1.4rem;
+  background:linear-gradient(165deg,#1B4536,#0B2318 60%,#08130D);
+  box-shadow:0 26px 50px -28px rgba(8,19,13,.75);
+}
+.phone__time{
+  font-family:'Manrope',sans-serif; font-size:.7rem; font-weight:700; color:#CFE5D9;
+  text-align:center; margin:0 0 1.1rem; letter-spacing:.04em;
+}
+.grid4{display:grid; grid-template-columns:repeat(4,1fr); gap:.9rem .6rem}
+.app{display:flex; flex-direction:column; align-items:center; gap:.3rem}
+.app i{
+  width:52px; height:52px; border-radius:14px; display:grid; place-items:center;
+  font-family:'Manrope',sans-serif; font-weight:800; font-size:.9rem; color:#fff; font-style:normal;
+}
+.app span{font-size:.55rem; color:#D6E7DE; text-align:center; line-height:1.2}
+.app--ours i{box-shadow:0 0 0 2px rgba(255,255,255,.28), 0 6px 14px -6px rgba(0,0,0,.6)}
+
+.stage{display:flex; flex-wrap:wrap; gap:1.6rem; align-items:flex-start}
+.note{
+  flex:1; min-width:250px; background:var(--paper-2); border:1px solid var(--line);
+  border-radius:18px; padding:1.2rem 1.3rem;
+}
+.note h3{margin:0 0 .6rem; font-size:.98rem; font-weight:900; letter-spacing:-.03em}
+.note p{margin:0 0 .6rem; font-size:.9rem; color:var(--fg-2)}
+.note p:last-child{margin:0}
+.note b{color:var(--fg); font-weight:800}
+
+/* ---------- 적용 예 ---------- */
+.apply{display:flex; flex-wrap:wrap; gap:1rem; align-items:flex-start}
+.card{
+  border:1px solid var(--line); border-radius:18px; background:#fff; padding:1rem;
+  display:flex; flex-direction:column; gap:.7rem;
+}
+.card figcaption{
+  font-family:'Manrope',sans-serif; font-size:.62rem; font-weight:700; letter-spacing:.1em;
+  color:var(--fg-3); text-transform:uppercase;
+}
+.bar{display:flex; align-items:center; gap:.6rem; width:236px}
+.bar__t b{display:block; font-size:1.06rem; font-weight:900; letter-spacing:-.04em; line-height:1.15}
+.bar__t em{display:block; font-style:normal; font-size:.6rem; color:var(--fg-3)}
+.splash{
+  width:236px; height:150px; border-radius:14px; display:grid; place-items:center; gap:.5rem;
+  background:var(--leaf); color:#fff; align-content:center;
+}
+.splash b{font-size:1.5rem; font-weight:900; letter-spacing:-.05em}
+.favrow{display:flex; align-items:center; gap:.5rem; width:236px; background:var(--paper-2); border-radius:9px; padding:.45rem .6rem}
+.favrow span{font-size:.72rem; color:var(--fg-2); font-weight:700}
+.favrow em{font-style:normal; font-size:.62rem; color:var(--fg-3); margin-left:auto; font-family:'Manrope',sans-serif}
+
+.close{margin-top:3.4rem; padding-top:2.2rem; border-top:1px solid var(--line); max-width:62ch}
+.close h2{font-size:1.2rem; font-weight:900; margin:0 0 .8rem; letter-spacing:-.035em}
+.close p{color:var(--fg-2); margin:0 0 .8rem; font-size:.95rem}
+.close ol{color:var(--fg-2); padding-left:1.2rem; margin:0 0 1rem; font-size:.95rem}
+.close li{margin-bottom:.45rem}
+.close b{color:var(--fg); font-weight:800}
+.warn{
+  background:var(--leaf-s); border-radius:0 14px 14px 0; border-left:4px solid var(--leaf);
+  padding:1rem 1.2rem; margin-top:1.2rem;
+}
+.warn p{margin:0 0 .5rem; font-size:.9rem; color:#0B4F32}
+.warn p:last-child{margin:0}
+.warn b{color:#073B26}
+
+@media (prefers-reduced-motion:no-preference){
+  .hero__mark{animation:grow .8s cubic-bezier(.2,.9,.25,1) both}
+  .hero h1{animation:up .7s cubic-bezier(.2,.9,.25,1) .1s both}
+  .hero .rom,.hero p{animation:up .7s cubic-bezier(.2,.9,.25,1) .2s both}
+  .mark{animation:up .6s cubic-bezier(.2,.9,.25,1) both}
+  .mark:nth-child(2){animation-delay:.06s}
+  .mark:nth-child(3){animation-delay:.12s}
+  .mark:nth-child(4){animation-delay:.18s}
+  @keyframes up{from{opacity:0;transform:translateY(14px)}}
+  @keyframes grow{from{opacity:0;transform:scale(.86) rotate(-6deg)}}
+}
+</style>
+
+<!-- ================= 히어로 ================= -->
+<header class="hero">
+  <div class="hero__in">
+    <div class="hero__mark">
+      <svg width="150" height="150" viewBox="0 0 100 100" role="img" aria-label="새록 마크">
+        <rect width="100" height="100" rx="26" fill="#0E9E62"></rect>
+        <g stroke="#fff" stroke-width="5.5" stroke-linecap="round" fill="none">
+          <path d="M30 78 V62"></path><path d="M50 78 V48"></path><path d="M70 78 V56"></path>
+        </g>
+        <g fill="#fff">
+          <path d="M30 63 C22 57 22 45 30 41 C38 45 38 57 30 63 Z" opacity=".55"></path>
+          <path d="M50 49 C40 42 40 26 50 21 C60 26 60 42 50 49 Z"></path>
+          <path d="M70 57 C61 51 61 37 70 32 C79 37 79 51 70 57 Z" opacity=".78"></path>
+        </g>
+      </svg>
+    </div>
+    <div>
+      <h1>새록</h1>
+      <p class="rom">saerok</p>
+      <p>기억이 <b>새록새록</b> — 잊었던 것이 다시 돋아난다는 말입니다.<br>이 앱이 하려는 일을 그대로 이름으로 삼았습니다.</p>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ================= 마크 후보 ================= -->
+  <p class="eyebrow">마크 후보</p>
+  <h2 class="sec">네 가지를 그려 봤습니다</h2>
+  <p class="sec-lead">아이콘은 크게 볼 일이 거의 없습니다. 홈 화면의 <b>48픽셀</b>에서 또렷한지가 전부입니다.
+    그래서 각 후보를 <b>큰 것부터 아주 작은 것까지</b> 함께 놓았습니다. 짙은 바탕과 밝은 바탕 양쪽에서도 봅니다.</p>
+
+  <div class="marks">
+
+    <!-- A -->
+    <figure class="mark is-pick" style="margin:0">
+      <div class="mark__top">
+        <div class="mark__half mark__half--light">
+          <svg width="76" height="76" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><g stroke="#fff" stroke-width="5.5" stroke-linecap="round" fill="none"><path d="M30 78 V62"></path><path d="M50 78 V48"></path><path d="M70 78 V56"></path></g><g fill="#fff"><path d="M30 63 C22 57 22 45 30 41 C38 45 38 57 30 63 Z" opacity=".55"></path><path d="M50 49 C40 42 40 26 50 21 C60 26 60 42 50 49 Z"></path><path d="M70 57 C61 51 61 37 70 32 C79 37 79 51 70 57 Z" opacity=".78"></path></g></svg>
+        </div>
+        <div class="mark__half mark__half--dark">
+          <svg width="76" height="76" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="24" fill="#fff"></rect><g stroke="#0E9E62" stroke-width="5.5" stroke-linecap="round" fill="none"><path d="M30 78 V62"></path><path d="M50 78 V48"></path><path d="M70 78 V56"></path></g><g fill="#0E9E62"><path d="M30 63 C22 57 22 45 30 41 C38 45 38 57 30 63 Z" opacity=".55"></path><path d="M50 49 C40 42 40 26 50 21 C60 26 60 42 50 49 Z"></path><path d="M70 57 C61 51 61 37 70 32 C79 37 79 51 70 57 Z" opacity=".78"></path></g></svg>
+        </div>
+      </div>
+      <div class="mark__body">
+        <div class="mark__name"><b>가 · 세 싹</b><span class="pick">추천</span></div>
+        <p><b>새록“새록”</b>의 반복을 크기가 다른 싹 셋으로 옮겼습니다. 하루에 하나씩 늘어난다는 뜻도 함께 담깁니다.
+          형태가 굵고 단순해 작아져도 뭉개지지 않습니다.</p>
+        <div class="sizes">
+          <span><svg width="44" height="44" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><g stroke="#fff" stroke-width="5.5" stroke-linecap="round" fill="none"><path d="M30 78 V62"></path><path d="M50 78 V48"></path><path d="M70 78 V56"></path></g><g fill="#fff"><path d="M30 63 C22 57 22 45 30 41 C38 45 38 57 30 63 Z" opacity=".55"></path><path d="M50 49 C40 42 40 26 50 21 C60 26 60 42 50 49 Z"></path><path d="M70 57 C61 51 61 37 70 32 C79 37 79 51 70 57 Z" opacity=".78"></path></g></svg><em>44</em></span>
+          <span><svg width="30" height="30" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><g stroke="#fff" stroke-width="5.5" stroke-linecap="round" fill="none"><path d="M30 78 V62"></path><path d="M50 78 V48"></path><path d="M70 78 V56"></path></g><g fill="#fff"><path d="M30 63 C22 57 22 45 30 41 C38 45 38 57 30 63 Z" opacity=".55"></path><path d="M50 49 C40 42 40 26 50 21 C60 26 60 42 50 49 Z"></path><path d="M70 57 C61 51 61 37 70 32 C79 37 79 51 70 57 Z" opacity=".78"></path></g></svg><em>30</em></span>
+          <span><svg width="20" height="20" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><g stroke="#fff" stroke-width="5.5" stroke-linecap="round" fill="none"><path d="M30 78 V62"></path><path d="M50 78 V48"></path><path d="M70 78 V56"></path></g><g fill="#fff"><path d="M30 63 C22 57 22 45 30 41 C38 45 38 57 30 63 Z" opacity=".55"></path><path d="M50 49 C40 42 40 26 50 21 C60 26 60 42 50 49 Z"></path><path d="M70 57 C61 51 61 37 70 32 C79 37 79 51 70 57 Z" opacity=".78"></path></g></svg><em>20</em></span>
+        </div>
+      </div>
+    </figure>
+
+    <!-- B -->
+    <figure class="mark" style="margin:0">
+      <div class="mark__top">
+        <div class="mark__half mark__half--light">
+          <svg width="76" height="76" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><path d="M50 80 V50 C50 33 68 27 74 39 C79 49 68 58 60 52" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"></path><circle cx="64" cy="44" r="3.6" fill="#fff" opacity=".65"></circle></svg>
+        </div>
+        <div class="mark__half mark__half--dark">
+          <svg width="76" height="76" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="24" fill="#fff"></rect><path d="M50 80 V50 C50 33 68 27 74 39 C79 49 68 58 60 52" fill="none" stroke="#0E9E62" stroke-width="8" stroke-linecap="round"></path><circle cx="64" cy="44" r="3.6" fill="#0E9E62" opacity=".65"></circle></svg>
+        </div>
+      </div>
+      <div class="mark__body">
+        <div class="mark__name"><b>나 · 풀리는 새순</b></div>
+        <p>고사리순처럼 <b>돌돌 말렸다 풀리는</b> 새순입니다. 기억이 풀려 나오는 모습에 가장 가깝습니다.
+          다만 아주 작아지면 물음표나 달팽이로 보일 수 있습니다.</p>
+        <div class="sizes">
+          <span><svg width="44" height="44" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><path d="M50 80 V50 C50 33 68 27 74 39 C79 49 68 58 60 52" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"></path><circle cx="64" cy="44" r="3.6" fill="#fff" opacity=".65"></circle></svg><em>44</em></span>
+          <span><svg width="30" height="30" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><path d="M50 80 V50 C50 33 68 27 74 39 C79 49 68 58 60 52" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"></path><circle cx="64" cy="44" r="3.6" fill="#fff" opacity=".65"></circle></svg><em>30</em></span>
+          <span><svg width="20" height="20" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><path d="M50 80 V50 C50 33 68 27 74 39 C79 49 68 58 60 52" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"></path><circle cx="64" cy="44" r="3.6" fill="#fff" opacity=".65"></circle></svg><em>20</em></span>
+        </div>
+      </div>
+    </figure>
+
+    <!-- C -->
+    <figure class="mark" style="margin:0">
+      <div class="mark__top">
+        <div class="mark__half mark__half--light">
+          <svg width="76" height="76" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><g fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"><path d="M50 36 C38 46 32 60 33 74"></path><path d="M50 36 C62 46 68 60 67 74"></path></g><circle cx="50" cy="24" r="5" fill="#fff" opacity=".62"></circle></svg>
+        </div>
+        <div class="mark__half mark__half--dark">
+          <svg width="76" height="76" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="24" fill="#fff"></rect><g fill="none" stroke="#0E9E62" stroke-width="9" stroke-linecap="round"><path d="M50 36 C38 46 32 60 33 74"></path><path d="M50 36 C62 46 68 60 67 74"></path></g><circle cx="50" cy="24" r="5" fill="#0E9E62" opacity=".62"></circle></svg>
+        </div>
+      </div>
+      <div class="mark__body">
+        <div class="mark__name"><b>다 · ㅅ 싹</b></div>
+        <p>새록의 첫 자음 <b>ㅅ</b>이 그대로 <b>잎 두 장</b>이 됩니다. 한글에서 나온 모양이라 가장 독창적입니다.
+          다만 뜻을 알기 전에는 그냥 도형으로 보일 수 있습니다.</p>
+        <div class="sizes">
+          <span><svg width="44" height="44" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><g fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"><path d="M50 36 C38 46 32 60 33 74"></path><path d="M50 36 C62 46 68 60 67 74"></path></g><circle cx="50" cy="24" r="5" fill="#fff" opacity=".62"></circle></svg><em>44</em></span>
+          <span><svg width="30" height="30" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><g fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"><path d="M50 36 C38 46 32 60 33 74"></path><path d="M50 36 C62 46 68 60 67 74"></path></g><circle cx="50" cy="24" r="5" fill="#fff" opacity=".62"></circle></svg><em>30</em></span>
+          <span><svg width="20" height="20" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><g fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"><path d="M50 36 C38 46 32 60 33 74"></path><path d="M50 36 C62 46 68 60 67 74"></path></g><circle cx="50" cy="24" r="5" fill="#fff" opacity=".62"></circle></svg><em>20</em></span>
+        </div>
+      </div>
+    </figure>
+
+    <!-- D -->
+    <figure class="mark" style="margin:0">
+      <div class="mark__top">
+        <div class="mark__half mark__half--light">
+          <svg width="76" height="76" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><circle cx="50" cy="68" r="13" fill="#fff" opacity=".5"></circle><path d="M50 68 V40" stroke="#fff" stroke-width="6" stroke-linecap="round" fill="none"></path><path d="M50 46 C58 40 68 42 72 32 C61 29 51 36 50 46 Z" fill="#fff"></path></svg>
+        </div>
+        <div class="mark__half mark__half--dark">
+          <svg width="76" height="76" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="24" fill="#fff"></rect><circle cx="50" cy="68" r="13" fill="#0E9E62" opacity=".45"></circle><path d="M50 68 V40" stroke="#0E9E62" stroke-width="6" stroke-linecap="round" fill="none"></path><path d="M50 46 C58 40 68 42 72 32 C61 29 51 36 50 46 Z" fill="#0E9E62"></path></svg>
+        </div>
+      </div>
+      <div class="mark__body">
+        <div class="mark__name"><b>라 · 씨앗과 순</b></div>
+        <p>씨앗 하나에서 <b>순이 돋는</b> 모양입니다. “머리에서 기억이 돋는다”는 뜻으로 읽힙니다.
+          다만 잎이 한쪽으로만 나 있어 균형이 살짝 기울어 보입니다.</p>
+        <div class="sizes">
+          <span><svg width="44" height="44" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><circle cx="50" cy="68" r="13" fill="#fff" opacity=".5"></circle><path d="M50 68 V40" stroke="#fff" stroke-width="6" stroke-linecap="round" fill="none"></path><path d="M50 46 C58 40 68 42 72 32 C61 29 51 36 50 46 Z" fill="#fff"></path></svg><em>44</em></span>
+          <span><svg width="30" height="30" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><circle cx="50" cy="68" r="13" fill="#fff" opacity=".5"></circle><path d="M50 68 V40" stroke="#fff" stroke-width="6" stroke-linecap="round" fill="none"></path><path d="M50 46 C58 40 68 42 72 32 C61 29 51 36 50 46 Z" fill="#fff"></path></svg><em>30</em></span>
+          <span><svg width="20" height="20" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><circle cx="50" cy="68" r="13" fill="#fff" opacity=".5"></circle><path d="M50 68 V40" stroke="#fff" stroke-width="6" stroke-linecap="round" fill="none"></path><path d="M50 46 C58 40 68 42 72 32 C61 29 51 36 50 46 Z" fill="#fff"></path></svg><em>20</em></span>
+        </div>
+      </div>
+    </figure>
+
+  </div>
+
+  <!-- ================= 홈 화면 ================= -->
+  <p class="eyebrow" style="margin-top:3.4rem">진짜 시험</p>
+  <h2 class="sec">다른 앱들 사이에 놓아 봤습니다</h2>
+  <p class="sec-lead">아이콘은 혼자 있을 때가 아니라 <b>다른 아이콘들 틈에 있을 때</b> 판가름 납니다.
+    추천안(가)을 실제 홈 화면처럼 늘어놓았습니다.</p>
+
+  <div class="stage">
+    <div class="phone">
+      <p class="phone__time">오전 9:14</p>
+      <div class="grid4">
+        <div class="app"><i style="background:#F5C518;color:#1A1A1A">K</i><span>카카오톡</span></div>
+        <div class="app"><i style="background:#1EC800">N</i><span>네이버</span></div>
+        <div class="app"><i style="background:#EA4335">▶</i><span>유튜브</span></div>
+        <div class="app"><i style="background:#3B5998">f</i><span>날씨</span></div>
+
+        <div class="app app--ours">
+          <svg width="52" height="52" viewBox="0 0 100 100" aria-label="새록 아이콘"><rect width="100" height="100" rx="26" fill="#0E9E62"></rect><g stroke="#fff" stroke-width="5.5" stroke-linecap="round" fill="none"><path d="M30 78 V62"></path><path d="M50 78 V48"></path><path d="M70 78 V56"></path></g><g fill="#fff"><path d="M30 63 C22 57 22 45 30 41 C38 45 38 57 30 63 Z" opacity=".55"></path><path d="M50 49 C40 42 40 26 50 21 C60 26 60 42 50 49 Z"></path><path d="M70 57 C61 51 61 37 70 32 C79 37 79 51 70 57 Z" opacity=".78"></path></g></svg>
+          <span>새록</span>
+        </div>
+        <div class="app"><i style="background:#2C2C2E">☎</i><span>전화</span></div>
+        <div class="app"><i style="background:#0A84FF">✉</i><span>문자</span></div>
+        <div class="app"><i style="background:#8E8E93">⚙</i><span>설정</span></div>
+      </div>
+    </div>
+
+    <div class="note">
+      <h3>왜 이 색과 이 모양인가</h3>
+      <p><b>초록 타일이 남습니다.</b> 홈 화면은 노랑·빨강·파랑이 대부분입니다. 짙은 초록은 그 사이에서 조용히 눈에 띕니다.
+        시끄럽게 튀지 않으면서 손이 가는 자리를 만듭니다.</p>
+      <p><b>싹은 아래쪽에 심습니다.</b> 마크를 가운데가 아니라 바닥에 붙여 세웠습니다.
+        땅에서 자란다는 느낌이 생기고, 둥근 모서리에 잘리지 않습니다.</p>
+      <p><b>세 싹의 크기를 다르게</b> 두어 자라는 중이라는 것을 보여 줍니다.
+        가장 큰 싹이 가운데라 어느 크기에서도 중심이 잡힙니다.</p>
+    </div>
+  </div>
+
+  <!-- ================= 적용 예 ================= -->
+  <p class="eyebrow" style="margin-top:3.4rem">쓰이는 자리</p>
+  <h2 class="sec">앱 안에서는 이렇게</h2>
+  <p class="sec-lead">이름이 바뀌면 앱 상단, 여는 화면, 브라우저 탭까지 함께 바뀝니다.</p>
+
+  <div class="apply">
+    <figure class="card" style="margin:0">
+      <div class="bar">
+        <svg width="38" height="38" viewBox="0 0 100 100"><rect width="100" height="100" rx="26" fill="#0E9E62"></rect><g stroke="#fff" stroke-width="5.5" stroke-linecap="round" fill="none"><path d="M30 78 V62"></path><path d="M50 78 V48"></path><path d="M70 78 V56"></path></g><g fill="#fff"><path d="M30 63 C22 57 22 45 30 41 C38 45 38 57 30 63 Z" opacity=".55"></path><path d="M50 49 C40 42 40 26 50 21 C60 26 60 42 50 49 Z"></path><path d="M70 57 C61 51 61 37 70 32 C79 37 79 51 70 57 Z" opacity=".78"></path></g></svg>
+        <span class="bar__t"><b>새록</b><em>매일 조금씩, 기억이 새록새록</em></span>
+      </div>
+      <figcaption>앱 상단</figcaption>
+    </figure>
+
+    <figure class="card" style="margin:0">
+      <div class="splash">
+        <svg width="58" height="58" viewBox="0 0 100 100"><rect width="100" height="100" rx="26" fill="#fff" opacity=".14"></rect><g stroke="#fff" stroke-width="5.5" stroke-linecap="round" fill="none"><path d="M30 78 V62"></path><path d="M50 78 V48"></path><path d="M70 78 V56"></path></g><g fill="#fff"><path d="M30 63 C22 57 22 45 30 41 C38 45 38 57 30 63 Z" opacity=".55"></path><path d="M50 49 C40 42 40 26 50 21 C60 26 60 42 50 49 Z"></path><path d="M70 57 C61 51 61 37 70 32 C79 37 79 51 70 57 Z" opacity=".78"></path></g></svg>
+        <b>새록</b>
+      </div>
+      <figcaption>여는 화면</figcaption>
+    </figure>
+
+    <figure class="card" style="margin:0">
+      <div class="favrow">
+        <svg width="16" height="16" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#0E9E62"></rect><g stroke="#fff" stroke-width="5.5" stroke-linecap="round" fill="none"><path d="M30 78 V62"></path><path d="M50 78 V48"></path><path d="M70 78 V56"></path></g><g fill="#fff"><path d="M30 63 C22 57 22 45 30 41 C38 45 38 57 30 63 Z" opacity=".55"></path><path d="M50 49 C40 42 40 26 50 21 C60 26 60 42 50 49 Z"></path><path d="M70 57 C61 51 61 37 70 32 C79 37 79 51 70 57 Z" opacity=".78"></path></g></svg>
+        <span>새록 · 두뇌 훈련</span><em>saerok</em>
+      </div>
+      <div class="favrow" style="background:#fff;border:1px solid var(--line)">
+        <span style="font-family:'Manrope',sans-serif;font-size:.7rem;color:var(--fg-2)">saerok.netlify.app</span>
+        <em style="color:var(--leaf);font-weight:800">비어 있음</em>
+      </div>
+      <figcaption>브라우저 탭 · 주소</figcaption>
+    </figure>
+  </div>
+
+  <!-- ================= 마무리 ================= -->
+  <div class="close">
+    <h2>‘가 · 세 싹’으로 만들어 두었습니다</h2>
+    <p>네 후보 중 <b>작은 크기에서 가장 또렷하고</b>, 이름의 뜻(새록<b>새록</b>, 반복)까지 담는 것이 ‘가’였습니다.
+      앱에는 이미 이 마크로 적용해 두었으니, 다른 것이 마음에 드시면 말씀만 하시면 됩니다. 바꾸는 데 오래 걸리지 않습니다.</p>
+
+    <p><b>남은 일은 주소 바꾸기 하나입니다.</b> 이것만 직접 해 주셔야 합니다.</p>
+    <ol>
+      <li>Netlify → 프로젝트 → <b>Project configuration → General → Change project name</b></li>
+      <li><b>saerok</b> 으로 변경 (비어 있는 것 확인했습니다)</li>
+      <li>새 zip 을 <b>Production deploys</b> 에 끌어다 놓기</li>
+      <li>테스트로 설치해 둔 앱을 지우고 <b>saerok.netlify.app</b> 에서 다시 설치</li>
+    </ol>
+
+    <div class="warn">
+      <p><b>테스트 점수를 남기시려면</b> 지우기 전에 기록 화면에서 <b>기록 내보내기</b>를 눌러 파일을 받아 두세요.</p>
+      <p>새 주소에서 설치한 뒤 <b>기록 가져오기</b>로 넣으면 그대로 옮겨집니다. 같은 판이 두 번 들어가지 않게 걸러 냅니다.</p>
+    </div>
+  </div>
+
+</div>

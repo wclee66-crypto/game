@@ -1,5 +1,5 @@
 /* ============================================================
-   맑은뜰 — 건강 기록 스타일
+   새록 — 건강 기록 스타일
    흰 바탕 · 옅은 면과 얇은 선 · 초록 포인트 하나 · 그림자 없음
    큰 글씨와 큰 누름 영역은 그대로 지킵니다.
    ============================================================ */
@@ -75,12 +75,10 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .appbar__title h1 { margin: 0; font-size: 1.16rem; font-weight: 800; letter-spacing: -.025em; }
 .appbar__title p { margin: 0; font-size: .68rem; color: var(--ink-3); font-weight: 500; }
 
-/* 앱 표시 */
+/* 앱 표시 — 새싹 마크 (rect 가 currentColor 를 쓰므로 색은 여기서 정한다) */
 .seal {
-  flex: none; width: 2.1rem; height: 2.1rem; border-radius: 50%;
-  background: var(--accent); color: #fff;
-  display: grid; place-items: center;
-  font-size: .92rem; font-weight: 800;
+  flex: none; width: 2.2rem; height: 2.2rem; display: block;
+  color: var(--accent);
 }
 
 /* ================= 본문 ================= */

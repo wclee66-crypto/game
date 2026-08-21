@@ -1,4 +1,4 @@
-/* 맑은뜰 — 저장소
+/* 새록 — 저장소
  * 모든 점수/설정/진행중 게임을 localStorage 한 곳에 모아 관리한다.
  * 스키마:
  * {
@@ -215,7 +215,7 @@ window.Store = (function () {
   function importJSON(text) {
     var incoming = JSON.parse(text);
     if (!incoming || typeof incoming !== 'object' || !incoming.records) {
-      throw new Error('맑은뜰에서 내보낸 파일이 아닙니다.');
+      throw new Error('새록에서 내보낸 파일이 아닙니다.');
     }
     var d = load(), added = 0;
     Object.keys(incoming.records).forEach(function (day) {
