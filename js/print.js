@@ -3,7 +3,8 @@
  * 화면용 게임과는 별개로, 연필로 풀 수 있는 A4 문제지를 만든다.
  * 시간·힌트·실수 같은 화면용 정보는 넣지 않고 문제만 크게 담는다.
  *
- * 브라우저의 인쇄 창에서 '대상'을 'PDF로 저장'으로 고르면 PDF 파일이 된다.
+ * 인쇄 창에서 프린터를 'Microsoft Print to PDF'(윈도우) 나 'PDF로 저장'(크롬·엣지)으로
+ * 바꾸면 종이 대신 PDF 파일이 된다. 창 모양은 브라우저마다 달라서 둘 다 안내한다.
  */
 window.Print = (function () {
 
@@ -359,7 +360,7 @@ window.Print = (function () {
       (cl
         ? '<p class="modal__msg">크레파스나 색연필로 칠할 <b>A4 색칠 도안</b>을 만듭니다. 번호와 색깔표가 함께 인쇄됩니다.</p>'
         : '<p class="modal__msg">연필로 풀 수 있는 <b>A4 문제지</b>를 만듭니다.</p>') +
-      '<p class="modal__msg small">인쇄 창에서 <b>대상</b>을 <b>“PDF로 저장”</b>으로 고르면 파일로 저장됩니다.</p>' +
+      '<p class=\'modal__msg small\'>종이에 찍지 않고 <b>PDF 파일로 저장</b>하시려면, 인쇄 창의 <b>프린터</b>를 <b>“Microsoft Print to PDF”</b> 또는 <b>“PDF로 저장”</b>으로 바꾸고 인쇄를 누르세요.</p>' +
       '<div class="settings">' +
         '<div class="set set--stack"><span class="set__lbl">난이도</span>' + seg('prLevel', levelItems, pick.level) +
           '<span class="set__hint" id="prHint">' + esc(G.levels[pick.level].note || '') + '</span></div>' +

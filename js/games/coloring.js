@@ -404,7 +404,7 @@ window.Games.coloring = (function () {
     var m = UI.modal({
       title: '종이로 인쇄',
       body: '<p class="modal__msg">지금 이 그림을 A4 한 장으로 인쇄합니다.<br>' +
-            '인쇄 창에서 <b>대상</b>을 <b>“PDF로 저장”</b>으로 고르면 파일로 저장됩니다.</p>' +
+            'PDF 파일로 저장하시려면 인쇄 창의 <b>프린터</b>를 <b>“Microsoft Print to PDF”</b> 또는 <b>“PDF로 저장”</b>으로 바꾸세요.</p>' +
             '<div class="settings"><div class="set"><span class="set__lbl">무엇을</span>' +
             '<div class="seg" id="clPrKind">' +
               '<button data-v="blank" class="is-on">빈 도안</button>' +
