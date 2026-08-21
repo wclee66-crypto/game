@@ -236,13 +236,21 @@ button.install:active { transform: scale(.99); }
 
 .levels { display: flex; flex-direction: column; gap: .55rem; }
 .level {
-  display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto;
-  gap: .1rem .85rem; text-align: left; align-items: center;
+  display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto auto;
+  gap: 0 .85rem; text-align: left; align-items: center;
   background: var(--surf); border: 1px solid var(--line);
-  border-radius: var(--r); padding: .85rem 1rem;
+  border-radius: var(--r); padding: .8rem 1rem;
 }
 .level:active { transform: scale(.99); }
-.level__name { grid-row: 1 / 3; font-size: 1.2rem; font-weight: 800; min-width: 3.4rem; letter-spacing: -.03em; }
+.level__step {
+  grid-column: 1; grid-row: 1;
+  font-family: var(--font-num); font-size: .66rem; font-weight: 800;
+  color: var(--accent-d); background: var(--accent-s);
+  border-radius: 999px; padding: .1rem .45rem; justify-self: start;
+}
+.level__name { grid-column: 1; grid-row: 2 / 4; font-size: 1.2rem; font-weight: 800; min-width: 3.6rem; letter-spacing: -.03em; }
+.level__meta { grid-column: 2; grid-row: 1 / 3; align-self: end; }
+.level__bonus { grid-column: 2; grid-row: 3; align-self: start; }
 .level__meta { font-size: .78rem; color: var(--ink-2); }
 .level__bonus { font-size: .72rem; color: var(--accent-d); font-weight: 700; }
 .level.is-loading { opacity: .55; pointer-events: none; }
@@ -289,7 +297,7 @@ button.install:active { transform: scale(.99); }
 /* ================= 스도쿠 ================= */
 
 .sd-grid {
-  display: grid; grid-template-columns: repeat(9, 1fr);
+  display: grid; grid-template-columns: repeat(var(--n, 9), 1fr);
   width: 100%; aspect-ratio: 1; margin: 0 auto;
   background: var(--line-2); border-radius: 12px; overflow: hidden;
   padding: 1px; gap: 0;
@@ -299,12 +307,12 @@ button.install:active { transform: scale(.99); }
   border: 0; padding: 0; background: var(--bg);
   display: grid; place-items: center;
   font-family: var(--font-num); font-weight: 600;
-  font-size: clamp(1rem, 5.4vw, 1.7rem);
+  font-size: calc(min(88vw, 540px) / var(--n, 9) * .46);
   color: var(--accent-d); line-height: 1;
   margin: 0 1px 1px 0;
 }
-.sd-cell:nth-child(9n) { margin-right: 0; }
-.sd-cell:nth-child(n+73) { margin-bottom: 0; }
+.sd-cell.er { margin-right: 0; }
+.sd-cell.eb { margin-bottom: 0; }
 .sd-cell.br { margin-right: 3px; }
 .sd-cell.bb { margin-bottom: 3px; }
 .sd-cell.is-given { color: var(--ink); font-weight: 800; }
@@ -555,10 +563,14 @@ button.install:active { transform: scale(.99); }
   font-family: var(--font-num); font-weight: 800; font-size: 1rem; color: var(--accent-d);
   background: var(--accent-s); border-radius: 999px; padding: .25rem .8rem;
 }
-.seg { display: flex; gap: .25rem; background: var(--surf-2); padding: .22rem; border-radius: 999px; }
+.set--stack { flex-direction: column; align-items: stretch; gap: .45rem; }
+.set--stack .set__lbl { font-size: .88rem; }
+.set__hint { font-size: .74rem; color: var(--ink-3); }
+.seg { display: flex; flex-wrap: wrap; gap: .25rem; background: var(--surf-2); padding: .22rem; border-radius: 999px; }
 .seg button {
-  border: 0; background: none; border-radius: 999px; padding: .45rem .85rem;
-  font-size: .82rem; font-weight: 700; color: var(--ink-2);
+  flex: 1 1 auto; min-width: 0;
+  border: 0; background: none; border-radius: 999px; padding: .45rem .7rem;
+  font-size: .8rem; font-weight: 700; color: var(--ink-2); white-space: nowrap;
 }
 .seg button.is-on { background: var(--bg); color: var(--ink); }
 .export { width: 100%; height: 9rem; font-size: .7rem; font-family: monospace; border-radius: var(--r-sm); border: 1px solid var(--line); padding: .6rem; }
@@ -641,9 +653,10 @@ button.install:active { transform: scale(.99); }
 
   .ps-sd { border-collapse: collapse; margin: 0 auto; border: 2.4pt solid #000; }
   .ps-sd td {
-    width: 17mm; height: 17mm; padding: 0;
+    width: calc(160mm / var(--pn, 9)); height: calc(160mm / var(--pn, 9)); padding: 0;
     border: 0.7pt solid #000; text-align: center; vertical-align: middle;
-    font-family: 'Manrope', sans-serif; font-size: 22pt; font-weight: 700;
+    font-family: 'Manrope', sans-serif; font-weight: 700;
+    font-size: calc(95mm / var(--pn, 9));
   }
   .ps-sd td.br { border-right: 2.4pt solid #000; }
   .ps-sd td.bb { border-bottom: 2.4pt solid #000; }

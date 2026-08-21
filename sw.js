@@ -4,7 +4,7 @@
  * 인터넷이 없거나 서버가 꺼져 있으면 저장해 둔 파일로 실행합니다.
  * 파일을 고친 뒤에는 아래 VERSION 을 올려 주세요. (js/app.js 의 APP_VERSION 도 같이)
  */
-var VERSION = 'malgeunddeul-v14';
+var VERSION = 'malgeunddeul-v16';
 var ASSETS = [
   './', './index.html', './manifest.json',
   './css/style.css',
@@ -44,12 +44,12 @@ function offlinePage() {
     '<!doctype html><html lang="ko"><head><meta charset="utf-8">' +
     '<meta name="viewport" content="width=device-width,initial-scale=1">' +
     '<title>맑은뜰</title><style>' +
-    'body{margin:0;min-height:100vh;display:grid;place-items:center;background:#F4EEE2;color:#23262E;' +
+    'body{margin:0;min-height:100vh;display:grid;place-items:center;background:#FFFFFF;color:#0E1A14;' +
     'font-family:-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;padding:2rem;text-align:center}' +
-    '.b{max-width:22rem}.s{width:3.4rem;height:3.4rem;border-radius:10px;background:#C8452F;color:#FBF3E4;' +
-    'display:grid;place-items:center;font-size:1.7rem;font-weight:700;margin:0 auto 1.2rem;font-family:serif}' +
-    'h1{font-size:1.25rem;margin:0 0 .8rem}p{color:#5C6474;line-height:1.75;font-size:.95rem;margin:0 0 1.4rem}' +
-    'button{background:#C8452F;color:#FDF6E9;border:0;border-radius:14px;padding:.9rem 1.6rem;' +
+    '.b{max-width:22rem}.s{width:3.4rem;height:3.4rem;border-radius:50%;background:#0E9E62;color:#fff;' +
+    'display:grid;place-items:center;font-size:1.5rem;font-weight:800;margin:0 auto 1.2rem}' +
+    'h1{font-size:1.25rem;margin:0 0 .8rem;font-weight:800}p{color:#4F6459;line-height:1.75;font-size:.95rem;margin:0 0 1.4rem}' +
+    'button{background:#0E9E62;color:#fff;border:0;border-radius:14px;padding:.9rem 1.6rem;' +
     'font-size:1rem;font-weight:700}</style></head><body><div class="b">' +
     '<div class="s">맑</div><h1>지금은 열 수 없습니다</h1>' +
     '<p>인터넷에 연결되어 있지 않거나,<br>앱을 내려받은 주소에 연결할 수 없습니다.<br>' +

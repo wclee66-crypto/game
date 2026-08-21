@@ -6,11 +6,21 @@ window.Games.quiz = (function () {
 
   /* 난이도는 세 가지가 함께 달라진다 — 문항 수 · 문항당 시간 · 문제의 어려움(pool)
    * pool 은 문제 은행의 d 값(1 쉬움 / 2 보통 / 3 어려움) 중 어떤 것을 낼지 정한다. */
+  /* 앞 두 단계는 문항을 줄이고, 시간을 늘리고, 보기 수까지 줄인다.
+     보기가 넷에서 둘로 줄면 체감 난이도가 크게 낮아진다. */
   var LEVELS = {
-    easy:   { name: '기본', count: 10, time: 25, bonus: 0,   pool: [1, 2], desc: '쉬운 문제 위주' },
-    normal: { name: '보통', count: 15, time: 16, bonus: 100, pool: [2, 3], desc: '보통 이상 문제' },
-    hard:   { name: '도전', count: 20, time: 10, bonus: 250, pool: [3],    desc: '어려운 문제만' }
+    step1:  { name: '첫걸음', step: 1, count: 5,  time: 40, opts: 2, bonus: 0,   pool: [1],
+              note: '5문항 · 보기 2개 · 문항당 40초 · 쉬운 문제만' },
+    step2:  { name: '가볍게', step: 2, count: 8,  time: 30, opts: 3, bonus: 0,   pool: [1],
+              note: '8문항 · 보기 3개 · 문항당 30초 · 쉬운 문제만' },
+    easy:   { name: '기본',   step: 3, count: 10, time: 25, opts: 4, bonus: 0,   pool: [1, 2],
+              note: '10문항 · 보기 4개 · 문항당 25초' },
+    normal: { name: '보통',   step: 4, count: 15, time: 16, opts: 4, bonus: 100, pool: [2, 3],
+              note: '15문항 · 보기 4개 · 문항당 16초 · 보통 이상' },
+    hard:   { name: '도전',   step: 5, count: 20, time: 10, opts: 4, bonus: 250, pool: [3],
+              note: '20문항 · 보기 4개 · 문항당 10초 · 어려운 문제만' }
   };
+  var ORDER = ['step1', 'step2', 'easy', 'normal', 'hard'];
 
   function qtime() { return (LEVELS[S.level] || LEVELS.easy).time; }
 
@@ -35,7 +45,7 @@ window.Games.quiz = (function () {
 
   function dOf(q) { return q.d || 1; }
 
-  function pickQuestions(cat, n, pool) {
+  function pickQuestions(cat, n, pool, nOpts) {
     var all = QUIZ_DATA.items.filter(function (q) { return cat === 'all' || q.c === cat; });
     var want = shuffle(all.filter(function (q) { return pool.indexOf(dOf(q)) >= 0; }));
     var picked = want.slice(0, n);
@@ -49,7 +59,15 @@ window.Games.quiz = (function () {
 
     return picked.map(function (q) {
       var opts = q.a.map(function (text, i) { return { text: text, ok: i === q.k }; });
+
+      // 보기 수를 줄일 때는 정답 하나에 오답을 필요한 만큼만 남긴다
+      if (nOpts && nOpts < opts.length) {
+        var right = opts.filter(function (o) { return o.ok; })[0];
+        var wrongs = shuffle(opts.filter(function (o) { return !o.ok; })).slice(0, nOpts - 1);
+        opts = [right].concat(wrongs);
+      }
       shuffle(opts);
+
       return {
         c: q.c, q: q.q, d: dOf(q),
         options: opts.map(function (o) { return o.text; }),
@@ -60,7 +78,7 @@ window.Games.quiz = (function () {
 
   function newGame(level, cat) {
     var L = LEVELS[level];
-    var qs = pickQuestions(cat, L.count, L.pool);
+    var qs = pickQuestions(cat, L.count, L.pool, L.opts);
     S = {
       day: Store.dayKey(), level: level, cat: cat,
       qs: qs, i: 0,
@@ -118,7 +136,7 @@ window.Games.quiz = (function () {
       '<section class="intro">' +
         '<div class="intro__mark">상</div>' +
         '<h2 class="intro__title">상식 퀴즈</h2>' +
-        '<p class="intro__desc">네 개의 보기 가운데 하나를 고릅니다.<br>빨리 맞힐수록 점수가 높습니다.<br><small>어려운 판일수록 문제가 어렵고 시간도 짧습니다.</small></p>' +
+        '<p class="intro__desc">보기 가운데 하나를 고릅니다.<br>빨리 맞힐수록 점수가 높습니다.<br><small>1단계는 보기가 둘뿐이고 시간도 넉넉합니다.<br>단계가 오를수록 문제가 어렵고 시간이 짧아집니다.</small></p>' +
         (best ? '<p class="intro__best">나의 최고 기록 <b>' + UI.comma(best.score) + '점</b></p>' : '') +
         (sess ? '<button class="btn btn--accent btn--big" id="qzResume">이어서 하기 <small>' + (sess.i + 1) + '번 문제부터' + (sess.review ? ' · 복습' : '') + '</small></button>' : '') +
         (wrong.length
@@ -131,14 +149,15 @@ window.Games.quiz = (function () {
             return '<button class="chip' + (i === 0 ? ' is-on' : '') + '" data-cat="' + c.id + '">' + c.name + '</button>';
           }).join('') +
         '</div>' +
-        '<h3 class="intro__sub">문항 수 고르기</h3>' +
+        '<h3 class="intro__sub">난이도 고르기</h3>' +
         '<div class="levels">' +
-          Object.keys(LEVELS).map(function (k) {
+          ORDER.map(function (k) {
             var L = LEVELS[k];
             return '<button class="level" data-level="' + k + '">' +
+              '<span class="level__step">' + L.step + '단계</span>' +
               '<span class="level__name">' + L.name + '</span>' +
-              '<span class="level__meta">' + L.count + '문항 · 문항당 ' + L.time + '초 · ' + L.desc + '</span>' +
-              (L.bonus ? '<span class="level__bonus">난이도 보너스 +' + L.bonus + '</span>' : '<span class="level__bonus">기본</span>') +
+              '<span class="level__meta">' + L.note + '</span>' +
+              '<span class="level__bonus">' + (L.bonus ? '난이도 보너스 +' + L.bonus : '기본') + '</span>' +
               '</button>';
           }).join('') +
         '</div>' +
@@ -325,7 +344,7 @@ window.Games.quiz = (function () {
 
     var sc = score();
     Store.addRecord({
-      game: 'quiz', score: sc.total, difficulty: LEVELS[S.level].name + ' · ' + catName(S.cat),
+      game: 'quiz', score: sc.total, difficulty: LEVELS[S.level].step + '단계 ' + LEVELS[S.level].name + ' · ' + catName(S.cat),
       duration: S.elapsed,
       detail: { correct: sc.correct, count: sc.count, streak: sc.streak, cat: S.cat }
     });
@@ -406,7 +425,7 @@ window.Games.quiz = (function () {
       lines: [
         ['정답 점수', '최대 700점 · 맞힌 문항 수에 비례'],
         ['속도 보너스', '최대 200점 · 정답을 빨리 고를수록 높음'],
-        ['난이도 차이', '기본 10문항·25초·쉬운 문제 / 보통 15문항·16초·보통 이상 / 도전 20문항·10초·어려운 문제만'],
+        ['난이도', '1단계 첫걸음 5문항·보기 2개·40초 / 2단계 가볍게 8문항·보기 3개·30초 / 3단계 기본 10문항·25초 / 4단계 보통 15문항·16초 / 5단계 도전 20문항·10초'],
         ['연속 정답 보너스', '최대 100점 · 3연속부터 25점씩 (3연속 25 / 4연속 50 / 5연속 75 / 6연속 이상 100)'],
         ['오답 감점', '없음 — 틀려도 점수가 깎이지 않습니다'],
         ['난이도 보너스', '보통(15문항) +100점, 도전(20문항) +250점 (끝까지 풀었을 때)'],

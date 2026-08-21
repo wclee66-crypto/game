@@ -22,16 +22,18 @@ window.Print = (function () {
 
   /* ---------------- 스도쿠 ---------------- */
 
-  function sudokuGrid(cells, opts) {
+  /** b = {n, br, bc} 판 모양, cells = 채울 값 */
+  function sudokuGrid(b, cells, opts) {
     opts = opts || {};
-    var out = '<table class="ps-sd"><tbody>';
-    for (var r = 0; r < 9; r++) {
+    var N = b.n;
+    var out = '<table class="ps-sd" style="--pn:' + N + '"><tbody>';
+    for (var r = 0; r < N; r++) {
       out += '<tr>';
-      for (var c = 0; c < 9; c++) {
-        var i = r * 9 + c;
+      for (var c = 0; c < N; c++) {
+        var i = r * N + c;
         var cls = [];
-        if (c % 3 === 2 && c !== 8) cls.push('br');
-        if (r % 3 === 2 && r !== 8) cls.push('bb');
+        if (c % b.bc === b.bc - 1 && c !== N - 1) cls.push('br');
+        if (r % b.br === b.br - 1 && r !== N - 1) cls.push('bb');
         var v = cells[i];
         var given = opts.givens ? opts.givens[i] : v;
         if (opts.answer && !given) cls.push('ans');     // 정답지에서 채워 넣은 칸
@@ -48,14 +50,14 @@ window.Print = (function () {
       var made = Games.sudoku.makeForPrint(o.level);
       pages.push('<section class="ps-sheet">' +
         sheetHead('스도쿠', made.levelName + (o.count > 1 ? ' · ' + (n + 1) + '번' : ''),
-          '가로줄·세로줄·굵은 네모 칸마다 1부터 9까지 한 번씩만 들어갑니다.') +
-        sudokuGrid(made.puzzle) +
+          '가로줄·세로줄·굵은 네모 칸마다 1부터 ' + made.n + '까지 한 번씩만 들어갑니다.') +
+        sudokuGrid(made, made.puzzle) +
       '</section>');
 
       if (o.answer) {
         pages.push('<section class="ps-sheet ps-sheet--ans">' +
           sheetHead('스도쿠 정답', made.levelName + (o.count > 1 ? ' · ' + (n + 1) + '번' : ''), '') +
-          sudokuGrid(made.solution, { givens: made.puzzle, answer: true }) +
+          sudokuGrid(made, made.solution, { givens: made.puzzle, answer: true }) +
         '</section>');
       }
     }
@@ -131,14 +133,16 @@ window.Print = (function () {
 
   function dialog(game) {
     var G = Games[game];
-    var levelItems = Object.keys(G.levels).map(function (k) { return [k, G.levels[k].name]; });
+    var order = G.levelOrder || Object.keys(G.levels);
+    var levelItems = order.map(function (k) { return [k, G.levels[k].step + '단계'] ; });
     var pick = { level: levelItems[0][0], count: 1, answer: false };
 
     var body =
       '<p class="modal__msg">연필로 풀 수 있는 <b>A4 문제지</b>를 만듭니다. ' +
       '인쇄 창에서 <b>대상</b>을 <b>“PDF로 저장”</b>으로 고르면 파일로 저장됩니다.</p>' +
       '<div class="settings">' +
-        '<div class="set"><span class="set__lbl">난이도</span>' + seg('prLevel', levelItems, pick.level) + '</div>' +
+        '<div class="set set--stack"><span class="set__lbl">난이도</span>' + seg('prLevel', levelItems, pick.level) +
+          '<span class="set__hint" id="prHint">' + esc(G.levels[pick.level].note || '') + '</span></div>' +
         '<div class="set"><span class="set__lbl">장수</span>' +
           seg('prCount', [['1', '1장'], ['2', '2장'], ['4', '4장']], '1') + '</div>' +
         '<div class="set"><span class="set__lbl">정답지</span>' +
@@ -165,7 +169,11 @@ window.Print = (function () {
         });
       });
     }
-    bind('prLevel', function (v) { pick.level = v; });
+    bind('prLevel', function (v) {
+      pick.level = v;
+      var h = m.card.querySelector('#prHint');
+      if (h) h.textContent = G.levels[v].note || '';
+    });
     bind('prCount', function (v) { pick.count = +v; });
     bind('prAns', function (v) { pick.answer = (v === 'yes'); });
   }

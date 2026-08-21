@@ -1,20 +1,34 @@
 /* 맑은뜰 — 스도쿠
  * 점수: 완성 500 + 시간 300 + 정확도 200 − (힌트 50/회) + 난이도 보너스
+ *
+ * 난이도는 다섯 단계이고, 앞 두 단계는 판 자체를 작게 만든다.
+ * 숫자만 많이 주는 것으로는 9칸 판이 쉬워지지 않기 때문이다.
+ *   n  = 한 줄의 칸 수, br·bc = 굵은 네모 한 칸의 세로·가로 크기
  */
 window.Games = window.Games || {};
 window.Games.sudoku = (function () {
 
   var LEVELS = {
-    easy:   { name: '쉬움',   givens: 45, limit: 480,  bonus: 0 },
-    normal: { name: '보통',   givens: 34, limit: 720,  bonus: 100 },
-    hard:   { name: '어려움', givens: 28, limit: 1080, bonus: 250 }
+    step1:  { name: '첫걸음', step: 1, n: 4, br: 2, bc: 2, givens: 8,  limit: 240,  bonus: 0,
+              note: '4칸 판 · 숫자 1~4' },
+    step2:  { name: '가볍게', step: 2, n: 6, br: 2, bc: 3, givens: 20, limit: 420,  bonus: 0,
+              note: '6칸 판 · 숫자 1~6' },
+    easy:   { name: '쉬움',   step: 3, n: 9, br: 3, bc: 3, givens: 45, limit: 480,  bonus: 0,
+              note: '9칸 판 · 숫자 45개로 시작' },
+    normal: { name: '보통',   step: 4, n: 9, br: 3, bc: 3, givens: 34, limit: 720,  bonus: 100,
+              note: '9칸 판 · 숫자 34개로 시작' },
+    hard:   { name: '어려움', step: 5, n: 9, br: 3, bc: 3, givens: 28, limit: 1080, bonus: 250,
+              note: '9칸 판 · 숫자 28개로 시작' }
   };
+  var ORDER = ['step1', 'step2', 'easy', 'normal', 'hard'];
 
   var S = null;      // 현재 게임 상태
   var root = null;
   var timer = null;
   var els = {};
-  var mounted = false;   // 이 게임이 화면에 올라와 있는가
+  var mounted = false;
+
+  function lv() { return LEVELS[S.level] || LEVELS.easy; }
 
   /* ================= 퍼즐 만들기 ================= */
 
@@ -26,25 +40,31 @@ window.Games.sudoku = (function () {
     return a;
   }
 
-  function canPlace(g, i, v) {
-    var r = Math.floor(i / 9), c = i % 9;
-    var br = Math.floor(r / 3) * 3, bc = Math.floor(c / 3) * 3;
-    for (var k = 0; k < 9; k++) {
-      if (g[r * 9 + k] === v) return false;
-      if (g[k * 9 + c] === v) return false;
-      if (g[(br + Math.floor(k / 3)) * 9 + bc + (k % 3)] === v) return false;
+  /** i 칸에 v 를 놓아도 되는가 */
+  function canPlace(g, i, v, L) {
+    var N = L.n, r = Math.floor(i / N), c = i % N, k;
+    for (k = 0; k < N; k++) {
+      if (g[r * N + k] === v) return false;
+      if (g[k * N + c] === v) return false;
+    }
+    var r0 = Math.floor(r / L.br) * L.br, c0 = Math.floor(c / L.bc) * L.bc;
+    for (var rr = 0; rr < L.br; rr++) {
+      for (var cc = 0; cc < L.bc; cc++) {
+        if (g[(r0 + rr) * N + c0 + cc] === v) return false;
+      }
     }
     return true;
   }
 
-  function fill(g, pos) {
-    if (pos === 81) return true;
-    if (g[pos]) return fill(g, pos + 1);
-    var nums = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]);
-    for (var i = 0; i < 9; i++) {
-      if (canPlace(g, pos, nums[i])) {
+  function fill(g, pos, L) {
+    var N = L.n;
+    if (pos === N * N) return true;
+    if (g[pos]) return fill(g, pos + 1, L);
+    var nums = shuffle(Array.from({ length: N }, function (_, i) { return i + 1; }));
+    for (var i = 0; i < N; i++) {
+      if (canPlace(g, pos, nums[i], L)) {
         g[pos] = nums[i];
-        if (fill(g, pos + 1)) return true;
+        if (fill(g, pos + 1, L)) return true;
         g[pos] = 0;
       }
     }
@@ -52,21 +72,21 @@ window.Games.sudoku = (function () {
   }
 
   /** 해가 몇 개인지 센다 (limit개를 넘으면 바로 중단) */
-  function countSolutions(g, limit) {
-    var best = -1, bestCount = 10;
-    for (var i = 0; i < 81; i++) {
+  function countSolutions(g, limit, L) {
+    var N = L.n, best = -1, bestCount = N + 1, i, v;
+    for (i = 0; i < N * N; i++) {
       if (g[i]) continue;
       var n = 0;
-      for (var v = 1; v <= 9; v++) if (canPlace(g, i, v)) n++;
+      for (v = 1; v <= N; v++) if (canPlace(g, i, v, L)) n++;
       if (n === 0) return 0;
       if (n < bestCount) { bestCount = n; best = i; if (n === 1) break; }
     }
     if (best === -1) return 1;
     var total = 0;
-    for (var v2 = 1; v2 <= 9; v2++) {
-      if (!canPlace(g, best, v2)) continue;
-      g[best] = v2;
-      total += countSolutions(g, limit - total);
+    for (v = 1; v <= N; v++) {
+      if (!canPlace(g, best, v, L)) continue;
+      g[best] = v;
+      total += countSolutions(g, limit - total, L);
       g[best] = 0;
       if (total >= limit) return total;
     }
@@ -74,15 +94,16 @@ window.Games.sudoku = (function () {
   }
 
   function makePuzzle(level) {
-    var sol = new Array(81).fill(0);
-    fill(sol, 0);
+    var L = LEVELS[level], N = L.n;
+    var sol = new Array(N * N).fill(0);
+    fill(sol, 0, L);
     var puz = sol.slice();
-    var order = shuffle(Array.from({ length: 81 }, function (_, i) { return i; }));
-    var removed = 0, target = 81 - LEVELS[level].givens;
+    var order = shuffle(Array.from({ length: N * N }, function (_, i) { return i; }));
+    var removed = 0, target = N * N - L.givens;
     for (var i = 0; i < order.length && removed < target; i++) {
       var p = order[i], keep = puz[p];
       puz[p] = 0;
-      if (countSolutions(puz.slice(), 2) !== 1) puz[p] = keep;
+      if (countSolutions(puz.slice(), 2, L) !== 1) puz[p] = keep;
       else removed++;
     }
     return { puzzle: puz, solution: sol };
@@ -92,13 +113,14 @@ window.Games.sudoku = (function () {
 
   function newGame(level) {
     var made = makePuzzle(level);
+    var N = LEVELS[level].n;
     S = {
       day: Store.dayKey(),
       level: level,
       puzzle: made.puzzle,
       solution: made.solution,
       values: made.puzzle.slice(),
-      notes: Array.from({ length: 81 }, function () { return []; }),
+      notes: Array.from({ length: N * N }, function () { return []; }),
       sel: -1,
       mistakes: 0,
       hints: 0,
@@ -119,7 +141,8 @@ window.Games.sudoku = (function () {
 
   function restore(sess) {
     S = {
-      day: sess.day, level: sess.level, puzzle: sess.puzzle, solution: sess.solution,
+      day: sess.day, level: LEVELS[sess.level] ? sess.level : 'easy',
+      puzzle: sess.puzzle, solution: sess.solution,
       values: sess.values, notes: sess.notes, sel: -1,
       mistakes: sess.mistakes, hints: sess.hints, elapsed: sess.elapsed,
       noteMode: false, done: false
@@ -138,29 +161,33 @@ window.Games.sudoku = (function () {
       '<section class="intro">' +
         '<div class="intro__mark">수</div>' +
         '<h2 class="intro__title">스도쿠</h2>' +
-        '<p class="intro__desc">가로줄·세로줄·굵은 네모 칸마다<br>1부터 9까지 한 번씩만 들어갑니다.</p>' +
+        '<p class="intro__desc">가로줄·세로줄·굵은 네모 칸마다<br>숫자가 한 번씩만 들어갑니다.<br><small>처음이시면 1단계부터 해 보세요.</small></p>' +
         (best ? '<p class="intro__best">나의 최고 기록 <b>' + UI.comma(best.score) + '점</b></p>' : '') +
-        (sess ? '<button class="btn btn--accent btn--big" id="sdResume">이어서 하기 <small>' + LEVELS[sess.level].name + ' · ' + UI.fmtTime(sess.elapsed) + ' 경과</small></button>' : '') +
+        (sess && LEVELS[sess.level]
+          ? '<button class="btn btn--accent btn--big" id="sdResume">이어서 하기 <small>' +
+            LEVELS[sess.level].name + ' · ' + UI.fmtTime(sess.elapsed) + ' 경과</small></button>'
+          : '') +
         '<div class="levels">' +
-          Object.keys(LEVELS).map(function (k) {
+          ORDER.map(function (k) {
             var L = LEVELS[k];
             return '<button class="level" data-level="' + k + '">' +
+              '<span class="level__step">' + L.step + '단계</span>' +
               '<span class="level__name">' + L.name + '</span>' +
-              '<span class="level__meta">숫자 ' + L.givens + '개로 시작 · 제한 ' + Math.round(L.limit / 60) + '분</span>' +
-              (L.bonus ? '<span class="level__bonus">난이도 보너스 +' + L.bonus + '</span>' : '<span class="level__bonus">기본</span>') +
+              '<span class="level__meta">' + L.note + ' · 제한 ' + Math.round(L.limit / 60) + '분</span>' +
+              '<span class="level__bonus">' + (L.bonus ? '난이도 보너스 +' + L.bonus : '기본') + '</span>' +
               '</button>';
           }).join('') +
         '</div>' +
-        '<button class="btn btn--ghost btn--print" id="sdPrint">🖨 종이로 풀 문제 만들기 <small>A4 인쇄 · PDF 저장</small></button>' +
+        '<button class="btn btn--ghost btn--print" id="sdPrint">종이로 풀 문제 만들기 <small>A4 인쇄 · PDF 저장</small></button>' +
         '<button class="linkbtn" id="sdRules">점수 규칙 보기</button>' +
       '</section>';
 
     root.querySelectorAll('.level').forEach(function (b) {
       b.addEventListener('click', function () {
-        var lv = b.dataset.level;
+        var k = b.dataset.level;
         b.classList.add('is-loading');
         b.querySelector('.level__meta').textContent = '문제를 만드는 중…';
-        setTimeout(function () { newGame(lv); renderBoard(); }, 30);
+        setTimeout(function () { newGame(k); renderBoard(); }, 30);
       });
     });
     var rb = root.querySelector('#sdResume');
@@ -173,7 +200,8 @@ window.Games.sudoku = (function () {
 
   function renderBoard() {
     if (!mounted) return;
-    var L = LEVELS[S.level];
+    var L = lv(), N = L.n;
+
     root.innerHTML =
       '<section class="game">' +
         '<div class="hud">' +
@@ -182,16 +210,16 @@ window.Games.sudoku = (function () {
           '<div class="hud__item"><span class="hud__lbl">실수</span><b id="sdMiss">0</b></div>' +
           '<div class="hud__item"><span class="hud__lbl">힌트</span><b id="sdHint">0</b></div>' +
         '</div>' +
-        '<div class="sd-grid" id="sdGrid"></div>' +
+        '<div class="sd-grid" id="sdGrid" style="--n:' + N + '"></div>' +
         '<div class="pad" id="sdPad">' +
-          [1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (n) {
-            return '<button class="pad__key" data-n="' + n + '"><span>' + n + '</span><em class="pad__left"></em></button>';
+          Array.from({ length: N }, function (_, i) {
+            return '<button class="pad__key" data-n="' + (i + 1) + '"><span>' + (i + 1) + '</span><em class="pad__left"></em></button>';
           }).join('') +
           '<button class="pad__key pad__key--fn" data-act="erase">지우기</button>' +
         '</div>' +
         '<div class="tools">' +
           '<button class="tool" id="sdNote"><span>✎</span>메모</button>' +
-          '<button class="tool" id="sdHintBtn"><span>💡</span>힌트</button>' +
+          '<button class="tool" id="sdHintBtn"><span>?</span>힌트</button>' +
           '<button class="tool" id="sdRestart"><span>↺</span>새 문제</button>' +
           '<button class="tool" id="sdSwitch"><span>⇄</span>다른 게임</button>' +
         '</div>' +
@@ -207,13 +235,16 @@ window.Games.sudoku = (function () {
     };
 
     var frag = document.createDocumentFragment();
-    for (var i = 0; i < 81; i++) {
-      var c = document.createElement('button');
-      c.className = 'sd-cell';
-      c.dataset.i = i;
-      if (i % 3 === 2 && i % 9 !== 8) c.classList.add('br');
-      if (Math.floor(i / 9) % 3 === 2 && i < 72) c.classList.add('bb');
-      frag.appendChild(c);
+    for (var i = 0; i < N * N; i++) {
+      var r = Math.floor(i / N), c = i % N;
+      var el = document.createElement('button');
+      el.className = 'sd-cell';
+      el.dataset.i = i;
+      if (c === N - 1) el.classList.add('er');
+      else if (c % L.bc === L.bc - 1) el.classList.add('br');
+      if (r === N - 1) el.classList.add('eb');
+      else if (r % L.br === L.br - 1) el.classList.add('bb');
+      frag.appendChild(el);
     }
     els.grid.appendChild(frag);
 
@@ -273,19 +304,21 @@ window.Games.sudoku = (function () {
       cell.classList.remove('shake'); void cell.offsetWidth; cell.classList.add('shake');
     } else {
       UI.beep('tick');
-      // 같은 줄·칸의 메모에서 지워 준다
       clearNotes(i, n);
     }
     paint(); persist();
     if (isComplete()) finish();
   }
 
+  /** 같은 줄·칸의 메모에서 그 숫자를 지워 준다 */
   function clearNotes(i, n) {
-    var r = Math.floor(i / 9), c = i % 9;
-    var br = Math.floor(r / 3) * 3, bc = Math.floor(c / 3) * 3;
-    var idx = [];
-    for (var k = 0; k < 9; k++) {
-      idx.push(r * 9 + k, k * 9 + c, (br + Math.floor(k / 3)) * 9 + bc + (k % 3));
+    var L = lv(), N = L.n;
+    var r = Math.floor(i / N), c = i % N;
+    var r0 = Math.floor(r / L.br) * L.br, c0 = Math.floor(c / L.bc) * L.bc;
+    var idx = [], k;
+    for (k = 0; k < N; k++) idx.push(r * N + k, k * N + c);
+    for (var rr = 0; rr < L.br; rr++) {
+      for (var cc = 0; cc < L.bc; cc++) idx.push((r0 + rr) * N + c0 + cc);
     }
     idx.forEach(function (j) {
       var p = S.notes[j].indexOf(n);
@@ -303,10 +336,10 @@ window.Games.sudoku = (function () {
 
   function useHint() {
     if (S.done) return;
-    var i = S.sel;
+    var N = lv().n, i = S.sel;
     if (i < 0 || S.puzzle[i] || S.values[i] === S.solution[i]) {
       var empties = [];
-      for (var k = 0; k < 81; k++) if (S.values[k] !== S.solution[k]) empties.push(k);
+      for (var k = 0; k < N * N; k++) if (S.values[k] !== S.solution[k]) empties.push(k);
       if (!empties.length) return;
       i = empties[Math.floor(Math.random() * empties.length)];
       S.sel = i;
@@ -322,24 +355,26 @@ window.Games.sudoku = (function () {
   }
 
   function isComplete() {
-    for (var i = 0; i < 81; i++) if (S.values[i] !== S.solution[i]) return false;
+    var N = lv().n;
+    for (var i = 0; i < N * N; i++) if (S.values[i] !== S.solution[i]) return false;
     return true;
   }
 
   /* ================= 그리기 ================= */
 
   function paint() {
+    var L = lv(), N = L.n;
     var sel = S.sel;
-    var selR = sel >= 0 ? Math.floor(sel / 9) : -1;
-    var selC = sel >= 0 ? sel % 9 : -1;
-    var selB = sel >= 0 ? Math.floor(selR / 3) * 3 + Math.floor(selC / 3) : -1;
+    var selR = sel >= 0 ? Math.floor(sel / N) : -1;
+    var selC = sel >= 0 ? sel % N : -1;
+    var selBR = sel >= 0 ? Math.floor(selR / L.br) : -1;
+    var selBC = sel >= 0 ? Math.floor(selC / L.bc) : -1;
     var selV = sel >= 0 ? S.values[sel] : 0;
 
-    for (var i = 0; i < 81; i++) {
+    for (var i = 0; i < N * N; i++) {
       var cell = els.grid.children[i];
       var v = S.values[i];
-      var r = Math.floor(i / 9), c = i % 9;
-      var b = Math.floor(r / 3) * 3 + Math.floor(c / 3);
+      var r = Math.floor(i / N), c = i % N;
 
       if (v) {
         cell.textContent = v;
@@ -355,16 +390,18 @@ window.Games.sudoku = (function () {
       cell.classList.toggle('is-given', !!S.puzzle[i]);
       cell.classList.toggle('is-wrong', !!v && v !== S.solution[i]);
       cell.classList.toggle('is-sel', i === sel);
-      cell.classList.toggle('is-peer', i !== sel && (r === selR || c === selC || b === selB));
+      cell.classList.toggle('is-peer', i !== sel &&
+        (r === selR || c === selC ||
+         (Math.floor(r / L.br) === selBR && Math.floor(c / L.bc) === selBC)));
       cell.classList.toggle('is-same', !!v && v === selV && i !== sel);
     }
 
     // 숫자별 남은 개수
-    var count = {};
-    for (var n = 1; n <= 9; n++) count[n] = 0;
+    var count = {}, n;
+    for (n = 1; n <= N; n++) count[n] = 0;
     S.values.forEach(function (v2, idx) { if (v2 && v2 === S.solution[idx]) count[v2]++; });
     els.pad.querySelectorAll('.pad__key[data-n]').forEach(function (k) {
-      var left = 9 - count[+k.dataset.n];
+      var left = N - count[+k.dataset.n];
       k.querySelector('.pad__left').textContent = left > 0 ? left : '';
       k.classList.toggle('is-done', left === 0);
     });
@@ -379,7 +416,7 @@ window.Games.sudoku = (function () {
     stopTimer();
     els.time.textContent = UI.fmtTime(S.elapsed);
     timer = setInterval(function () {
-      if (!S || S.done) return;
+      if (!S || S.done || !mounted) return;
       S.elapsed++;
       els.time.textContent = UI.fmtTime(S.elapsed);
       if (S.elapsed % 10 === 0) persist();
@@ -390,7 +427,7 @@ window.Games.sudoku = (function () {
   /* ================= 점수 ================= */
 
   function score() {
-    var L = LEVELS[S.level];
+    var L = lv();
     var base = 500;
     var time = Math.round(300 * Math.max(0, L.limit - S.elapsed) / L.limit);
     var acc = Math.max(0, 200 - S.mistakes * 40);
@@ -406,19 +443,20 @@ window.Games.sudoku = (function () {
     Store.clearSession('sudoku');
     UI.beep('win');
 
+    var L = lv();
     var sc = score();
     Store.addRecord({
-      game: 'sudoku', score: sc.total, difficulty: LEVELS[S.level].name,
+      game: 'sudoku', score: sc.total, difficulty: L.step + '단계 ' + L.name,
       duration: S.elapsed,
-      detail: { mistakes: S.mistakes, hints: S.hints, time: sc.time, acc: sc.acc, bonus: sc.bonus }
+      detail: { mistakes: S.mistakes, hints: S.hints, size: L.n, time: sc.time, acc: sc.acc, bonus: sc.bonus }
     });
 
     var rows = [
       { label: '완성 기본 점수', value: sc.base },
-      { label: '시간 보너스 (' + UI.fmtTime(S.elapsed) + ' / ' + UI.fmtTime(LEVELS[S.level].limit) + ')', value: sc.time },
+      { label: '시간 보너스 (' + UI.fmtTime(S.elapsed) + ' / ' + UI.fmtTime(L.limit) + ')', value: sc.time },
       { label: '정확도 보너스 (실수 ' + S.mistakes + '회)', value: sc.acc }
     ];
-    if (sc.bonus) rows.push({ label: '난이도 보너스 (' + LEVELS[S.level].name + ')', value: sc.bonus });
+    if (sc.bonus) rows.push({ label: '난이도 보너스 (' + L.name + ')', value: sc.bonus });
     if (sc.penalty) rows.push({ label: '힌트 사용 (' + S.hints + '회)', value: sc.penalty, minus: true });
 
     UI.resultModal({
@@ -426,7 +464,7 @@ window.Games.sudoku = (function () {
       score: sc.total,
       headline: praise(sc.total),
       rows: rows,
-      note: '오늘 스도쿠 최고 기록: ' + UI.comma(Store.dayBest()[ 'sudoku'] || sc.total) + '점',
+      note: '오늘 스도쿠 최고 기록: ' + UI.comma(Store.dayBest()['sudoku'] || sc.total) + '점',
       actions: [
         { label: '다른 게임', onClick: function () { App.gameSwitcher('sudoku'); } },
         { label: '기록 보기', onClick: function () { App.go('records'); } },
@@ -449,12 +487,13 @@ window.Games.sudoku = (function () {
     rules: {
       title: '스도쿠 점수 규칙',
       lines: [
+        ['난이도', '1단계 첫걸음(4칸) · 2단계 가볍게(6칸) · 3단계 쉬움 · 4단계 보통 · 5단계 어려움 (3~5단계는 9칸 판)'],
         ['완성 기본', '문제를 다 풀면 500점'],
-        ['시간 보너스', '최대 300점 · 제한 시간이 많이 남을수록 높음 (쉬움 8분 / 보통 12분 / 어려움 18분)'],
+        ['시간 보너스', '최대 300점 · 제한 시간이 많이 남을수록 높음 (4분 / 7분 / 8분 / 12분 / 18분)'],
         ['정확도 보너스', '최대 200점 · 실수 1회마다 40점씩 줄어듦'],
         ['힌트 감점', '힌트 1회마다 50점 차감'],
-        ['난이도 보너스', '보통 +100점, 어려움 +250점'],
-        ['최고 점수', '쉬움 1,000점 / 보통 1,100점 / 어려움 1,250점'],
+        ['난이도 보너스', '보통 +100점, 어려움 +250점 (1~3단계는 보너스 없음)'],
+        ['최고 점수', '1~3단계 1,000점 / 보통 1,100점 / 어려움 1,250점'],
         ['주의', '다 풀지 않고 나가면 점수는 기록되지 않습니다 (진행 상황은 저장됩니다)']
       ]
     },
@@ -471,10 +510,17 @@ window.Games.sudoku = (function () {
     },
     hasProgress: function () { return !!Store.getSession('sudoku'); },
     levels: LEVELS,
+    levelOrder: ORDER,
     /** 인쇄용으로 새 문제를 하나 만들어 준다 (화면 상태와 무관) */
     makeForPrint: function (level) {
-      var made = makePuzzle(LEVELS[level] ? level : 'easy');
-      return { level: level, levelName: LEVELS[level].name, puzzle: made.puzzle, solution: made.solution };
+      var key = LEVELS[level] ? level : 'easy';
+      var L = LEVELS[key];
+      var made = makePuzzle(key);
+      return {
+        level: key, levelName: L.step + '단계 ' + L.name,
+        n: L.n, br: L.br, bc: L.bc,
+        puzzle: made.puzzle, solution: made.solution
+      };
     }
   };
 })();

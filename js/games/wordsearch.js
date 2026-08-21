@@ -4,11 +4,21 @@
 window.Games = window.Games || {};
 window.Games.wordsearch = (function () {
 
+  /* 앞 두 단계는 판을 작게, 낱말을 짧게, 방향을 줄인다.
+     maxLen 은 낼 수 있는 낱말의 최대 글자 수. */
   var LEVELS = {
-    easy:   { name: '쉬움',   size: 8,  count: 6,  limit: 360, bonus: 0,   dirs: [[0, 1], [1, 0], [1, 1]] },
-    normal: { name: '보통',   size: 10, count: 8,  limit: 480, bonus: 100, dirs: [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1]] },
-    hard:   { name: '어려움', size: 12, count: 10, limit: 600, bonus: 250, dirs: [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1], [-1, 0], [-1, -1], [1, -1]] }
+    step1:  { name: '첫걸음', step: 1, size: 6,  count: 4,  maxLen: 3, limit: 300, bonus: 0,
+              dirs: [[0, 1], [1, 0]], note: '6칸 판 · 낱말 4개 · 가로와 세로만' },
+    step2:  { name: '가볍게', step: 2, size: 7,  count: 5,  maxLen: 3, limit: 300, bonus: 0,
+              dirs: [[0, 1], [1, 0], [1, 1]], note: '7칸 판 · 낱말 5개 · 대각선 추가' },
+    easy:   { name: '쉬움',   step: 3, size: 8,  count: 6,  maxLen: 8, limit: 360, bonus: 0,
+              dirs: [[0, 1], [1, 0], [1, 1]], note: '8칸 판 · 낱말 6개' },
+    normal: { name: '보통',   step: 4, size: 10, count: 8,  maxLen: 10, limit: 480, bonus: 100,
+              dirs: [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1]], note: '10칸 판 · 낱말 8개 · 거꾸로도 나옴' },
+    hard:   { name: '어려움', step: 5, size: 12, count: 10, maxLen: 12, limit: 600, bonus: 250,
+              dirs: [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1], [-1, 0], [-1, -1], [1, -1]], note: '12칸 판 · 낱말 10개 · 여덟 방향' }
   };
+  var ORDER = ['step1', 'step2', 'easy', 'normal', 'hard'];
 
   /* 찾은 낱말을 칠하는 색 — 포인트 초록에서 시작해 서로 잘 구분되는 순서로 */
   var HUES = ['#0E9E62', '#2F6FED', '#D98324', '#7C5CD6', '#0E8FA8',
@@ -30,8 +40,16 @@ window.Games.wordsearch = (function () {
 
   function buildBoard(level) {
     var L = LEVELS[level], N = L.size;
-    var theme = WORD_THEMES[Math.floor(Math.random() * WORD_THEMES.length)];
-    var pool = shuffle(theme.words.filter(function (w) { return w.length >= 2 && w.length <= N; }));
+    var cap = Math.min(N, L.maxLen || N);
+
+    // 짧은 낱말이 넉넉한 주제만 고른다 (앞 단계에서 판이 비지 않도록)
+    var themes = WORD_THEMES.filter(function (t) {
+      return t.words.filter(function (w) { return w.length >= 2 && w.length <= cap; }).length >= L.count + 2;
+    });
+    if (!themes.length) themes = WORD_THEMES;
+    var theme = themes[Math.floor(Math.random() * themes.length)];
+
+    var pool = shuffle(theme.words.filter(function (w) { return w.length >= 2 && w.length <= cap; }));
 
     var grid = Array.from({ length: N * N }, function () { return ''; });
     var placed = [];
@@ -106,16 +124,17 @@ window.Games.wordsearch = (function () {
         (best ? '<p class="intro__best">나의 최고 기록 <b>' + UI.comma(best.score) + '점</b></p>' : '') +
         (sess ? '<button class="btn btn--accent btn--big" id="wsResume">이어서 하기 <small>' + LEVELS[sess.level].name + ' · ' + sess.found.length + '/' + sess.placed.length + '개 찾음</small></button>' : '') +
         '<div class="levels">' +
-          Object.keys(LEVELS).map(function (k) {
+          ORDER.map(function (k) {
             var L = LEVELS[k];
             return '<button class="level" data-level="' + k + '">' +
+              '<span class="level__step">' + L.step + '단계</span>' +
               '<span class="level__name">' + L.name + '</span>' +
-              '<span class="level__meta">' + L.size + '×' + L.size + ' 판 · 낱말 ' + L.count + '개 · 제한 ' + Math.round(L.limit / 60) + '분</span>' +
-              (L.bonus ? '<span class="level__bonus">난이도 보너스 +' + L.bonus + '</span>' : '<span class="level__bonus">기본</span>') +
+              '<span class="level__meta">' + L.note + ' · 제한 ' + Math.round(L.limit / 60) + '분</span>' +
+              '<span class="level__bonus">' + (L.bonus ? '난이도 보너스 +' + L.bonus : '기본') + '</span>' +
               '</button>';
           }).join('') +
         '</div>' +
-        '<button class="btn btn--ghost btn--print" id="wsPrint">🖨 종이로 풀 문제 만들기 <small>A4 인쇄 · PDF 저장</small></button>' +
+        '<button class="btn btn--ghost btn--print" id="wsPrint">종이로 풀 문제 만들기 <small>A4 인쇄 · PDF 저장</small></button>' +
         '<button class="linkbtn" id="wsRules">점수 규칙 보기</button>' +
       '</section>';
 
@@ -396,7 +415,7 @@ window.Games.wordsearch = (function () {
 
     var sc = score();
     Store.addRecord({
-      game: 'wordsearch', score: sc.total, difficulty: LEVELS[S.level].name,
+      game: 'wordsearch', score: sc.total, difficulty: LEVELS[S.level].step + '단계 ' + LEVELS[S.level].name,
       duration: S.elapsed,
       detail: { found: S.found.length, total: S.placed.length, wrong: S.wrong, hints: S.hints, theme: S.theme, timeUp: !!timeUp }
     });
@@ -427,12 +446,13 @@ window.Games.wordsearch = (function () {
     rules: {
       title: '낱말찾기 점수 규칙',
       lines: [
+        ['난이도', '1단계 첫걸음(6칸·낱말 4개·가로세로만) · 2단계 가볍게(7칸·5개) · 3단계 쉬움(8칸·6개) · 4단계 보통(10칸·8개) · 5단계 어려움(12칸·10개)'],
         ['낱말 점수', '최대 600점 · 찾은 낱말 수에 비례 (모두 찾으면 600점)'],
         ['시간 보너스', '최대 300점 · 모든 낱말을 찾았을 때만, 남은 시간에 비례'],
         ['정확도 보너스', '최대 100점 · 잘못 그은 횟수 1회마다 10점씩 줄어듦'],
         ['힌트 감점', '힌트 1회마다 50점 차감'],
-        ['난이도 보너스', '보통 +100점, 어려움 +250점 (모두 찾았을 때)'],
-        ['최고 점수', '쉬움 1,000점 / 보통 1,100점 / 어려움 1,250점'],
+        ['난이도 보너스', '보통 +100점, 어려움 +250점 (모두 찾았을 때 · 1~3단계는 보너스 없음)'],
+        ['최고 점수', '1~3단계 1,000점 / 보통 1,100점 / 어려움 1,250점'],
         ['시간이 끝나면', '찾은 만큼만 점수로 기록됩니다']
       ]
     },
@@ -445,6 +465,7 @@ window.Games.wordsearch = (function () {
     unmount: function () { mounted = false; stopTimer(); persist(); },
     hasProgress: function () { return !!Store.getSession('wordsearch'); },
     levels: LEVELS,
+    levelOrder: ORDER,
     /** 인쇄용으로 새 판을 하나 만들어 준다 (화면 상태와 무관) */
     makeForPrint: function (level) {
       var b = buildBoard(LEVELS[level] ? level : 'easy');

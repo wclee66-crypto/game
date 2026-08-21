@@ -1,7 +1,7 @@
 /* 맑은뜰 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v14';                // sw.js 의 VERSION 과 함께 올린다
+  var APP_VERSION = 'v16';                // sw.js 의 VERSION 과 함께 올린다
   var GAMES = ['sudoku', 'wordsearch', 'quiz'];
   var MAX_PER_GAME = 1250;               // 한 게임에서 받을 수 있는 최고 점수
   var MAX_DAY = MAX_PER_GAME * GAMES.length;
