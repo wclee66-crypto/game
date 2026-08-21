@@ -854,11 +854,6 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
     border-bottom: 2px solid #000; padding-bottom: 3mm; margin-bottom: 4mm;
   }
   .ps-head__left { display: flex; align-items: center; gap: 3mm; }
-  .ps-seal {
-    width: 10mm; height: 10mm; border: 1.2pt solid #000; border-radius: 50%;
-    display: inline-flex; align-items: center; justify-content: center;
-    font-weight: 800; font-size: 14pt;
-  }
   .ps-title { font-weight: 800; font-size: 20pt; line-height: 1.1; letter-spacing: -.02em; }
   .ps-title em { display: block; font-style: normal; font-size: 10pt; font-weight: 400; }
   .ps-name { font-size: 10pt; white-space: nowrap; }

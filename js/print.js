@@ -13,7 +13,6 @@ window.Print = (function () {
   function sheetHead(title, level, sub) {
     return '<div class="ps-head">' +
       '<div class="ps-head__left">' +
-        '<span class="ps-seal">새</span>' +
         '<span class="ps-title">' + esc(title) + '<em>' + esc(level) + '</em></span>' +
       '</div>' +
       '<div class="ps-name">이름 <span class="ps-blank"></span> 날짜 <span class="ps-blank ps-blank--sm"></span></div>' +
@@ -122,7 +121,7 @@ window.Print = (function () {
 
       pages.push('<section class="ps-sheet ps-sheet--left">' +
         sheetHead('산수', b.levelName + (o.count > 1 ? ' · ' + (n + 1) + '번' : ''),
-          b.note + ' · 빈칸에 답을 적으세요.') +
+          '빈칸에 답을 적으세요.') +
         body +
       '</section>');
 
