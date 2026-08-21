@@ -1,8 +1,8 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v18';                // sw.js 의 VERSION 과 함께 올린다
-  var GAMES = ['sudoku', 'wordsearch', 'math', 'quiz'];
+  var APP_VERSION = 'v19';                // sw.js 의 VERSION 과 함께 올린다
+  var GAMES = ['sudoku', 'wordsearch', 'math', 'quiz', 'spot'];
   var MAX_PER_GAME = 1250;               // 한 게임에서 받을 수 있는 최고 점수
   var MAX_DAY = MAX_PER_GAME * GAMES.length;
   var DAY_GOAL = 3;                      // 하루에 이만큼 종목을 하면 목표 달성
@@ -109,7 +109,8 @@ window.App = (function () {
       sudoku: ['스도쿠', '숫자로 하는 두뇌 체조'],
       wordsearch: ['낱말찾기', '글자판 속 숨은 낱말'],
       math: ['산수', '더하기 빼기로 머리 깨우기'],
-      quiz: ['상식 퀴즈', '아는 만큼 빨리 맞히기']
+      quiz: ['상식 퀴즈', '아는 만큼 빨리 맞히기'],
+      spot: ['틀린그림찾기', '두 그림을 견주어 보는 눈']
     }[route] || titles_default();
     document.getElementById('appTitle').textContent = titles[0];
     document.getElementById('appSub').textContent = titles[1];

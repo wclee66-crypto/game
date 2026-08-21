@@ -19,7 +19,7 @@ window.Store = (function () {
       v: 1,
       settings: { fontScale: 'md', sound: true },
       records: {},
-      sessions: { sudoku: null, wordsearch: null, math: null, quiz: null },
+      sessions: { sudoku: null, wordsearch: null, math: null, quiz: null, spot: null },
       quizWrong: []
     };
   }
@@ -35,7 +35,7 @@ window.Store = (function () {
     if (!db || typeof db !== 'object') db = blank();
     if (!db.settings) db.settings = blank().settings;
     if (!db.records) db.records = {};
-    if (!db.sessions) db.sessions = { sudoku: null, wordsearch: null, math: null, quiz: null };
+    if (!db.sessions) db.sessions = { sudoku: null, wordsearch: null, math: null, quiz: null, spot: null };
     if (!Array.isArray(db.quizWrong)) db.quizWrong = [];
     return db;
   }
