@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v28';                // sw.js 의 VERSION 과 함께 올린다
+  var APP_VERSION = 'v29';                // sw.js 의 VERSION 과 함께 올린다
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -25,9 +25,14 @@ window.App = (function () {
   var MAX_PER_GAME = 1250;               // 한 게임에서 받을 수 있는 최고 점수
   var MAX_DAY = MAX_PER_GAME * GAMES.length;   // relist() 에서 다시 센다
   var DAY_GOAL = 3;                      // 하루에 이만큼 종목을 하면 목표 달성
-  /* 홈에도 게임을 모두 보여 준다. 넓은 화면에서는 두세 줄로 놓여 자리가 넉넉하고,
-     '게임 모두 보기' 를 한 번 더 누르게 하는 것보다 바로 고르는 편이 낫다.
-     차례는 pickForHome() 이 정한다 — 하다 만 것, 아직 안 한 것이 앞에 온다. */
+  var HOME_GAMES = 3;                    // 좁은 화면에서 홈에 추려 보여 줄 개수
+
+  /* 컴퓨터처럼 넓은 화면(게임 칸이 두세 줄로 놓이는 폭)에서는 홈에 모두 보여 준다.
+     휴대폰·태블릿은 한 줄로 쌓여 홈이 너무 길어지므로 셋만 보여 주고
+     '게임 모두 보기' 로 넘어가게 둔다. 기준 폭은 css/style.css 의 격자와 같다. */
+  function wideScreen() {
+    return !!(window.matchMedia && window.matchMedia('(min-width: 1100px)').matches);
+  }
 
   var view, current = null, here = 'home';
 
@@ -212,6 +217,7 @@ window.App = (function () {
     return GAMES.slice()
       .map(function (g, i) { return { g: g, r: rank(g), i: i }; })
       .sort(function (a, b) { return a.r - b.r || a.i - b.i; })
+      .slice(0, wideScreen() ? GAMES.length : HOME_GAMES)
       .map(function (x) { return x.g; });
   }
 
@@ -249,6 +255,7 @@ window.App = (function () {
     var chartMax = Math.max(1000, Math.max.apply(null, chartData.map(function (d) { return d.value; })));
 
     var doneCount = GAMES.filter(function (g) { return best[g] != null; }).length;
+    var homeList = pickForHome(best);
 
     view.innerHTML =
       '<section class="home">' +
@@ -264,7 +271,10 @@ window.App = (function () {
         '</div>' +
 
         ('<h2 class="sec">' + T('오늘의 게임') + '</h2>') +
-        '<div class="gamelist">' + pickForHome(best).map(gameCard).join('') + '</div>' +
+        '<div class="gamelist">' + homeList.map(gameCard).join('') + '</div>' +
+        (homeList.length < GAMES.length
+          ? '<button class="btn btn--ghost btn--wide" id="hmMore">' + T('게임 모두 보기 ({n}가지)', { n: GAMES.length }) + '</button>'
+          : '') +
 
         ('<h2 class="sec">' + T('최근 이레') + '</h2>') +
         '<div class="card">' +
@@ -285,6 +295,8 @@ window.App = (function () {
     });
     var ib = view.querySelector('#hmInstall');
     if (ib) ib.addEventListener('click', doInstall);
+    var mb = view.querySelector('#hmMore');
+    if (mb) mb.addEventListener('click', function () { go('games'); });
     view.querySelector('#hmRules').addEventListener('click', function () { showRules('all'); });
     view.querySelector('#hmRecords').addEventListener('click', function () { go('records'); });
   }
@@ -610,6 +622,14 @@ window.App = (function () {
       if (document.hidden) Games[current].unmount();
       else if (document.getElementById('modalRoot').hidden) Games[current].mount(view);
     });
+
+    /* 넓은 화면 기준을 넘나들면 홈에 보여 줄 개수가 달라지므로 다시 그린다 */
+    if (window.matchMedia) {
+      var mq = window.matchMedia('(min-width: 1100px)');
+      var onWide = function () { if (here === 'home') renderHome(); };
+      if (mq.addEventListener) mq.addEventListener('change', onWide);
+      else if (mq.addListener) mq.addListener(onWide);
+    }
 
     var start = (location.hash || '').replace('#', '');
     go(['home', 'records'].concat(GAMES).indexOf(start) >= 0 ? start : 'home');
