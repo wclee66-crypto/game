@@ -434,6 +434,7 @@ window.Games.wordorder = (function () {
   }
 
   return {
+    langs: ['ko'],                                 // 한글 글자를 뒤섞는 놀이다
     id: 'wordorder', name: '단어 순서', tagline: '뒤섞인 글자를 바로잡기',
     rules: {
       title: '단어 순서 바로잡기 점수 규칙',

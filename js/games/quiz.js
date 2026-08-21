@@ -418,6 +418,7 @@ window.Games.quiz = (function () {
   }
 
   return {
+    langs: ['ko'],                                 // 문제 은행이 한국어다
     id: 'quiz', name: '상식 퀴즈', tagline: '아는 만큼 빨리 맞히기',
     rules: {
       title: '상식 퀴즈 점수 규칙',

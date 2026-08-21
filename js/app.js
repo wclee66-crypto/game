@@ -7,10 +7,23 @@ window.App = (function () {
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
    * index.html 에 <script> 한 줄만 더하면 홈·게임 고르기·기록 화면에 함께 나타난다.
    * 보이는 순서를 바꾸고 싶으면 index.html 의 <script> 순서를 바꾸면 된다. */
-  var GAMES = Object.keys(window.Games || {});
+  /* 낱말찾기처럼 그 나라 말이 있어야만 되는 게임은 langs 를 적어 둔다.
+     적지 않은 게임(숫자·그림)은 어느 말에서나 그대로 쓸 수 있다. */
+  function playableIn(id, code) {
+    var L = window.Games[id] && window.Games[id].langs;
+    return !L || L.indexOf(code) >= 0;
+  }
+  var ALL_GAMES = Object.keys(window.Games || {});
+  var GAMES = ALL_GAMES;                 // 말을 고를 때 다시 추린다 (relist)
+
+  function relist() {
+    var code = I18N.get();
+    GAMES = ALL_GAMES.filter(function (g) { return playableIn(g, code); });
+    MAX_DAY = MAX_PER_GAME * GAMES.length;
+  }
 
   var MAX_PER_GAME = 1250;               // 한 게임에서 받을 수 있는 최고 점수
-  var MAX_DAY = MAX_PER_GAME * GAMES.length;
+  var MAX_DAY = MAX_PER_GAME * GAMES.length;   // relist() 에서 다시 센다
   var DAY_GOAL = 3;                      // 하루에 이만큼 종목을 하면 목표 달성
   var HOME_GAMES = 3;                    // 홈에는 이만큼만 추려서 보여 준다
 
@@ -463,6 +476,15 @@ window.App = (function () {
     var body =
       '<div class="settings">' +
         '<div class="set">' +
+          '<span class="set__lbl">' + T('말') + '</span>' +
+          '<div class="seg" id="setLang">' +
+            I18N.langs.map(function (o) {
+              return '<button data-v="' + o.code + '"' + (I18N.get() === o.code ? ' class="is-on"' : '') +
+                '>' + o.name + '</button>';
+            }).join('') +
+          '</div>' +
+        '</div>' +
+        '<div class="set">' +
           '<span class="set__lbl">글씨 크기</span>' +
           '<div class="seg" id="setFs">' +
             [['md', '보통'], ['lg', '크게'], ['xl', '아주 크게']].map(function (o) {
@@ -486,6 +508,17 @@ window.App = (function () {
       '</div>';
 
     var m = UI.modal({ title: '설정', body: body, actions: [{ label: '닫기', kind: 'accent' }] });
+
+    m.card.querySelectorAll('#setLang button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        if (I18N.get() === b.dataset.v) return;
+        Store.setSetting('lang', b.dataset.v);
+        I18N.set(b.dataset.v);
+        relist();                          // 그 말로 못 하는 게임은 목록에서 빠진다
+        m.close();
+        go('home');
+      });
+    });
 
     m.card.querySelectorAll('#setFs button').forEach(function (b) {
       b.addEventListener('click', function () {
@@ -551,6 +584,8 @@ window.App = (function () {
 
   function init() {
     view = document.getElementById('view');
+    I18N.start();                        // 저장된 말, 없으면 브라우저 말
+    relist();
     applySettings();
 
     document.querySelectorAll('.tab').forEach(function (t) {

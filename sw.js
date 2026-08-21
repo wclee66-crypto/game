@@ -11,7 +11,7 @@ var VERSION = 'malgeunddeul-v27';
 var ASSETS = [
   './', './index.html', './manifest.json',
   './css/style.css',
-  './js/storage.js', './js/ui.js', './js/print.js', './js/app.js',
+  './js/storage.js', './js/i18n.js', './js/ui.js', './js/print.js', './js/app.js',
   './icons/favicon-32.png', './icons/favicon-64.png', './icons/apple-touch-icon.png',
   './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png'
 ];

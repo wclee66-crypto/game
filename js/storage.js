@@ -3,7 +3,7 @@
  * 스키마:
  * {
  *   v: 1,
- *   settings: { fontScale:'md'|'lg'|'xl', sound:true },
+ *   settings: { fontScale:'md'|'lg'|'xl', sound:true, lang:'ko'|'en' },
  *   records: { "2026-08-19": [ {game,score,difficulty,detail,duration,at}, ... ] },
  *   sessions: { <게임id>: {...}|null, ... }   — 게임이 늘 때마다 저절로 늘어난다
  * }
@@ -17,7 +17,7 @@ window.Store = (function () {
   function blank() {
     return {
       v: 1,
-      settings: { fontScale: 'md', sound: true },
+      settings: { fontScale: 'md', sound: true, lang: null },   /* null 이면 브라우저 말을 따른다 */
       records: {},
       sessions: {},                              /* 게임이 늘어나도 손댈 곳이 없도록 빈 채로 둔다 */
       quizWrong: []

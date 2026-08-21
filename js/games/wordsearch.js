@@ -441,6 +441,7 @@ window.Games.wordsearch = (function () {
   }
 
   return {
+    langs: ['ko'],                                 // 한글 글자판과 낱말 모음이 있어야 한다
     id: 'wordsearch', name: '낱말찾기', tagline: '글자판 속 숨은 낱말',
     rules: {
       title: '낱말찾기 점수 규칙',
