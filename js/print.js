@@ -175,6 +175,80 @@ window.Print = (function () {
     return pages.join('');
   }
 
+  /* ---------------- 색칠 공부 ---------------- */
+
+  /** 도안 한 장.
+   *  fills 를 주면 그 색으로 칠해진 그림이 된다.
+   *  아직 안 칠한 칸에는 번호를 남긴다 — 칠하다 만 그림을 종이로 이어서 칠할 수 있도록.
+   */
+  function coloringSvg(pic, fills, showNums) {
+    var s = '<svg class="ps-cl" viewBox="' + pic.viewBox + '" xmlns="http://www.w3.org/2000/svg">';
+    pic.regions.forEach(function (r, i) {
+      var c = fills ? fills[i] : 0;
+      s += '<path d="' + r.d + '" fill="' + (c ? PICTURES.hexOf(c) : '#FFFFFF') +
+           '" stroke="#000" stroke-width="0.45" stroke-linejoin="round"></path>';
+    });
+    (pic.strokes || []).forEach(function (d) {
+      s += '<path d="' + d + '" fill="none" stroke="#000" stroke-width="0.45"></path>';
+    });
+    if (showNums) {
+      pic.regions.forEach(function (r, i) {
+        if (fills && fills[i]) return;                 // 이미 칠한 칸에는 번호를 적지 않는다
+        s += '<text x="' + r.x + '" y="' + r.y + '" class="ps-cl-num">' + r.c + '</text>';
+      });
+    }
+    return s + '</svg>';
+  }
+
+  /** 아래쪽 색깔표 — 1:빨강 / 2:노랑 … */
+  function coloringLegend(pic) {
+    return '<p class="ps-cl-legend">' +
+      pic.colors.map(function (n) {
+        return '<span><i style="background:' + PICTURES.hexOf(n) + '"></i>' + n + ':' + PICTURES.nameOf(n) + '</span>';
+      }).join('') + '</p>';
+  }
+
+  function coloringSheet(pic, fills, noNumbers, title, tag) {
+    /* 번호를 적는 것이 뜻이 있는가 — '마음대로 칠하기'로 만든 그림에는 번호가 없다 */
+    var showNums = !noNumbers;
+    var left = 0;
+    if (showNums) {
+      pic.regions.forEach(function (r, i) { if (!fills || !fills[i]) left++; });
+    }
+
+    if (!title) {
+      title = !fills ? '색칠 공부' : (left ? '칠하던 그림' : '내가 칠한 그림');
+    }
+    var sub = !fills
+      ? (noNumbers ? '마음대로 색을 골라 칠해 보세요.'
+                   : '칸마다 적힌 번호를 보고, 아래 색깔표대로 칠하세요.')
+      : (left ? '남은 ' + left + '칸은 번호대로 칠해 보세요.' : '');
+
+    return '<section class="ps-sheet ps-sheet--cl">' +
+      sheetHead(title, pic.name + (tag || ''), sub) +
+      coloringSvg(pic, fills, showNums) +
+      (left ? coloringLegend(pic) : '') +
+    '</section>';
+  }
+
+  function coloringSheets(o) {
+    var pages = [];
+    for (var n = 0; n < o.count; n++) {
+      var pic = Games.coloring.makeForPrint(o.level, o.picId);
+      var no = o.count > 1 ? ' · ' + (n + 1) + '번' : '';
+      pages.push(coloringSheet(pic, null, false, '색칠 공부', no));
+      if (o.answer) {
+        pages.push(coloringSheet(pic, pic.regions.map(function (r) { return r.c; }), false, '완성 견본', no));
+      }
+    }
+    return pages.join('');
+  }
+
+  /** 화면에서 칠하던 그림을 그대로 인쇄한다 */
+  function coloringNow(pic, fills, noNumbers) {
+    printHtml(coloringSheet(pic, fills, noNumbers));
+  }
+
   /* ---------------- 인쇄 실행 ---------------- */
 
   /** 게임마다 문제지를 만드는 함수 — 새 게임을 지원할 때 여기에 한 줄 더한다 */
@@ -182,7 +256,8 @@ window.Print = (function () {
     sudoku: sudokuSheets,
     wordsearch: wordsearchSheets,
     math: mathSheets,
-    wordorder: wordorderSheets
+    wordorder: wordorderSheets,
+    coloring: coloringSheets
   };
 
   /* 인쇄 내용은 **인쇄 창이 닫힌 뒤에** 지운다.
@@ -193,8 +268,13 @@ window.Print = (function () {
    * afterprint 를 받지 못하는 브라우저를 위해 넉넉한 예비 시간도 함께 둔다.
    */
   function run(game, o) {
+    printHtml((SHEETS[game] || wordsearchSheets)(o));
+  }
+
+  /** 만들어진 종이를 인쇄 창에 올리고, 창이 닫힌 뒤에 지운다 */
+  function printHtml(html) {
     var root = document.getElementById('printRoot');
-    root.innerHTML = (SHEETS[game] || wordsearchSheets)(o);
+    root.innerHTML = html;
 
     var cleared = false;
     function cleanup() {
@@ -224,26 +304,37 @@ window.Print = (function () {
 
   function dialog(game) {
     var G = Games[game];
+    var cl = (game === 'coloring');                 // 색칠은 '문제지'가 아니라 '도안'이다
     var order = G.levelOrder || Object.keys(G.levels);
     var levelItems = order.map(function (k) { return [k, G.levels[k].step + '단계'] ; });
-    var pick = { level: levelItems[0][0], count: 1, answer: false };
+    var pick = { level: levelItems[0][0], count: 1, answer: false, picId: 'random' };
+
+    var picItems = cl
+      ? [['random', '아무거나']].concat(PICTURES.list.map(function (p) { return [p.id, p.name]; }))
+      : null;
 
     var body =
-      '<p class="modal__msg">연필로 풀 수 있는 <b>A4 문제지</b>를 만듭니다. ' +
-      '인쇄 창에서 <b>대상</b>을 <b>“PDF로 저장”</b>으로 고르면 파일로 저장됩니다.</p>' +
+      (cl
+        ? '<p class="modal__msg">크레파스나 색연필로 칠할 <b>A4 색칠 도안</b>을 만듭니다. 번호와 색깔표가 함께 인쇄됩니다.</p>'
+        : '<p class="modal__msg">연필로 풀 수 있는 <b>A4 문제지</b>를 만듭니다.</p>') +
+      '<p class="modal__msg small">인쇄 창에서 <b>대상</b>을 <b>“PDF로 저장”</b>으로 고르면 파일로 저장됩니다.</p>' +
       '<div class="settings">' +
         '<div class="set set--stack"><span class="set__lbl">난이도</span>' + seg('prLevel', levelItems, pick.level) +
           '<span class="set__hint" id="prHint">' + esc(G.levels[pick.level].note || '') + '</span></div>' +
+        (cl ? '<div class="set set--stack"><span class="set__lbl">그림</span>' + seg('prPic', picItems, 'random') + '</div>' : '') +
         '<div class="set"><span class="set__lbl">장수</span>' +
           seg('prCount', [['1', '1장'], ['2', '2장'], ['4', '4장']], '1') + '</div>' +
-        '<div class="set"><span class="set__lbl">정답지</span>' +
+        '<div class="set"><span class="set__lbl">' + (cl ? '완성 견본' : '정답지') + '</span>' +
           seg('prAns', [['no', '없이'], ['yes', '함께']], 'no') + '</div>' +
       '</div>' +
-      '<p class="modal__msg small">문제지에는 시간·점수 같은 것은 인쇄되지 않습니다. ' +
-      '정답지를 “함께”로 두면 문제지 다음 장에 정답이 나옵니다.</p>';
+      (cl
+        ? '<p class="modal__msg small">“완성 견본”을 함께로 두면 도안 다음 장에 다 칠한 모습이 색으로 인쇄됩니다. ' +
+          '보고 따라 칠할 때 좋습니다. (컬러로 나오게 하려면 인쇄 창에서 <b>컬러</b>를 골라 주세요.)</p>'
+        : '<p class="modal__msg small">문제지에는 시간·점수 같은 것은 인쇄되지 않습니다. ' +
+          '정답지를 “함께”로 두면 문제지 다음 장에 정답이 나옵니다.</p>');
 
     var m = UI.modal({
-      title: '인쇄용 문제지 만들기',
+      title: cl ? '색칠 도안 만들기' : '인쇄용 문제지 만들기',
       body: body,
       actions: [
         { label: '취소' },
@@ -265,9 +356,10 @@ window.Print = (function () {
       var h = m.card.querySelector('#prHint');
       if (h) h.textContent = G.levels[v].note || '';
     });
+    if (cl) bind('prPic', function (v) { pick.picId = v; });
     bind('prCount', function (v) { pick.count = +v; });
     bind('prAns', function (v) { pick.answer = (v === 'yes'); });
   }
 
-  return { dialog: dialog };
+  return { dialog: dialog, coloringNow: coloringNow };
 })();

@@ -525,6 +525,68 @@ button.install:active { transform: scale(.99); }
 .qz-badge.is-wrong { color: var(--bad); }
 @keyframes rise { from { opacity: 0; transform: translateY(8px); } }
 
+/* ================= 색칠 공부 ================= */
+
+.cl-modes .btn { flex-direction: column; min-height: 3.5rem; padding: .55rem .5rem; }
+.cl-modes .btn small { display: block; font-weight: 500; font-size: .66rem; color: var(--ink-3); margin-top: .12rem; }
+.cl-modes .btn.is-on { background: var(--accent); border-color: var(--accent); color: #fff; }
+.cl-modes .btn.is-on small { color: #fff; opacity: .85; }
+
+.cl-stage { display: flex; justify-content: center; }
+.cl-svg {
+  width: 100%; max-width: 460px; height: auto; display: block;
+  touch-action: manipulation; user-select: none; -webkit-user-select: none;
+}
+
+.cl-rg {
+  stroke: var(--ink); stroke-width: .5; stroke-linejoin: round;
+  cursor: pointer; transition: fill .13s ease;
+}
+.cl-line { fill: none; stroke: var(--ink); stroke-width: .5; stroke-linecap: round; pointer-events: none; }
+
+/* 번호 글자는 그림과 함께 늘어난다. '글씨 크게' 설정을 따라 한 번 더 키운다. */
+.cl-num {
+  font-size: 3.6px; font-family: var(--font-num); font-weight: 800;
+  fill: var(--ink-2); text-anchor: middle; dominant-baseline: central;
+  pointer-events: none;
+}
+html[data-fs="lg"] .cl-num { font-size: 4.1px; }
+html[data-fs="xl"] .cl-num { font-size: 4.6px; }
+.cl-num.is-hidden { display: none; }
+.cl-num.is-miss { fill: var(--bad); font-size: 5.4px; }
+
+.cl-rg.is-blink { animation: clblink .8s ease-in-out infinite; }
+@keyframes clblink { 50% { fill: var(--accent-s); stroke-width: 1.1; } }
+.cl-rg.is-miss { animation: clmiss .55s; }
+@keyframes clmiss { 30%, 70% { fill: var(--bad-s); stroke: var(--bad); stroke-width: 1.2; } }
+
+.cl-tip {
+  margin: .7rem 0 0; min-height: 2.6em; text-align: center;
+  font-size: .8rem; font-weight: 600; color: var(--ink-2); line-height: 1.4;
+}
+
+.cl-palette {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+  gap: .35rem; margin-top: .5rem;
+}
+.cl-color {
+  display: flex; flex-direction: column; align-items: center; gap: .15rem;
+  background: var(--surf); border: 1px solid var(--line);
+  border-radius: 12px; padding: .4rem .1rem .35rem;
+}
+.cl-color:active { transform: scale(.96); }
+.cl-color__dot {
+  width: 1.8rem; height: 1.8rem; border-radius: 50%;
+  display: grid; place-items: center;
+  color: #fff; font-family: var(--font-num); font-weight: 800; font-size: .92rem;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .16);
+}
+.cl-color__dot.is-dark { color: #2A2A2A; }
+.cl-color__nm { font-size: .58rem; font-weight: 700; color: var(--ink-2); letter-spacing: -.05em; }
+.cl-color.is-on { border-color: var(--accent); background: var(--accent-s); }
+.cl-color.is-on .cl-color__dot { box-shadow: inset 0 0 0 1px rgba(0,0,0,.16), 0 0 0 2px var(--bg), 0 0 0 4px var(--accent); }
+.cl-color--eraser .cl-color__dot { background: var(--surf-2); color: var(--ink-2); font-size: 1rem; }
+
 /* ================= 기록 ================= */
 
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: .45rem; }
@@ -807,5 +869,26 @@ button.install:active { transform: scale(.99); }
   .ps-ws-words li {
     border: 0.8pt solid #000; border-radius: 2mm; padding: 1.5mm 4mm;
     font-size: 13pt; font-weight: 700;
+  }
+
+  /* ---- 색칠 도안 ---- */
+  .ps-cl {
+    display: block; margin: 0 auto 4mm;
+    width: 168mm; height: 168mm;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .ps-cl path { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .ps-cl-num {
+    font-size: 3.2px; font-family: 'Manrope', sans-serif; font-weight: 700;
+    fill: #333; text-anchor: middle; dominant-baseline: central;
+  }
+  .ps-cl-legend {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 2mm 5mm; margin: 0; font-size: 12pt; font-weight: 700;
+  }
+  .ps-cl-legend i {
+    display: inline-block; width: 4.5mm; height: 4.5mm; border-radius: 1mm;
+    border: 0.5pt solid #000; margin-right: 1.5mm; vertical-align: -0.8mm;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
   }
 }
