@@ -151,7 +151,6 @@ window.Games.wordorder = (function () {
 
     root.innerHTML =
       '<section class="intro">' +
-        '<div class="intro__mark">순</div>' +
         '<h2 class="intro__title">단어 순서 바로잡기</h2>' +
         '<p class="intro__desc">글자가 뒤섞인 낱말을 바른 순서로 되돌립니다.<br>' +
           '<b>기투레쓰봉</b> → <b>쓰레기봉투</b><br>' +

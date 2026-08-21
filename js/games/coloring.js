@@ -93,7 +93,6 @@ window.Games.coloring = (function () {
 
     root.innerHTML =
       '<section class="intro">' +
-        '<div class="intro__mark">색</div>' +
         '<h2 class="intro__title">색칠 공부</h2>' +
         '<p class="intro__desc">색을 하나 고른 다음<br>같은 번호가 적힌 칸을 누르면 칠해집니다.<br>' +
           '<small>다 칠한 그림은 종이로 인쇄할 수 있습니다.</small></p>' +

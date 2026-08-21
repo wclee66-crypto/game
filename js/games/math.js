@@ -140,7 +140,6 @@ window.Games.math = (function () {
 
     root.innerHTML =
       '<section class="intro">' +
-        '<div class="intro__mark">산</div>' +
         '<h2 class="intro__title">숫자 계산</h2>' +
         '<p class="intro__desc">더하기와 빼기를 암산으로 풉니다.<br>답은 숫자판을 눌러 직접 넣습니다.<br><small>틀려도 점수가 깎이지 않습니다.</small></p>' +
         (best ? '<p class="intro__best">나의 최고 기록 <b>' + UI.comma(best.score) + '점</b></p>' : '') +

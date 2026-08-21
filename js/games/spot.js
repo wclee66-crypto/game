@@ -407,7 +407,6 @@ window.Games.spot = (function () {
 
     root.innerHTML =
       '<section class="intro">' +
-        '<div class="intro__mark">틀</div>' +
         '<h2 class="intro__title">틀린그림찾기</h2>' +
         '<p class="intro__desc">두 그림을 견주어 보고<br>모양이 다른 것을 눌러 주세요.<br>' +
           '<small>물건 수는 두 그림이 똑같습니다.<br>모양 · 색 · 다른 물건으로만 달라집니다.<br>' +

@@ -159,7 +159,6 @@ window.Games.sudoku = (function () {
 
     root.innerHTML =
       '<section class="intro">' +
-        '<div class="intro__mark">수</div>' +
         '<h2 class="intro__title">스도쿠</h2>' +
         '<p class="intro__desc">가로줄·세로줄·굵은 네모 칸마다<br>숫자가 한 번씩만 들어갑니다.<br><small>처음이시면 1단계부터 해 보세요.</small></p>' +
         (best ? '<p class="intro__best">나의 최고 기록 <b>' + UI.comma(best.score) + '점</b></p>' : '') +

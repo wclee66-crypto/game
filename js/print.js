@@ -91,9 +91,9 @@ window.Print = (function () {
       var b = Games.wordsearch.makeForPrint(o.level);
       pages.push('<section class="ps-sheet">' +
         sheetHead('낱말찾기', '주제 ' + b.theme + (o.count > 1 ? ' · ' + (n + 1) + '번' : ''),
-          '글자판에서 아래 낱말을 찾아 동그라미를 치세요. 가로·세로·대각선 모두 있습니다.') +
-        wsGrid(b) +
+          '아래 낱말을 글자판에서 찾아 동그라미를 치세요. 가로·세로·대각선 모두 있습니다.') +
         wsWords(b) +
+        wsGrid(b) +
       '</section>');
 
       if (o.answer) {
@@ -101,8 +101,8 @@ window.Print = (function () {
         b.placed.forEach(function (p) { p.cells.forEach(function (i) { marked[i] = true; }); });
         pages.push('<section class="ps-sheet ps-sheet--ans">' +
           sheetHead('낱말찾기 정답', '주제 ' + b.theme + (o.count > 1 ? ' · ' + (n + 1) + '번' : ''), '') +
-          wsGrid(b, marked) +
           wsWords(b) +
+          wsGrid(b, marked) +
         '</section>');
       }
     }
