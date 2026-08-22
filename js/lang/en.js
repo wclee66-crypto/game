@@ -71,8 +71,6 @@ window.I18N.dict.en = {
 
   /* ---------- 이 사이트 소개 ---------- */
   '머리를 쓰는 일이 가장 좋은 예방입니다': 'Using your mind is the best prevention',
-  '새록은 치매를 예방하고 인지 능력을 지키는 데 도움이 되도록 만든 두뇌 훈련 놀이터입니다. 어렵지 않은 놀이를 매일 조금씩 하시면 됩니다. 컴퓨터·휴대폰·태블릿 어디서나 열리고, 화면이 불편하시면 문제를 종이에 뽑아 연필로 푸셔도 됩니다.':
-    'Saerok is a brain-training playground built to help prevent dementia and keep your mind sharp. Just play a little every day — nothing here is hard. It works on a computer, a phone or a tablet, and if a screen is awkward you can print the puzzles and solve them with a pencil.',
   '새록은 초기 치매 및 인지 장애 개선에 도움이 되는 게임을 무료로 이용하실 수 있는 두뇌 훈련 놀이터입니다. 어렵지 않은 놀이를 매일 조금씩 하시면 됩니다. 컴퓨터·태블릿·휴대폰 어디서나 열리고, 화면이 불편하시면 문제를 출력하여 사용하실 수도 있습니다.':
     'Saerok is a brain-training playground where games that help with early dementia and ' +
     'mild cognitive decline are free to play. A little every day is enough. It opens on a ' +
@@ -92,9 +90,9 @@ window.I18N.dict.en = {
   '무엇을': 'What to print',
   '섞어서': 'A mix',
   '“섞어서”는 한 장에 한 종목씩 돌아가며 나옵니다.': 'With “A mix”, each sheet is a different game in turn.',
-  '{name}만 장수만큼 뽑습니다. 문제는 장마다 다릅니다.':
+  '{name}만 장수만큼 출력합니다. 문제는 장마다 다릅니다.':
     'Prints {name} only — a different puzzle on every sheet.',
-  '지금 말로 종이에 뽑을 수 있는 게임이 없습니다.': 'No games can be printed in this language yet.',
+  '지금 언어로 출력할 수 있는 게임이 없습니다.': 'No games can be printed in this language yet.',
   '1단계': 'Level 1', '2단계': 'Level 2', '3단계': 'Level 3', '4단계': 'Level 4', '5단계': 'Level 5',
   '6장': '6', '10장': '10',
 
