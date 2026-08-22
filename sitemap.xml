@@ -1,18 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url><loc>https://playsaerok.com/</loc></url>
-  <url><loc>https://playsaerok.com/sudoku/</loc></url>
-  <url><loc>https://playsaerok.com/wordsearch/</loc></url>
-  <url><loc>https://playsaerok.com/math/</loc></url>
-  <url><loc>https://playsaerok.com/wordorder/</loc></url>
+  <url><loc>https://playsaerok.com/sudoku/</loc>
+    <image:image><image:loc>https://playsaerok.com/images/sudoku-worksheet.png</image:loc><image:title>스도쿠 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
+  </url>
+  <url><loc>https://playsaerok.com/wordsearch/</loc>
+    <image:image><image:loc>https://playsaerok.com/images/wordsearch-worksheet.png</image:loc><image:title>낱말찾기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
+  </url>
+  <url><loc>https://playsaerok.com/math/</loc>
+    <image:image><image:loc>https://playsaerok.com/images/math-worksheet.png</image:loc><image:title>숫자 계산 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
+  </url>
+  <url><loc>https://playsaerok.com/wordorder/</loc>
+    <image:image><image:loc>https://playsaerok.com/images/wordorder-worksheet.png</image:loc><image:title>단어 순서 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
+  </url>
   <url><loc>https://playsaerok.com/quiz/</loc></url>
-  <url><loc>https://playsaerok.com/coloring/</loc></url>
-  <url><loc>https://playsaerok.com/spot/</loc></url>
-  <url><loc>https://playsaerok.com/print/</loc></url>
-  <url><loc>https://playsaerok.com/en/sudoku/</loc></url>
-  <url><loc>https://playsaerok.com/en/math/</loc></url>
+  <url><loc>https://playsaerok.com/coloring/</loc>
+    <image:image><image:loc>https://playsaerok.com/images/coloring-worksheet.png</image:loc><image:title>색칠 공부 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
+  </url>
+  <url><loc>https://playsaerok.com/spot/</loc>
+    <image:image><image:loc>https://playsaerok.com/images/spot-worksheet.png</image:loc><image:title>틀린그림찾기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
+  </url>
+  <url><loc>https://playsaerok.com/print/</loc>
+    <image:image><image:loc>https://playsaerok.com/images/sudoku-worksheet.png</image:loc><image:title>스도쿠 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
+    <image:image><image:loc>https://playsaerok.com/images/wordsearch-worksheet.png</image:loc><image:title>낱말찾기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
+    <image:image><image:loc>https://playsaerok.com/images/math-worksheet.png</image:loc><image:title>숫자 계산 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
+    <image:image><image:loc>https://playsaerok.com/images/wordorder-worksheet.png</image:loc><image:title>단어 순서 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
+    <image:image><image:loc>https://playsaerok.com/images/coloring-worksheet.png</image:loc><image:title>색칠 공부 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
+    <image:image><image:loc>https://playsaerok.com/images/spot-worksheet.png</image:loc><image:title>틀린그림찾기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
+  </url>
+  <url><loc>https://playsaerok.com/en/sudoku/</loc>
+    <image:image><image:loc>https://playsaerok.com/images/sudoku-worksheet.png</image:loc><image:title>Sudoku printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
+  </url>
+  <url><loc>https://playsaerok.com/en/math/</loc>
+    <image:image><image:loc>https://playsaerok.com/images/math-worksheet.png</image:loc><image:title>Mental Math printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
+  </url>
   <url><loc>https://playsaerok.com/en/quiz/</loc></url>
-  <url><loc>https://playsaerok.com/en/coloring/</loc></url>
-  <url><loc>https://playsaerok.com/en/spot/</loc></url>
-  <url><loc>https://playsaerok.com/en/print/</loc></url>
+  <url><loc>https://playsaerok.com/en/coloring/</loc>
+    <image:image><image:loc>https://playsaerok.com/images/coloring-worksheet.png</image:loc><image:title>Colour by Number printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
+  </url>
+  <url><loc>https://playsaerok.com/en/spot/</loc>
+    <image:image><image:loc>https://playsaerok.com/images/spot-worksheet.png</image:loc><image:title>Spot the Difference printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
+  </url>
+  <url><loc>https://playsaerok.com/en/print/</loc>
+    <image:image><image:loc>https://playsaerok.com/images/sudoku-worksheet.png</image:loc><image:title>Sudoku printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
+    <image:image><image:loc>https://playsaerok.com/images/math-worksheet.png</image:loc><image:title>Mental Math printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
+    <image:image><image:loc>https://playsaerok.com/images/coloring-worksheet.png</image:loc><image:title>Colour by Number printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
+    <image:image><image:loc>https://playsaerok.com/images/spot-worksheet.png</image:loc><image:title>Spot the Difference printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
+  </url>
 </urlset>

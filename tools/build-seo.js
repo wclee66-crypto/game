@@ -121,7 +121,9 @@ var COPY = {
     printNote: '문제지에는 시간·점수 같은 화면용 정보가 인쇄되지 않습니다. 정답지도 함께 뽑을 수 있습니다.',
     printList: '뽑을 수 있는 문제지',
     langNote: 'English',
-    aboutTitle: '이 사이트는'
+    aboutTitle: '이 사이트는',
+    shotCap: '실제로 뽑히는 문제지입니다. 누를 때마다 새 문제가 만들어집니다.',
+    shotList: '문제지 미리 보기'
   },
   en: {
     brand: 'Saerok',
@@ -150,9 +152,55 @@ var COPY = {
     printNote: 'Times and scores are never printed on a worksheet. Answer sheets are optional.',
     printList: 'What you can print',
     langNote: '한국어',
-    aboutTitle: 'About this site'
+    aboutTitle: 'About this site',
+    shotCap: 'A real worksheet. Every sheet is generated fresh when you print.',
+    shotList: 'Worksheet preview'
   }
 };
+
+/* ================= 문제지 미리보기 그림 ================= *
+ * 왜 넣는가 — 사람들은 '치매 문제지'를 이미지 검색으로 찾아 그림을 보고 들어옵니다.
+ * 그러려면 진짜 문제지 그림이 페이지에 있어야 하고, alt(그림 설명)에
+ * 찾을 만한 말이 들어 있어야 합니다. 그림은 tools/build-images.js 가 만듭니다.
+ */
+var SHOT = {
+  sudoku:     { f: 'sudoku-worksheet.png' },
+  wordsearch: { f: 'wordsearch-worksheet.png' },
+  math:       { f: 'math-worksheet.png' },
+  wordorder:  { f: 'wordorder-worksheet.png' },
+  coloring:   { f: 'coloring-worksheet.png' },
+  spot:       { f: 'spot-worksheet.png' }
+};
+
+/** PNG 앞머리에서 가로·세로를 읽는다 (그림 파일 규칙상 늘 같은 자리에 있다) */
+function pngSize(f) {
+  try {
+    var b = fs.readFileSync(path.join(ROOT, 'images', f));
+    return { w: b.readUInt32BE(16), h: b.readUInt32BE(20) };
+  } catch (e) { return { w: 794, h: 1000 }; }        /* 그림이 아직 없어도 페이지는 만들어져야 한다 */
+}
+Object.keys(SHOT).forEach(function (id) {
+  var d = pngSize(SHOT[id].f);
+  SHOT[id].w = d.w; SHOT[id].h = d.h;
+});
+
+/** 그림 설명 — 검색에 걸리는 것은 사실상 이 문장이다 */
+function shotAlt(name, lang) {
+  return lang === 'ko'
+    ? name + ' 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)'
+    : name + ' printable worksheet — free A4 brain training activity sheet for seniors';
+}
+
+/** 그림이 있으면 페이지에 붙일 조각을 돌려준다 */
+function shotFigure(id, name, lang, C) {
+  var sh = SHOT[id];
+  if (!sh) return '';
+  return '<figure class="doc__shot">\n' +
+    '  <img src="/images/' + sh.f + '" width="' + sh.w + '" height="' + sh.h + '" loading="lazy" ' +
+      'alt="' + esc(shotAlt(name, lang)) + '">\n' +
+    '  <figcaption>' + esc(C.shotCap) + '</figcaption>\n' +
+    '</figure>\n';
+}
 
 function esc(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -178,6 +226,12 @@ alt + (alt ? '\n' : '') +
 '<meta property="og:title" content="' + esc(o.title) + '">\n' +
 '<meta property="og:description" content="' + esc(o.desc) + '">\n' +
 '<meta property="og:url" content="' + o.url + '">\n' +
+'<meta property="og:site_name" content="' + esc(o.siteName || '') + '">\n' +
+'<meta property="og:image" content="' + SITE + '/images/' + (o.image || (o.lang === 'ko' ? 'saerok-og.png' : 'saerok-og-en.png')) + '">\n' +
+'<meta property="og:image:width" content="1200">\n' +
+'<meta property="og:image:height" content="630">\n' +
+'<meta property="og:image:alt" content="' + esc(o.imageAlt || o.title) + '">\n' +
+'<meta name="twitter:card" content="summary_large_image">\n' +
 '<link rel="icon" href="/icons/favicon-32.png" sizes="32x32">\n' +
 '<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">\n' +
 '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
@@ -245,6 +299,7 @@ function gamePage(g, lang, C, games) {
       (g.canPrint ? '<a class="doc__btn doc__btn--ghost" href="' + base + '/print/">' + C.printPage + '</a>' : '') +
     '</p>\n' +
     '<p>' + esc(C.intro) + '</p>\n' +
+    shotFigure(g.id, g.name, lang, C) +
     (lv ? '<h2>' + C.levels + '</h2>\n<ul class="doc__lv">' + lv + '</ul>\n' : '') +
     (rules ? '<h2>' + C.scoring + '</h2>\n<table class="doc__tbl"><tbody>' + rules + '</tbody></table>\n' : '') +
     '</main>\n' +
@@ -256,6 +311,9 @@ function gamePage(g, lang, C, games) {
       lang: lang, url: url, altUrl: altUrl,
       title: g.name + ' · ' + C.siteName,
       desc: g.tagline + ' — ' + C.free,
+      siteName: C.siteName,
+      image: SHOT[g.id] && (g.id + '-og.png'),        /* 그 게임 카드가 카톡에 나오게 */
+      imageAlt: shotAlt(g.name, lang),
       body: body
     })
   };
@@ -274,6 +332,14 @@ function printPage(lang, C, games) {
 
   var steps = C.printSteps.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('');
 
+  /* 문제지 그림을 늘어놓는다 — 이미지 검색으로 들어오는 길이 된다 */
+  var gallery = games.filter(function (g) { return SHOT[g.id]; }).map(function (g) {
+    return '<a class="doc__tile" href="' + base + '/' + g.id + '/">' +
+      '<img src="/images/' + SHOT[g.id].f + '" width="' + SHOT[g.id].w + '" height="' + SHOT[g.id].h + '" loading="lazy" ' +
+        'alt="' + esc(shotAlt(g.name, lang)) + '">' +
+      '<span>' + esc(g.name) + '</span></a>';
+  }).join('');
+
   var body =
     header(C, lang, altUrl) +
     '<main class="doc__main">\n' +
@@ -281,6 +347,7 @@ function printPage(lang, C, games) {
     '<p class="doc__lead">' + esc(C.printLead) + '</p>\n' +
     '<p class="doc__cta"><a class="doc__btn" href="/' + (lang === 'ko' ? '' : '?lang=en') + '">' + C.play + '</a></p>\n' +
     '<p>' + esc(C.printWho) + '</p>\n' +
+    (gallery ? '<h2>' + C.shotList + '</h2>\n<div class="doc__tiles">' + gallery + '</div>\n' : '') +
     '<h2>' + C.printList + '</h2>\n<ul class="doc__lv">' + list + '</ul>\n' +
     '<h2>' + C.printHow + '</h2>\n<ol class="doc__lv">' + steps + '</ol>\n' +
     '<p>' + esc(C.printNote) + '</p>\n' +
@@ -293,6 +360,7 @@ function printPage(lang, C, games) {
       lang: lang, url: url, altUrl: altUrl,
       title: C.printTitle + ' · ' + C.brand,
       desc: C.printLead,
+      siteName: C.siteName,
       body: body
     })
   };
@@ -316,6 +384,7 @@ function write(rel, html) {
 }
 
 var made = [];
+var shots = {};          /* 페이지마다 딸린 그림 — 이미지 검색에 알리려고 */
 ['ko', 'en'].forEach(function (lang) {
   var loaded = loadGames(lang);
   var C = COPY[lang];
@@ -325,19 +394,30 @@ var made = [];
     var p = gamePage(g, lang, C, games);
     write(p.dir, p.html);
     made.push(p.dir + '/');
+    if (SHOT[g.id]) shots[p.dir + '/'] = [{ f: SHOT[g.id].f, alt: shotAlt(g.name, lang) }];
   });
   var pp = printPage(lang, C, games);
   write(pp.dir, pp.html);
   made.push(pp.dir + '/');
+  /* 문제지 안내 페이지에는 그림이 다 모여 있다 */
+  shots[pp.dir + '/'] = games.filter(function (g) { return SHOT[g.id]; }).map(function (g) {
+    return { f: SHOT[g.id].f, alt: shotAlt(g.name, lang) };
+  });
 });
 
-/* sitemap.xml */
+/* sitemap.xml — 주소와 함께 그 페이지의 그림도 적는다.
+   이미지 검색에 문제지 그림이 걸리려면 이 목록이 있는 편이 훨씬 빠르다. */
 var urls = ['/'].concat(made).map(function (u) {
-  return '  <url><loc>' + SITE + u + '</loc></url>';
+  var imgs = (shots[u] || []).map(function (im) {
+    return '\n    <image:image><image:loc>' + SITE + '/images/' + im.f + '</image:loc>' +
+      '<image:title>' + esc(im.alt) + '</image:title></image:image>';
+  }).join('');
+  return '  <url><loc>' + SITE + u + '</loc>' + imgs + (imgs ? '\n  ' : '') + '</url>';
 }).join('\n');
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'),
   '<?xml version="1.0" encoding="UTF-8"?>\n' +
-  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + '\n</urlset>\n');
+  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n' +
+  '        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' + urls + '\n</urlset>\n');
 
 /* robots.txt */
 fs.writeFileSync(path.join(ROOT, 'robots.txt'),

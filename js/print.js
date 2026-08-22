@@ -507,5 +507,16 @@ window.Print = (function () {
     bind('prAns', function (v) { pick.answer = (v === 'yes'); });
   }
 
-  return { dialog: dialog, mixedDialog: mixedDialog, coloringNow: coloringNow };
+  /** 인쇄 창을 열지 않고 문제지 종이만 만들어 돌려준다.
+   *  화면 없이 미리보기 그림을 만드는 도구(tools/build-images.js)가 쓴다. */
+  function sheets(game, o) {
+    var make = SHEETS[game];
+    if (!make) return '';
+    return make({
+      level: o && o.level, count: (o && o.count) || 1,
+      answer: !!(o && o.answer), picId: (o && o.picId) || 'random'
+    });
+  }
+
+  return { dialog: dialog, mixedDialog: mixedDialog, coloringNow: coloringNow, sheets: sheets };
 })();

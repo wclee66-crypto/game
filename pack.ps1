@@ -40,6 +40,13 @@ Write-Host ("  버전 v{0} -> v{1} 로 올렸습니다." -f $old, $new) -Foregro
 if ($LASTEXITCODE -ne 0) { throw '검색용 페이지를 만들지 못했습니다.' }
 Write-Host ''
 
+# ---------- 1-3. 문제지 미리보기 그림 새로 찍기 ----------
+# 사람들이 '치매 문제지'를 이미지 검색으로 찾아 그림을 보고 들어옵니다.
+# 카톡에 주소를 보낼 때 나오는 그림도 여기서 만듭니다.
+# 크롬이 없으면 그냥 건너뛰므로 배포가 멈추지 않습니다.
+& node (Join-Path $root 'tools\build-images.js')
+Write-Host ''
+
 # ---------- 2. zip 만들기 ----------
 $stage = Join-Path $env:TEMP 'malgeun-pack'
 if (Test-Path $stage) { Remove-Item -LiteralPath $stage -Recurse -Force }
@@ -52,6 +59,10 @@ Copy-Item (Join-Path $root 'sitemap.xml'), (Join-Path $root 'robots.txt') -Desti
 Get-ChildItem $root -File -Filter 'google*.html' | ForEach-Object { Copy-Item $_.FullName -Destination $stage }
 Get-ChildItem $root -File -Filter 'naver*.html'  | ForEach-Object { Copy-Item $_.FullName -Destination $stage }
 Copy-Item (Join-Path $root 'css'), (Join-Path $root 'js'), (Join-Path $root 'icons') -Destination $stage -Recurse
+# 문제지 미리보기 · 카톡 공유 그림
+if (Test-Path (Join-Path $root 'images')) {
+  Copy-Item (Join-Path $root 'images') -Destination $stage -Recurse
+}
 
 # 검색용 낱장 페이지 (게임마다 한 장 + 문제지 안내 + 영어판)
 $pages = @('en', 'print')

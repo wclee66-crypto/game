@@ -93,3 +93,33 @@
   .doc__main h1 { font-size: 2.3rem; }
   .doc__main p, .doc__lv li { font-size: 1.05rem; }
 }
+
+/* ---- 문제지 미리보기 그림 ----
+   이미지 검색으로 들어오는 길이라, 실제로 뽑히는 종이를 그대로 보여 준다. */
+.doc__shot { margin: 1.6rem 0; }
+.doc__shot img {
+  display: block; width: 100%; height: auto; max-width: 30rem;
+  border: 1px solid var(--line); border-radius: 10px; background: #fff;
+}
+.doc__shot figcaption {
+  margin-top: .55rem; font-size: .86rem; color: var(--ink-3);
+}
+
+.doc__tiles {
+  display: grid; gap: .9rem; margin: 1rem 0 1.6rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.doc__tile { text-decoration: none; color: inherit; display: block; }
+/* 게임마다 문제지 길이가 달라, 칸 높이를 맞추고 윗부분을 보여 준다 */
+.doc__tile img {
+  display: block; width: 100%; height: auto; background: #fff;
+  aspect-ratio: 3 / 4; object-fit: cover; object-position: top center;
+  border: 1px solid var(--line); border-radius: 10px;
+}
+.doc__tile span {
+  display: block; margin-top: .45rem; text-align: center;
+  font-size: .92rem; font-weight: 800; color: var(--accent-d);
+}
+@media (min-width: 720px) {
+  .doc__tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
