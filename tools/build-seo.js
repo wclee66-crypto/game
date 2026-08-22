@@ -72,6 +72,7 @@ function loadGames(lang) {
   run('js/data/quiz-data-en.js');
   run('js/data/words.js');
   run('js/data/order-words.js');
+  run('js/data/order-words-en.js');
   run('js/data/pictures.js');
 
   ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot'].forEach(function (id) {

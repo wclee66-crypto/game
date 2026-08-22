@@ -128,7 +128,7 @@ window.Games.wordsearch = (function () {
             return '<button class="level" data-level="' + k + '">' +
               '<span class="level__step">' + T('{n}단계', { n: L.step }) + '</span>' +
               '<span class="level__name">' + L.name + '</span>' +
-              '<span class="level__meta">' + L.note + (' ' + T('· 제한') + ' ') + Math.round(L.limit / 60) + (T('분') + '</span>') +
+              '<span class="level__meta">' + L.note + ' ' + T('· 제한 {m}분', { m: Math.round(L.limit / 60) }) + '</span>' +
               '<span class="level__bonus">' + (L.bonus ? T('난이도 보너스 +{n}', { n: L.bonus }) : T('기본')) + '</span>' +
               '</button>';
           }).join('') +

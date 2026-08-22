@@ -81,7 +81,8 @@ function loadAll(lang) {
 
   run('js/i18n.js'); run('js/lang/en.js'); w.I18N.set(lang);
   run('js/data/quiz-data.js'); run('js/data/quiz-data-en.js');
-  run('js/data/words.js'); run('js/data/order-words.js'); run('js/data/pictures.js');
+  run('js/data/words.js'); run('js/data/order-words.js');
+  run('js/data/order-words-en.js'); run('js/data/pictures.js');
   ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot'].forEach(function (id) {
     run('js/games/' + id + '.js');
   });

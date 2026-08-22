@@ -283,7 +283,7 @@ window.I18N.dict.en = {
   '점수 규칙 보기': 'See the scoring rules',
   '시간': 'Time',
   '실수': 'Mistakes',
-  '힌트': 'Hints',
+  '힌트': 'Hint',
   '지우기': 'Erase',
   '다른 게임': 'Another game',
   '그만두기': 'Stop',
@@ -616,5 +616,56 @@ window.I18N.dict.en = {
     'Questions you miss are kept for you. Tap “Just the ones you got wrong” on the first screen; get one right and it comes off the list',
   '복습 판': 'Review round',
   '연습이므로 점수로 기록되지 않습니다 (한 번에 최대 20문제)':
-    'Practice only, so no score is kept (up to 20 questions at a time)'
+    'Practice only, so no score is kept (up to 20 questions at a time)',
+  /* ---------- 단어 순서 · 영어판 (알파벳을 섞는다) ---------- */
+  '세 자 낱말': 'Three-letter words',
+  '서너 자 낱말': 'Three and four-letter words',
+  '네다섯 자 낱말': 'Four and five-letter words',
+  '다섯여섯 자 낱말': 'Five and six-letter words',
+  '여섯 자 넘는 낱말': 'Six letters and longer',
+  '1단계 세 자 · 2단계 서너 자 · 3단계 네다섯 자 · 4단계 다섯여섯 자 · 5단계 여섯 자 넘는 낱말':
+    'Level 1 three letters · Level 2 three to four · Level 3 four to five · Level 4 five to six · Level 5 six and longer',
+  /* ---------- 단어 순서 바로잡기 ---------- */
+  '단어 순서': 'Word Scramble',
+  '뒤섞인 글자를 바로잡기': 'Put the jumbled letters back in order',
+  '단어 순서 바로잡기': 'Word Scramble',
+  '글자가 뒤섞인 낱말을 바른 순서로 되돌립니다.': 'Put the letters of a jumbled word back in the right order.',
+  /* 보기로 드는 뒤섞인 낱말 — 말마다 다르다 */
+  '기투레쓰봉': 'ttbole',
+  '쓰레기봉투': 'bottle',
+  '아래 글자를 차례대로 눌러 빈칸을 채우세요.': 'Tap the letters below in order to fill the blanks.',
+  '뒤섞인 낱말': 'Jumbled word',
+  '글자를 차례대로 눌러 주세요': 'Tap the letters in order',
+  '힌트 보기': 'Show hint',
+  '한 글자 지우기': 'Delete one letter',
+  '빈칸이 다 찼습니다. 확인을 누르세요.': 'All blanks are filled. Tap Check.',
+  '다 채우셨습니다. 확인을 누르세요.': 'All filled in. Tap Check.',
+  '빈칸을 모두 채워 주세요.': 'Please fill in every blank.',
+  '<b>잘하셨습니다!</b>': '<b>Well done!</b>',
+  '바른 낱말은': 'The word was',
+  '단어 순서를 마쳤습니다': 'Word Scramble finished',
+  '{n}낱말을 바로잡으셨습니다.': 'You unscrambled {n} words.',
+  '단어 순서 바로잡기 점수 규칙': 'Word Scramble scoring',
+  '푸는 법': 'How to play',
+  '뒤섞인 낱말을 보고, 아래 글자를 차례대로 눌러 빈칸을 채웁니다. 빈칸을 다시 누르면 그 글자가 빠집니다':
+    'Look at the jumbled word and tap the letters below in order. Tap a filled blank again to take that letter back',
+  '1단계 두 글자 · 2단계 두세 글자 · 3단계 세 글자 · 4단계 서너 글자 · 5단계 네다섯 글자':
+    'Level 1 two syllables · Level 2 two to three · Level 3 three · Level 4 three to four · Level 5 four to five',
+  '고를 글자': 'Letters to choose from',
+  '낱말에 든 글자에다, 낱말에 없는 글자를 얼마쯤 섞어 늘어놓습니다. 남는 글자는 쓰지 않고 두면 됩니다':
+    'The word’s own letters are laid out along with a few that do not belong. Just leave the spare ones alone',
+  '낱말 글자 수의 두 배로 늘어놓습니다(다섯 글자 낱말이면 열 글자). 절반은 낱말에 없는 글자이니 남겨 두면 됩니다':
+    'Twice as many tiles as the word has letters. Half of them do not belong, so simply leave them',
+  '「힌트 보기」를 누르면 낱말의 뜻을 한 줄 보여 줍니다. 점수는 깎이지 않습니다':
+    'Tap “Show hint” for a one-line clue. It costs you nothing',
+  '없음 — 틀리면 바른 낱말을 보여 주고 다음 문제로 넘어갑니다':
+    'None — if you slip, the correct word is shown and you move on',
+  'PC에서는 Backspace 한 글자 지우기, Enter 확인': 'On a computer: Backspace deletes a letter, Enter checks',
+  '두 글자 낱말 · 고를 글자 4개': 'Two-syllable words · four tiles',
+  '두세 글자 낱말 · 고를 글자 4~6개': 'Two and three-syllable words · four to six tiles',
+  '세 글자 낱말 · 고를 글자 6개': 'Three-syllable words · six tiles',
+  '서너 글자 낱말 · 고를 글자 6~8개': 'Three and four-syllable words · six to eight tiles',
+  '네다섯 글자 낱말 · 고를 글자 8~10개': 'Four and five-syllable words · eight to ten tiles',
+  '{n}문제 · 제한 {m}분': '{n} questions · {m} min limit',
+  '· 제한 {m}분': '· {m} min limit'
 };

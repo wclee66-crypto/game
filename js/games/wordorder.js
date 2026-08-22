@@ -11,8 +11,24 @@
 window.Games = window.Games || {};
 window.Games.wordorder = (function () {
 
-  /* decoy: 고를 글자를 낱말 글자 수의 몇 배로 늘어놓을지 (1 = 낱말 글자 수만큼 더 붙임) */
-  var LEVELS = {
+  /* 영어에서는 알파벳을 섞으므로 길이를 재는 잣대가 다르다.
+     한국어는 두세 '글자'지만 영어는 서너 '자'라, 단계마다 길이를 따로 정한다.
+     decoy: 고를 글자를 낱말 길이의 몇 배로 늘어놓을지.
+     영어는 일곱 자짜리에 두 배를 붙이면 열넉 칸이 되어 눈이 어지럽다. 절반만 붙인다. */
+  function isEn() { return I18N.get() === 'en' && window.ORDER_WORDS_EN; }
+
+  var LEVELS = isEn() ? {
+    step1:  { name: T('첫걸음'), step: 1, count: 10, limit: 240, bonus: 0,   lens: [3],       decoy: 1,
+              note: T('세 자 낱말') },
+    step2:  { name: T('가볍게'), step: 2, count: 12, limit: 300, bonus: 0,   lens: [3, 4],    decoy: 1,
+              note: T('서너 자 낱말') },
+    easy:   { name: T('쉬움'),   step: 3, count: 15, limit: 360, bonus: 0,   lens: [4, 5],    decoy: 0.8,
+              note: T('네다섯 자 낱말') },
+    normal: { name: T('보통'),   step: 4, count: 18, limit: 420, bonus: 100, lens: [5, 6],    decoy: 0.6,
+              note: T('다섯여섯 자 낱말') },
+    hard:   { name: T('어려움'), step: 5, count: 20, limit: 480, bonus: 250, lens: [6, 7, 8], decoy: 0.5,
+              note: T('여섯 자 넘는 낱말') }
+  } : {
     step1:  { name: T('첫걸음'), step: 1, count: 10, limit: 240, bonus: 0,   lens: [2],    decoy: 1,
               note: T('두 글자 낱말 · 고를 글자 4개') },
     step2:  { name: T('가볍게'), step: 2, count: 12, limit: 300, bonus: 0,   lens: [2, 3], decoy: 1,
@@ -41,11 +57,16 @@ window.Games.wordorder = (function () {
   /** 낱말에 없는 글자를 뽑아 쓸 낱글자 모음 */
   var syllables = null;
 
+  /** 지금 말의 낱말 모음. 영어에서 한국어 낱말이 섞여 나오면 풀 수가 없다. */
+  function bank() {
+    return isEn() ? window.ORDER_WORDS_EN : (window.ORDER_WORDS || []);
+  }
+
   function prepare() {
     if (byLen) return;
     byLen = {};
     var seen = {};
-    (window.ORDER_WORDS || []).forEach(function (it) {
+    bank().forEach(function (it) {
       var n = it.w.length;
       (byLen[n] = byLen[n] || []).push(it);
       it.w.split('').forEach(function (ch) { seen[ch] = 1; });
@@ -158,7 +179,7 @@ window.Games.wordorder = (function () {
         (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + (T('점') + '</b></p>') : '') +
         (sess && LEVELS[sess.level]
           ? ('<button class="btn btn--accent btn--big" id="woResume">' + T('이어서 하기') + ' <small>') +
-            LEVELS[sess.level].name + ' · ' + (sess.i + 1) + T('번 문제부터</small></button>')
+            LEVELS[sess.level].name + ' · ' + T('{n}번 문제부터', { n: sess.i + 1 }) + '</small></button>'
           : '') +
         '<div class="levels">' +
           ORDER.map(function (k) {
@@ -166,7 +187,7 @@ window.Games.wordorder = (function () {
             return '<button class="level" data-level="' + k + '">' +
               '<span class="level__step">' + T('{n}단계', { n: L.step }) + '</span>' +
               '<span class="level__name">' + L.name + '</span>' +
-              '<span class="level__meta">' + L.note + ' · ' + L.count + (T('문제 · 제한') + ' ') + Math.round(L.limit / 60) + (T('분') + '</span>') +
+              '<span class="level__meta">' + L.note + ' · ' + T('{n}문제 · 제한 {m}분', { n: L.count, m: Math.round(L.limit / 60) }) + '</span>' +
               '<span class="level__bonus">' + (L.bonus ? T('난이도 보너스 +{n}', { n: L.bonus }) : T('기본')) + '</span>' +
               '</button>';
           }).join('') +
@@ -434,15 +455,18 @@ window.Games.wordorder = (function () {
   }
 
   return {
-    langs: ['ko'],                                 // 한글 글자를 뒤섞는 놀이다
     art: '<path d="M3 7h5v5H3zM10 7h5v5h-5zM17 7h4v5h-4z"/><path d="M4 17h13"/><path d="M14 14.5 17 17l-3 2.5"/>',
     id: 'wordorder', name: T('단어 순서'), tagline: T('뒤섞인 글자를 바로잡기'),
     rules: {
       title: T('단어 순서 바로잡기 점수 규칙'),
       lines: [
         [T('푸는 법'), T('뒤섞인 낱말을 보고, 아래 글자를 차례대로 눌러 빈칸을 채웁니다. 빈칸을 다시 누르면 그 글자가 빠집니다')],
-        [T('난이도'), T('1단계 두 글자 · 2단계 두세 글자 · 3단계 세 글자 · 4단계 서너 글자 · 5단계 네다섯 글자')],
-        [T('고를 글자'), T('낱말 글자 수의 두 배로 늘어놓습니다(다섯 글자 낱말이면 열 글자). 절반은 낱말에 없는 글자이니 남겨 두면 됩니다')],
+        [T('난이도'), isEn()
+          ? T('1단계 세 자 · 2단계 서너 자 · 3단계 네다섯 자 · 4단계 다섯여섯 자 · 5단계 여섯 자 넘는 낱말')
+          : T('1단계 두 글자 · 2단계 두세 글자 · 3단계 세 글자 · 4단계 서너 글자 · 5단계 네다섯 글자')],
+        [T('고를 글자'), isEn()
+          ? T('낱말에 든 글자에다, 낱말에 없는 글자를 얼마쯤 섞어 늘어놓습니다. 남는 글자는 쓰지 않고 두면 됩니다')
+          : T('낱말 글자 수의 두 배로 늘어놓습니다(다섯 글자 낱말이면 열 글자). 절반은 낱말에 없는 글자이니 남겨 두면 됩니다')],
         [T('힌트'), T('「힌트 보기」를 누르면 낱말의 뜻을 한 줄 보여 줍니다. 점수는 깎이지 않습니다')],
         [T('정답 점수'), T('최대 600점 · 맞힌 문제 수에 비례')],
         [T('시간 보너스'), T('최대 300점 · 끝까지 풀었을 때만, 남은 시간에 비례')],
