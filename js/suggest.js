@@ -22,7 +22,7 @@
  */
 window.Suggest = (function () {
 
-  var KEY = '';                                    /* ← 여기에 Web3Forms 열쇠를 넣습니다 */
+  var KEY = 'ea330e8a-71e9-4122-9b9c-b8784bc84374';   /* 2026-08-22 에 받은 Web3Forms 열쇠 */
   var URL = 'https://api.web3forms.com/submit';
 
   var MAX = 2000;                                  /* 너무 긴 글은 잘라 보낸다 */
