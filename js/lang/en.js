@@ -40,7 +40,7 @@ window.I18N.dict.en = {
   '홈': 'Home',
   '새록 · 두뇌 훈련': 'Saerok · Brain Training',
   '스도쿠·낱말찾기·숫자 계산·단어 순서·상식퀴즈·색칠 공부·틀린그림찾기를 매일 조금씩. 날짜별 점수가 기록되는 치매 예방 두뇌 훈련 앱':
-    'Sudoku, mental math, colour by number and spot the difference — a little every day. A free brain-training app for older adults that keeps a daily score.',
+    'Sudoku, mental math, a general knowledge quiz, colour by number and spot the difference — a little every day. A free brain-training app for older adults that keeps a daily score.',
 
   /* ---------- 홈 ---------- */
   '오늘 {n}종목 완료': '{n} done today',
@@ -298,7 +298,7 @@ window.I18N.dict.en = {
   '틀려도 점수가 깎이지 않습니다.': 'A wrong answer never costs you points.',
   '문제 · 제한': 'questions · limit',
   '남은 시간': 'Time left',
-  '문제': 'Question',
+  '문제': 'Questions',        /* 숫자 계산의 「문제 3/10」 과 상식 퀴즈 복습 결과의 단위로 함께 쓰인다 */
   '맞힘': 'Correct',
   '답을 누른 뒤': 'Tap your answer, then press',
   '을 누르세요': '',
@@ -469,5 +469,91 @@ window.I18N.dict.en = {
   '보통 +100점, 어려움 +250점 (모두 찾았을 때)': 'Normal +100, Hard +250 (when you find them all)',
   '시간이 끝나면': 'When time runs out',
   '찾은 만큼만 점수로 기록되고, 못 찾은 곳을 알려 드립니다':
-    'You score for what you found, and we show you the ones you missed'
+    'You score for what you found, and we show you the ones you missed',
+
+  /* ---------- 상식 퀴즈 ----------
+   * 문제 자체는 여기에 옮기지 않는다. 영어 문제 은행이 따로 있다 —
+   * js/data/quiz-data-en.js (분야 이름도 그 파일에 영어로 들어 있다)
+   */
+  '상식 퀴즈': 'General Knowledge',
+  '아는 만큼 빨리 맞히기': 'What you know, as fast as you can',
+  '상식 퀴즈 점수 규칙': 'General Knowledge scoring',
+  '보기 가운데 하나를 고릅니다.': 'Choose one of the answers.',
+  '빨리 맞힐수록 점수가 높습니다.': 'The sooner you are right, the higher your score.',
+  '1단계는 보기가 둘뿐이고 시간도 넉넉합니다.': 'Level 1 gives only two answers and plenty of time.',
+  '단계가 오를수록 문제가 어렵고 시간이 짧아집니다.':
+    'The higher the level, the harder the questions and the shorter the time.',
+  '분야 고르기': 'Choose a subject',
+  '난이도 고르기': 'Choose a level',
+  '전체': 'All',
+  '복습': 'Review',
+  '도전': 'Challenge',
+
+  /* 단계 설명 */
+  '5문항 · 보기 2개 · 문항당 40초 · 쉬운 문제만': '5 questions · 2 answers · 40 sec each · easy only',
+  '8문항 · 보기 3개 · 문항당 30초 · 쉬운 문제만': '8 questions · 3 answers · 30 sec each · easy only',
+  '10문항 · 보기 4개 · 문항당 25초': '10 questions · 4 answers · 25 sec each',
+  '15문항 · 보기 4개 · 문항당 16초 · 보통 이상': '15 questions · 4 answers · 16 sec each · harder ones',
+  '20문항 · 보기 4개 · 문항당 10초 · 어려운 문제만': '20 questions · 4 answers · 10 sec each · hardest only',
+
+  /* 이어서 하기 · 오답 노트 */
+  '{n}번 문제부터': 'From question {n}',
+  '{n}번 문제부터 · 복습': 'From question {n} · review',
+  '틀린 문제만 다시 풀기': 'Just the ones you got wrong',
+  '오답 노트 {n}문제 · 점수는 기록되지 않습니다': '{n} on your review list · no score is kept',
+  '오답 노트 {n}문제 중 20문제 · 점수는 기록되지 않습니다':
+    '20 of the {n} on your review list · no score is kept',
+  '오답 노트 비우기': 'Empty the review list',
+  '모아 둔 {n}문제가 모두 지워집니다. 비울까요?': 'All {n} saved questions will be removed. Empty it?',
+  '비우기': 'Empty it',
+  '오답 노트를 비웠습니다.': 'Your review list is empty now.',
+  '다시 풀 문제가 없습니다.': 'There is nothing to review.',
+  '이 분야에는 문제가 {n}개뿐입니다. 그만큼만 출제됩니다.':
+    'This subject has only {n} questions, so that is all you will be asked.',
+
+  /* 푸는 중 */
+  '정답입니다!': 'Correct!',
+  '정답입니다! 오답 노트에서 지웠습니다.': 'Correct! Taken off your review list.',
+  '시간이 지났습니다.': 'Time is up.',
+  '아쉽습니다.': 'Not quite.',
+
+  /* 끝난 뒤 */
+  '퀴즈가 끝났습니다': 'Quiz finished',
+  '정답 점수 ({a}/{b}문항)': 'Correct answers ({a}/{b})',
+  '속도 보너스': 'Speed bonus',
+  '틀린 {n}문제를 오답 노트에 담았습니다.': 'The {n} you missed went onto your review list.',
+  '연속 정답 보너스는 3연속부터 25점씩 올라가 최대 100점입니다.':
+    'The streak bonus starts at 3 in a row and rises by 25 each time, up to 100.',
+  '틀린 문제만': 'The wrong ones',
+  '새 퀴즈': 'New quiz',
+  '남은 문제 더': 'More of them',
+
+  /* 복습 판 */
+  '복습을 마쳤습니다': 'Review finished',
+  '{a} / {b}문제를 맞히셨습니다.': 'You got {a} of {b} right.',
+  '{a} / {b}문제를 맞히셨습니다. 맞힌 문제는 오답 노트에서 지웠습니다.':
+    'You got {a} of {b} right. Those are now off your review list.',
+  '맞혀서 지운 문제': 'Cleared from the list',
+  '오답 노트에 남은 문제': 'Still on the list',
+  '복습은 연습이라 점수로 기록되지 않습니다. 점수를 쌓으시려면 새 퀴즈를 풀어 주세요.':
+    'Review is practice, so no score is kept. Play a new quiz to earn points.',
+
+  /* 점수 규칙 */
+  '최대 700점 · 맞힌 문항 수에 비례': 'Up to 700 · in proportion to how many you get right',
+  '최대 200점 · 정답을 빨리 고를수록 높음': 'Up to 200 · the sooner you answer, the more you get',
+  '1단계 첫걸음 5문항·보기 2개·40초 / 2단계 가볍게 8문항·보기 3개·30초 / 3단계 기본 10문항·25초 / 4단계 보통 15문항·16초 / 5단계 도전 20문항·10초':
+    'Level 1 First steps: 5 questions, 2 answers, 40 sec · 2 Gentle: 8 questions, 3 answers, 30 sec · 3 Standard: 10 questions, 25 sec · 4 Normal: 15 questions, 16 sec · 5 Challenge: 20 questions, 10 sec',
+  '최대 100점 · 3연속부터 25점씩 (3연속 25 / 4연속 50 / 5연속 75 / 6연속 이상 100)':
+    'Up to 100 · from 3 in a row, 25 each (3 in a row 25 / 4 in a row 50 / 5 in a row 75 / 6 or more 100)',
+  '없음 — 틀려도 점수가 깎이지 않습니다': 'None — a wrong answer never costs you points',
+  '보통(15문항) +100점, 도전(20문항) +250점 (끝까지 풀었을 때)':
+    'Normal (15 questions) +100, Challenge (20 questions) +250 (when you finish)',
+  '기본 1,000점 / 보통 1,100점 / 도전 1,250점':
+    'Levels 1–3: 1,000 / Normal 1,100 / Challenge 1,250',
+  '오답 노트': 'Review list',
+  '틀린 문제는 자동으로 모입니다. 시작 화면의 “틀린 문제만 다시 풀기”로 복습하고, 다시 맞히면 노트에서 지워집니다':
+    'Questions you miss are kept for you. Tap “Just the ones you got wrong” on the first screen; get one right and it comes off the list',
+  '복습 판': 'Review round',
+  '연습이므로 점수로 기록되지 않습니다 (한 번에 최대 20문제)':
+    'Practice only, so no score is kept (up to 20 questions at a time)'
 };

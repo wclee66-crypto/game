@@ -155,7 +155,7 @@ window.Games.wordorder = (function () {
         ('<p class="intro__desc">' + T('글자가 뒤섞인 낱말을 바른 순서로 되돌립니다.') + '<br>') +
           ('<b>' + T('기투레쓰봉') + '</b> → <b>' + T('쓰레기봉투') + '</b><br>') +
           (T('아래 글자를 차례대로 눌러 빈칸을 채우세요.') + '<br><small>' + T('틀려도 점수가 깎이지 않습니다.') + '</small></p>') +
-        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + T('점</b></p>') : '') +
+        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + (T('점') + '</b></p>') : '') +
         (sess && LEVELS[sess.level]
           ? ('<button class="btn btn--accent btn--big" id="woResume">' + T('이어서 하기') + ' <small>') +
             LEVELS[sess.level].name + ' · ' + (sess.i + 1) + T('번 문제부터</small></button>')
@@ -164,7 +164,7 @@ window.Games.wordorder = (function () {
           ORDER.map(function (k) {
             var L = LEVELS[k];
             return '<button class="level" data-level="' + k + '">' +
-              '<span class="level__step">' + L.step + (T('단계') + '</span>') +
+              '<span class="level__step">' + T('{n}단계', { n: L.step }) + '</span>' +
               '<span class="level__name">' + L.name + '</span>' +
               '<span class="level__meta">' + L.note + ' · ' + L.count + (T('문제 · 제한') + ' ') + Math.round(L.limit / 60) + (T('분') + '</span>') +
               '<span class="level__bonus">' + (L.bonus ? T('난이도 보너스 +{n}', { n: L.bonus }) : T('기본')) + '</span>' +
@@ -391,7 +391,7 @@ window.Games.wordorder = (function () {
 
     var L = lv(), sc = score();
     Store.addRecord({
-      game: 'wordorder', score: sc.total, difficulty: L.step + (T('단계') + ' ') + L.name,
+      game: 'wordorder', score: sc.total, difficulty: T('{n}단계', { n: L.step }) + ' ' + L.name,
       duration: S.elapsed,
       detail: { correct: sc.correct, count: sc.count, streak: sc.streak }
     });
@@ -471,7 +471,7 @@ window.Games.wordorder = (function () {
       var key = LEVELS[level] ? level : 'easy';
       var L = LEVELS[key];
       return {
-        level: key, levelName: L.step + (T('단계') + ' ') + L.name,
+        level: key, levelName: T('{n}단계', { n: L.step }) + ' ' + L.name,
         note: L.note,
         items: makeSet(key, count || 12)
       };
