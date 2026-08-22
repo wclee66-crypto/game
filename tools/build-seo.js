@@ -239,6 +239,7 @@ alt + (alt ? '\n' : '') +
 '<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800;900&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">\n' +
 '<link rel="stylesheet" href="/css/style.css">\n' +
 '<link rel="stylesheet" href="/css/page.css">\n' +
+'<script src="/js/analytics.js" defer></script>\n' +
 '</head>\n' +
 '<body class="doc">\n' +
 o.body +
