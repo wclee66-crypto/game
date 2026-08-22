@@ -168,6 +168,7 @@ function page(o) {
 '<head>\n' +
 '<meta charset="utf-8">\n' +
 '<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
+'<meta name="naver-site-verification" content="f0a6ed93a3d035f79ca2cdc2ab93f8002d5d9ad0">\n' +
 '<title>' + esc(o.title) + '</title>\n' +
 '<meta name="description" content="' + esc(o.desc) + '">\n' +
 '<link rel="canonical" href="' + o.url + '">\n' +

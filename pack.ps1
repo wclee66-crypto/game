@@ -47,6 +47,10 @@ New-Item -ItemType Directory -Force $stage | Out-Null
 
 Copy-Item (Join-Path $root 'index.html'), (Join-Path $root 'manifest.json'), $swJs -Destination $stage
 Copy-Item (Join-Path $root 'sitemap.xml'), (Join-Path $root 'robots.txt') -Destination $stage
+
+# 검색 등록용 소유 확인 파일 (구글·네이버가 준 것) — 지우면 등록이 풀립니다
+Get-ChildItem $root -File -Filter 'google*.html' | ForEach-Object { Copy-Item $_.FullName -Destination $stage }
+Get-ChildItem $root -File -Filter 'naver*.html'  | ForEach-Object { Copy-Item $_.FullName -Destination $stage }
 Copy-Item (Join-Path $root 'css'), (Join-Path $root 'js'), (Join-Path $root 'icons') -Destination $stage -Recurse
 
 # 검색용 낱장 페이지 (게임마다 한 장 + 문제지 안내 + 영어판)
