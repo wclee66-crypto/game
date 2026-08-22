@@ -116,7 +116,7 @@ window.Print = (function () {
     for (var n = 0; n < o.count; n++) {
       var b = Games.math.makeForPrint(o.level, 24);
       var body = '<ol class="ps-math">' + b.items.map(function (it) {
-        return '<li><span class="pm-q">' + esc(it.q) + ' =</span><span class="pm-blank"></span></li>';
+        return '<li><span class="pm-q">' + esc(it.q) + (it.noeq ? '' : ' =') + '</span><span class="pm-blank"></span></li>';
       }).join('') + '</ol>';
 
       pages.push('<section class="ps-sheet ps-sheet--left">' +
@@ -129,7 +129,7 @@ window.Print = (function () {
         pages.push('<section class="ps-sheet ps-sheet--left ps-sheet--ans">' +
           sheetHead(T('숫자 계산 정답'), b.levelName + (o.count > 1 ? ' · ' + (n + 1) + T('번') : ''), '') +
           '<ol class="ps-math">' + b.items.map(function (it) {
-            return '<li><span class="pm-q">' + esc(it.q) + ' =</span><span class="pm-a">' + it.a + '</span></li>';
+            return '<li><span class="pm-q">' + esc(it.q) + (it.noeq ? '' : ' =') + '</span><span class="pm-a">' + it.a + '</span></li>';
           }).join('') + '</ol>' +
         '</section>');
       }
