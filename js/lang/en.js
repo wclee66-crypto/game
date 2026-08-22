@@ -11,6 +11,8 @@ window.I18N.dict.en = {
   '여기서는 설치할 수 없습니다': 'Cannot install here',
   '카카오톡·네이버 앱 안에서 열린 화면입니다.<br>오른쪽 위 <b>⋮</b> 또는 <b>⋯</b> → <b>다른 브라우저로 열기</b> 를 눌러<br>크롬이나 삼성 인터넷에서 다시 열어 주세요.':
     'This page opened inside another app.<br>Tap <b>⋮</b> or <b>⋯</b> at the top right → <b>Open in browser</b><br>and open it again in Chrome or Safari.',
+  '앱 설치': 'Install',
+  '알겠습니다': 'Got it',
   '앱으로 설치하기': 'Install as an app',
   '홈 화면에 아이콘이 생기고, 인터넷 없이도 열립니다': 'An icon appears on your home screen, and it opens without internet',
   '앱으로 설치하려면': 'To install as an app',

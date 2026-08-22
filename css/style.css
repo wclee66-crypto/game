@@ -73,7 +73,28 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .appbar__back:active, .appbar__gear:active { background: var(--line-2); }
 .appbar__title { flex: 1; min-width: 0; }
 .appbar__title h1 { margin: 0; font-size: 1.16rem; font-weight: 800; letter-spacing: -.025em; }
-.appbar__title p { margin: 0; font-size: .68rem; color: var(--ink-3); font-weight: 500; }
+/* 단추가 늘어 자리가 좁아졌다 — 설명글이 두 줄로 접히면 맨 위 줄이 두꺼워진다 */
+.appbar__title p {
+  margin: 0; font-size: .68rem; color: var(--ink-3); font-weight: 500;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* 앱 설치 안내 — 2026-08-22 에 홈의 큰 상자에서 이 작은 단추로 옮겼다.
+   매일 오시는 분에게는 상자가 자리만 차지했다. */
+.appbar__inst {
+  flex: none; height: 2.1rem; padding: 0 .7rem; border: 0;
+  border-radius: 999px; background: var(--accent-s); color: var(--accent-d);
+  font-size: .78rem; font-weight: 800; line-height: 1;
+  display: flex; align-items: center; gap: .25rem;
+}
+.appbar__inst:active { background: #C6E7D6; }
+.appbar__inst-ico { font-size: .95rem; }
+/* 좁은 화면에서는 글자를 접고 그림만 남긴다 */
+@media (max-width: 460px) {
+  .appbar { gap: .5rem; }
+  .appbar__inst { width: 2.1rem; padding: 0; justify-content: center; }
+  .appbar__inst-txt { display: none; }
+}
 
 /* 앱 표시 — 새싹 마크 (rect 가 currentColor 를 쓰므로 색은 여기서 정한다) */
 .seal {

@@ -38,18 +38,20 @@ window.App = (function () {
 
   /* ================= 앱 설치 ================= */
   /* 크롬 계열은 설치 조건을 만족하면 beforeinstallprompt 를 보내 준다.
-     그 순간을 잡아 두었다가 홈 화면의 T('앱으로 설치') 버튼에 연결한다. */
+     그 순간을 잡아 두었다가 맨 위 줄의 '앱 설치' 단추에 연결한다. */
   var installEvent = null;
+  var installed = false;                  // 이 판에서 설치를 마쳤는가
 
   window.addEventListener('beforeinstallprompt', function (e) {
     e.preventDefault();
     installEvent = e;
-    if (here === 'home' && view) renderHome();
+    syncInstallBtn();
   });
   window.addEventListener('appinstalled', function () {
     installEvent = null;
+    installed = true;                     // 설치했는데 또 권하면 안 된다
     UI.toast(T('홈 화면에 설치되었습니다.'));
-    if (here === 'home' && view) renderHome();
+    syncInstallBtn();
   });
 
   function ua() { return navigator.userAgent || ''; }
@@ -69,12 +71,6 @@ window.App = (function () {
   /** iOS에서 진짜 Safari인지 (크롬·엣지 등은 설치가 제대로 되지 않는다) */
   function isIOSSafari() {
     return isIOS() && !/CriOS|FxiOS|EdgiOS|OPiOS|Whale/i.test(ua());
-  }
-
-  function tip(title, detail) {
-    return '<div class="install install--tip">' +
-      '<span class="install__ico">⤓</span>' +
-      '<span class="install__txt">' + UI.esc(title) + '<em>' + detail + '</em></span></div>';
   }
 
   /* 이 사이트가 무엇을 하는 곳인지 한 번은 알려 드린다.
@@ -102,32 +98,52 @@ window.App = (function () {
     '</section>';
   }
 
-  function installCard() {
-    if (isStandalone()) return '';                     // 이미 앱으로 실행 중 — 안내 불필요
+  /* 설치 안내에 무엇을 적을지 한 곳에서 정한다.
+     null 이면 안내할 것이 없다 (이미 앱으로 실행 중).
+     예전에는 홈 맨 위에 상자로 놓였는데, 매일 오시는 분에게는 자리만 차지해
+     2026-08-22 에 맨 위 줄의 작은 단추로 옮겼다. */
+  function installInfo() {
+    if (isStandalone() || installed) return null;      // 이미 앱이거나 방금 설치함
 
     if (isInApp()) {
-      return tip(T('여기서는 설치할 수 없습니다'),
-        T('카카오톡·네이버 앱 안에서 열린 화면입니다.<br>오른쪽 위 <b>⋮</b> 또는 <b>⋯</b> → <b>다른 브라우저로 열기</b> 를 눌러<br>크롬이나 삼성 인터넷에서 다시 열어 주세요.'));
+      return { title: T('여기서는 설치할 수 없습니다'),
+        detail: T('카카오톡·네이버 앱 안에서 열린 화면입니다.<br>오른쪽 위 <b>⋮</b> 또는 <b>⋯</b> → <b>다른 브라우저로 열기</b> 를 눌러<br>크롬이나 삼성 인터넷에서 다시 열어 주세요.') };
     }
 
     if (installEvent) {                                // 크롬 계열이 설치 가능하다고 알려 온 상태
-      return '<button class="install" id="hmInstall">' +
-        '<span class="install__ico">⤓</span>' +
-        ('<span class="install__txt">' + T('앱으로 설치하기') + '<em>' + T('홈 화면에 아이콘이 생기고, 인터넷 없이도 열립니다') + '</em></span>') +
-        '</button>';
+      return { now: true, title: T('앱으로 설치하기'),
+        detail: T('홈 화면에 아이콘이 생기고, 인터넷 없이도 열립니다') };
     }
 
     if (isIOSSafari()) {
-      return tip(T('앱으로 설치하려면'),
-        T('아래쪽 <b>공유 버튼 ⬆</b> → <b>홈 화면에 추가</b> 를 누르세요.<br>아이폰은 이것이 정식 설치 방법입니다.'));
+      return { title: T('앱으로 설치하려면'),
+        detail: T('아래쪽 <b>공유 버튼 ⬆</b> → <b>홈 화면에 추가</b> 를 누르세요.<br>아이폰은 이것이 정식 설치 방법입니다.') };
     }
     if (isIOS()) {
-      return tip(T('Safari로 열어 주세요'),
-        T('아이폰·아이패드는 <b>Safari</b>에서만 앱으로 설치됩니다.<br>이 주소를 Safari에서 다시 열어 주세요.'));
+      return { title: T('Safari로 열어 주세요'),
+        detail: T('아이폰·아이패드는 <b>Safari</b>에서만 앱으로 설치됩니다.<br>이 주소를 Safari에서 다시 열어 주세요.') };
     }
 
-    return tip(T('앱으로 설치하려면'),
-      T('브라우저 메뉴 <b>⋮</b> → <b>앱 설치</b> 를 누르세요.<br>“홈 화면에 추가”만 보이면 <b>새로고침</b> 한 번 뒤 다시 열어 보세요.'));
+    return { title: T('앱으로 설치하려면'),
+      detail: T('브라우저 메뉴 <b>⋮</b> → <b>앱 설치</b> 를 누르세요.<br>“홈 화면에 추가”만 보이면 <b>새로고침</b> 한 번 뒤 다시 열어 보세요.') };
+  }
+
+  /** 맨 위 줄의 설치 단추를 보이거나 감춘다 */
+  function syncInstallBtn() {
+    var b = document.getElementById('btnInstall');
+    if (b) b.hidden = !installInfo();
+  }
+
+  /** 설치 단추를 눌렀을 때 */
+  function showInstall() {
+    var info = installInfo();
+    if (!info) return;
+    if (info.now) { doInstall(); return; }             // 바로 설치할 수 있으면 곧장 띄운다
+    UI.modal({
+      title: info.title,
+      body: '<p class="modal__msg">' + info.detail + '</p>',
+      actions: [{ label: T('알겠습니다'), kind: 'primary' }]
+    });
   }
 
   function doInstall() {
@@ -135,6 +151,7 @@ window.App = (function () {
     installEvent.prompt();
     installEvent.userChoice.then(function (res) {
       if (res && res.outcome === 'accepted') installEvent = null;
+      syncInstallBtn();
       if (here === 'home' && view) renderHome();
     });
   }
@@ -286,7 +303,6 @@ window.App = (function () {
       '<section class="home">' +
 
         introCard() +
-        installCard() +
 
         '<div class="card card--today">' +
           '<div class="today__head">' +
@@ -328,8 +344,6 @@ window.App = (function () {
       Store.setSetting('introDone', true);
       renderHome();
     });
-    var ib = view.querySelector('#hmInstall');
-    if (ib) ib.addEventListener('click', doInstall);
     var mb = view.querySelector('#hmMore');
     if (mb) mb.addEventListener('click', function () { go('games'); });
     view.querySelector('#hmRules').addEventListener('click', function () { showRules('all'); });
@@ -649,6 +663,11 @@ window.App = (function () {
       var lbl = t.querySelector('.tab__lbl');
       if (lbl && TABS[t.dataset.route]) lbl.textContent = T(TABS[t.dataset.route]);
     });
+    var inst = document.getElementById('btnInstall');
+    if (inst) {
+      inst.querySelector('.appbar__inst-txt').textContent = T('앱 설치');
+      inst.setAttribute('aria-label', T('앱으로 설치하기'));
+    }
     document.title = T('새록 · 두뇌 훈련');
     var meta = document.querySelector('meta[name="description"]');
     if (meta) meta.setAttribute('content', T('스도쿠·낱말찾기·숫자 계산·단어 순서·상식퀴즈·색칠 공부·틀린그림찾기를 매일 조금씩. 날짜별 점수가 기록되는 치매 예방 두뇌 훈련 앱'));
@@ -666,6 +685,8 @@ window.App = (function () {
     });
     document.getElementById('btnBack').addEventListener('click', function () { go('home'); });
     document.getElementById('btnSettings').addEventListener('click', showSettings);
+    document.getElementById('btnInstall').addEventListener('click', showInstall);
+    syncInstallBtn();
 
     // 화면을 벗어날 때 진행 상황을 저장한다
     window.addEventListener('pagehide', function () { if (current && Games[current]) Games[current].unmount(); });
