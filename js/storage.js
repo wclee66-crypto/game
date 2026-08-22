@@ -188,7 +188,8 @@ window.Store = (function () {
       var dup = false;
       for (var i = 0; i < w.length; i++) if (w[i].q === it.q) { dup = true; break; }
       if (dup) return;
-      w.push({ c: it.c, q: it.q, options: it.options, a: it.a, at: new Date().toISOString() });
+      /* lang 은 어느 말로 된 문제인가 — 한국어 노트와 영어 노트가 섞이지 않게 한다 */
+      w.push({ c: it.c, q: it.q, options: it.options, a: it.a, lang: it.lang || 'ko', at: new Date().toISOString() });
     });
     if (w.length > WRONG_MAX) w.splice(0, w.length - WRONG_MAX);
     save();
@@ -204,7 +205,14 @@ window.Store = (function () {
     return false;
   }
 
-  function clearWrong() { load().quizWrong = []; save(); }
+  /** 오답 노트 비우기 — lang 을 주면 그 말로 된 문제만 지운다 (다른 말의 노트는 남는다) */
+  function clearWrong(lang) {
+    var db = load();
+    db.quizWrong = lang
+      ? db.quizWrong.filter(function (w) { return (w.lang || 'ko') !== lang; })
+      : [];
+    save();
+  }
 
   /* ---------- 설정 ---------- */
 

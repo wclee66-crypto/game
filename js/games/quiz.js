@@ -24,6 +24,22 @@ window.Games.quiz = (function () {
 
   function qtime() { return (LEVELS[S.level] || LEVELS.easy).time; }
 
+  /* 문제 은행은 말에 따라 통째로 바뀐다.
+     영어에서는 영어 문제 은행을 쓰고, 없으면 한국어 은행으로 돌아간다.
+     (섞어 내면 한 판 안에 두 말이 나와 버린다) */
+  function bank() {
+    if (I18N.get() === 'en' && window.QUIZ_DATA_EN) return window.QUIZ_DATA_EN;
+    return window.QUIZ_DATA;
+  }
+
+  /* 지금 말로 된 오답 노트만 본다.
+     영어 사용자에게 예전에 담아 둔 한국어 문제를 보여 주면 풀 수가 없다.
+     lang 이 없는 것은 영어판이 생기기 전에 담긴 것이라 한국어로 친다. */
+  function myWrong() {
+    var cur = I18N.get();
+    return Store.getWrong().filter(function (w) { return (w.lang || 'ko') === cur; });
+  }
+
   var S = null, root = null, timer = null, els = {}, locked = false;
   var nextTimer = null;      // 정답 표시 뒤 다음 문제로 넘어가는 예약
   var mounted = false;       // 이 게임이 화면에 올라와 있는가
@@ -46,7 +62,7 @@ window.Games.quiz = (function () {
   function dOf(q) { return q.d || 1; }
 
   function pickQuestions(cat, n, pool, nOpts) {
-    var all = QUIZ_DATA.items.filter(function (q) { return cat === 'all' || q.c === cat; });
+    var all = bank().items.filter(function (q) { return cat === 'all' || q.c === cat; });
     var want = shuffle(all.filter(function (q) { return pool.indexOf(dOf(q)) >= 0; }));
     var picked = want.slice(0, n);
 
@@ -111,7 +127,8 @@ window.Games.quiz = (function () {
     if (!S || S.done) return;
     Store.saveSession('quiz', {
       day: S.day, level: S.level, cat: S.cat, qs: S.qs, i: S.i,
-      picks: S.picks, elapsed: S.elapsed, review: S.review
+      picks: S.picks, elapsed: S.elapsed, review: S.review,
+      lang: I18N.get()                    // 어느 말로 풀던 판인가 — 말이 바뀌면 이어서 하지 않는다
     });
   }
 
@@ -129,23 +146,27 @@ window.Games.quiz = (function () {
     clearPending();
     if (!mounted) return;
     var sess = Store.getSession('quiz');
+    if (sess && (sess.lang || 'ko') !== I18N.get()) sess = null;   // 다른 말로 풀던 판은 이어서 하지 않는다
     var best = Store.bestEver('quiz');
-    var wrong = Store.getWrong();
+    var wrong = myWrong();
 
     root.innerHTML =
       '<section class="intro">' +
         ('<h2 class="intro__title">' + T('상식 퀴즈') + '</h2>') +
         ('<p class="intro__desc">' + T('보기 가운데 하나를 고릅니다.') + '<br>' + T('빨리 맞힐수록 점수가 높습니다.') + '<br><small>' + T('1단계는 보기가 둘뿐이고 시간도 넉넉합니다.') + '<br>' + T('단계가 오를수록 문제가 어렵고 시간이 짧아집니다.') + '</small></p>') +
-        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + T('점</b></p>') : '') +
+        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + (T('점') + '</b></p>') : '') +
         (sess ? '<button class="btn btn--accent btn--big" id="qzResume">' + T('이어서 하기') +
-           ' <small>' + T('{n}번 문제부터', { n: sess.i + 1 }) + (sess.review ? T(' · 복습') : '') + '</small></button>' : '') +
+           ' <small>' + (sess.review ? T('{n}번 문제부터 · 복습', { n: sess.i + 1 })
+                                     : T('{n}번 문제부터', { n: sess.i + 1 })) + '</small></button>' : '') +
         (wrong.length
           ? ('<button class="btn btn--big btn--note" id="qzReview">' + T('틀린 문제만 다시 풀기') + ' ') +
-            '<small>' + T('오답 노트 {n}문제', { n: wrong.length }) + (wrong.length > 20 ? T(' 중 20문제') : '') + T(' · 점수는 기록되지 않습니다</small></button>')
+            '<small>' + (wrong.length > 20
+              ? T('오답 노트 {n}문제 중 20문제 · 점수는 기록되지 않습니다', { n: wrong.length })
+              : T('오답 노트 {n}문제 · 점수는 기록되지 않습니다', { n: wrong.length })) + '</small></button>'
           : '') +
         ('<h3 class="intro__sub">' + T('분야 고르기') + '</h3>') +
         '<div class="chips" id="qzCats">' +
-          QUIZ_DATA.categories.map(function (c, i) {
+          bank().categories.map(function (c, i) {
             return '<button class="chip' + (i === 0 ? ' is-on' : '') + '" data-cat="' + c.id + '">' + c.name + '</button>';
           }).join('') +
         '</div>' +
@@ -154,7 +175,7 @@ window.Games.quiz = (function () {
           ORDER.map(function (k) {
             var L = LEVELS[k];
             return '<button class="level" data-level="' + k + '">' +
-              '<span class="level__step">' + L.step + (T('단계') + '</span>') +
+              '<span class="level__step">' + T('{n}단계', { n: L.step }) + '</span>' +
               '<span class="level__name">' + L.name + '</span>' +
               '<span class="level__meta">' + L.note + '</span>' +
               '<span class="level__bonus">' + (L.bonus ? T('난이도 보너스 +{n}', { n: L.bonus }) : T('기본')) + '</span>' +
@@ -162,7 +183,7 @@ window.Games.quiz = (function () {
           }).join('') +
         '</div>' +
         ('<button class="linkbtn" id="qzRules">' + T('점수 규칙 보기') + '</button>') +
-        (wrong.length ? T('<button class="linkbtn" id="qzClearNote">오답 노트 비우기</button>') : '') +
+        (wrong.length ? ('<button class="linkbtn" id="qzClearNote">' + T('오답 노트 비우기') + '</button>') : '') +
       '</section>';
 
     var cat = 'all';
@@ -176,7 +197,7 @@ window.Games.quiz = (function () {
     root.querySelectorAll('.level').forEach(function (b) {
       b.addEventListener('click', function () {
         var lv = b.dataset.level;
-        var avail = QUIZ_DATA.items.filter(function (q) { return cat === 'all' || q.c === cat; }).length;
+        var avail = bank().items.filter(function (q) { return cat === 'all' || q.c === cat; }).length;
         if (avail < LEVELS[lv].count) {
           UI.toast(T('이 분야에는 문제가 {n}개뿐입니다. 그만큼만 출제됩니다.', { n: avail }));
         }
@@ -192,7 +213,7 @@ window.Games.quiz = (function () {
     var cn = root.querySelector('#qzClearNote');
     if (cn) cn.addEventListener('click', function () {
       UI.confirm(T('오답 노트 비우기'), T('모아 둔 {n}문제가 모두 지워집니다. 비울까요?', { n: wrong.length }), function () {
-        Store.clearWrong();
+        Store.clearWrong(I18N.get());     // 지금 말로 된 것만 지운다
         UI.toast(T('오답 노트를 비웠습니다.'));
         renderIntro();
       }, T('비우기'));
@@ -212,7 +233,7 @@ window.Games.quiz = (function () {
       '<section class="game quiz">' +
         '<div class="qz-top">' +
           '<span class="qz-count">' + (S.i + 1) + ' / ' + S.qs.length + '</span>' +
-          (S.review ? T('<span class="chip chip--note">복습</span>') : '') +
+          (S.review ? ('<span class="chip chip--note">' + T('복습') + '</span>') : '') +
           '<span class="chip chip--tag">' + UI.esc(q.c) + '</span>' +
           '<span class="qz-clock" id="qzClock">' + qtime() + '</span>' +
         '</div>' +
@@ -327,7 +348,7 @@ window.Games.quiz = (function () {
     S.picks.forEach(function (p, i) {
       if (p.correct) return;
       var q = S.qs[i];
-      if (q) out.push({ c: q.c, q: q.q, options: q.options, a: q.options[q.answer] });
+      if (q) out.push({ c: q.c, q: q.q, options: q.options, a: q.options[q.answer], lang: I18N.get() });
     });
     Store.addWrong(out);
     return out.length;
@@ -344,7 +365,8 @@ window.Games.quiz = (function () {
 
     var sc = score();
     Store.addRecord({
-      game: 'quiz', score: sc.total, difficulty: LEVELS[S.level].step + (T('단계') + ' ') + LEVELS[S.level].name + ' · ' + catName(S.cat),
+      game: 'quiz', score: sc.total,
+      difficulty: T('{n}단계', { n: LEVELS[S.level].step }) + ' ' + LEVELS[S.level].name + ' · ' + catName(S.cat),
       duration: S.elapsed,
       detail: { correct: sc.correct, count: sc.count, streak: sc.streak, cat: S.cat }
     });
@@ -362,7 +384,7 @@ window.Games.quiz = (function () {
       headline: sc.correct === sc.count ? T('전부 맞히셨습니다. 대단합니다!') : T('{n}문제를 맞히셨습니다.', { n: sc.correct }),
       rows: rows,
       note: missed
-        ? (T('틀린') + ' ') + missed + T('문제를 오답 노트에 담았습니다.')
+        ? T('틀린 {n}문제를 오답 노트에 담았습니다.', { n: missed })
         : T('연속 정답 보너스는 3연속부터 25점씩 올라가 최대 100점입니다.'),
       actions: missed
         ? [
@@ -380,21 +402,22 @@ window.Games.quiz = (function () {
 
   /** 오답 노트를 바로 이어서 푼다 */
   function startReviewNow() {
-    var notes = shuffle(Store.getWrong().slice());
+    var notes = shuffle(myWrong().slice());
     if (!notes.length) { UI.toast(T('다시 풀 문제가 없습니다.')); S = null; renderIntro(); return; }
     if (newReview(notes)) renderQuestion();
   }
 
   function finishReview(missed) {
     var correct = S.picks.filter(function (p) { return p.correct; }).length;
-    var left = Store.getWrong().length;
+    var left = myWrong().length;
 
     UI.resultModal({
       title: T('복습을 마쳤습니다'),
       score: correct,
       unit: T('문제'),
-      headline: T('{a} / {b}문제를 맞히셨습니다.', { a: correct, b: S.qs.length }) +
-        (correct ? T(' 맞힌 문제는 오답 노트에서 지웠습니다.') : ''),
+      headline: correct
+        ? T('{a} / {b}문제를 맞히셨습니다. 맞힌 문제는 오답 노트에서 지웠습니다.', { a: correct, b: S.qs.length })
+        : T('{a} / {b}문제를 맞히셨습니다.', { a: correct, b: S.qs.length }),
       rows: [
         { label: T('맞혀서 지운 문제'), value: correct },
         { label: T('오답 노트에 남은 문제'), value: left, plain: true }
@@ -414,12 +437,13 @@ window.Games.quiz = (function () {
   }
 
   function catName(id) {
-    var c = QUIZ_DATA.categories.filter(function (x) { return x.id === id; })[0];
+    var c = bank().categories.filter(function (x) { return x.id === id; })[0];
     return c ? c.name : T('전체');
   }
 
   return {
-    langs: ['ko'],                                 // 문제 은행이 한국어다
+    /* langs 를 적지 않는다 — 한국어·영어 문제 은행이 모두 있어 두 말에서 다 나온다.
+       새 말을 더할 때는 그 말의 문제 은행을 만들고 bank() 에 한 줄 더한다. */
     id: 'quiz', name: T('상식 퀴즈'), tagline: T('아는 만큼 빨리 맞히기'),
     rules: {
       title: T('상식 퀴즈 점수 규칙'),

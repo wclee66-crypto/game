@@ -170,7 +170,7 @@ window.Games.sudoku = (function () {
           ORDER.map(function (k) {
             var L = LEVELS[k];
             return '<button class="level" data-level="' + k + '">' +
-              '<span class="level__step">' + L.step + (T('단계') + '</span>') +
+              '<span class="level__step">' + T('{n}단계', { n: L.step }) + '</span>' +
               '<span class="level__name">' + L.name + '</span>' +
               '<span class="level__meta">' + L.note + (' ' + T('· 제한') + ' ') + Math.round(L.limit / 60) + (T('분') + '</span>') +
               '<span class="level__bonus">' + (L.bonus ? T('난이도 보너스 +{n}', { n: L.bonus }) : T('기본')) + '</span>' +
@@ -445,7 +445,7 @@ window.Games.sudoku = (function () {
     var L = lv();
     var sc = score();
     Store.addRecord({
-      game: 'sudoku', score: sc.total, difficulty: L.step + (T('단계') + ' ') + L.name,
+      game: 'sudoku', score: sc.total, difficulty: T('{n}단계', { n: L.step }) + ' ' + L.name,
       duration: S.elapsed,
       detail: { mistakes: S.mistakes, hints: S.hints, size: L.n, time: sc.time, acc: sc.acc, bonus: sc.bonus }
     });
@@ -516,7 +516,7 @@ window.Games.sudoku = (function () {
       var L = LEVELS[key];
       var made = makePuzzle(key);
       return {
-        level: key, levelName: L.step + (T('단계') + ' ') + L.name,
+        level: key, levelName: T('{n}단계', { n: L.step }) + ' ' + L.name,
         n: L.n, br: L.br, bc: L.bc,
         puzzle: made.puzzle, solution: made.solution
       };

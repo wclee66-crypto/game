@@ -420,7 +420,7 @@ window.Games.spot = (function () {
           ORDER.map(function (k) {
             var L = LEVELS[k];
             return '<button class="level" data-level="' + k + '">' +
-              '<span class="level__step">' + L.step + (T('단계') + '</span>') +
+              '<span class="level__step">' + T('{n}단계', { n: L.step }) + '</span>' +
               '<span class="level__name">' + L.name + '</span>' +
               '<span class="level__meta">' + L.note + (' ' + T('· 제한') + ' ') + Math.round(L.limit / 60) + (T('분') + '</span>') +
               '<span class="level__bonus">' + (L.bonus ? T('난이도 보너스 +{n}', { n: L.bonus }) : T('기본')) + '</span>' +
@@ -624,7 +624,7 @@ window.Games.spot = (function () {
 
     var L = lv(), sc = score();
     Store.addRecord({
-      game: 'spot', score: sc.total, difficulty: L.step + (T('단계') + ' ') + L.name, duration: S.elapsed,
+      game: 'spot', score: sc.total, difficulty: T('{n}단계', { n: L.step }) + ' ' + L.name, duration: S.elapsed,
       detail: { found: S.found.length, total: S.diffs.length, wrong: S.wrong, hints: S.hints, timeUp: !!timeUp }
     });
 
@@ -705,7 +705,7 @@ window.Games.spot = (function () {
       var items = buildItems(L);
       var diffs = buildDiffs(items, L);
       return {
-        levelName: L.step + (T('단계') + ' ') + L.name,
+        levelName: T('{n}단계', { n: L.step }) + ' ' + L.name,
         note: L.note,
         w: W, h: H,
         count: diffs.length,

@@ -120,13 +120,13 @@ window.Games.wordsearch = (function () {
       '<section class="intro">' +
         ('<h2 class="intro__title">' + T('낱말찾기') + '</h2>') +
         ('<p class="intro__desc">' + T('글자판 속에 숨은 낱말을') + '<br>' + T('손가락으로 쭉 그어 찾습니다.') + '<br><small>' + T('글자를 하나씩 눌러 이어 붙여도 됩니다.') + '<br>' + T('고른 칸은 낱말이 될 때까지 색이 남습니다.') + '</small></p>') +
-        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + T('점</b></p>') : '') +
+        (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + (T('점') + '</b></p>') : '') +
         (sess ? ('<button class="btn btn--accent btn--big" id="wsResume">' + T('이어서 하기') + ' <small>') + LEVELS[sess.level].name + ' · ' + sess.found.length + '/' + sess.placed.length + T('개 찾음</small></button>') : '') +
         '<div class="levels">' +
           ORDER.map(function (k) {
             var L = LEVELS[k];
             return '<button class="level" data-level="' + k + '">' +
-              '<span class="level__step">' + L.step + (T('단계') + '</span>') +
+              '<span class="level__step">' + T('{n}단계', { n: L.step }) + '</span>' +
               '<span class="level__name">' + L.name + '</span>' +
               '<span class="level__meta">' + L.note + (' ' + T('· 제한') + ' ') + Math.round(L.limit / 60) + (T('분') + '</span>') +
               '<span class="level__bonus">' + (L.bonus ? T('난이도 보너스 +{n}', { n: L.bonus }) : T('기본')) + '</span>' +
@@ -414,7 +414,7 @@ window.Games.wordsearch = (function () {
 
     var sc = score();
     Store.addRecord({
-      game: 'wordsearch', score: sc.total, difficulty: LEVELS[S.level].step + (T('단계') + ' ') + LEVELS[S.level].name,
+      game: 'wordsearch', score: sc.total, difficulty: T('{n}단계', { n: LEVELS[S.level].step }) + ' ' + LEVELS[S.level].name,
       duration: S.elapsed,
       detail: { found: S.found.length, total: S.placed.length, wrong: S.wrong, hints: S.hints, theme: S.theme, timeUp: !!timeUp }
     });

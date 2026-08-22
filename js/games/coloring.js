@@ -119,7 +119,7 @@ window.Games.coloring = (function () {
           ORDER.map(function (k) {
             var L = LEVELS[k];
             return '<button class="level" data-level="' + k + '">' +
-              '<span class="level__step">' + L.step + (T('단계') + '</span>') +
+              '<span class="level__step">' + T('{n}단계', { n: L.step }) + '</span>' +
               '<span class="level__name">' + L.name + '</span>' +
               '<span class="level__meta">' + L.note + '</span>' +
               '<span class="level__bonus">' + (L.bonus ? T('난이도 보너스 +{n}', { n: L.bonus }) : T('기본')) + '</span>' +
@@ -480,7 +480,7 @@ window.Games.coloring = (function () {
     var sc = score();
     Store.addRecord({
       game: 'coloring', score: sc.total,
-      difficulty: LEVELS[S.level].step + (T('단계') + ' ') + LEVELS[S.level].name,
+      difficulty: T('{n}단계', { n: LEVELS[S.level].step }) + ' ' + LEVELS[S.level].name,
       duration: S.elapsed,
       detail: { picture: pic.name, cells: S.fills.length, wrong: S.wrong, hints: S.hints }
     });
