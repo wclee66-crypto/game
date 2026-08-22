@@ -329,10 +329,10 @@ window.Print = (function () {
     }).join('');
   }
 
-  /** 홈의 '문제 출력' — 여러 종목을 섞어 한 묶음으로 */
+  /** 홈의 '문제 인쇄' — 여러 종목을 섞어 한 묶음으로 */
   function mixedDialog() {
     var ids = printable();
-    if (!ids.length) { UI.toast(T('지금 언어로 출력할 수 있는 게임이 없습니다.')); return; }
+    if (!ids.length) { UI.toast(T('지금 언어로 인쇄할 수 있는 게임이 없습니다.')); return; }
 
     var pick = { game: 'mixed', level: 'easy', count: 4, answer: false };
     var LV = [
@@ -360,7 +360,7 @@ window.Print = (function () {
       '</div>';
 
     var m = UI.modal({
-      title: T('문제 출력'),
+      title: T('문제 인쇄'),
       body: body,
       actions: [
         { label: T('취소') },
@@ -382,7 +382,7 @@ window.Print = (function () {
       var h = m.card.querySelector('#mxHint');
       if (h) h.textContent = (v === 'mixed')
         ? T('“섞어서”는 한 장에 한 종목씩 돌아가며 나옵니다.')
-        : T('{name}만 장수만큼 출력합니다. 문제는 장마다 다릅니다.', { name: window.Games[v].name });
+        : T('{name}만 장수만큼 인쇄합니다. 문제는 장마다 다릅니다.', { name: window.Games[v].name });
     });
     bind('mxLevel', function (v) { pick.level = v; });
     bind('mxCount', function (v) { pick.count = +v; });

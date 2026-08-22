@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v40';                // sw.js 의 VERSION 과 함께 올린다
+  var APP_VERSION = 'v41';                // sw.js 의 VERSION 과 함께 올린다
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -91,7 +91,7 @@ window.App = (function () {
       '<p class="about__p">' +
         T('새록은 초기 치매 및 인지 장애 개선에 도움이 되는 게임을 무료로 이용하실 수 있는 ' +
           '두뇌 훈련 놀이터입니다. 어렵지 않은 놀이를 매일 조금씩 하시면 됩니다. ' +
-          '컴퓨터·태블릿·휴대폰 어디서나 열리고, 화면이 불편하시면 문제를 출력하여 사용하실 수도 있습니다.') +
+          '컴퓨터·태블릿·휴대폰 어디서나 열리고, 화면이 불편하시면 문제를 인쇄하여 사용하실 수도 있습니다.') +
       '</p>' +
       /* 왜 만들었는지를 짧게 적는다 — 처음 오신 분이 믿고 써 보시게 하는 것은 기능 설명이 아니다 */
       '<p class="about__p about__note">' +
@@ -311,8 +311,8 @@ window.App = (function () {
         '<div class="row3">' +
           ('<button class="btn btn--ghost" id="hmRules">' + T('점수 규칙 한눈에') + '</button>') +
           ('<button class="btn btn--ghost" id="hmRecords">' + T('기록 자세히') + '</button>') +
-          ('<button class="btn btn--ghost btn--print" id="hmPrint">' + T('문제 출력') +
-            '<small>' + T('문제를 A4 용지로 출력하여 직접 풀이할 수 있습니다') + '</small></button>') +
+          ('<button class="btn btn--ghost btn--print" id="hmPrint">' + T('문제 인쇄') +
+            '<small>' + T('문제를 A4 용지로 인쇄하여 직접 풀이할 수 있습니다') + '</small></button>') +
         '</div>' +
 
         ('<button class="linkbtn" id="hmSuggest">' + T('건의하기') + '</button>') +

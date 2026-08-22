@@ -71,7 +71,7 @@ window.I18N.dict.en = {
 
   /* ---------- 이 사이트 소개 ---------- */
   '머리를 쓰는 일이 가장 좋은 예방입니다': 'Using your mind is the best prevention',
-  '새록은 초기 치매 및 인지 장애 개선에 도움이 되는 게임을 무료로 이용하실 수 있는 두뇌 훈련 놀이터입니다. 어렵지 않은 놀이를 매일 조금씩 하시면 됩니다. 컴퓨터·태블릿·휴대폰 어디서나 열리고, 화면이 불편하시면 문제를 출력하여 사용하실 수도 있습니다.':
+  '새록은 초기 치매 및 인지 장애 개선에 도움이 되는 게임을 무료로 이용하실 수 있는 두뇌 훈련 놀이터입니다. 어렵지 않은 놀이를 매일 조금씩 하시면 됩니다. 컴퓨터·태블릿·휴대폰 어디서나 열리고, 화면이 불편하시면 문제를 인쇄하여 사용하실 수도 있습니다.':
     'Saerok is a brain-training playground where games that help with early dementia and ' +
     'mild cognitive decline are free to play. A little every day is enough. It opens on a ' +
     'computer, a tablet or a phone, and if the screen is hard to use you can print the puzzles instead.',
@@ -82,17 +82,17 @@ window.I18N.dict.en = {
   '모두 무료입니다.': 'Everything is free.',
   '종이 문제지 안내 보기': 'See the free printable worksheets',
 
-  /* ---------- 문제 출력 (여러 종목 섞어) ---------- */
-  '문제 출력': 'Print puzzles',
-  '문제를 A4 용지로 출력하여 직접 풀이할 수 있습니다': 'Print puzzles on A4 paper and solve them by hand',
+  /* ---------- 문제 인쇄 (여러 종목 섞어) ---------- */
+  '문제 인쇄': 'Print puzzles',
+  '문제를 A4 용지로 인쇄하여 직접 풀이할 수 있습니다': 'Print puzzles on A4 paper and solve them by hand',
   '연필로 풀 수 있는 <b>A4 문제지</b>를 만듭니다. 매번 새 문제가 나옵니다.':
     'Makes <b>A4 worksheets</b> you can solve with a pencil. Every sheet is freshly made.',
   '무엇을': 'What to print',
   '섞어서': 'A mix',
   '“섞어서”는 한 장에 한 종목씩 돌아가며 나옵니다.': 'With “A mix”, each sheet is a different game in turn.',
-  '{name}만 장수만큼 출력합니다. 문제는 장마다 다릅니다.':
+  '{name}만 장수만큼 인쇄합니다. 문제는 장마다 다릅니다.':
     'Prints {name} only — a different puzzle on every sheet.',
-  '지금 언어로 출력할 수 있는 게임이 없습니다.': 'No games can be printed in this language yet.',
+  '지금 언어로 인쇄할 수 있는 게임이 없습니다.': 'No games can be printed in this language yet.',
   '1단계': 'Level 1', '2단계': 'Level 2', '3단계': 'Level 3', '4단계': 'Level 4', '5단계': 'Level 5',
   '6장': '6', '10장': '10',
 
