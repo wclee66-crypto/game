@@ -212,7 +212,7 @@ window.Games.math = (function () {
         (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + (T('점') + '</b></p>') : '') +
         (sess && LEVELS[sess.level]
           ? ('<button class="btn btn--accent btn--big" id="mtResume">' + T('이어서 하기') + ' <small>') +
-            LEVELS[sess.level].name + ' · ' + (sess.i + 1) + (T('번 문제부터') + '</small></button>')
+            LEVELS[sess.level].name + ' · ' + T('{n}번 문제부터', { n: sess.i + 1 }) + '</small></button>'
           : '') +
         '<div class="levels">' +
           ORDER.map(function (k) {

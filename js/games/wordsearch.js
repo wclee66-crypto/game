@@ -5,11 +5,17 @@ window.Games = window.Games || {};
 window.Games.wordsearch = (function () {
 
   /* 앞 두 단계는 판을 작게, 낱말을 짧게, 방향을 줄인다.
-     maxLen 은 낼 수 있는 낱말의 최대 글자 수. */
+     maxLen 은 낼 수 있는 낱말의 최대 길이.
+     한글은 한 칸에 한 글자(음절)라 세 글자면 넉넉하지만,
+     영어는 한 칸에 알파벳 하나라 세 자로는 CAT·DOG 밖에 못 낸다.
+     그래서 앞 단계의 maxLen 만 영어에서 늘려 잡는다. */
+  function isEn() { return I18N.get() === 'en' && window.WORD_THEMES_EN; }
+  var EN = isEn();
+
   var LEVELS = {
-    step1:  { name: T('첫걸음'), step: 1, size: 6,  count: 4,  maxLen: 3, limit: 300, bonus: 0,
+    step1:  { name: T('첫걸음'), step: 1, size: 6,  count: 4,  maxLen: EN ? 5 : 3, limit: 300, bonus: 0,
               dirs: [[0, 1], [1, 0]], note: T('6칸 판 · 낱말 4개 · 가로와 세로만') },
-    step2:  { name: T('가볍게'), step: 2, size: 7,  count: 5,  maxLen: 3, limit: 300, bonus: 0,
+    step2:  { name: T('가볍게'), step: 2, size: 7,  count: 5,  maxLen: EN ? 6 : 3, limit: 300, bonus: 0,
               dirs: [[0, 1], [1, 0], [1, 1]], note: T('7칸 판 · 낱말 5개 · 대각선 추가') },
     easy:   { name: T('쉬움'),   step: 3, size: 8,  count: 6,  maxLen: 8, limit: 360, bonus: 0,
               dirs: [[0, 1], [1, 0], [1, 1]], note: T('8칸 판 · 낱말 6개') },
@@ -18,6 +24,11 @@ window.Games.wordsearch = (function () {
     hard:   { name: T('어려움'), step: 5, size: 12, count: 10, maxLen: 12, limit: 600, bonus: 250,
               dirs: [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1], [-1, 0], [-1, -1], [1, -1]], note: T('12칸 판 · 낱말 10개 · 여덟 방향') }
   };
+
+  /** 지금 말의 낱말 모음과 빈칸 메울 글자.
+     영어 글자판에 한글이 섞여 나오면 놀이가 되지 않는다. */
+  function themes() { return EN ? window.WORD_THEMES_EN : WORD_THEMES; }
+  function filler() { return EN ? window.WORD_FILLER_EN : WORD_FILLER; }
   var ORDER = ['step1', 'step2', 'easy', 'normal', 'hard'];
 
   /* 찾은 낱말을 칠하는 색 — 포인트 초록에서 시작해 서로 잘 구분되는 순서로 */
@@ -43,11 +54,12 @@ window.Games.wordsearch = (function () {
     var cap = Math.min(N, L.maxLen || N);
 
     // 짧은 낱말이 넉넉한 주제만 고른다 (앞 단계에서 판이 비지 않도록)
-    var themes = WORD_THEMES.filter(function (t) {
+    var all = themes();
+    var fit = all.filter(function (t) {
       return t.words.filter(function (w) { return w.length >= 2 && w.length <= cap; }).length >= L.count + 2;
     });
-    if (!themes.length) themes = WORD_THEMES;
-    var theme = themes[Math.floor(Math.random() * themes.length)];
+    if (!fit.length) fit = all;
+    var theme = fit[Math.floor(Math.random() * fit.length)];
 
     var pool = shuffle(theme.words.filter(function (w) { return w.length >= 2 && w.length <= cap; }));
 
@@ -76,7 +88,8 @@ window.Games.wordsearch = (function () {
     });
 
     for (var i = 0; i < grid.length; i++) {
-      if (!grid[i]) grid[i] = WORD_FILLER[Math.floor(Math.random() * WORD_FILLER.length)];
+      var F = filler();
+      if (!grid[i]) grid[i] = F[Math.floor(Math.random() * F.length)];
     }
 
     return { theme: theme.name, grid: grid, placed: placed, size: N };
@@ -121,7 +134,7 @@ window.Games.wordsearch = (function () {
         ('<h2 class="intro__title">' + T('낱말찾기') + '</h2>') +
         ('<p class="intro__desc">' + T('글자판 속에 숨은 낱말을') + '<br>' + T('손가락으로 쭉 그어 찾습니다.') + '<br><small>' + T('글자를 하나씩 눌러 이어 붙여도 됩니다.') + '<br>' + T('고른 칸은 낱말이 될 때까지 색이 남습니다.') + '</small></p>') +
         (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + (T('점') + '</b></p>') : '') +
-        (sess ? ('<button class="btn btn--accent btn--big" id="wsResume">' + T('이어서 하기') + ' <small>') + LEVELS[sess.level].name + ' · ' + sess.found.length + '/' + sess.placed.length + T('개 찾음</small></button>') : '') +
+        (sess ? ('<button class="btn btn--accent btn--big" id="wsResume">' + T('이어서 하기') + ' <small>') + LEVELS[sess.level].name + ' · ' + T('{a}/{b}개 찾음', { a: sess.found.length, b: sess.placed.length }) + '</small></button>' : '') +
         '<div class="levels">' +
           ORDER.map(function (k) {
             var L = LEVELS[k];
@@ -441,7 +454,6 @@ window.Games.wordsearch = (function () {
   }
 
   return {
-    langs: ['ko'],                                 // 한글 글자판과 낱말 모음이 있어야 한다
     art: '<path d="M3 3h18v18H3z"/><path d="M6.5 7.5h2M11 7.5h2M15.5 7.5h2M6.5 12h2M11 12h2M15.5 12h2M6.5 16.5h2M11 16.5h2M15.5 16.5h2"/><path d="M6 6.5 18 17"/>',
     id: 'wordsearch', name: T('낱말찾기'), tagline: T('글자판 속 숨은 낱말'),
     rules: {

@@ -71,6 +71,7 @@ function loadGames(lang) {
   run('js/data/quiz-data.js');
   run('js/data/quiz-data-en.js');
   run('js/data/words.js');
+  run('js/data/words-en.js');
   run('js/data/order-words.js');
   run('js/data/order-words-en.js');
   run('js/data/pictures.js');

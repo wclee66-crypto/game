@@ -49,14 +49,14 @@ window.Print = (function () {
     for (var n = 0; n < o.count; n++) {
       var made = Games.sudoku.makeForPrint(o.level);
       pages.push('<section class="ps-sheet">' +
-        sheetHead(T('스도쿠'), made.levelName + (o.count > 1 ? ' · ' + (n + 1) + T('번') : ''),
+        sheetHead(T('스도쿠'), made.levelName + (o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : ''),
           T('가로줄·세로줄·굵은 네모 칸마다 1부터 {n}까지 한 번씩만 들어갑니다.', { n: made.n })) +
         sudokuGrid(made, made.puzzle) +
       '</section>');
 
       if (o.answer) {
         pages.push('<section class="ps-sheet ps-sheet--ans">' +
-          sheetHead(T('스도쿠 정답'), made.levelName + (o.count > 1 ? ' · ' + (n + 1) + T('번') : ''), '') +
+          sheetHead(T('스도쿠 정답'), made.levelName + (o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : ''), '') +
           sudokuGrid(made, made.solution, { givens: made.puzzle, answer: true }) +
         '</section>');
       }
@@ -90,7 +90,7 @@ window.Print = (function () {
     for (var n = 0; n < o.count; n++) {
       var b = Games.wordsearch.makeForPrint(o.level);
       pages.push('<section class="ps-sheet">' +
-        sheetHead(T('낱말찾기'), (T('주제') + ' ') + b.theme + (o.count > 1 ? ' · ' + (n + 1) + T('번') : ''),
+        sheetHead(T('낱말찾기'), (T('주제') + ' ') + b.theme + (o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : ''),
           T('아래 낱말을 글자판에서 찾아 동그라미를 치세요. 가로·세로·대각선 모두 있습니다.')) +
         wsWords(b) +
         wsGrid(b) +
@@ -100,7 +100,7 @@ window.Print = (function () {
         var marked = {};
         b.placed.forEach(function (p) { p.cells.forEach(function (i) { marked[i] = true; }); });
         pages.push('<section class="ps-sheet ps-sheet--ans">' +
-          sheetHead(T('낱말찾기 정답'), (T('주제') + ' ') + b.theme + (o.count > 1 ? ' · ' + (n + 1) + T('번') : ''), '') +
+          sheetHead(T('낱말찾기 정답'), (T('주제') + ' ') + b.theme + (o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : ''), '') +
           wsWords(b) +
           wsGrid(b, marked) +
         '</section>');
@@ -120,14 +120,14 @@ window.Print = (function () {
       }).join('') + '</ol>';
 
       pages.push('<section class="ps-sheet ps-sheet--left">' +
-        sheetHead(T('숫자 계산'), b.levelName + (o.count > 1 ? ' · ' + (n + 1) + T('번') : ''),
+        sheetHead(T('숫자 계산'), b.levelName + (o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : ''),
           T('빈칸에 답을 적으세요.')) +
         body +
       '</section>');
 
       if (o.answer) {
         pages.push('<section class="ps-sheet ps-sheet--left ps-sheet--ans">' +
-          sheetHead(T('숫자 계산 정답'), b.levelName + (o.count > 1 ? ' · ' + (n + 1) + T('번') : ''), '') +
+          sheetHead(T('숫자 계산 정답'), b.levelName + (o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : ''), '') +
           '<ol class="ps-math">' + b.items.map(function (it) {
             return '<li><span class="pm-q">' + esc(it.q) + (it.noeq ? '' : ' =') + '</span><span class="pm-a">' + it.a + '</span></li>';
           }).join('') + '</ol>' +
@@ -160,14 +160,14 @@ window.Print = (function () {
       var b = Games.wordorder.makeForPrint(o.level, 10);
 
       pages.push('<section class="ps-sheet">' +
-        sheetHead(T('단어 순서 바로잡기'), b.levelName + (o.count > 1 ? ' · ' + (n + 1) + T('번') : ''),
+        sheetHead(T('단어 순서 바로잡기'), b.levelName + (o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : ''),
           T('글자 순서가 뒤섞인 낱말입니다. 바른 순서로 오른쪽 네모에 한 글자씩 적으세요.')) +
         woRows(b.items, false) +
       '</section>');
 
       if (o.answer) {
         pages.push('<section class="ps-sheet ps-sheet--ans">' +
-          sheetHead(T('단어 순서 정답'), b.levelName + (o.count > 1 ? ' · ' + (n + 1) + T('번') : ''), '') +
+          sheetHead(T('단어 순서 정답'), b.levelName + (o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : ''), '') +
           woRows(b.items, true) +
         '</section>');
       }
@@ -191,7 +191,7 @@ window.Print = (function () {
     var pages = [];
     for (var n = 0; n < o.count; n++) {
       var b = Games.spot.makeForPrint(o.level);
-      var no = o.count > 1 ? ' · ' + (n + 1) + T('번') : '';
+      var no = o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : '';
 
       pages.push('<section class="ps-sheet">' +
         sheetHead(T('틀린그림찾기'), b.levelName + no,
@@ -271,7 +271,7 @@ window.Print = (function () {
     var pages = [];
     for (var n = 0; n < o.count; n++) {
       var pic = Games.coloring.makeForPrint(o.level, o.picId);
-      var no = o.count > 1 ? ' · ' + (n + 1) + T('번') : '';
+      var no = o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : '';
       pages.push(coloringSheet(pic, null, false, T('색칠 공부'), no));
       if (o.answer) {
         pages.push(coloringSheet(pic, pic.regions.map(function (r) { return r.c; }), false, T('완성 견본'), no));

@@ -414,7 +414,7 @@ window.Games.spot = (function () {
         (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + (T('점') + '</b></p>') : '') +
         (sess && LEVELS[sess.level]
           ? ('<button class="btn btn--accent btn--big" id="spResume">' + T('이어서 하기') + ' <small>') +
-            LEVELS[sess.level].name + ' · ' + (sess.found || []).length + '/' + sess.diffs.length + (T('군데 찾음') + '</small></button>')
+            LEVELS[sess.level].name + ' · ' + T('{a}/{b}군데 찾음', { a: (sess.found || []).length, b: sess.diffs.length }) + '</small></button>'
           : '') +
         '<div class="levels">' +
           ORDER.map(function (k) {

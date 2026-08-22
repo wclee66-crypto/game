@@ -667,5 +667,68 @@ window.I18N.dict.en = {
   '서너 글자 낱말 · 고를 글자 6~8개': 'Three and four-syllable words · six to eight tiles',
   '네다섯 글자 낱말 · 고를 글자 8~10개': 'Four and five-syllable words · eight to ten tiles',
   '{n}문제 · 제한 {m}분': '{n} questions · {m} min limit',
-  '· 제한 {m}분': '· {m} min limit'
+  '· 제한 {m}분': '· {m} min limit',
+  /* ---------- 낱말찾기 ---------- */
+  '글자판 속 숨은 낱말': 'Words hidden in the letter grid',
+  '낱말찾기 점수 규칙': 'Word Search scoring',
+  '글자판 속에 숨은 낱말을': 'Find the words hidden',
+  '손가락으로 쭉 그어 찾습니다.': 'in the grid by dragging across them.',
+  '글자를 하나씩 눌러 이어 붙여도 됩니다.': 'You can also tap the letters one by one.',
+  '고른 칸은 낱말이 될 때까지 색이 남습니다.': 'Chosen squares stay coloured until they make a word.',
+  '{a}/{b}개 찾음': '{a} of {b} found',
+  '지금 판은 사라집니다. 새로 시작할까요?': 'This grid will be lost. Start a new one?',
+  '글자를 차례로 눌러 낱말을 만들어 보세요.': 'Tap the letters in order to build a word.',
+  '‘{w}’의 첫 글자에 표시했습니다. (−50점)': 'The first letter of “{w}” is marked. (−50 points)',
+  '찾은 낱말 ({a}/{b}개)': 'Words found ({a} of {b})',
+  '정확도 보너스 (헛선택 {n}회)': 'Accuracy bonus ({n} wrong drags)',
+  '시간이 다 되었습니다': 'Time is up',
+  '낱말을 모두 찾았습니다!': 'You found every word!',
+  '남은 낱말:': 'Words left:',
+  '주제 ‘{t}’ 완주!': 'Theme “{t}” complete!',
+  '모든 낱말을 찾아야 시간 보너스와 난이도 보너스를 받습니다.':
+    'Find every word to earn the time bonus and the level bonus.',
+  '낱말 점수': 'Word score',
+  '최대 600점 · 찾은 낱말 수에 비례 (모두 찾으면 600점)':
+    'Up to 600 points, in proportion to the words you find (600 for all of them)',
+  '최대 300점 · 모든 낱말을 찾았을 때만, 남은 시간에 비례':
+    'Up to 300 points, only if you find them all, in proportion to the time left',
+  '최대 100점 · 잘못 그은 횟수 1회마다 10점씩 줄어듦':
+    'Up to 100 points, losing 10 for each wrong drag',
+  '보통 +100점, 어려움 +250점 (모두 찾았을 때 · 1~3단계는 보너스 없음)':
+    'Normal +100, Hard +250 (only if you find them all; levels 1–3 have no bonus)',
+  '찾은 만큼만 점수로 기록됩니다': 'Only the words you found are recorded',
+  '1단계 첫걸음(6칸·낱말 4개·가로세로만) · 2단계 가볍게(7칸·5개) · 3단계 쉬움(8칸·6개) · 4단계 보통(10칸·8개) · 5단계 어려움(12칸·10개)':
+    'Level 1 (6×6, 4 words, across and down only) · Level 2 (7×7, 5) · Level 3 (8×8, 6) · Level 4 (10×10, 8) · Level 5 (12×12, 10)',
+  '6칸 판 · 낱말 4개 · 가로와 세로만': '6×6 grid · 4 words · across and down only',
+  '7칸 판 · 낱말 5개 · 대각선 추가': '7×7 grid · 5 words · diagonals added',
+  '8칸 판 · 낱말 6개': '8×8 grid · 6 words',
+  '10칸 판 · 낱말 8개 · 거꾸로도 나옴': '10×10 grid · 8 words · backwards too',
+  '12칸 판 · 낱말 10개 · 여덟 방향': '12×12 grid · 10 words · all eight directions',
+  /* ---------- 남아 있던 문구 (2026-08-22) ---------- */
+  '{a}/{b}군데 찾음': '{a} of {b} found',
+  '{n}번': 'no. {n}',
+  '칸 칠함': 'squares filled',
+  '번호 없이 마음대로': 'Free colouring, no numbers',
+  '더하고 빼고 곱하며 머리 깨우기': 'Add, take away and multiply to wake the mind',
+  '한 자리 더하기와 빼기 · 빈칸 채우기': 'Single-digit adding and taking away · fill the blank',
+  '두 자리 ± 한 자리 · 쉬운 곱하기 · 빈칸 채우기':
+    'Two digits ± one digit · easy times tables · fill the blank',
+  '두 자리 ± 두 자리 · 구구단 · 나눗셈 · 빈칸 채우기':
+    'Two digits ± two digits · times tables · division · fill the blank',
+  '세 자리 계산 · 두 자리 곱하기·나누기 · 세 수 이어 계산':
+    'Three-digit sums · two-digit multiply and divide · three numbers in a row',
+  '1단계 한 자리 더하기 · 2단계 한 자리 더하기·빼기와 빈칸 채우기 · 3단계 두 자리 ± 한 자리와 쉬운 곱하기 · 4단계 두 자리 ± 두 자리와 구구단·나눗셈 · 5단계 세 자리 계산과 두 자리 곱하기·나누기, 세 수 이어 계산':
+    'Level 1 single-digit adding · Level 2 adding and taking away, fill the blank · Level 3 two digits ± one digit, easy times tables · Level 4 two digits ± two digits, times tables and division · Level 5 three-digit sums, two-digit multiply and divide, three numbers in a row',
+  ' 경과': ' elapsed',
+  '메모 모드입니다. 숫자를 작게 적어 둡니다.': 'Note mode. Numbers are written small.',
+  '무엇을 했는지': 'what you played',
+  '판의 기록을 불러왔습니다.': 'Your saved round has been restored.',
+  '같은 게임을 여러 번 해도 그날 총점에는 <b>가장 높은 점수</b>만 반영됩니다. 판마다의 기록은 모두 남습니다.':
+    'If you play the same game more than once, only your <b>best score</b> counts towards that day’s total. Every round is still kept in your record.',
+  '점수 규칙': 'Scoring',
+  '문제지': 'worksheet',
+  '도안': 'colouring sheet',
+  '잘하셨습니다!': 'Well done!',
+  '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="지우개">':
+    '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="Eraser">'
 };

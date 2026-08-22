@@ -29,12 +29,18 @@ window.Games.coloring = (function () {
   /* '5가 적힌 칸' vs '6이 적힌 칸' — 숫자를 읽는 소리에 받침이 있는지로 갈린다.
      (일·삼·육·칠·팔·십은 받침이 있고, 이·사·오·구는 없다) */
   var NUM_BATCHIM = { 1: 1, 3: 1, 6: 1, 7: 1, 8: 1, 10: 1 };
-  function numJosa(n, withB, noB) { return n + (NUM_BATCHIM[n] ? withB : noB); }
+  /** 숫자에 붙는 조사. 영어에서는 붙이지 않는다. */
+  function numJosa(n, withB, noB) {
+    if (I18N.get() !== 'ko') return n;
+    return n + (NUM_BATCHIM[n] ? withB : noB);
+  }
 
-  /** 낱말 끝 글자에 받침이 있는가 — '초록을' vs '노랑를' 을 가르기 위해 */
+  /** 낱말 끝 글자에 받침이 있는가 — '초록을' vs '노랑를' 을 가르기 위해.
+     한글이 아니면 조사를 붙이지 않는다. 영어에서 'Butterfly를' 이 되면 안 된다. */
   function josa(word, withB, noB) {
     var c = word.charCodeAt(word.length - 1) - 0xAC00;
-    return word + ((c >= 0 && c <= 11171 && c % 28 !== 0) ? withB : noB);
+    if (c < 0 || c > 11171) return word;
+    return word + (c % 28 !== 0 ? withB : noB);
   }
 
   /* ================= 판 만들기 ================= */
