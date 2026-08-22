@@ -33,13 +33,29 @@ $swText = [regex]::Replace($swText, "malgeunddeul-v\d+", "malgeunddeul-v$new")
 Write-Host ""
 Write-Host ("  버전 v{0} -> v{1} 로 올렸습니다." -f $old, $new) -ForegroundColor Cyan
 
+# ---------- 1-2. 검색용 페이지 새로 만들기 ----------
+# 게임 정보를 읽어 /sudoku/ 같은 낱장 페이지와 sitemap.xml 을 다시 만듭니다.
+# 게임이 늘면 페이지도 저절로 늘어납니다.
+& node (Join-Path $root 'tools\build-seo.js')
+if ($LASTEXITCODE -ne 0) { throw '검색용 페이지를 만들지 못했습니다.' }
+Write-Host ''
+
 # ---------- 2. zip 만들기 ----------
 $stage = Join-Path $env:TEMP 'malgeun-pack'
 if (Test-Path $stage) { Remove-Item -LiteralPath $stage -Recurse -Force }
 New-Item -ItemType Directory -Force $stage | Out-Null
 
 Copy-Item (Join-Path $root 'index.html'), (Join-Path $root 'manifest.json'), $swJs -Destination $stage
+Copy-Item (Join-Path $root 'sitemap.xml'), (Join-Path $root 'robots.txt') -Destination $stage
 Copy-Item (Join-Path $root 'css'), (Join-Path $root 'js'), (Join-Path $root 'icons') -Destination $stage -Recurse
+
+# 검색용 낱장 페이지 (게임마다 한 장 + 문제지 안내 + 영어판)
+$pages = @('en', 'print')
+Get-ChildItem (Join-Path $root 'js\games') -Filter '*.js' | ForEach-Object { $pages += $_.BaseName }
+foreach ($d in ($pages | Select-Object -Unique)) {
+  $src = Join-Path $root $d
+  if (Test-Path $src) { Copy-Item $src -Destination $stage -Recurse }
+}
 
 $zip = Join-Path (Split-Path $root -Parent) '새록-배포용.zip'
 if (Test-Path $zip) { Remove-Item -LiteralPath $zip -Force }

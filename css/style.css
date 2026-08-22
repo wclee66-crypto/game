@@ -802,6 +802,11 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
   display: grid; place-items: center;
 }
 .about__x:active { background: var(--bg); }
+.about__more {
+  margin-top: .7rem; border: 0; background: none; padding: 0;
+  font-size: .8rem; font-weight: 800; color: var(--accent-d);
+  text-decoration: underline; text-underline-offset: 3px;
+}
 
 /* 건의하기 — 글씨가 크고 칸이 넉넉해야 어르신이 쓰기 편하다 */
 .sg-field { display: block; margin-top: 1rem; }

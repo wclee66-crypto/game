@@ -74,6 +74,7 @@ window.I18N.dict.en = {
   '새록은 치매를 예방하고 인지 능력을 지키는 데 도움이 되도록 만든 두뇌 훈련 놀이터입니다. 어렵지 않은 놀이를 매일 조금씩 하시면 됩니다. 컴퓨터·휴대폰·태블릿 어디서나 열리고, 화면이 불편하시면 문제를 종이에 뽑아 연필로 푸셔도 됩니다.':
     'Saerok is a brain-training playground built to help prevent dementia and keep your mind sharp. Just play a little every day — nothing here is hard. It works on a computer, a phone or a tablet, and if a screen is awkward you can print the puzzles and solve them with a pencil.',
   '모두 무료입니다.': 'Everything is free.',
+  '종이 문제지 안내 보기': 'See the free printable worksheets',
 
   /* ---------- 문제 출력 (여러 종목 섞어) ---------- */
   '문제 출력': 'Print puzzles',

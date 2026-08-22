@@ -1,0 +1,95 @@
+/* 새록 — 검색용 페이지(글이 있는 낱장) 전용 모양
+ *
+ * 앱 화면(css/style.css)의 색과 글꼴을 그대로 쓰되,
+ * 이 페이지들은 '읽는 글'이라 줄 간격을 넉넉히 둔다.
+ * 어르신이 읽으실 수 있게 글씨를 크게 잡는다.
+ */
+
+.doc {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.75;
+}
+
+/* ---- 맨 위 ---- */
+.doc__top {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  max-width: 44rem; margin: 0 auto; padding: 1.1rem 1.2rem;
+}
+.doc__brand {
+  display: inline-flex; align-items: center; gap: .55rem;
+  color: var(--accent); text-decoration: none;
+  font-size: 1.15rem; font-weight: 800; letter-spacing: -.03em;
+}
+.doc__brand svg { width: 2rem; height: 2rem; }
+.doc__brand span { color: var(--ink); }
+.doc__lang {
+  font-size: .82rem; font-weight: 700; color: var(--accent-d);
+  text-decoration: none; padding: .35rem .8rem;
+  border: 1px solid #C6E7D6; border-radius: 999px; background: var(--accent-s);
+}
+
+/* ---- 본문 ---- */
+.doc__main { max-width: 44rem; margin: 0 auto; padding: .5rem 1.2rem 2rem; }
+
+.doc__main h1 {
+  margin: .6rem 0 .4rem; font-size: 1.9rem; font-weight: 800;
+  letter-spacing: -.04em; line-height: 1.25;
+}
+.doc__main h2 {
+  margin: 2rem 0 .6rem; font-size: 1.2rem; font-weight: 800;
+  letter-spacing: -.03em; padding-top: 1.2rem; border-top: 1px solid var(--line);
+}
+.doc__main p { margin: 0 0 1rem; font-size: 1rem; color: var(--ink-2); }
+.doc__lead { font-size: 1.1rem !important; color: var(--ink) !important; font-weight: 600; }
+
+/* ---- 누르는 자리 ---- */
+.doc__cta { display: flex; flex-wrap: wrap; gap: .55rem; margin: 1.3rem 0 1.6rem !important; }
+.doc__btn {
+  display: inline-block; text-decoration: none;
+  background: var(--accent); color: #fff;
+  padding: .85rem 1.5rem; border-radius: 999px;
+  font-size: 1rem; font-weight: 800; letter-spacing: -.02em;
+}
+.doc__btn--ghost { background: var(--surf); color: var(--accent-d); box-shadow: inset 0 0 0 1.5px var(--accent); }
+
+/* ---- 목록 · 표 ---- */
+.doc__lv { margin: 0 0 1rem; padding-left: 1.3rem; }
+.doc__lv li { margin-bottom: .5rem; font-size: 1rem; color: var(--ink-2); }
+.doc__lv li b { color: var(--ink); }
+.doc__lv a { color: var(--accent-d); text-decoration: none; }
+
+.doc__tbl { width: 100%; border-collapse: collapse; margin: 0 0 1rem; }
+.doc__tbl th, .doc__tbl td {
+  text-align: left; vertical-align: top; padding: .6rem .5rem;
+  border-top: 1px solid var(--line); font-size: .94rem;
+}
+.doc__tbl th { width: 32%; font-weight: 800; color: var(--ink); }
+.doc__tbl td { color: var(--ink-2); }
+
+/* ---- 다른 게임 · 맨 아래 ---- */
+.doc__more { max-width: 44rem; margin: 0 auto; padding: 0 1.2rem; }
+.doc__more h2 {
+  margin: 1.5rem 0 .7rem; font-size: 1rem; font-weight: 800;
+  padding-top: 1.2rem; border-top: 1px solid var(--line);
+}
+.doc__links { display: flex; flex-wrap: wrap; gap: .45rem; }
+.doc__links a {
+  text-decoration: none; font-size: .9rem; font-weight: 700;
+  color: var(--accent-d); background: var(--accent-s);
+  border: 1px solid #C6E7D6; border-radius: 999px; padding: .45rem 1rem;
+}
+
+.doc__foot {
+  max-width: 44rem; margin: 0 auto; padding: 1.6rem 1.2rem 3rem;
+  font-size: .88rem; color: var(--ink-3);
+}
+.doc__foot a { color: var(--accent-d); font-weight: 700; text-decoration: none; }
+.doc__foot p { margin: .5rem 0 0; font-size: .82rem; }
+
+@media (min-width: 720px) {
+  .doc__main h1 { font-size: 2.3rem; }
+  .doc__main p, .doc__lv li { font-size: 1.05rem; }
+}

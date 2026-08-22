@@ -27,7 +27,9 @@ http.createServer((req, res) => {
     return;
   }
   let rel = decodeURIComponent(req.url.split('?')[0]);
-  if (rel === '/') rel = '/index.html';
+  /* 폴더 주소(/print/ 같은)는 그 안의 index.html 을 준다.
+     실제 호스팅이 그렇게 하므로 여기서도 똑같이 맞춘다. */
+  if (rel.endsWith('/')) rel += 'index.html';
   const file = path.join(ROOT, path.normalize(rel).replace(/^([/\\])+/, ''));
   if (!file.startsWith(ROOT)) { res.writeHead(403).end('forbidden'); return; }
   fs.readFile(file, (err, buf) => {

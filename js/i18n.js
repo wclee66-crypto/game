@@ -58,10 +58,16 @@ window.I18N = (function () {
     return LANGS[0];
   }
 
-  /** 저장된 설정을 먼저 보고, 없으면 브라우저 말을 따른다 */
+  /** 주소에 ?lang=en 이 있으면 그것부터. 없으면 저장된 설정, 그것도 없으면 브라우저 말.
+   *  (검색용 낱장 페이지에서 '지금 해 보기'로 들어올 때 쓴다) */
+  function fromUrl() {
+    var m = /[?&]lang=([a-z-]+)/i.exec(location.search || '');
+    return m && has(m[1].toLowerCase()) ? m[1].toLowerCase() : null;
+  }
   function start() {
-    var saved = Store.settings().lang;
-    set(saved || guess());
+    var want = fromUrl();
+    if (want) Store.setSetting('lang', want);          /* 고른 말을 기억해 둔다 */
+    set(want || Store.settings().lang || guess());
   }
 
   /**
