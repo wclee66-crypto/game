@@ -241,6 +241,7 @@ alt + (alt ? '\n' : '') +
 '<meta property="og:image:height" content="630">\n' +
 '<meta property="og:image:alt" content="' + esc(o.imageAlt || o.title) + '">\n' +
 '<meta name="twitter:card" content="summary_large_image">\n' +
+'<link rel="icon" href="/favicon.ico" sizes="any">\n' +
 '<link rel="icon" href="/icons/favicon-32.png" sizes="32x32">\n' +
 '<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">\n' +
 '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +

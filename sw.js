@@ -9,7 +9,7 @@ var VERSION = 'malgeunddeul-v45';
  * 실제로 저장할 파일은 install 때 index.html 을 읽어서 스스로 찾아낸다.
  * 그래서 새 게임 파일을 index.html 에 한 줄 넣으면 이 목록은 손대지 않아도 된다. */
 var ASSETS = [
-  './', './index.html', './manifest.json',
+  './', './index.html', './manifest.json', './favicon.ico',
   './css/style.css', './css/page.css',
   './js/storage.js', './js/i18n.js', './js/lang/en.js', './js/ui.js', './js/print.js', './js/suggest.js', './js/app.js',
   './icons/favicon-32.png', './icons/favicon-64.png', './icons/apple-touch-icon.png',

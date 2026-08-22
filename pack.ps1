@@ -54,6 +54,8 @@ New-Item -ItemType Directory -Force $stage | Out-Null
 
 Copy-Item (Join-Path $root 'index.html'), (Join-Path $root 'manifest.json'), $swJs -Destination $stage
 Copy-Item (Join-Path $root 'sitemap.xml'), (Join-Path $root 'robots.txt') -Destination $stage
+# 브라우저가 주소 맨 뒤에서 저절로 찾는 아이콘 — 없으면 헛걸음을 한다
+Copy-Item (Join-Path $root 'favicon.ico'), (Join-Path $root 'favicon.png') -Destination $stage
 
 # 검색 등록용 소유 확인 파일 (구글·네이버가 준 것) — 지우면 등록이 풀립니다
 Get-ChildItem $root -File -Filter 'google*.html' | ForEach-Object { Copy-Item $_.FullName -Destination $stage }
