@@ -104,11 +104,13 @@ var COPY = {
     levels: '난이도 5단계',
     scoring: '점수 규칙',
     free: '모두 무료입니다. 회원가입도 필요 없습니다.',
-    intro: '새록은 치매를 예방하고 인지 능력을 지키는 데 도움이 되도록 만든 두뇌 훈련 놀이터입니다. ' +
-           '컴퓨터·휴대폰·태블릿 어디서나 열리고, 화면이 불편하시면 문제를 종이에 뽑아 연필로 푸셔도 됩니다.',
-    printTitle: '무료 인쇄 활동지 — 어르신 두뇌 훈련 문제지',
-    printLead: '스도쿠·낱말찾기·숫자 계산·단어 순서·색칠 공부·틀린그림찾기 문제지를 ' +
-               'A4 용지에 몇 장이든 공짜로 뽑을 수 있습니다. 회원가입도, 돈도 들지 않습니다.',
+    intro: '새록은 초기 치매 및 인지 장애 개선에 도움이 되는 게임을 무료로 이용하실 수 있는 ' +
+           '두뇌 훈련 놀이터입니다. 컴퓨터·태블릿·휴대폰 어디서나 열리고, ' +
+           '화면이 불편하시면 문제를 출력하여 사용하실 수도 있습니다.',
+    printTitle: '어르신 두뇌 훈련 문제지',
+    printLead: '초기 치매 및 인지 장애 개선에 도움이 되는 ' +
+               '스도쿠·낱말찾기·숫자 계산·단어 순서·색칠 공부·틀린그림찾기 게임을 ' +
+               'A4 용지에 몇 장이든 무료로 인쇄하실 수 있습니다.',
     printWho: '요양보호사·사회복지사·주간보호센터·노인복지관에서 그대로 쓰실 수 있습니다. ' +
               '누를 때마다 새 문제가 만들어지므로 같은 문제지를 다시 쓸 일이 없습니다.',
     printHow: '뽑는 방법',
@@ -122,6 +124,8 @@ var COPY = {
     printList: '뽑을 수 있는 문제지',
     langNote: 'English',
     aboutTitle: '이 사이트는',
+    story: '제가 치매를 앓으시는 어머니를 위해 인터넷에서 문제를 검색하다가 찾기가 너무 힘들어 ' +
+           '직접 만들어 쓰던 것입니다. 다른 분들에게도 도움이 되면 좋겠다는 생각에 올려 봅니다.',
     shotCap: '실제로 뽑히는 문제지입니다. 누를 때마다 새 문제가 만들어집니다.',
     shotList: '문제지 미리 보기'
   },
@@ -135,8 +139,9 @@ var COPY = {
     levels: 'Five levels',
     scoring: 'Scoring',
     free: 'Everything is free. No sign-up.',
-    intro: 'Saerok is a brain-training playground built to help prevent dementia and keep the mind sharp. ' +
-           'It works on a computer, a phone or a tablet, and you can print the puzzles and solve them with a pencil.',
+    intro: 'Saerok is a brain-training playground where games that help with early dementia and ' +
+           'mild cognitive decline are free to play. It works on a computer, a tablet or a phone, ' +
+           'and if the screen is hard to use you can print the puzzles instead.',
     printTitle: 'Free printable brain puzzles for seniors',
     printLead: 'Print as many A4 worksheets as you like — sudoku, word search, mental math, word order, ' +
                'colour by number and spot the difference. No sign-up, no cost.',
@@ -153,6 +158,9 @@ var COPY = {
     printList: 'What you can print',
     langNote: '한국어',
     aboutTitle: 'About this site',
+    story: 'I went looking online for puzzles for my mother, who lives with dementia, and found it ' +
+           'far too hard to find good ones — so I made these for her. I am putting them here in the ' +
+           'hope that they help someone else too.',
     shotCap: 'A real worksheet. Every sheet is generated fresh when you print.',
     shotList: 'Worksheet preview'
   }
@@ -303,6 +311,7 @@ function gamePage(g, lang, C, games) {
     shotFigure(g.id, g.name, lang, C) +
     (lv ? '<h2>' + C.levels + '</h2>\n<ul class="doc__lv">' + lv + '</ul>\n' : '') +
     (rules ? '<h2>' + C.scoring + '</h2>\n<table class="doc__tbl"><tbody>' + rules + '</tbody></table>\n' : '') +
+    '<p class="doc__note">' + esc(C.story) + '</p>\n' +
     '</main>\n' +
     footer(C, lang, games, g.id);
 
@@ -352,6 +361,7 @@ function printPage(lang, C, games) {
     '<h2>' + C.printList + '</h2>\n<ul class="doc__lv">' + list + '</ul>\n' +
     '<h2>' + C.printHow + '</h2>\n<ol class="doc__lv">' + steps + '</ol>\n' +
     '<p>' + esc(C.printNote) + '</p>\n' +
+    '<p class="doc__note">' + esc(C.story) + '</p>\n' +
     '</main>\n' +
     footer(C, lang, games, null);
 

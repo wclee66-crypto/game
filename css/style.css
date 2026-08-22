@@ -795,6 +795,10 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
 .about__h { margin: 0 0 .45rem; font-size: 1.02rem; font-weight: 800; color: var(--accent-d); letter-spacing: -.03em; }
 .about__p { margin: 0; font-size: .82rem; line-height: 1.7; color: var(--ink-2); }
 .about__p--sm { margin-top: .4rem; font-size: .76rem; font-weight: 700; color: var(--accent-d); }
+.about__note {
+  margin-top: .7rem; padding-left: .7rem; font-size: .78rem;
+  color: var(--ink-3); border-left: 2px solid var(--line);
+}
 .about__x {
   position: absolute; top: .5rem; right: .5rem;
   width: 2rem; height: 2rem; border: 0; border-radius: 50%;

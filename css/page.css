@@ -123,3 +123,11 @@
 @media (min-width: 720px) {
   .doc__tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
+
+/* ---- 왜 만들었는지 ----
+   강조가 아니라 곁들이는 말이다. 앱 홈의 .about__note 와 같은 결로 둔다. */
+.doc__note {
+  margin: 1.8rem 0 0; padding-left: .9rem;
+  font-size: .92rem; line-height: 1.75; color: var(--ink-3);
+  border-left: 2px solid var(--line);
+}
