@@ -64,9 +64,23 @@ window.I18N = (function () {
     var m = /[?&]lang=([a-z-]+)/i.exec(location.search || '');
     return m && has(m[1].toLowerCase()) ? m[1].toLowerCase() : null;
   }
+  /** 주소에서 ?lang= 만 떼어 낸다. 나머지 물음표 뒤 글자와 # 은 그대로 둔다.
+   *  이걸 안 지우면, 설정에서 말을 바꿔도 다시 열릴 때 주소가 도로 덮어쓴다. */
+  function stripLangFromUrl() {
+    if (!window.history || !history.replaceState || !location.search) return;
+    var kept = location.search.slice(1).split('&').filter(function (kv) {
+      return kv && !/^lang=/i.test(kv);
+    });
+    var q = kept.length ? '?' + kept.join('&') : '';
+    try { history.replaceState(null, '', location.pathname + q + (location.hash || '')); } catch (e) {}
+  }
+
   function start() {
     var want = fromUrl();
-    if (want) Store.setSetting('lang', want);          /* 고른 말을 기억해 둔다 */
+    if (want) {
+      Store.setSetting('lang', want);                  /* 고른 말을 기억해 둔다 */
+      stripLangFromUrl();                              /* 그리고 주소에서는 지운다 */
+    }
     set(want || Store.settings().lang || guess());
   }
 
