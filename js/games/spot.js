@@ -669,7 +669,8 @@ window.Games.spot = (function () {
 
   /* ================= 바깥에 내보내기 ================= */
 
-  return {
+  return {
+    art: '<path d="M3 4h8v8H3zM13 4h8v8h-8z"/><circle cx="7" cy="8" r="1.7"/><circle cx="17" cy="8" r="1.7"/><path d="M6 16.5h5M13 16.5h5M6 19.5h3M13 19.5h5"/>',
     id: 'spot', name: T('틀린그림찾기'), tagline: T('두 그림을 견주어 보는 눈'),
     rules: {
       title: T('틀린그림찾기 점수 규칙'),

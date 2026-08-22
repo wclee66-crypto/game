@@ -481,7 +481,8 @@ window.Games.sudoku = (function () {
 
   /* ================= 진입점 ================= */
 
-  return {
+  return {
+    art: '<path d="M3 3h18v18H3z"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/>',
     id: 'sudoku', name: T('스도쿠'), tagline: T('숫자로 하는 두뇌 체조'),
     rules: {
       title: T('스도쿠 점수 규칙'),

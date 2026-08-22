@@ -61,13 +61,30 @@ window.I18N.dict.en = {
   '오늘 시작해요': 'Start today',
   '오늘의 게임': "Today's games",
   '게임 모두 보기 ({n}가지)': 'See all games ({n})',
-  '최근 이레': 'Last 7 days',
+  '최근 일주일': 'Last 7 days',
   '막대는 그날의 총점입니다. 같은 게임을 여러 번 하면 가장 높은 점수만 더해집니다.':
     'Each bar is that day’s total. If you play a game more than once, only your best score counts.',
   '점수 규칙 한눈에': 'Scoring at a glance',
   '기록 자세히': 'Full record',
   '매일 조금씩, 여러 종목을 골고루 하는 것이 두뇌 건강에 좋습니다.':
     'A little every day, across different games, is best for your mind.',
+
+  /* ---------- 이 사이트 소개 ---------- */
+  '머리를 쓰는 일이 가장 좋은 예방입니다': 'Using your mind is the best prevention',
+  '새록은 치매를 예방하고 인지 능력을 지키는 데 도움이 되도록 만든 두뇌 훈련 놀이터입니다. 어렵지 않은 놀이를 매일 조금씩 하시면 됩니다. 컴퓨터·휴대폰·태블릿 어디서나 열리고, 화면이 불편하시면 문제를 종이에 뽑아 연필로 푸셔도 됩니다.':
+    'Saerok is a brain-training playground built to help prevent dementia and keep your mind sharp. Just play a little every day — nothing here is hard. It works on a computer, a phone or a tablet, and if a screen is awkward you can print the puzzles and solve them with a pencil.',
+  '모두 무료입니다.': 'Everything is free.',
+
+  /* ---------- 문제 출력 (여러 종목 섞어) ---------- */
+  '문제 출력': 'Print puzzles',
+  '문제를 A4 용지로 출력하여 직접 풀이할 수 있습니다': 'Print puzzles on A4 paper and solve them by hand',
+  '여러 종목을 섞어 <b>A4 문제지 묶음</b>을 만듭니다. 한 장에 한 종목씩, 매번 새 문제가 나옵니다.':
+    'Makes a <b>pack of A4 worksheets</b> across different games — one game per sheet, freshly made each time.',
+  '그 단계가 없는 종목은 알맞은 단계로 나옵니다.': 'Games without that level are printed at a suitable one.',
+  '지금 뽑을 수 있는 종목: {list}': 'Available now: {list}',
+  '지금 말로 종이에 뽑을 수 있는 게임이 없습니다.': 'No games can be printed in this language yet.',
+  '1단계': 'Level 1', '2단계': 'Level 2', '3단계': 'Level 3', '4단계': 'Level 4', '5단계': 'Level 5',
+  '6장': '6', '10장': '10',
 
   /* ---------- 기록 ---------- */
   '총 판수': 'Games played',

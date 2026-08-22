@@ -509,7 +509,8 @@ window.Games.coloring = (function () {
 
   /* ================= 바깥으로 ================= */
 
-  return {
+  return {
+    art: '<path d="M4 20l1.2-3.6 8.6-8.6 2.4 2.4-8.6 8.6z"/><path d="M14.6 5.2l2-2a1.7 1.7 0 0 1 2.4 2.4l-2 2z"/><path d="M4 20h16"/>',
     id: 'coloring', name: T('색칠 공부'), tagline: T('번호대로 색을 채워 가는 시간'),
     rules: {
       title: T('색칠 공부 점수 규칙'),

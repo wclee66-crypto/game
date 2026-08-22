@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v31';                // sw.js 의 VERSION 과 함께 올린다
+  var APP_VERSION = 'v32';                // sw.js 의 VERSION 과 함께 올린다
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -75,6 +75,23 @@ window.App = (function () {
     return '<div class="install install--tip">' +
       '<span class="install__ico">⤓</span>' +
       '<span class="install__txt">' + UI.esc(title) + '<em>' + detail + '</em></span></div>';
+  }
+
+  /* 이 사이트가 무엇을 하는 곳인지 한 번은 알려 드린다.
+     처음 오신 분에게는 꼭 필요하지만, 매일 오시는 분에게는 자리만 차지하므로
+     닫으면 다시 나오지 않는다. (설정에 introDone 으로 남는다) */
+  function introCard() {
+    if (Store.settings().introDone) return '';
+    return '<section class="about">' +
+      '<button class="about__x" id="hmAboutX" aria-label="' + T('닫기') + '">×</button>' +
+      '<h2 class="about__h">' + T('머리를 쓰는 일이 가장 좋은 예방입니다') + '</h2>' +
+      '<p class="about__p">' +
+        T('새록은 치매를 예방하고 인지 능력을 지키는 데 도움이 되도록 만든 두뇌 훈련 놀이터입니다. ' +
+          '어렵지 않은 놀이를 매일 조금씩 하시면 됩니다. 컴퓨터·휴대폰·태블릿 어디서나 열리고, ' +
+          '화면이 불편하시면 문제를 종이에 뽑아 연필로 푸셔도 됩니다.') +
+      '</p>' +
+      '<p class="about__p about__p--sm">' + T('모두 무료입니다.') + '</p>' +
+    '</section>';
   }
 
   function installCard() {
@@ -260,6 +277,7 @@ window.App = (function () {
     view.innerHTML =
       '<section class="home">' +
 
+        introCard() +
         installCard() +
 
         '<div class="card card--today">' +
@@ -276,15 +294,17 @@ window.App = (function () {
           ? '<button class="btn btn--ghost btn--wide" id="hmMore">' + T('게임 모두 보기 ({n}가지)', { n: GAMES.length }) + '</button>'
           : '') +
 
-        ('<h2 class="sec">' + T('최근 이레') + '</h2>') +
+        ('<h2 class="sec">' + T('최근 일주일') + '</h2>') +
         '<div class="card">' +
           UI.barChart(chartData, chartMax) +
           ('<p class="card__foot">' + T('막대는 그날의 총점입니다. 같은 게임을 여러 번 하면 가장 높은 점수만 더해집니다.') + '</p>') +
         '</div>' +
 
-        '<div class="row2">' +
+        '<div class="row3">' +
           ('<button class="btn btn--ghost" id="hmRules">' + T('점수 규칙 한눈에') + '</button>') +
           ('<button class="btn btn--ghost" id="hmRecords">' + T('기록 자세히') + '</button>') +
+          ('<button class="btn btn--ghost btn--print" id="hmPrint">' + T('문제 출력') +
+            '<small>' + T('문제를 A4 용지로 출력하여 직접 풀이할 수 있습니다') + '</small></button>') +
         '</div>' +
 
         ('<button class="linkbtn" id="hmSuggest">' + T('건의하기') + '</button>') +
@@ -295,12 +315,18 @@ window.App = (function () {
     view.querySelectorAll('[data-go]').forEach(function (b) {
       b.addEventListener('click', function () { go(b.dataset.go); });
     });
+    var ax = view.querySelector('#hmAboutX');
+    if (ax) ax.addEventListener('click', function () {
+      Store.setSetting('introDone', true);
+      renderHome();
+    });
     var ib = view.querySelector('#hmInstall');
     if (ib) ib.addEventListener('click', doInstall);
     var mb = view.querySelector('#hmMore');
     if (mb) mb.addEventListener('click', function () { go('games'); });
     view.querySelector('#hmRules').addEventListener('click', function () { showRules('all'); });
     view.querySelector('#hmRecords').addEventListener('click', function () { go('records'); });
+    view.querySelector('#hmPrint').addEventListener('click', function () { Print.mixedDialog(); });
     view.querySelector('#hmSuggest').addEventListener('click', function () { Suggest.open(); });
   }
 
@@ -463,6 +489,16 @@ window.App = (function () {
     UI.modal({ title: which === 'all' ? T('점수 규칙') : '', body: body, actions: [{ label: T('닫기'), kind: 'accent' }] });
   }
 
+  /* 게임을 나타내는 작은 그림. 게임 파일의 art 를 그대로 쓴다.
+     art 가 없는 게임은 동그라미 하나로 대신한다 — 화면이 비지 않게. */
+  var RECORDS_ART = '<path d="M4 20V10M10 20V4M16 20v-7M4 20h16"/>';
+  function gameArt(g) {
+    var d = g === 'records' ? RECORDS_ART : (Games[g] && Games[g].art);
+    if (!d) d = '<circle cx="12" cy="12" r="7"/>';
+    return '<svg class="switcher__art" viewBox="0 0 24 24" aria-hidden="true" fill="none" ' +
+      'stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>';
+  }
+
   function gameSwitcher(from) {
     var others = GAMES.concat(['records']).filter(function (g) { return g !== from; });
     var body = '<div class="switcher">' + others.map(function (g) {
@@ -470,7 +506,8 @@ window.App = (function () {
       var sub = g === 'records' ? T('날짜별 점수 보기')
         : (Games[g].hasProgress() ? T('진행 중인 판이 있습니다') : T('새로 시작하기'));
       return '<button class="switcher__item" data-go="' + g + '">' +
-        '<span class="switcher__txt">' + name + '<em>' + sub + '</em></span></button>';
+        '<span class="switcher__txt">' + name + '<em>' + sub + '</em></span>' +
+        gameArt(g) + '</button>';
     }).join('') + '</div>';
 
     var m = UI.modal({

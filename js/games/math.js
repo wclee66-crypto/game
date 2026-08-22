@@ -370,7 +370,8 @@ window.Games.math = (function () {
     keyHandler = null;
   }
 
-  return {
+  return {
+    art: '<path d="M4 8h6M7 5v6"/><path d="M14 8h6"/><path d="M4 17h6"/><path d="M14.5 14.5l5 5M19.5 14.5l-5 5"/>',
     id: 'math', name: T('숫자 계산'), tagline: T('더하기 빼기로 머리 깨우기'),
     rules: {
       title: T('숫자 계산 점수 규칙'),

@@ -285,6 +285,94 @@ window.Print = (function () {
     printHtml(coloringSheet(pic, fills, noNumbers));
   }
 
+  /* ---------------- 여러 게임 섞어 뽑기 ---------------- */
+
+  /** 종이로 뽑을 수 있는 게임 목록 (지금 고른 말로 할 수 있는 것만) */
+  function printable() {
+    var out = [];
+    Object.keys(window.Games).forEach(function (id) {
+      var G = window.Games[id];
+      if (!G.makeForPrint || !SHEETS[id]) return;
+      var L = G.langs;
+      if (L && L.indexOf(I18N.get()) < 0) return;      /* 그 말로 못 하는 게임은 뺀다 */
+      out.push(id);
+    });
+    return out;
+  }
+
+  /** 매수만큼 '서로 다른 게임'을 골라 한 장씩 만든다.
+   *  같은 게임을 여러 장 뽑는 것이 아니라, 종목을 돌아가며 뽑는다.
+   *  게임 수보다 많이 뽑으면 한 바퀴 더 돈다 (문제는 그때마다 새로 만들어진다). */
+  function mixedSheets(o) {
+    var ids = printable();
+    if (!ids.length) return '';
+
+    var bag = ids.slice(), order = [];
+    while (order.length < o.count) {
+      if (!bag.length) bag = ids.slice();
+      order.push(bag.splice(Math.floor(Math.random() * bag.length), 1)[0]);
+    }
+
+    return order.map(function (id) {
+      var G = window.Games[id];
+      var lv = o.level;
+      if (!G.levels || !G.levels[lv]) {                /* 그 게임에 없는 단계면 가운데 단계로 */
+        var ord = G.levelOrder || Object.keys(G.levels || {});
+        lv = ord[Math.min(ord.length - 1, 2)];
+      }
+      return SHEETS[id]({ level: lv, count: 1, answer: o.answer, picId: 'random' });
+    }).join('');
+  }
+
+  /** 홈의 '문제 출력' — 여러 종목을 섞어 한 묶음으로 */
+  function mixedDialog() {
+    var ids = printable();
+    if (!ids.length) { UI.toast(T('지금 말로 종이에 뽑을 수 있는 게임이 없습니다.')); return; }
+
+    var pick = { level: 'easy', count: 4, answer: false };
+    var LV = [
+      ['step1', T('1단계')], ['step2', T('2단계')], ['easy', T('3단계')],
+      ['normal', T('4단계')], ['hard', T('5단계')]
+    ];
+
+    var body =
+      '<p class="modal__msg">' +
+        T('여러 종목을 섞어 <b>A4 문제지 묶음</b>을 만듭니다. 한 장에 한 종목씩, 매번 새 문제가 나옵니다.') +
+      '</p>' +
+      '<p class="modal__msg small">' + T('종이에 찍지 않고 <b>PDF 파일로 저장</b>하시려면, 인쇄 창의 <b>프린터</b>를 <b>“Microsoft Print to PDF”</b> 또는 <b>“PDF로 저장”</b>으로 바꾸고 인쇄를 누르세요.') + '</p>' +
+      '<div class="settings">' +
+        ('<div class="set set--stack"><span class="set__lbl">' + T('난이도') + '</span>') + seg('mxLevel', LV, pick.level) +
+          '<span class="set__hint">' + T('그 단계가 없는 종목은 알맞은 단계로 나옵니다.') + '</span></div>' +
+        ('<div class="set set--stack"><span class="set__lbl">' + T('장수') + '</span>') +
+          seg('mxCount', [['2', T('2장')], ['4', T('4장')], ['6', T('6장')], ['10', T('10장')]], '4') + '</div>' +
+        ('<div class="set"><span class="set__lbl">' + T('정답지') + '</span>') +
+          seg('mxAns', [['no', T('없이')], ['yes', T('함께')]], 'no') + '</div>' +
+      '</div>' +
+      '<p class="modal__msg small">' + T('지금 뽑을 수 있는 종목: {list}', { list: ids.map(function (i) { return window.Games[i].name; }).join(' · ') }) + '</p>';
+
+    var m = UI.modal({
+      title: T('문제 출력'),
+      body: body,
+      actions: [
+        { label: T('취소') },
+        { label: T('만들기'), kind: 'accent', onClick: function () { printHtml(mixedSheets(pick)); } }
+      ]
+    });
+
+    function bind(id, fn) {
+      m.card.querySelectorAll('#' + id + ' button').forEach(function (b) {
+        b.addEventListener('click', function () {
+          m.card.querySelectorAll('#' + id + ' button').forEach(function (x) { x.classList.remove('is-on'); });
+          b.classList.add('is-on');
+          fn(b.dataset.v);
+        });
+      });
+    }
+    bind('mxLevel', function (v) { pick.level = v; });
+    bind('mxCount', function (v) { pick.count = +v; });
+    bind('mxAns', function (v) { pick.answer = (v === 'yes'); });
+  }
+
   /* ---------------- 인쇄 실행 ---------------- */
 
   /** 게임마다 문제지를 만드는 함수 — 새 게임을 지원할 때 여기에 한 줄 더한다 */
@@ -403,5 +491,5 @@ window.Print = (function () {
     bind('prAns', function (v) { pick.answer = (v === 'yes'); });
   }
 
-  return { dialog: dialog, coloringNow: coloringNow };
+  return { dialog: dialog, mixedDialog: mixedDialog, coloringNow: coloringNow };
 })();
