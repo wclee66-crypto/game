@@ -78,10 +78,13 @@ window.I18N.dict.en = {
   /* ---------- 문제 출력 (여러 종목 섞어) ---------- */
   '문제 출력': 'Print puzzles',
   '문제를 A4 용지로 출력하여 직접 풀이할 수 있습니다': 'Print puzzles on A4 paper and solve them by hand',
-  '여러 종목을 섞어 <b>A4 문제지 묶음</b>을 만듭니다. 한 장에 한 종목씩, 매번 새 문제가 나옵니다.':
-    'Makes a <b>pack of A4 worksheets</b> across different games — one game per sheet, freshly made each time.',
-  '그 단계가 없는 종목은 알맞은 단계로 나옵니다.': 'Games without that level are printed at a suitable one.',
-  '지금 뽑을 수 있는 종목: {list}': 'Available now: {list}',
+  '연필로 풀 수 있는 <b>A4 문제지</b>를 만듭니다. 매번 새 문제가 나옵니다.':
+    'Makes <b>A4 worksheets</b> you can solve with a pencil. Every sheet is freshly made.',
+  '무엇을': 'What to print',
+  '섞어서': 'A mix',
+  '“섞어서”는 한 장에 한 종목씩 돌아가며 나옵니다.': 'With “A mix”, each sheet is a different game in turn.',
+  '{name}만 장수만큼 뽑습니다. 문제는 장마다 다릅니다.':
+    'Prints {name} only — a different puzzle on every sheet.',
   '지금 말로 종이에 뽑을 수 있는 게임이 없습니다.': 'No games can be printed in this language yet.',
   '1단계': 'Level 1', '2단계': 'Level 2', '3단계': 'Level 3', '4단계': 'Level 4', '5단계': 'Level 5',
   '6장': '6', '10장': '10',

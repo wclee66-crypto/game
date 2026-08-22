@@ -307,10 +307,15 @@ window.Print = (function () {
     var ids = printable();
     if (!ids.length) return '';
 
-    var bag = ids.slice(), order = [];
-    while (order.length < o.count) {
-      if (!bag.length) bag = ids.slice();
-      order.push(bag.splice(Math.floor(Math.random() * bag.length), 1)[0]);
+    var order = [], i;
+    if (o.game !== 'mixed' && SHEETS[o.game]) {
+      for (i = 0; i < o.count; i++) order.push(o.game);   /* 한 종목만 여러 장 */
+    } else {
+      var bag = ids.slice();                              /* 종목을 돌아가며 */
+      while (order.length < o.count) {
+        if (!bag.length) bag = ids.slice();
+        order.push(bag.splice(Math.floor(Math.random() * bag.length), 1)[0]);
+      }
     }
 
     return order.map(function (id) {
@@ -329,26 +334,30 @@ window.Print = (function () {
     var ids = printable();
     if (!ids.length) { UI.toast(T('지금 말로 종이에 뽑을 수 있는 게임이 없습니다.')); return; }
 
-    var pick = { level: 'easy', count: 4, answer: false };
+    var pick = { game: 'mixed', level: 'easy', count: 4, answer: false };
     var LV = [
       ['step1', T('1단계')], ['step2', T('2단계')], ['easy', T('3단계')],
       ['normal', T('4단계')], ['hard', T('5단계')]
     ];
+    /* 무엇을 뽑을지부터 고른다 — 섞어서, 또는 한 종목만 */
+    var GM = [['mixed', T('섞어서')]].concat(ids.map(function (id) {
+      return [id, window.Games[id].name];
+    }));
 
     var body =
       '<p class="modal__msg">' +
-        T('여러 종목을 섞어 <b>A4 문제지 묶음</b>을 만듭니다. 한 장에 한 종목씩, 매번 새 문제가 나옵니다.') +
+        T('연필로 풀 수 있는 <b>A4 문제지</b>를 만듭니다. 매번 새 문제가 나옵니다.') +
       '</p>' +
       '<p class="modal__msg small">' + T('종이에 찍지 않고 <b>PDF 파일로 저장</b>하시려면, 인쇄 창의 <b>프린터</b>를 <b>“Microsoft Print to PDF”</b> 또는 <b>“PDF로 저장”</b>으로 바꾸고 인쇄를 누르세요.') + '</p>' +
       '<div class="settings">' +
-        ('<div class="set set--stack"><span class="set__lbl">' + T('난이도') + '</span>') + seg('mxLevel', LV, pick.level) +
-          '<span class="set__hint">' + T('그 단계가 없는 종목은 알맞은 단계로 나옵니다.') + '</span></div>' +
+        ('<div class="set set--stack"><span class="set__lbl">' + T('무엇을') + '</span>') + seg('mxGame', GM, pick.game) +
+          '<span class="set__hint" id="mxHint">' + T('“섞어서”는 한 장에 한 종목씩 돌아가며 나옵니다.') + '</span></div>' +
+        ('<div class="set set--stack"><span class="set__lbl">' + T('난이도') + '</span>') + seg('mxLevel', LV, pick.level) + '</div>' +
         ('<div class="set set--stack"><span class="set__lbl">' + T('장수') + '</span>') +
           seg('mxCount', [['2', T('2장')], ['4', T('4장')], ['6', T('6장')], ['10', T('10장')]], '4') + '</div>' +
         ('<div class="set"><span class="set__lbl">' + T('정답지') + '</span>') +
           seg('mxAns', [['no', T('없이')], ['yes', T('함께')]], 'no') + '</div>' +
-      '</div>' +
-      '<p class="modal__msg small">' + T('지금 뽑을 수 있는 종목: {list}', { list: ids.map(function (i) { return window.Games[i].name; }).join(' · ') }) + '</p>';
+      '</div>';
 
     var m = UI.modal({
       title: T('문제 출력'),
@@ -368,6 +377,13 @@ window.Print = (function () {
         });
       });
     }
+    bind('mxGame', function (v) {
+      pick.game = v;
+      var h = m.card.querySelector('#mxHint');
+      if (h) h.textContent = (v === 'mixed')
+        ? T('“섞어서”는 한 장에 한 종목씩 돌아가며 나옵니다.')
+        : T('{name}만 장수만큼 뽑습니다. 문제는 장마다 다릅니다.', { name: window.Games[v].name });
+    });
     bind('mxLevel', function (v) { pick.level = v; });
     bind('mxCount', function (v) { pick.count = +v; });
     bind('mxAns', function (v) { pick.answer = (v === 'yes'); });
