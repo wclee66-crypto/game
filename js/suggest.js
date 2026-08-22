@@ -1,34 +1,49 @@
 /* 새록 — 건의하기
  *
- * 서버를 두지 않습니다. 배포한 곳(Netlify)에 딸린 '받는 곳'으로 바로 보냅니다.
- * index.html 의 숨은 <form name="suggest"> 를 호스팅이 읽어 만들어 둔 자리입니다.
+ * 서버를 두지 않습니다. 건의 받아 주는 곳(Web3Forms)으로 바로 보내고,
+ * 그쪽이 어르신 메일함으로 옮겨 줍니다.
+ *
+ * 2026-08-22 에 Netlify Forms 에서 이리로 옮겼습니다.
+ * 넷리파이가 배포를 막아 Cloudflare Pages 로 홈페이지를 옮겼는데,
+ * 그쪽에는 건의 받는 기능이 없기 때문입니다.
+ * 이제 어디로 옮기든 이 기능은 따라옵니다 — 호스팅에 매이지 않습니다.
  *
  * 로그인이 없습니다. 어르신에게 이메일 코드를 받아 적게 하는 것은 벽이 너무 높아서,
  * 글 한 칸과 보내기 단추만 둡니다. 이메일은 답이 필요할 때만 적으시면 됩니다.
+ *
+ * ─────────────────────────────────────────────
+ *  열쇠(access key) 넣는 법
+ *    1. web3forms.com 에 들어갑니다
+ *    2. 건의를 받을 메일 주소를 넣고 'Create Access Key' 를 누릅니다
+ *    3. 그 메일함으로 온 글자(access key)를 아래 KEY 에 그대로 붙여 넣습니다
+ *  비워 두면 홈과 설정에서 '건의하기' 단추 자체가 나오지 않습니다.
+ *  (눌러도 안 되는 단추를 보여 드리지 않기 위해서입니다)
+ * ─────────────────────────────────────────────
  */
 window.Suggest = (function () {
 
+  var KEY = '';                                    /* ← 여기에 Web3Forms 열쇠를 넣습니다 */
+  var URL = 'https://api.web3forms.com/submit';
+
   var MAX = 2000;                                  /* 너무 긴 글은 잘라 보낸다 */
 
-  function enc(o) {
-    var out = [];
-    for (var k in o) {
-      if (!Object.prototype.hasOwnProperty.call(o, k)) continue;
-      out.push(encodeURIComponent(k) + '=' + encodeURIComponent(o[k]));
-    }
-    return out.join('&');
-  }
+  /** 건의하기를 쓸 수 있는 상태인가 — 열쇠가 없으면 단추를 아예 감춘다 */
+  function ready() { return !!KEY; }
 
   /** 보내기 — 성공하면 true */
   function send(data) {
-    return fetch('/', {
+    data.access_key = KEY;
+    return fetch(URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: enc(data)
-    }).then(function (res) { return !!(res && res.ok); });
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(function (res) {
+      return res.json().then(function (j) { return !!(res.ok && j && j.success); });
+    });
   }
 
   function open() {
+    if (!ready()) return;
     var wrap = UI.h('<div></div>');
 
     wrap.innerHTML =
@@ -43,6 +58,8 @@ window.Suggest = (function () {
         '<span class="sg-lbl">' + T('이메일') + ' <em>' + T('(답을 받고 싶으실 때만)') + '</em></span>' +
         '<input class="sg-mail" id="sgMail" type="email" autocomplete="email" inputmode="email">' +
       '</label>' +
+      /* 사람 눈에는 안 보이는 칸 — 기계가 채우면 걸러 낸다 */
+      '<input type="checkbox" id="sgBot" name="botcheck" tabindex="-1" hidden>' +
       '<p class="sg-bad" id="sgBad" hidden></p>' +
       '<p class="sg-note">' +
         T('적어 주신 이메일은 답장에만 씁니다. 다른 곳에 쓰거나 남에게 넘기지 않습니다.') +
@@ -89,8 +106,9 @@ window.Suggest = (function () {
     btn.textContent = T('보내는 중…');
 
     send({
-      'form-name': 'suggest',
-      'bot-field': '',
+      subject: '새록 건의 (' + I18N.get() + ')',    /* 메일 제목 — 메일함에서 한눈에 찾으시라고 */
+      from_name: '새록',
+      botcheck: wrap.querySelector('#sgBot').checked,
       message: text.slice(0, MAX),
       email: mail,
       lang: I18N.get(),
@@ -110,5 +128,5 @@ window.Suggest = (function () {
     });
   }
 
-  return { open: open };
+  return { open: open, ready: ready };
 })();

@@ -331,7 +331,7 @@ window.App = (function () {
             '<small>' + T('문제를 A4 용지로 인쇄하여 직접 풀이할 수 있습니다') + '</small></button>') +
         '</div>' +
 
-        ('<button class="linkbtn" id="hmSuggest">' + T('건의하기') + '</button>') +
+        (Suggest.ready() ? ('<button class="linkbtn" id="hmSuggest">' + T('건의하기') + '</button>') : '') +
 
         ('<p class="tipline">' + T('매일 조금씩, 여러 종목을 골고루 하는 것이 두뇌 건강에 좋습니다.') + '</p>') +
       '</section>';
@@ -349,7 +349,8 @@ window.App = (function () {
     view.querySelector('#hmRules').addEventListener('click', function () { showRules('all'); });
     view.querySelector('#hmRecords').addEventListener('click', function () { go('records'); });
     view.querySelector('#hmPrint').addEventListener('click', function () { Print.mixedDialog(); });
-    view.querySelector('#hmSuggest').addEventListener('click', function () { Suggest.open(); });
+    var sg = view.querySelector('#hmSuggest');
+    if (sg) sg.addEventListener('click', function () { Suggest.open(); });
     var ab = view.querySelector('#hmAbout');
     if (ab) ab.addEventListener('click', function () { location.href = aboutHref(); });
   }
@@ -576,7 +577,7 @@ window.App = (function () {
           ('<span class="set__lbl">' + T('버전') + '</span>') +
           '<span class="set__ver">' + APP_VERSION + '</span>' +
         '</div>' +
-        ('<button class="btn btn--ghost" id="setSuggest">' + T('건의하기') + '</button>') +
+        (Suggest.ready() ? ('<button class="btn btn--ghost" id="setSuggest">' + T('건의하기') + '</button>') : '') +
         ('<button class="btn btn--ghost" id="setUpdate">' + T('최신 버전으로 새로 받기') + '</button>') +
         ('<p class="modal__msg small">' + T('기록은 이 기기 안에만 저장됩니다. 앱을 지우거나 브라우저 기록을 삭제하면 점수도 함께 사라지니, 필요하면') + ' <b>' + T('기록 내보내기') + '</b>' + T('로 파일을 보관하세요. (새로 받아도 점수는 지워지지 않습니다.)') + '</p>') +
       '</div>';
@@ -601,7 +602,8 @@ window.App = (function () {
         b.classList.add('is-on');
       });
     });
-    m.card.querySelector('#setSuggest').addEventListener('click', function () { m.close(); Suggest.open(); });
+    var sgb = m.card.querySelector('#setSuggest');
+    if (sgb) sgb.addEventListener('click', function () { m.close(); Suggest.open(); });
     m.card.querySelector('#setUpdate').addEventListener('click', forceUpdate);
 
     m.card.querySelectorAll('#setSound button').forEach(function (b) {
