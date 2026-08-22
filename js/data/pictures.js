@@ -857,6 +857,756 @@ window.PICTURES = (function () {
 
   /* ================= 그림 목록 ================= */
 
+  /* ================= 그림 11 · 집 ================= */
+
+  /** 지붕과 벽을 가로 띠로 나눠 큼직하게. 칸이 커야 색칠하기 편하다. */
+  function house(ctx, d) {
+    var out = [], i;
+    var C = [
+      { sky: 1, roof: 2, wall: 2, win: 1, door: 1, tree: 0, frame: 0 },
+      { sky: 2, roof: 3, wall: 3, win: 1, door: 1, tree: 1, frame: 0 },
+      { sky: 2, roof: 4, wall: 4, win: 4, door: 2, tree: 1, frame: 1 },
+      { sky: 3, roof: 5, wall: 5, win: 4, door: 2, tree: 1, frame: 2 },
+      { sky: 3, roof: 6, wall: 6, win: 4, door: 3, tree: 1, frame: 3 }
+    ][d - 1];
+    var I = C.frame ? [9, 9, 91, 91] : [3, 3, 97, 97];
+    var hz = 74;
+
+    var skyA = ctx.pref([8, 3]), skyB = ctx.col(7);
+    for (i = 0; i < C.sky; i++) {
+      var sy0 = I[1] + (hz - I[1]) * i / C.sky, sy1 = I[1] + (hz - I[1]) * (i + 1) / C.sky;
+      out.push(reg(rect(I[0], sy0, I[2], sy1), i % 2 ? skyB : skyA, [I[0] + 6, (sy0 + sy1) / 2]));
+    }
+    out.push(reg(rect(I[0], hz, I[2], I[3]), ctx.pref([4, 2]), [I[0] + 6, (hz + I[3]) / 2]));
+    out.push(reg(circlePath(70, 18, 7), ctx.pref([2, 5]), [70, 18]));
+
+
+    /* 지붕 — 꼭대기에서 처마까지 가로 띠 */
+    var apexY = 22, eaveY = 46, halfW = 30;
+    var roofA = ctx.pref([1, 5, 9]), roofB = ctx.col(4);
+    for (i = 0; i < C.roof; i++) {
+      var t0 = i / C.roof, t1 = (i + 1) / C.roof;
+      var ry0 = apexY + (eaveY - apexY) * t0, ry1 = apexY + (eaveY - apexY) * t1;
+      var w0 = halfW * t0, w1 = halfW * t1;
+      var q = [[50 - w0, ry0], [50 + w0, ry0], [50 + w1, ry1], [50 - w1, ry1]];
+      out.push(reg(poly(q), i % 2 ? roofB : roofA, cen(q)));
+    }
+
+    /* 굴뚝 — 지붕 위에 얹는다 */
+    if (C.tree) out.push(reg(rect(62, 24, 70, 41), ctx.pref([1, 9, 5]), [66, 31]));
+
+    /* 벽 — 창과 문 사이(가운데)에 번호를 적어 가려지지 않게 */
+    var wallA = ctx.pref([2, 7, 8]), wallB = ctx.col(6);
+    var wy0 = eaveY, wy1 = hz;
+    for (i = 0; i < C.wall; i++) {
+      var a0 = wy0 + (wy1 - wy0) * i / C.wall, a1 = wy0 + (wy1 - wy0) * (i + 1) / C.wall;
+      out.push(reg(rect(26, a0, 74, a1), i % 2 ? wallB : wallA, [50, (a0 + a1) / 2]));
+    }
+
+    /* 창문 */
+    var winC = ctx.pref([8, 3, 2]);
+    if (C.win === 4) {
+      [[31, 50, 38, 57], [38, 50, 45, 57], [31, 57, 38, 64], [38, 57, 45, 64]].forEach(function (b, k) {
+        out.push(reg(rect(b[0], b[1], b[2], b[3]), k % 2 ? ctx.col(3) : winC, [(b[0] + b[2]) / 2, (b[1] + b[3]) / 2]));
+      });
+    } else {
+      out.push(reg(rect(31, 50, 45, 64), winC, [38, 57]));
+    }
+
+    /* 문 */
+    var doorC = ctx.pref([9, 1, 5]);
+    for (i = 0; i < C.door; i++) {
+      var d0 = 56 + (hz - 56) * i / C.door, d1 = 56 + (hz - 56) * (i + 1) / C.door;
+      out.push(reg(rect(55, d0, 69, d1), i % 2 ? ctx.col(2) : doorC, [62, (d0 + d1) / 2]));
+    }
+
+    frameRegions(out, ctx, C.frame);
+    return { regions: out, strokes: [] };
+  }
+
+  /* ================= 그림 12 · 우산 ================= */
+
+  /** 우산 덮개를 부챗살로 나눈다. 단계가 오르면 살이 늘고 빗방울이 더해진다. */
+  function umbrella(ctx, d) {
+    var out = [], i;
+    var C = [
+      { sky: 1, ribs: 3, band: 0, drops: 0, frame: 0 },
+      { sky: 2, ribs: 4, band: 0, drops: 3, frame: 0 },
+      { sky: 2, ribs: 6, band: 1, drops: 5, frame: 1 },
+      { sky: 3, ribs: 8, band: 1, drops: 7, frame: 2 },
+      { sky: 3, ribs: 10, band: 1, drops: 9, frame: 3 }
+    ][d - 1];
+    var I = C.frame ? [9, 9, 91, 91] : [3, 3, 97, 97];
+
+    var skyA = ctx.pref([8, 3]), skyB = ctx.col(7);
+    for (i = 0; i < C.sky; i++) {
+      var y0 = I[1] + (I[3] - I[1]) * i / C.sky, y1 = I[1] + (I[3] - I[1]) * (i + 1) / C.sky;
+      out.push(reg(rect(I[0], y0, I[2], y1), i % 2 ? skyB : skyA, [I[0] + 6, (y0 + y1) / 2]));
+    }
+
+    /* 빗방울 — 우산에 가리지 않도록 양옆에 */
+    var dropC = ctx.pref([3, 8]);
+    for (i = 0; i < C.drops; i++) {
+      var dx = i % 2 ? 16 + (i * 3) % 8 : 78 + (i * 3) % 8;
+      var dy = 20 + (i * 13) % 60;
+      out.push(reg(circlePath(dx, dy, 3.2), dropC, [dx, dy]));
+    }
+
+    /* 손잡이 — 곧은 대와 굽은 부분 */
+    var stickC = ctx.pref([9, 5]);
+    out.push(reg(rect(48, 50, 52, 78), stickC, [50, 66]));
+    /* ㄱ 을 뒤집은 손잡이 — 아래로 내려가 왼쪽으로 굽는다 */
+    var hook = [[48, 78], [52, 78], [52, 86], [38, 86], [38, 76], [42, 76], [42, 82], [48, 82]];
+    out.push(reg(poly(hook), ctx.col(1), [45, 84]));
+
+    /* 덮개 — 반원을 부챗살로 */
+    var cA = ctx.pref([1, 5, 7]), cB = ctx.pref([2, 8, 3]);
+    if (cB === cA) cB = ctx.col(4);
+    var R = 36, cx = 50, cy = 52;
+    for (i = 0; i < C.ribs; i++) {
+      var a0 = -90 + 180 * i / C.ribs, a1 = -90 + 180 * (i + 1) / C.ribs;
+      var inner = C.band ? 0.72 : 0;
+      out.push(reg(slice(cx, cy, rConst(R), inner, 1, a0, a1),
+        i % 2 ? cB : cA, slicePt(cx, cy, rConst(R), inner, 1, a0, a1)));
+      if (C.band) {
+        out.push(reg(slice(cx, cy, rConst(R), 0, 0.72, a0, a1),
+          i % 2 ? cA : cB, slicePt(cx, cy, rConst(R), 0, 0.72, a0, a1)));
+      }
+    }
+    out.push(reg(circlePath(50, 14, 3.5), ctx.pref([9, 1]), [50, 14]));
+
+    frameRegions(out, ctx, C.frame);
+    return { regions: out, strokes: [] };
+  }
+
+  /* ================= 그림 13 · 찻잔 ================= */
+
+  function teacup(ctx, d) {
+    var out = [], i;
+    var C = [
+      { bg: 1, body: 2, saucer: 1, steam: 0, frame: 0 },
+      { bg: 2, body: 3, saucer: 1, steam: 2, frame: 0 },
+      { bg: 2, body: 4, saucer: 2, steam: 2, frame: 1 },
+      { bg: 3, body: 5, saucer: 2, steam: 3, frame: 2 },
+      { bg: 3, body: 6, saucer: 3, steam: 3, frame: 3 }
+    ][d - 1];
+    var I = C.frame ? [9, 9, 91, 91] : [3, 3, 97, 97];
+
+    var bgA = ctx.pref([2, 8]), bgB = ctx.col(5);
+    for (i = 0; i < C.bg; i++) {
+      var y0 = I[1] + (I[3] - I[1]) * i / C.bg, y1 = I[1] + (I[3] - I[1]) * (i + 1) / C.bg;
+      out.push(reg(rect(I[0], y0, I[2], y1), i % 2 ? bgB : bgA, [I[0] + 6, (y0 + y1) / 2]));
+    }
+
+    /* 김 — 잔 위로 오르는 둥근 방울 */
+    var steamC = ctx.pref([8, 3]);
+    for (i = 0; i < C.steam; i++) {
+      out.push(reg(circlePath(38 + i * 12, 22 - (i % 2) * 6, 5), steamC, [38 + i * 12, 22 - (i % 2) * 6]));
+    }
+
+    /* 손잡이 — 오른쪽 고리 */
+    var handC = ctx.pref([1, 5, 9]);
+    out.push(reg(slice(72, 56, rConst(14), 0.55, 1, 20, 200), handC, slicePt(72, 56, rConst(14), 0.55, 1, 20, 200)));
+
+    /* 잔 — 위가 넓고 아래가 좁은 사다리꼴을 가로 띠로 */
+    var cupA = ctx.pref([7, 2, 8]), cupB = ctx.col(3);
+    var top = 40, bot = 76, tw = 25, bw = 17;
+    for (i = 0; i < C.body; i++) {
+      var t0 = i / C.body, t1 = (i + 1) / C.body;
+      var q = [[50 - (tw + (bw - tw) * t0), top + (bot - top) * t0],
+               [50 + (tw + (bw - tw) * t0), top + (bot - top) * t0],
+               [50 + (tw + (bw - tw) * t1), top + (bot - top) * t1],
+               [50 - (tw + (bw - tw) * t1), top + (bot - top) * t1]];
+      out.push(reg(poly(q), i % 2 ? cupB : cupA, cen(q)));
+    }
+    /* 잔 안의 차 */
+    out.push(reg(ellBand(50, 40, 25, 5, 25, 75, 0).d, ctx.pref([9, 1, 5]), [50, 40]));
+
+    /* 받침 */
+    var sauA = ctx.pref([3, 8, 6]), sauB = ctx.col(2);
+    for (i = 0; i < C.saucer; i++) {
+      var s0 = 78 + 10 * i / C.saucer, s1 = 78 + 10 * (i + 1) / C.saucer;
+      var w0 = 34 - 6 * (i / C.saucer), w1 = 34 - 6 * ((i + 1) / C.saucer);
+      var qq = [[50 - w0, s0], [50 + w0, s0], [50 + w1, s1], [50 - w1, s1]];
+      out.push(reg(poly(qq), i % 2 ? sauB : sauA, cen(qq)));
+    }
+
+    frameRegions(out, ctx, C.frame);
+    return { regions: out, strokes: [] };
+  }
+
+  /* ================= 그림 14 · 수박 ================= */
+
+  function melon(ctx, d) {
+    var out = [], i;
+    var C = [
+      { bg: 1, parts: 2, seeds: 0, frame: 0 },
+      { bg: 2, parts: 3, seeds: 3, frame: 0 },
+      { bg: 2, parts: 4, seeds: 5, frame: 1 },
+      { bg: 3, parts: 6, seeds: 7, frame: 2 },
+      { bg: 3, parts: 8, seeds: 9, frame: 3 }
+    ][d - 1];
+    var I = C.frame ? [9, 9, 91, 91] : [3, 3, 97, 97];
+
+    var bgA = ctx.pref([2, 8]), bgB = ctx.col(6);
+    for (i = 0; i < C.bg; i++) {
+      var y0 = I[1] + (I[3] - I[1]) * i / C.bg, y1 = I[1] + (I[3] - I[1]) * (i + 1) / C.bg;
+      out.push(reg(rect(I[0], y0, I[2], y1), i % 2 ? bgB : bgA, [I[0] + 6, (y0 + y1) / 2]));
+    }
+
+    var cx = 50, cy = 84, R = 50, a0 = -55, a1 = 55;   /* 좌우가 액자 안에 들도록 */
+    var rindC = ctx.pref([4]), whiteC = ctx.pref([8, 2]);
+    var redA = ctx.pref([1, 7, 5]), redB = ctx.col(5);
+
+    /* 겉껍질 · 속껍질 */
+    out.push(reg(slice(cx, cy, rConst(R), 0.9, 1, a0, a1), rindC, slicePt(cx, cy, rConst(R), 0.9, 1, a0, a1)));
+    out.push(reg(slice(cx, cy, rConst(R), 0.82, 0.9, a0, a1), whiteC, slicePt(cx, cy, rConst(R), 0.82, 0.9, a0, a1)));
+
+    /* 속살 — 부챗살로 나눈다 */
+    for (i = 0; i < C.parts; i++) {
+      var b0 = a0 + (a1 - a0) * i / C.parts, b1 = a0 + (a1 - a0) * (i + 1) / C.parts;
+      out.push(reg(slice(cx, cy, rConst(R), 0, 0.82, b0, b1),
+        i % 2 ? redB : redA, slicePt(cx, cy, rConst(R), 0.25, 0.82, b0, b1)));
+    }
+
+    /* 씨 */
+    var seedC = ctx.pref([9, 10, 3]);
+    for (i = 0; i < C.seeds; i++) {
+      var ang = a0 + (a1 - a0) * (i + 0.5) / C.seeds;
+      var pr = R * (i % 2 ? 0.42 : 0.62);              /* 안팎으로 엇갈리게 흩는다 */
+      var p = polar(cx, cy, pr, ang);
+      out.push(reg(circlePath(p[0], p[1], 4), seedC, p));
+    }
+
+    frameRegions(out, ctx, C.frame);
+    return { regions: out, strokes: [] };
+  }
+
+  /* ================= 그림 15 · 밤하늘 ================= */
+
+  /** 별 모양 — 뾰족한 끝 n개 */
+  function starPath(cx, cy, r, inner, n, tilt) {
+    var pts = [], i;
+    for (i = 0; i < n * 2; i++) {
+      var a = (tilt || 0) + 360 * i / (n * 2);
+      pts.push(polar(cx, cy, i % 2 ? r * inner : r, a));
+    }
+    return poly(pts);
+  }
+
+  function night(ctx, d) {
+    var out = [], i;
+    var C = [
+      { bg: 1, rings: 2, stars: 3, frame: 0 },
+      { bg: 2, rings: 3, stars: 4, frame: 0 },
+      { bg: 2, rings: 4, stars: 6, frame: 1 },
+      { bg: 3, rings: 5, stars: 8, frame: 2 },
+      { bg: 3, rings: 6, stars: 10, frame: 3 }
+    ][d - 1];
+    var I = C.frame ? [9, 9, 91, 91] : [3, 3, 97, 97];
+
+    var bgA = ctx.pref([3, 6, 8]), bgB = ctx.col(5);
+    for (i = 0; i < C.bg; i++) {
+      var y0 = I[1] + (I[3] - I[1]) * i / C.bg, y1 = I[1] + (I[3] - I[1]) * (i + 1) / C.bg;
+      out.push(reg(rect(I[0], y0, I[2], y1), i % 2 ? bgB : bgA, [I[0] + 6, (y0 + y1) / 2]));
+    }
+
+    /* 별 — 달과 겹치지 않게 가장자리를 따라 */
+    var stA = ctx.pref([2, 5]), stB = ctx.col(7);
+    var spots = [[20, 20], [80, 22], [20, 52], [80, 56], [26, 82], [74, 82], [50, 15], [50, 89], [34, 30], [66, 32]];
+    for (i = 0; i < C.stars && i < spots.length; i++) {
+      var s = spots[i];
+      out.push(reg(starPath(s[0], s[1], 8, 0.42, 5, 0), i % 2 ? stB : stA, s));
+    }
+
+    /* 달 — 가운데 둥근 고리 */
+    var mA = ctx.pref([2, 7]), mB = ctx.col(8);
+    for (i = C.rings - 1; i >= 0; i--) {
+      var r1 = 24 * (i + 1) / C.rings, r0 = 24 * i / C.rings;
+      /* 번호를 한 줄로 세우면 겹친다. 고리마다 방향을 돌려 가며 적는다. */
+      var lab = i === 0 ? [50, 54] : polar(50, 54, (r0 + r1) / 2, [0, 90, 180, 270][i % 4]);
+      out.push(reg(slice(50, 54, rConst(24), r0 / 24, r1 / 24, 0, 360),
+        i % 2 ? mB : mA, lab));
+    }
+
+    frameRegions(out, ctx, C.frame);
+    return { regions: out, strokes: [] };
+  }
+
+  /* ================= 그림 16 · 눈사람 ================= */
+
+  function snowman(ctx, d) {
+    var out = [], i;
+    var C = [
+      { bg: 1, bands: 1, hat: 0, scarf: 0, btn: 0, frame: 0 },
+      { bg: 2, bands: 2, hat: 1, scarf: 1, btn: 2, frame: 0 },
+      { bg: 2, bands: 3, hat: 1, scarf: 1, btn: 3, frame: 1 },
+      { bg: 3, bands: 4, hat: 1, scarf: 2, btn: 3, frame: 2 },
+      { bg: 3, bands: 5, hat: 1, scarf: 2, btn: 4, frame: 3 }
+    ][d - 1];
+    var I = C.frame ? [9, 9, 91, 91] : [3, 3, 97, 97];
+    var hz = 84;
+
+    var bgA = ctx.pref([8, 3]), bgB = ctx.col(6);
+    for (i = 0; i < C.bg; i++) {
+      var y0 = I[1] + (hz - I[1]) * i / C.bg, y1 = I[1] + (hz - I[1]) * (i + 1) / C.bg;
+      out.push(reg(rect(I[0], y0, I[2], y1), i % 2 ? bgB : bgA, [I[0] + 6, (y0 + y1) / 2]));
+    }
+    out.push(reg(rect(I[0], hz, I[2], I[3]), ctx.pref([8, 2]), [I[0] + 6, (hz + I[3]) / 2]));
+
+    /* 아래 몸통 · 가운데 몸통 · 머리 */
+    var bodyA = ctx.pref([8, 2, 7]), bodyB = ctx.col(4);
+    var balls = [[50, 70, 20], [50, 45, 15], [50, 25, 11]];
+    balls.forEach(function (b, bi) {
+      for (i = 0; i < C.bands; i++) {
+        var t0 = i / C.bands, t1 = (i + 1) / C.bands;
+        var yy0 = b[1] - b[2] + 2 * b[2] * t0, yy1 = b[1] - b[2] + 2 * b[2] * t1;
+        var band = ellBandH(b[0], b[1], b[2], b[2], yy0, yy1);
+        out.push(reg(band.d, (i + bi) % 2 ? bodyB : bodyA, band.pt));
+      }
+    });
+
+    /* 모자 */
+    if (C.hat) {
+      var hatC = ctx.pref([1, 9, 6]);
+      out.push(reg(rect(34, 15, 66, 19), hatC, [50, 17]));
+      out.push(reg(rect(41, 5, 59, 15), ctx.col(2), [50, 10]));
+    }
+
+    /* 목도리 */
+    if (C.scarf) {
+      var scA = ctx.pref([1, 5, 7]), scB = ctx.col(3);
+      for (i = 0; i < C.scarf; i++) {
+        var s0 = 33 + 5 * i / C.scarf, s1 = 33 + 5 * (i + 1) / C.scarf;
+        out.push(reg(rect(37, s0, 63, s1), i % 2 ? scB : scA, [50, (s0 + s1) / 2]));
+      }
+      out.push(reg(rect(60, 38, 67, 52), scA, [63.5, 45]));
+    }
+
+    /* 눈 · 코 · 단추 */
+    out.push(reg(circlePath(45, 22, 2.6), ctx.pref([9, 10]), [45, 22]));
+    out.push(reg(circlePath(55, 22, 2.6), ctx.pref([9, 10]), [55, 22]));
+    out.push(reg(poly([[50, 26], [58, 28], [50, 30]]), ctx.pref([5, 1]), [53, 28]));
+    var btnC = ctx.pref([9, 10, 6]);
+    for (i = 0; i < C.btn; i++) {
+      out.push(reg(circlePath(50, 58 + i * 8, 3), btnC, [50, 58 + i * 8]));
+    }
+
+    frameRegions(out, ctx, C.frame);
+    return { regions: out, strokes: [] };
+  }
+
+  /* ================= 그림 17 · 연 ================= */
+
+  function kite(ctx, d) {
+    var out = [], i;
+    var C = [
+      { bg: 1, parts: 2, tails: 2, frame: 0 },
+      { bg: 2, parts: 4, tails: 3, frame: 0 },
+      { bg: 2, parts: 4, tails: 4, frame: 1 },
+      { bg: 3, parts: 8, tails: 5, frame: 2 },
+      { bg: 3, parts: 8, tails: 6, frame: 3 }
+    ][d - 1];
+    var I = C.frame ? [9, 9, 91, 91] : [3, 3, 97, 97];
+
+    var bgA = ctx.pref([8, 3]), bgB = ctx.col(7);
+    for (i = 0; i < C.bg; i++) {
+      var y0 = I[1] + (I[3] - I[1]) * i / C.bg, y1 = I[1] + (I[3] - I[1]) * (i + 1) / C.bg;
+      out.push(reg(rect(I[0], y0, I[2], y1), i % 2 ? bgB : bgA, [I[0] + 6, (y0 + y1) / 2]));
+    }
+
+    /* 연 몸 — 마름모를 위아래 · 좌우로 가른다 */
+    var cx = 50, cy = 40, hw = 26, ht = 30;
+    var kA = ctx.pref([1, 5, 2]), kB = ctx.pref([3, 8, 6]);
+    if (kB === kA) kB = ctx.col(4);
+    var quads = [
+      [[cx, cy - ht], [cx + hw, cy], [cx, cy], [cx, cy]],
+      [[cx, cy - ht], [cx, cy], [cx - hw, cy], [cx, cy]],
+      [[cx, cy], [cx + hw, cy], [cx, cy + ht], [cx, cy]],
+      [[cx, cy], [cx, cy + ht], [cx - hw, cy], [cx, cy]]
+    ];
+    if (C.parts <= 2) {
+      out.push(reg(poly([[cx, cy - ht], [cx + hw, cy], [cx, cy + ht]]), kA, [cx + hw * 0.35, cy]));
+      out.push(reg(poly([[cx, cy - ht], [cx, cy + ht], [cx - hw, cy]]), kB, [cx - hw * 0.35, cy]));
+    } else if (C.parts === 4) {
+      quads.forEach(function (q, k) {
+        var p = [q[0], q[1], q[2]];
+        out.push(reg(poly(p), k % 2 ? kB : kA, cen(p)));
+      });
+    } else {
+      quads.forEach(function (q, k) {
+        var p = [q[0], q[1], q[2]];
+        var m1 = lerp(p[0], p[1], 0.5), m2 = lerp(p[1], p[2], 0.5);
+        out.push(reg(poly([p[0], m1, cen(p)]), k % 2 ? kB : kA, cen([p[0], m1, cen(p)])));
+        out.push(reg(poly([m1, p[1], m2, cen(p)]), k % 2 ? kA : kB, cen([m1, p[1], m2])));
+        out.push(reg(poly([cen(p), m2, p[2]]), k % 2 ? kB : kA, cen([cen(p), m2, p[2]])));
+      });
+    }
+
+    /* 연줄 — 연 끝에서 아래로 */
+    out.push(reg(rect(49, cy + ht, 51, 74), ctx.pref([9, 10]), [50, (cy + ht + 74) / 2]));
+
+    /* 꼬리 리본 — 연줄을 따라 좌우로 번갈아 */
+    var tA = ctx.pref([2, 5]), tB = ctx.col(1);
+    for (i = 0; i < C.tails; i++) {
+      var ty = 74 + i * 5;
+      if (ty + 5 > 92) break;
+      var tx = 50 + (i % 2 ? 9 : -9);
+      out.push(reg(poly([[tx - 8, ty], [tx + 8, ty], [tx + 6, ty + 5], [tx - 6, ty + 5]]),
+        i % 2 ? tB : tA, [tx, ty + 2.5]));
+    }
+
+    frameRegions(out, ctx, C.frame);
+    return { regions: out, strokes: [] };
+  }
+
+  /* ================= 그림 18 · 항아리 ================= */
+
+  function jar(ctx, d) {
+    var out = [], i;
+    var C = [
+      { bg: 1, body: 2, band: 0, lid: 1, frame: 0 },
+      { bg: 2, body: 3, band: 1, lid: 1, frame: 0 },
+      { bg: 2, body: 4, band: 1, lid: 2, frame: 1 },
+      { bg: 3, body: 5, band: 2, lid: 2, frame: 2 },
+      { bg: 3, body: 6, band: 2, lid: 2, frame: 3 }
+    ][d - 1];
+    var I = C.frame ? [9, 9, 91, 91] : [3, 3, 97, 97];
+    var hz = 82;
+
+    var bgA = ctx.pref([2, 8]), bgB = ctx.col(6);
+    for (i = 0; i < C.bg; i++) {
+      var y0 = I[1] + (hz - I[1]) * i / C.bg, y1 = I[1] + (hz - I[1]) * (i + 1) / C.bg;
+      out.push(reg(rect(I[0], y0, I[2], y1), i % 2 ? bgB : bgA, [I[0] + 6, (y0 + y1) / 2]));
+    }
+    out.push(reg(rect(I[0], hz, I[2], I[3]), ctx.pref([9, 5]), [I[0] + 6, (hz + I[3]) / 2]));
+
+    /* 몸통 — 가운데가 불룩한 타원을 가로 띠로 */
+    var jA = ctx.pref([9, 5, 1]), jB = ctx.col(4);
+    var cy = 54, ry = 28, rx = 27, top = 30, bot = 82;
+    for (i = 0; i < C.body; i++) {
+      var b0 = top + (bot - top) * i / C.body, b1 = top + (bot - top) * (i + 1) / C.body;
+      var band = ellBandH(50, cy, rx, ry, b0, b1);
+      out.push(reg(band.d, i % 2 ? jB : jA, band.pt));
+    }
+
+    /* 허리 무늬 띠 */
+    var pA = ctx.pref([2, 7, 8]);
+    for (i = 0; i < C.band; i++) {
+      var m0 = 46 + i * 11, m1 = 55 + i * 11;          /* 번호가 들어갈 만큼 넓게 */
+      var mb = ellBandH(50, cy, rx, ry, m0, m1);
+      out.push(reg(mb.d, i % 2 ? ctx.col(3) : pA, [50 - 14, mb.pt[1]]));   /* 번호는 왼쪽에 */
+    }
+
+    /* 뚜껑 */
+    var lA = ctx.pref([9, 1, 5]), lB = ctx.col(2);
+    for (i = 0; i < C.lid; i++) {
+      var l0 = 20 + 10 * i / C.lid, l1 = 20 + 10 * (i + 1) / C.lid;
+      var w0 = 16 + 8 * (i / C.lid), w1 = 16 + 8 * ((i + 1) / C.lid);
+      var q = [[50 - w0, l0], [50 + w0, l0], [50 + w1, l1], [50 - w1, l1]];
+      out.push(reg(poly(q), i % 2 ? lB : lA, cen(q)));
+    }
+    out.push(reg(circlePath(50, 17, 4), ctx.pref([1, 5]), [50, 17]));
+
+    frameRegions(out, ctx, C.frame);
+    return { regions: out, strokes: [] };
+  }
+
+  /* ================= 그림 19 · 부채 ================= */
+
+  function handfan(ctx, d) {
+    var out = [], i;
+    var C = [
+      { bg: 1, ribs: 3, rows: 1, frame: 0 },
+      { bg: 2, ribs: 5, rows: 1, frame: 0 },
+      { bg: 2, ribs: 7, rows: 2, frame: 1 },
+      { bg: 3, ribs: 9, rows: 2, frame: 2 },
+      { bg: 3, ribs: 11, rows: 3, frame: 3 }
+    ][d - 1];
+    var I = C.frame ? [9, 9, 91, 91] : [3, 3, 97, 97];
+
+    var bgA = ctx.pref([8, 2]), bgB = ctx.col(6);
+    for (i = 0; i < C.bg; i++) {
+      var y0 = I[1] + (I[3] - I[1]) * i / C.bg, y1 = I[1] + (I[3] - I[1]) * (i + 1) / C.bg;
+      out.push(reg(rect(I[0], y0, I[2], y1), i % 2 ? bgB : bgA, [I[0] + 6, (y0 + y1) / 2]));
+    }
+
+    /* 손잡이 */
+    out.push(reg(rect(47, 74, 53, 92), ctx.pref([9, 5]), [50, 84]));
+
+    /* 부챗살 — 아래 한 점에서 위로 펼쳐진다 */
+    var cx = 50, cy = 76, R = 44, a0 = -72, a1 = 72;   /* 좌우가 액자 안에 들도록 */
+    var fA = ctx.pref([1, 7, 5]), fB = ctx.pref([2, 8, 3]);
+    if (fB === fA) fB = ctx.col(4);
+    for (i = 0; i < C.ribs; i++) {
+      var b0 = a0 + (a1 - a0) * i / C.ribs, b1 = a0 + (a1 - a0) * (i + 1) / C.ribs;
+      for (var r = 0; r < C.rows; r++) {
+        var s0 = 0.22 + (1 - 0.22) * r / C.rows, s1 = 0.22 + (1 - 0.22) * (r + 1) / C.rows;
+        out.push(reg(slice(cx, cy, rConst(R), s0, s1, b0, b1),
+          (i + r) % 2 ? fB : fA, slicePt(cx, cy, rConst(R), s0, s1, b0, b1)));
+      }
+    }
+    out.push(reg(slice(cx, cy, rConst(R), 0, 0.22, a0, a1), ctx.pref([9, 5]),
+      slicePt(cx, cy, rConst(R), 0.05, 0.22, a0, a1)));
+
+    frameRegions(out, ctx, C.frame);
+    return { regions: out, strokes: [] };
+  }
+
+  /* ================= 그림 20 · 기차 ================= */
+
+  function train(ctx, d) {
+    var out = [], i;
+    var C = [
+      { bg: 1, cars: 1, win: 1, wheels: 2, smoke: 0, frame: 0 },
+      { bg: 2, cars: 1, win: 2, wheels: 3, smoke: 2, frame: 0 },
+      { bg: 2, cars: 2, win: 2, wheels: 4, smoke: 3, frame: 1 },
+      { bg: 3, cars: 2, win: 3, wheels: 5, smoke: 3, frame: 2 },
+      { bg: 3, cars: 3, win: 3, wheels: 6, smoke: 4, frame: 3 }
+    ][d - 1];
+    var I = C.frame ? [9, 9, 91, 91] : [3, 3, 97, 97];
+    var hz = 78;
+
+    var bgA = ctx.pref([8, 3]), bgB = ctx.col(7);
+    for (i = 0; i < C.bg; i++) {
+      var y0 = I[1] + (hz - I[1]) * i / C.bg, y1 = I[1] + (hz - I[1]) * (i + 1) / C.bg;
+      out.push(reg(rect(I[0], y0, I[2], y1), i % 2 ? bgB : bgA, [I[0] + 6, (y0 + y1) / 2]));
+    }
+    out.push(reg(rect(I[0], hz, I[2], I[3]), ctx.pref([4, 9]), [I[0] + 6, (hz + I[3]) / 2]));
+
+    /* 연기 */
+    var smC = ctx.pref([10, 8]);
+    for (i = 0; i < C.smoke; i++) {
+      out.push(reg(circlePath(24 + i * 11, 22 - (i % 2) * 5, 5.5), smC, [24 + i * 11, 22 - (i % 2) * 5]));
+    }
+
+    /* 기관차 — 왼쪽 */
+    var eA = ctx.pref([1, 5, 6]), eB = ctx.col(2);
+    out.push(reg(rect(12, 46, 41, 70), eA, [26, 66]));
+    out.push(reg(rect(16, 30, 25, 46), eB, [20.5, 37]));        /* 굴뚝 */
+    out.push(reg(rect(27, 34, 41, 46), eB, [34, 40]));          /* 운전실 */
+    for (i = 0; i < C.win; i++) {
+      var wx = 14 + i * 9;
+      if (wx + 7 > 39) break;
+      out.push(reg(rect(wx, 50, wx + 7, 60), ctx.pref([8, 2]), [wx + 3.5, 55]));
+    }
+
+    /* 객차 */
+    var cA = ctx.pref([3, 6, 7]), cB = ctx.col(5);
+    for (i = 0; i < C.cars; i++) {
+      var x0 = 43 + i * 17, x1 = x0 + 15;
+      if (x1 > 92) break;
+      out.push(reg(rect(x0, 50, x1, 70), i % 2 ? cB : cA, [(x0 + x1) / 2, 64]));
+      out.push(reg(rect(x0 + 2, 53, x1 - 2, 61), ctx.pref([8, 2]), [(x0 + x1) / 2, 57]));
+    }
+
+    /* 바퀴 */
+    var whC = ctx.pref([9, 10]);
+    for (i = 0; i < C.wheels; i++) {
+      var bx = 18 + i * 13;
+      if (bx > 88) break;
+      out.push(reg(circlePath(bx, 73, 5), whC, [bx, 73]));
+    }
+
+    frameRegions(out, ctx, C.frame);
+    return { regions: out, strokes: [] };
+  }
+
+  /* ================= 그림 21 · 고양이 ================= */
+
+  function cat(ctx, d) {
+    var out = [], i;
+    var C = [
+      { bg: 1, bands: 2, stripe: 0, frame: 0 },
+      { bg: 2, bands: 3, stripe: 2, frame: 0 },
+      { bg: 2, bands: 4, stripe: 3, frame: 1 },
+      { bg: 3, bands: 5, stripe: 4, frame: 2 },
+      { bg: 3, bands: 6, stripe: 5, frame: 3 }
+    ][d - 1];
+    var I = C.frame ? [9, 9, 91, 91] : [3, 3, 97, 97];
+
+    var bgA = ctx.pref([8, 2]), bgB = ctx.col(6);
+    for (i = 0; i < C.bg; i++) {
+      var y0 = I[1] + (I[3] - I[1]) * i / C.bg, y1 = I[1] + (I[3] - I[1]) * (i + 1) / C.bg;
+      out.push(reg(rect(I[0], y0, I[2], y1), i % 2 ? bgB : bgA, [I[0] + 6, (y0 + y1) / 2]));
+    }
+
+    /* 귀 */
+    var furA = ctx.pref([5, 9, 2]), furB = ctx.col(3);
+    out.push(reg(poly([[24, 34], [34, 14], [44, 30]]), furA, [34, 27]));
+    out.push(reg(poly([[76, 34], [66, 14], [56, 30]]), furA, [66, 27]));
+
+    /* 얼굴 — 가로 띠 */
+    var cy = 52, rx = 30, ry = 27;
+    for (i = 0; i < C.bands; i++) {
+      var b0 = cy - ry + 2 * ry * i / C.bands, b1 = cy - ry + 2 * ry * (i + 1) / C.bands;
+      var band = ellBandH(50, cy, rx, ry, b0, b1);
+      out.push(reg(band.d, i % 2 ? furB : furA, band.pt));
+    }
+
+    /* 이마 줄무늬 */
+    var stC = ctx.pref([9, 10, 1]);
+    for (i = 0; i < C.stripe; i++) {
+      var sx = 50 + (i - (C.stripe - 1) / 2) * 9;
+      out.push(reg(poly([[sx - 3, 28], [sx + 3, 28], [sx + 2.2, 39], [sx - 2.2, 39]]), stC, [sx, 34]));
+    }
+
+    /* 눈 · 코 · 입 */
+    out.push(reg(circlePath(39, 50, 6), ctx.pref([4, 2]), [39, 50]));
+    out.push(reg(circlePath(61, 50, 6), ctx.pref([4, 2]), [61, 50]));
+    out.push(reg(poly([[44, 58], [56, 58], [50, 64]]), ctx.pref([7, 1]), [50, 60]));
+    /* 입 — 아래로 벌어진 반달 */
+    out.push(reg(slice(50, 67, rEllipse(11, 8), 0, 1, 90, 270), ctx.pref([1, 5]), [50, 71]));
+
+    frameRegions(out, ctx, C.frame);
+    return { regions: out, strokes: [] };
+  }
+
+  /* ================= 그림 22 · 포도 ================= */
+
+  function grape(ctx, d) {
+    var out = [], i, j;
+    var C = [
+      { bg: 1, rows: 3, leaf: 1, frame: 0 },
+      { bg: 2, rows: 4, leaf: 1, frame: 0 },
+      { bg: 2, rows: 5, leaf: 2, frame: 1 },
+      { bg: 3, rows: 6, leaf: 2, frame: 2 },
+      { bg: 3, rows: 7, leaf: 2, frame: 3 }
+    ][d - 1];
+    var I = C.frame ? [9, 9, 91, 91] : [3, 3, 97, 97];
+
+    var bgA = ctx.pref([2, 8]), bgB = ctx.col(6);
+    for (i = 0; i < C.bg; i++) {
+      var y0 = I[1] + (I[3] - I[1]) * i / C.bg, y1 = I[1] + (I[3] - I[1]) * (i + 1) / C.bg;
+      out.push(reg(rect(I[0], y0, I[2], y1), i % 2 ? bgB : bgA, [I[0] + 6, (y0 + y1) / 2]));
+    }
+
+    /* 줄기 · 잎 */
+    var stemC = ctx.pref([9, 5]);
+    out.push(reg(rect(48, 12, 52, 26), stemC, [50, 19]));
+    var leafC = ctx.pref([4, 2]);
+    for (i = 0; i < C.leaf; i++) {
+      var side = i === 0 ? -1 : 1;
+      var lf = leafHalf(50, 24, 3, 24, side * 62, 26, 0.6, side);
+      out.push(reg(lf.d, i % 2 ? ctx.col(2) : leafC, lf.pt));
+    }
+
+    /* 포도알 — 위가 넓고 아래로 갈수록 좁아지는 삼각 다발 */
+    var gA = ctx.pref([6, 3, 1]), gB = ctx.col(7);
+    var top = 32, r = 7.2, k = 0;
+    for (i = 0; i < C.rows; i++) {
+      var n = C.rows - i;
+      for (j = 0; j < n; j++) {
+        var gx = 50 + (j - (n - 1) / 2) * (r * 2 - 1);
+        var gy = top + i * (r * 1.75);
+        if (gy + r > 94) continue;
+        out.push(reg(circlePath(gx, gy, r), k % 2 ? gB : gA, [gx, gy]));
+        k++;
+      }
+    }
+
+    frameRegions(out, ctx, C.frame);
+    return { regions: out, strokes: [] };
+  }
+
+  /* ================= 그림 23 · 등대 ================= */
+
+  function lighthouse(ctx, d) {
+    var out = [], i;
+    var C = [
+      { sky: 1, sea: 1, body: 3, beam: 0, frame: 0 },
+      { sky: 2, sea: 1, body: 4, beam: 1, frame: 0 },
+      { sky: 2, sea: 2, body: 5, beam: 1, frame: 1 },
+      { sky: 3, sea: 2, body: 6, beam: 2, frame: 2 },
+      { sky: 3, sea: 3, body: 7, beam: 2, frame: 3 }
+    ][d - 1];
+    var I = C.frame ? [9, 9, 91, 91] : [3, 3, 97, 97];
+    var hz = 70;
+
+    var skyA = ctx.pref([8, 2]), skyB = ctx.col(7);
+    for (i = 0; i < C.sky; i++) {
+      var y0 = I[1] + (hz - I[1]) * i / C.sky, y1 = I[1] + (hz - I[1]) * (i + 1) / C.sky;
+      out.push(reg(rect(I[0], y0, I[2], y1), i % 2 ? skyB : skyA, [I[0] + 6, (y0 + y1) / 2]));
+    }
+    var seaA = ctx.pref([3, 8]), seaB = ctx.col(4);
+    for (i = 0; i < C.sea; i++) {
+      var s0 = hz + (I[3] - hz) * i / C.sea, s1 = hz + (I[3] - hz) * (i + 1) / C.sea;
+      out.push(reg(rect(I[0], s0, I[2], s1), i % 2 ? seaB : seaA, [I[0] + 6, (s0 + s1) / 2]));
+    }
+
+    /* 불빛 */
+    if (C.beam) {
+      var beamC = ctx.pref([2, 5]);
+      out.push(reg(poly([[42, 22], [14, 12], [14, 30]]), beamC, [24, 21]));
+      if (C.beam > 1) out.push(reg(poly([[58, 22], [86, 12], [86, 30]]), beamC, [76, 21]));
+    }
+
+    /* 몸통 — 위가 좁은 사다리꼴, 가로 줄무늬 */
+    var bA = ctx.pref([1, 5, 7]), bB = ctx.pref([8, 2]);
+    if (bB === bA) bB = ctx.col(3);
+    var top = 30, bot = 80, tw = 10, bw = 19;
+    for (i = 0; i < C.body; i++) {
+      var t0 = i / C.body, t1 = (i + 1) / C.body;
+      var q = [[50 - (tw + (bw - tw) * t0), top + (bot - top) * t0],
+               [50 + (tw + (bw - tw) * t0), top + (bot - top) * t0],
+               [50 + (tw + (bw - tw) * t1), top + (bot - top) * t1],
+               [50 - (tw + (bw - tw) * t1), top + (bot - top) * t1]];
+      out.push(reg(poly(q), i % 2 ? bB : bA, cen(q)));
+    }
+
+    /* 등불과 지붕 */
+    out.push(reg(rect(41, 16, 59, 28), ctx.pref([2, 5]), [50, 22]));
+    out.push(reg(poly([[38, 16], [62, 16], [50, 6]]), ctx.pref([1, 9]), [50, 13]));
+    out.push(reg(rect(37, 28, 63, 32), ctx.pref([9, 10]), [50, 30]));
+
+    frameRegions(out, ctx, C.frame);
+    return { regions: out, strokes: [] };
+  }
+
+  /* ================= 그림 24 · 무지개 ================= */
+
+  function rainbow(ctx, d) {
+    var out = [], i;
+    var C = [
+      { bg: 1, arcs: 3, clouds: 1, frame: 0 },
+      { bg: 2, arcs: 4, clouds: 2, frame: 0 },
+      { bg: 2, arcs: 5, clouds: 2, frame: 1 },
+      { bg: 3, arcs: 6, clouds: 2, frame: 2 },
+      { bg: 3, arcs: 7, clouds: 2, frame: 3 }
+    ][d - 1];
+    var I = C.frame ? [9, 9, 91, 91] : [3, 3, 97, 97];
+    var hz = 78;
+
+    var bgA = ctx.pref([8, 2]), bgB = ctx.col(7);
+    for (i = 0; i < C.bg; i++) {
+      var y0 = I[1] + (hz - I[1]) * i / C.bg, y1 = I[1] + (hz - I[1]) * (i + 1) / C.bg;
+      out.push(reg(rect(I[0], y0, I[2], y1), i % 2 ? bgB : bgA, [I[0] + 6, (y0 + y1) / 2]));
+    }
+    out.push(reg(rect(I[0], hz, I[2], I[3]), ctx.pref([4, 9]), [I[0] + 6, (hz + I[3]) / 2]));
+
+    /* 무지개 — 반달 모양 고리를 겹쳐 놓는다 */
+    var cx = 50, cy = 78, R = 40;                      /* 양 끝이 액자 안에 들도록 */
+    for (i = 0; i < C.arcs; i++) {
+      var s1 = 1 - i / C.arcs, s0 = 1 - (i + 1) / C.arcs;
+      out.push(reg(slice(cx, cy, rConst(R), s0, s1, -90, 90),
+        ctx.col(i), slicePt(cx, cy, rConst(R), s0, s1, -46, -46)));
+    }
+
+    /* 구름 — 무지개 양쪽 끝에 */
+    var cldC = ctx.pref([8, 10, 2]);
+    var spots = [[16, 42], [84, 42]];                  /* 아치 옆 빈자리에 */
+    for (i = 0; i < C.clouds && i < spots.length; i++) {
+      var s = spots[i];
+      out.push(reg(circlePath(s[0] - 6, s[1], 7), cldC, [s[0] - 6, s[1]]));
+      out.push(reg(circlePath(s[0] + 6, s[1], 7), ctx.col(2), [s[0] + 6, s[1]]));
+      out.push(reg(circlePath(s[0], s[1] - 6, 8), cldC, [s[0], s[1] - 6]));
+    }
+
+    frameRegions(out, ctx, C.frame);
+    return { regions: out, strokes: [] };
+  }
+
+
   var LIST = [
     { id: 'mandala',   name: T('고운 무늬'), make: mandala },
     { id: 'patchwork', name: T('조각보'),    make: patchwork },
@@ -867,7 +1617,21 @@ window.PICTURES = (function () {
     { id: 'tulip',     name: T('꽃'),        make: tulip },
     { id: 'boat',      name: T('배'),        make: boat },
     { id: 'bird',      name: T('새'),        make: bird },
-    { id: 'fruit',     name: T('과일'),      make: fruit }
+    { id: 'fruit',      name: T('과일'),      make: fruit },
+    { id: 'house',      name: T('집'),        make: house },
+    { id: 'umbrella',   name: T('우산'),      make: umbrella },
+    { id: 'teacup',     name: T('찻잔'),      make: teacup },
+    { id: 'melon',      name: T('수박'),      make: melon },
+    { id: 'night',      name: T('밤하늘'),    make: night },
+    { id: 'snowman',    name: T('눈사람'),    make: snowman },
+    { id: 'kite',       name: T('연'),        make: kite },
+    { id: 'jar',        name: T('항아리'),    make: jar },
+    { id: 'handfan',    name: T('부채'),      make: handfan },
+    { id: 'train',      name: T('기차'),      make: train },
+    { id: 'cat',        name: T('고양이'),    make: cat },
+    { id: 'grape',      name: T('포도'),      make: grape },
+    { id: 'lighthouse', name: T('등대'),      make: lighthouse },
+    { id: 'rainbow',    name: T('무지개'),    make: rainbow }
   ];
 
   /* ================= 만들기 ================= */

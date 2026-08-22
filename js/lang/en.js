@@ -247,6 +247,20 @@ window.I18N.dict.en = {
   /* ---------- 색칠 그림 이름 ---------- */
   '고운 무늬': 'Mandala', '조각보': 'Patchwork', '해바라기': 'Sunflower', '거북이': 'Turtle',
   '배': 'Boat', '과일': 'Fruit',
+  '집': 'House',
+  '우산': 'Umbrella',
+  '찻잔': 'Teacup',
+  '수박': 'Watermelon',
+  '밤하늘': 'Night sky',
+  '눈사람': 'Snowman',
+  '연': 'Kite',
+  '항아리': 'Clay jar',
+  '부채': 'Hand fan',
+  '기차': 'Train',
+  '고양이': 'Cat',
+  '포도': 'Grapes',
+  '등대': 'Lighthouse',
+  '무지개': 'Rainbow',
   '크레파스나 색연필로 칠할 <b>A4 색칠 도안</b>을 만듭니다. 번호와 색깔표가 함께 인쇄됩니다.':
     'Makes an <b>A4 colouring sheet</b> for crayons or pencils, with the numbers and colour key printed too.',
 
