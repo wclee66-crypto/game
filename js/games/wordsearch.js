@@ -49,7 +49,7 @@ window.Games.wordsearch = (function () {
     return a;
   }
 
-  function buildBoard(level) {
+  function buildBoard(level, themeId) {
     var L = LEVELS[level], N = L.size;
     var cap = Math.min(N, L.maxLen || N);
 
@@ -59,7 +59,14 @@ window.Games.wordsearch = (function () {
       return t.words.filter(function (w) { return w.length >= 2 && w.length <= cap; }).length >= L.count + 2;
     });
     if (!fit.length) fit = all;
-    var theme = fit[Math.floor(Math.random() * fit.length)];
+    /* 주제를 콕 집어 달라고 하면 그것을 쓴다 — 핀터레스트용 그림처럼
+       '과일 낱말찾기' 를 따로 뽑아야 할 때가 있다. 없는 주제면 아무거나 고른다. */
+    var theme = null;
+    if (themeId) {
+      theme = fit.filter(function (t) { return t.id === themeId; })[0] ||
+              all.filter(function (t) { return t.id === themeId; })[0];
+    }
+    if (!theme) theme = fit[Math.floor(Math.random() * fit.length)];
 
     var pool = shuffle(theme.words.filter(function (w) { return w.length >= 2 && w.length <= cap; }));
 
@@ -480,8 +487,8 @@ window.Games.wordsearch = (function () {
     levels: LEVELS,
     levelOrder: ORDER,
     /** 인쇄용으로 새 판을 하나 만들어 준다 (화면 상태와 무관) */
-    makeForPrint: function (level) {
-      var b = buildBoard(LEVELS[level] ? level : 'easy');
+    makeForPrint: function (level, themeId) {
+      var b = buildBoard(LEVELS[level] ? level : 'easy', themeId);
       return { level: level, levelName: LEVELS[level].name, theme: b.theme, grid: b.grid, placed: b.placed, size: b.size };
     }
   };

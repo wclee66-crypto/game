@@ -88,7 +88,7 @@ window.Print = (function () {
   function wordsearchSheets(o) {
     var pages = [];
     for (var n = 0; n < o.count; n++) {
-      var b = Games.wordsearch.makeForPrint(o.level);
+      var b = Games.wordsearch.makeForPrint(o.level, o.themeId);
       pages.push('<section class="ps-sheet">' +
         sheetHead(T('낱말찾기'), (T('주제') + ' ') + b.theme + (o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : ''),
           T('아래 낱말을 글자판에서 찾아 동그라미를 치세요. 가로·세로·대각선 모두 있습니다.')) +
@@ -514,7 +514,8 @@ window.Print = (function () {
     if (!make) return '';
     return make({
       level: o && o.level, count: (o && o.count) || 1,
-      answer: !!(o && o.answer), picId: (o && o.picId) || 'random'
+      answer: !!(o && o.answer), picId: (o && o.picId) || 'random',
+      themeId: (o && o.themeId) || null
     });
   }
 
