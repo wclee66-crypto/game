@@ -8,6 +8,7 @@
 
 /js/*
   Cache-Control: public, max-age=0, must-revalidate
+  X-Saerok-Rule: js
 
 /css/*
   Cache-Control: public, max-age=0, must-revalidate
