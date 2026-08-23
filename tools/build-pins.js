@@ -125,35 +125,35 @@ function printCss() {
 
 /* 낱말찾기 — 주제마다 한 장 (id 는 js/data/words-en.js 의 것) */
 var WS = [
-  ['fruit', 'Fruit', 'apple, pear, grape, cherry and more'],
-  ['vege', 'Vegetable', 'carrot, onion, potato, cabbage and more'],
-  ['animal', 'Animal', 'cat, dog, horse, tiger and more'],
-  ['bird', 'Bird', 'owl, robin, swan, parrot and more'],
-  ['flower', 'Flower', 'rose, lily, tulip, daisy and more'],
-  ['sea', 'Sea Life', 'crab, whale, salmon, dolphin and more'],
-  ['kitchen', 'Kitchen', 'pan, bowl, kettle, spoon and more'],
-  ['cloth', 'Clothes', 'hat, coat, scarf, sweater and more'],
-  ['weather', 'Weather', 'rain, snow, cloud, thunder and more'],
-  ['food', 'Food', 'bread, soup, cheese, pasta and more'],
-  ['music', 'Music', 'drum, piano, violin, trumpet and more'],
-  ['garden', 'Garden', 'seed, spade, hedge, blossom and more']
+  ['fruit', 'Fruit', 'apple, pear, grape, cherry and more', '과일'],
+  ['vege', 'Vegetable', 'carrot, onion, potato, cabbage and more', '채소'],
+  ['animal', 'Animal', 'cat, dog, horse, tiger and more', '동물'],
+  ['bird', 'Bird', 'owl, robin, swan, parrot and more', '새'],
+  ['flower', 'Flower', 'rose, lily, tulip, daisy and more', '꽃'],
+  ['sea', 'Sea Life', 'crab, whale, salmon, dolphin and more', '바다 생물'],
+  ['kitchen', 'Kitchen', 'pan, bowl, kettle, spoon and more', '부엌 살림'],
+  ['cloth', 'Clothes', 'hat, coat, scarf, sweater and more', '옷'],
+  ['weather', 'Weather', 'rain, snow, cloud, thunder and more', '날씨'],
+  ['food', 'Food', 'bread, soup, cheese, pasta and more', '음식'],
+  ['music', 'Music', 'drum, piano, violin, trumpet and more', '악기'],
+  ['garden', 'Garden', 'seed, spade, hedge, blossom and more', '정원']
 ];
 
 /* 색칠 공부 — 그림마다 한 장 (id 는 js/data/pictures.js 의 것) */
 var COL = [
-  ['butterfly', 'Butterfly'],
-  ['flower', 'Sunflower'],
-  ['fish', 'Fish'],
-  ['cat', 'Cat'],
-  ['train', 'Train'],
-  ['rainbow', 'Rainbow'],
-  ['umbrella', 'Umbrella'],
-  ['mandala', 'Mandala']
+  ['butterfly', 'Butterfly', '나비'],
+  ['flower', 'Sunflower', '해바라기'],
+  ['fish', 'Fish', '물고기'],
+  ['cat', 'Cat', '고양이'],
+  ['train', 'Train', '기차'],
+  ['rainbow', 'Rainbow', '무지개'],
+  ['umbrella', 'Umbrella', '우산'],
+  ['mandala', 'Mandala', '고운 무늬']
 ];
 
 /* 한 장짜리 핀을 만드는 짧은 손잡이 */
-function one(file, title, sub, game, opt) {
-  return { file: file, title: title, sub: sub, sheet: { game: game, opt: opt || {} } };
+function one(file, title, sub, game, opt, ko) {
+  return { file: file, title: title, sub: sub, ko: ko || '', sheet: { game: game, opt: opt || {} } };
 }
 
 var PINS = [];
@@ -163,6 +163,7 @@ PINS.push({
   file: 'pin-01-dementia-activities',
   title: 'Free Printable<br>Dementia Activities',
   sub: '7 puzzle types · 5 levels · play online or print',
+  ko: '일곱 게임 모음 — 치매 활동지로 소개',
   link: SITE + '/?lang=en',
   sheets: [
     { game: 'wordsearch', opt: { level: 'easy', themeId: 'fruit' } },
@@ -175,6 +176,7 @@ PINS.push({
   file: 'pin-02-brain-games-seniors',
   title: '7 Free Printable<br>Brain Games',
   sub: 'For seniors · play online free, or download the PDF',
+  ko: '일곱 게임 모음 — 두뇌 게임으로 소개',
   link: SITE + '/?lang=en',
   sheets: [
     { game: 'sudoku', opt: { level: 'normal' } },
@@ -187,6 +189,7 @@ PINS.push({
   file: 'pin-09-carers',
   title: 'Activity Sheets<br>for Care Homes',
   sub: 'Generated fresh every time — never the same sheet twice',
+  ko: '요양원·주간보호센터를 겨냥한 모음',
   link: SITE + '/?lang=en',
   sheets: [
     { game: 'coloring', opt: { level: 'normal', picId: 'cat' } },
@@ -198,24 +201,24 @@ PINS.push({
 
 /* ---- 게임마다 한 장 ---- */
 PINS.push(one('pin-03-sudoku', 'Free Printable<br>Sudoku for Seniors',
-  'Easy 4×4 up to full 9×9 · play online or print', 'sudoku', { level: 'easy' }));
+  'Easy 4×4 up to full 9×9 · play online or print', 'sudoku', { level: 'easy' }, '스도쿠'));
 PINS.push(one('pin-04-word-search', 'Free Printable<br>Word Search',
-  'For seniors · 30 themes · play online or print', 'wordsearch', { level: 'easy', themeId: 'nature' }));
+  'For seniors · 30 themes · play online or print', 'wordsearch', { level: 'easy', themeId: 'nature' }, '낱말찾기'));
 PINS.push(one('pin-05-math', 'Free Printable<br>Math Worksheets',
-  'For seniors · five levels · play online or print', 'math', { level: 'easy' }));
+  'For seniors · five levels · play online or print', 'math', { level: 'easy' }, '숫자 계산'));
 PINS.push(one('pin-06-word-scramble', 'Free Printable<br>Word Scramble',
-  'For seniors · 600 words · play online or print', 'wordorder', { level: 'easy' }));
+  'For seniors · 600 words · play online or print', 'wordorder', { level: 'easy' }, '단어 순서 바로잡기'));
 PINS.push(one('pin-07-colour-by-number', 'Free Printable<br>Colour by Number',
-  'For adults · 24 pictures · colour on screen or on paper', 'coloring', { level: 'normal', picId: 'mandala' }));
+  'For adults · 24 pictures · colour on screen or on paper', 'coloring', { level: 'normal', picId: 'mandala' }, '색칠 공부'));
 PINS.push(one('pin-08-spot-the-difference', 'Free Printable<br>Spot the Difference',
-  'For seniors · big, clear pictures · play online or print', 'spot', { level: 'normal' }));
+  'For seniors · big, clear pictures · play online or print', 'spot', { level: 'normal' }, '틀린그림찾기'));
 
 /* ---- 낱말찾기 주제별 ---- */
 WS.forEach(function (t, i) {
   PINS.push(one('pin-' + (10 + i) + '-wordsearch-' + t[0],
     'Free Printable<br>' + t[1] + ' Word Search',
     'For seniors · ' + t[2],
-    'wordsearch', { level: 'normal', themeId: t[0] }));
+    'wordsearch', { level: 'normal', themeId: t[0] }, '낱말찾기 — ' + t[3]));
 });
 
 /* ---- 색칠 공부 그림별 ---- */
@@ -223,18 +226,18 @@ COL.forEach(function (c, i) {
   PINS.push(one('pin-' + (22 + i) + '-colour-' + c[0],
     'Free Printable<br>' + c[1] + ' Colour by Number',
     'For adults and seniors · big, simple shapes',
-    'coloring', { level: 'normal', picId: c[0] }));
+    'coloring', { level: 'normal', picId: c[0] }, '색칠 공부 — ' + c[2]));
 });
 
 /* ---- 스도쿠 단계별 ---- */
-[['easy', '9×9 Sudoku', 'level 3 · a gentle full-size grid'],
- ['step1', 'Easy 4×4 Sudoku', 'level 1 · for a first try, or when 9×9 is too much'],
- ['hard', 'Hard 9×9 Sudoku', 'level 5 · for someone who wants a real challenge']
+[['easy', '9×9 Sudoku', 'level 3 · a gentle full-size grid', '9칸 · 쉬움'],
+ ['step1', 'Easy 4×4 Sudoku', 'level 1 · for a first try, or when 9×9 is too much', '4칸 · 첫걸음'],
+ ['hard', 'Hard 9×9 Sudoku', 'level 5 · for someone who wants a real challenge', '9칸 · 어려움']
 ].forEach(function (lv, i) {
   PINS.push(one('pin-' + (30 + i) + '-sudoku-' + lv[0],
     'Free Printable<br>' + lv[1],
     'For seniors · ' + lv[2],
-    'sudoku', { level: lv[0] }));
+    'sudoku', { level: lv[0] }, '스도쿠 — ' + lv[3]));
 });
 
 /* 핀마다 어디로 데려갈지 — 그 게임 화면으로 바로 들어가게 한다 */
@@ -329,35 +332,92 @@ function describe(p) {
 }
 
 function guide(list) {
+  var BOARD = {
+    A: 'Free Printable Dementia Activities',
+    B: 'Brain Games for Seniors',
+    C: 'Activity Ideas for Care Homes'
+  };
+
   var out = [
-    '핀터레스트에 올리는 법',
+    '════════════════════════════════════════════════════',
+    '  핀터레스트에 그림 올리는 법',
+    '  그림은 이 폴더 안에 있습니다.',
+    '════════════════════════════════════════════════════',
     '',
-    '  · 하루 한두 장씩 나눠 올립니다. 한꺼번에 다 올리면 서로 자리를 뺏습니다.',
-    '  · 그림 · 제목 · 설명 · 링크 · 보드, 다섯 가지를 채우면 됩니다.',
-    '  · 태그는 Therapy Worksheets 하나만 넣어도 넉넉합니다.',
     '',
-    '보드 세 개',
+    '■ 아래 영어 글은 읽으실 것이 아닙니다',
+    '',
+    '  미국·영국 사람에게 보여 줄 글이라 영어로 되어 있습니다.',
+    '  뜻을 몰라도 괜찮습니다. 그냥 **복사해서 붙여 넣기만** 하시면 됩니다.',
+    '  무엇을 어디에 넣는지는 [ ] 안에 한국어로 적어 두었습니다.',
+    '',
+    '',
+    '■ 한 장 올리는 순서 (3분이면 됩니다)',
+    '',
+    '  1. 핀터레스트 왼쪽 줄에서 「+」 를 누르고 「핀」 을 고릅니다.',
+    '  2. 이 폴더에서 그림 파일을 고릅니다.',
+    '     (아래 목록의 「그림 파일」 에 적힌 이름 그대로)',
+    '  3. [제목] 아래 한 줄을 복사해서, 핀터레스트의 「제목」 칸에 붙입니다.',
+    '  4. [설명] 아래 글을 복사해서, 「설명」 칸에 붙입니다.',
+    '  5. [링크] 아래 주소를 복사해서, 「링크」 칸에 붙입니다.',
+    '  6. 「보드」 칸을 눌러 [보드] 에 적힌 이름을 고릅니다.',
+    '  7. 「태그」 칸에 therapy 라고 쳐서 Therapy Worksheets 를 고릅니다.',
+    '  8. 오른쪽 위 빨간 「게시」 를 누릅니다.  ← 끝!',
+    '',
+    '  ※ 복사하는 법 — 글을 마우스로 드래그해서 파랗게 만든 뒤,',
+    '     Ctrl 키를 누른 채 C. 붙일 때는 Ctrl 키를 누른 채 V.',
+    '',
+    '',
+    '■ 하루에 한두 장씩만 올리세요',
+    '',
+    '  한꺼번에 다 올리면 어르신 핀끼리 서로 자리를 뺏습니다.',
+    '  하루 한두 장씩, 서두르지 말고 올리시면 됩니다.',
+    '  다 올리는 데 3주쯤 걸립니다. 그게 정상입니다.',
+    '',
+    '  위에서부터 순서대로 하시면 됩니다. 어디까지 했는지 잊으실까 봐',
+    '  번호를 붙여 두었습니다. 끝낸 줄에 V 표시라도 해 두시면 편합니다.',
+    '',
+    '',
+    '■ 보드(서랍) 세 개 — 이미 만들어 두셨습니다',
+    '',
     '  A. Free Printable Dementia Activities',
     '  B. Brain Games for Seniors',
     '  C. Activity Ideas for Care Homes',
-    '', ''
+    '',
+    '',
+    ''
   ];
+
   list.forEach(function (p, i) {
-    out.push('────────────────────────────────────────');
-    out.push((i + 1) + '. ' + p.file + '.png    [보드 ' + p.board + ']');
-    out.push('────────────────────────────────────────');
+    var n = (i + 1 < 10 ? ' ' : '') + (i + 1);
+    out.push('══════════════════════════════════════════════════');
+    out.push('  ' + n + '번    ' + (p.ko || ''));
+    out.push('══════════════════════════════════════════════════');
     out.push('');
-    out.push('[제목]');
+    out.push('[그림 파일]  ' + p.file + '.png');
+    out.push('[보드]       ' + BOARD[p.board]);
+    out.push('');
+    out.push('[제목]  ← 「제목」 칸에 붙여 넣으세요');
     out.push(plain(p.title));
     out.push('');
-    out.push('[설명]');
+    out.push('[설명]  ← 「설명」 칸에 붙여 넣으세요');
     out.push(p.desc);
     out.push('');
-    out.push('[링크]');
+    out.push('[링크]  ← 「링크」 칸에 붙여 넣으세요');
     out.push(p.link);
     out.push('');
     out.push('');
   });
+
+  out.push('══════════════════════════════════════════════════');
+  out.push('  다 올리셨습니다. 고생하셨습니다.');
+  out.push('══════════════════════════════════════════════════');
+  out.push('');
+  out.push('  두세 달은 조용할 겁니다. 그게 정상입니다.');
+  out.push('  구글 애널리틱스의 「트래픽 획득」 에 pinterest 가 보이기 시작하면');
+  out.push('  걸린 것입니다.');
+  out.push('');
+
   return out.join('\r\n');
 }
 
