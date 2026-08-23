@@ -141,7 +141,7 @@ var COPY = {
     brand: 'Saerok',
     siteName: 'Saerok · Brain Training',
     home: 'Home',
-    play: 'Play now',
+    play: 'Play online — no app to install',
     printPage: 'Free printable worksheets',
     otherGames: 'Other games',
     levels: 'Five levels',
@@ -170,7 +170,7 @@ var COPY = {
     pdfFresh: 'These files are prepared in advance, so they always hold the same puzzles. ' +
               'For a fresh set every time, use “Print puzzles” on the site itself.',
     pdfEach: 'Download',
-    langNote: '한국어',
+    langNote: 'Korean',
     aboutTitle: 'About this site',
     story: 'I went looking online for puzzles for my mother, who lives with dementia, and found it ' +
            'far too hard to find good ones — so I made these for her. I am putting them here in the ' +
