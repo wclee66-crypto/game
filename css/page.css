@@ -131,3 +131,32 @@
   font-size: .92rem; line-height: 1.75; color: var(--ink-3);
   border-left: 2px solid var(--line);
 }
+
+/* ---- 내려받는 문제지(PDF) ----
+ * 왜 이렇게 만드는가 — 이 자리가 「그냥 보고 나가는 사람」과
+ * 「파일을 받아 가는 사람」을 가른다. 그래서 단추를 크고 또렷하게 둔다.
+ * 어르신·요양보호사가 휴대폰으로도 손가락으로 누를 수 있어야 한다. */
+.doc__dlwrap { margin: 0 0 1.4rem; }
+
+.doc__dlrow { margin-bottom: 1.1rem; }
+.doc__dlrow h3 {
+  margin: 0 0 .5rem; font-size: 1rem; font-weight: 800;
+  color: var(--ink); letter-spacing: -.02em;
+}
+
+.doc__dls {
+  display: grid; gap: .5rem;
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+}
+
+.doc__dl {
+  display: flex; flex-direction: column; gap: .1rem;
+  padding: .62rem .7rem; min-height: 44px;
+  border: 1.5px solid var(--line); border-radius: 10px;
+  background: var(--surf); text-decoration: none;
+}
+.doc__dl:hover { border-color: var(--accent); background: var(--accent-s); }
+
+.doc__dl b { font-size: .96rem; font-weight: 800; color: var(--accent-d); }
+.doc__dl span { font-size: .9rem; color: var(--ink); }
+.doc__dl em { font-style: normal; font-size: .76rem; color: var(--ink-3); }

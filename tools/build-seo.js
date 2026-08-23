@@ -124,6 +124,12 @@ var COPY = {
     ],
     printNote: '문제지에는 시간·점수 같은 화면용 정보가 인쇄되지 않습니다. 정답지도 함께 인쇄하실 수 있습니다.',
     printList: '인쇄 가능 문제지',
+    pdfTitle: '문제지 내려받기 (PDF)',
+    pdfLead: '아래에서 바로 내려받아 인쇄하실 수 있습니다. ' +
+             '한 파일에 문제지 네 장과 정답지가 함께 들어 있습니다.',
+    pdfFresh: '내려받는 파일은 미리 만들어 둔 것이라 늘 같은 문제입니다. ' +
+              '누를 때마다 새 문제를 받으시려면 홈에서 「문제 인쇄」를 쓰십시오.',
+    pdfEach: '내려받기',
     langNote: 'English',
     aboutTitle: '이 사이트는',
     story: '제가 치매를 앓으시는 어머니를 위해 인터넷에서 문제를 검색하다가 찾기가 너무 힘들어 ' +
@@ -158,6 +164,12 @@ var COPY = {
     ],
     printNote: 'Times and scores are never printed on a worksheet. Answer sheets are optional.',
     printList: 'What you can print',
+    pdfTitle: 'Download the worksheets (PDF)',
+    pdfLead: 'Download and print straight away — no sign-up, no email. ' +
+             'Each file holds four worksheets and the answer sheets.',
+    pdfFresh: 'These files are prepared in advance, so they always hold the same puzzles. ' +
+              'For a fresh set every time, use “Print puzzles” on the site itself.',
+    pdfEach: 'Download',
     langNote: '한국어',
     aboutTitle: 'About this site',
     story: 'I went looking online for puzzles for my mother, who lives with dementia, and found it ' +
@@ -173,26 +185,32 @@ var COPY = {
  * 그러려면 진짜 문제지 그림이 페이지에 있어야 하고, alt(그림 설명)에
  * 찾을 만한 말이 들어 있어야 합니다. 그림은 tools/build-images.js 가 만듭니다.
  */
-var SHOT = {
-  sudoku:     { f: 'sudoku-worksheet.png' },
-  wordsearch: { f: 'wordsearch-worksheet.png' },
-  math:       { f: 'math-worksheet.png' },
-  wordorder:  { f: 'wordorder-worksheet.png' },
-  coloring:   { f: 'coloring-worksheet.png' },
-  spot:       { f: 'spot-worksheet.png' }
-};
+var SHOT_IDS = ['sudoku', 'wordsearch', 'math', 'wordorder', 'coloring', 'spot'];
 
 /** PNG 앞머리에서 가로·세로를 읽는다 (그림 파일 규칙상 늘 같은 자리에 있다) */
 function pngSize(f) {
   try {
     var b = fs.readFileSync(path.join(ROOT, 'images', f));
     return { w: b.readUInt32BE(16), h: b.readUInt32BE(20) };
-  } catch (e) { return { w: 794, h: 1000 }; }        /* 그림이 아직 없어도 페이지는 만들어져야 한다 */
+  } catch (e) { return null; }          /* 그림이 아직 없어도 페이지는 만들어져야 한다 */
 }
-Object.keys(SHOT).forEach(function (id) {
-  var d = pngSize(SHOT[id].f);
-  SHOT[id].w = d.w; SHOT[id].h = d.h;
+
+/* 말별로 한 벌씩 — 영어 그림은 이름 뒤에 -en 이 붙는다 */
+var SHOT = { ko: {}, en: {} };
+['ko', 'en'].forEach(function (lang) {
+  var tail = lang === 'ko' ? '' : '-en';
+  SHOT_IDS.forEach(function (id) {
+    var f = id + '-worksheet' + tail + '.png';
+    var d = pngSize(f);
+    if (d) SHOT[lang][id] = { f: f, w: d.w, h: d.h };
+  });
 });
+
+/** 그 게임·그 말의 문제지 그림 — 없으면 null */
+function shot(id, lang) { return (SHOT[lang] || {})[id] || null; }
+
+/** 카톡·페이스북에 나올 가로 그림 이름 */
+function ogName(id, lang) { return id + '-og' + (lang === 'ko' ? '' : '-en') + '.png'; }
 
 /** 그림 설명 — 검색에 걸리는 것은 사실상 이 문장이다 */
 function shotAlt(name, lang) {
@@ -203,7 +221,7 @@ function shotAlt(name, lang) {
 
 /** 그림이 있으면 페이지에 붙일 조각을 돌려준다 */
 function shotFigure(id, name, lang, C) {
-  var sh = SHOT[id];
+  var sh = shot(id, lang);
   if (!sh) return '';
   return '<figure class="doc__shot">\n' +
     '  <img src="/images/' + sh.f + '" width="' + sh.w + '" height="' + sh.h + '" loading="lazy" ' +
@@ -284,6 +302,56 @@ function footer(C, lang, games, hereId) {
     '</footer>\n';
 }
 
+/* ================= 내려받는 문제지(PDF) ================= *
+ * 왜 넣는가 — 영어권 사람들은 인쇄 창이 아니라 **파일 받기**를 기대합니다.
+ * 미리 만들어 둔 PDF 를 한 번 눌러 받게 해 두면 그냥 나가 버리는 일이 줄고,
+ * 구글이 PDF 도 검색에 넣어 주므로 파일 하나하나가 들어오는 길이 됩니다.
+ * 파일은 tools/build-pdf.js 가 만듭니다. 아직 없으면 이 자리는 통째로 사라집니다.
+ */
+var pdfUrls = [];                       /* sitemap 에 적을 목록 */
+
+/** 그 게임·그 단계의 PDF 가 실제로 있으면 크기(KB)를 돌려준다 */
+function pdfKb(lang, id, n) {
+  try {
+    return Math.round(fs.statSync(path.join(ROOT, 'pdf', lang, id + '-level' + n + '.pdf')).size / 1024);
+  } catch (e) { return 0; }
+}
+
+/** 받았을 때 남을 파일 이름 — 주소는 영어로 두고, 이름만 알아보기 쉽게 준다 */
+function pdfName(lang, g, n) {
+  return lang === 'ko'
+    ? g.name + '-' + n + '단계-문제지.pdf'
+    : (g.name + ' level ' + n + ' worksheets').replace(/\s+/g, '-').toLowerCase() + '.pdf';
+}
+
+/** 게임 하나치 — 단계마다 단추 하나 */
+function pdfRow(lang, g) {
+  var links = g.order.map(function (k, i) {
+    var L = g.levels[k], n = i + 1;
+    var kb = pdfKb(lang, g.id, n);
+    if (!kb) return '';
+    var href = '/pdf/' + lang + '/' + g.id + '-level' + n + '.pdf';
+    pdfUrls.push(href);
+    return '<a class="doc__dl" href="' + href + '" download="' + esc(pdfName(lang, g, n)) + '">' +
+      '<b>' + esc(L.step + (lang === 'ko' ? '단계' : '')) + '</b>' +
+      '<span>' + esc(L.name) + '</span>' +
+      '<em>PDF · ' + kb + 'KB</em></a>';
+  }).join('');
+  if (!links) return '';
+  return '<div class="doc__dlrow"><h3>' + esc(g.name) + '</h3>' +
+    '<div class="doc__dls">' + links + '</div></div>';
+}
+
+/** 여러 게임치를 한 덩어리로 */
+function pdfBlock(lang, C, list) {
+  var rows = list.map(function (g) { return pdfRow(lang, g); }).join('');
+  if (!rows) return '';
+  return '<h2 id="download">' + esc(C.pdfTitle) + '</h2>\n' +
+    '<p>' + esc(C.pdfLead) + '</p>\n' +
+    '<div class="doc__dlwrap">' + rows + '</div>\n' +
+    '<p class="doc__note">' + esc(C.pdfFresh) + '</p>\n';
+}
+
 /* ================= 게임 한 장 ================= */
 
 function gamePage(g, lang, C, games) {
@@ -312,6 +380,7 @@ function gamePage(g, lang, C, games) {
     '</p>\n' +
     '<p>' + esc(C.intro) + '</p>\n' +
     shotFigure(g.id, g.name, lang, C) +
+    (g.canPrint ? pdfBlock(lang, C, [g]) : '') +
     (lv ? '<h2>' + C.levels + '</h2>\n<ul class="doc__lv">' + lv + '</ul>\n' : '') +
     (rules ? '<h2>' + C.scoring + '</h2>\n<table class="doc__tbl"><tbody>' + rules + '</tbody></table>\n' : '') +
     '<p class="doc__note">' + esc(C.story) + '</p>\n' +
@@ -325,7 +394,7 @@ function gamePage(g, lang, C, games) {
       title: g.name + ' · ' + C.siteName,
       desc: g.tagline + ' — ' + C.free,
       siteName: C.siteName,
-      image: SHOT[g.id] && (g.id + '-og.png'),        /* 그 게임 카드가 카톡에 나오게 */
+      image: shot(g.id, lang) && ogName(g.id, lang),        /* 그 게임 카드가 카톡에 나오게 */
       imageAlt: shotAlt(g.name, lang),
       body: body
     })
@@ -346,9 +415,10 @@ function printPage(lang, C, games) {
   var steps = C.printSteps.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('');
 
   /* 문제지 그림을 늘어놓는다 — 이미지 검색으로 들어오는 길이 된다 */
-  var gallery = games.filter(function (g) { return SHOT[g.id]; }).map(function (g) {
+  var gallery = games.filter(function (g) { return shot(g.id, lang); }).map(function (g) {
+    var sh = shot(g.id, lang);
     return '<a class="doc__tile" href="' + base + '/' + g.id + '/">' +
-      '<img src="/images/' + SHOT[g.id].f + '" width="' + SHOT[g.id].w + '" height="' + SHOT[g.id].h + '" loading="lazy" ' +
+      '<img src="/images/' + sh.f + '" width="' + sh.w + '" height="' + sh.h + '" loading="lazy" ' +
         'alt="' + esc(shotAlt(g.name, lang)) + '">' +
       '<span>' + esc(g.name) + '</span></a>';
   }).join('');
@@ -360,6 +430,7 @@ function printPage(lang, C, games) {
     '<p class="doc__lead">' + esc(C.printLead) + '</p>\n' +
     '<p class="doc__cta"><a class="doc__btn" href="/' + (lang === 'ko' ? '' : '?lang=en') + '">' + C.play + '</a></p>\n' +
     '<p>' + esc(C.printWho) + '</p>\n' +
+    pdfBlock(lang, C, games.filter(function (g) { return g.canPrint; })) +
     (gallery ? '<h2>' + C.shotList + '</h2>\n<div class="doc__tiles">' + gallery + '</div>\n' : '') +
     '<h2>' + C.printList + '</h2>\n<ul class="doc__lv">' + list + '</ul>\n' +
     '<h2>' + C.printHow + '</h2>\n<ol class="doc__lv">' + steps + '</ol>\n' +
@@ -408,14 +479,15 @@ var shots = {};          /* 페이지마다 딸린 그림 — 이미지 검색�
     var p = gamePage(g, lang, C, games);
     write(p.dir, p.html);
     made.push(p.dir + '/');
-    if (SHOT[g.id]) shots[p.dir + '/'] = [{ f: SHOT[g.id].f, alt: shotAlt(g.name, lang) }];
+    var sh = shot(g.id, lang);
+    if (sh) shots[p.dir + '/'] = [{ f: sh.f, alt: shotAlt(g.name, lang) }];
   });
   var pp = printPage(lang, C, games);
   write(pp.dir, pp.html);
   made.push(pp.dir + '/');
   /* 문제지 안내 페이지에는 그림이 다 모여 있다 */
-  shots[pp.dir + '/'] = games.filter(function (g) { return SHOT[g.id]; }).map(function (g) {
-    return { f: SHOT[g.id].f, alt: shotAlt(g.name, lang) };
+  shots[pp.dir + '/'] = games.filter(function (g) { return shot(g.id, lang); }).map(function (g) {
+    return { f: shot(g.id, lang).f, alt: shotAlt(g.name, lang) };
   });
 });
 
@@ -428,6 +500,14 @@ var urls = ['/'].concat(made).map(function (u) {
   }).join('');
   return '  <url><loc>' + SITE + u + '</loc>' + imgs + (imgs ? '\n  ' : '') + '</url>';
 }).join('\n');
+
+/* 내려받는 문제지도 적는다 — 구글은 PDF 도 검색에 넣어 준다 */
+if (pdfUrls.length) {
+  /* 게임 페이지와 안내 페이지 양쪽에서 담기므로 겹치는 것을 걸러 낸다 */
+  pdfUrls = pdfUrls.filter(function (u, i) { return pdfUrls.indexOf(u) === i; });
+  urls += '\n' + pdfUrls.map(function (u) { return '  <url><loc>' + SITE + u + '</loc></url>'; }).join('\n');
+}
+
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'),
   '<?xml version="1.0" encoding="UTF-8"?>\n' +
   '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n' +

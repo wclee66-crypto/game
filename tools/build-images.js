@@ -94,17 +94,27 @@ function loadAll(lang) {
 /* 이미지 검색에서 실제로 찾는 것들. 파일 이름도 검색어에 맞춘다. */
 /* 1단계는 너무 비어 보여 눌러 보지 않는다.
    이미지 검색에서는 '알차 보이는가'가 곧 눌러 보는 비율이다. */
-var SHOTS = [
-  { id: 'sudoku',     lang: 'ko', level: 'easy',   file: 'sudoku-worksheet' },
-  { id: 'wordsearch', lang: 'ko', level: 'easy',   file: 'wordsearch-worksheet' },
-  { id: 'math',       lang: 'ko', level: 'easy',   file: 'math-worksheet' },
-  { id: 'wordorder',  lang: 'ko', level: 'easy',   file: 'wordorder-worksheet' },
-  { id: 'coloring',   lang: 'ko', level: 'normal', file: 'coloring-worksheet' },
-  { id: 'spot',       lang: 'ko', level: 'normal', file: 'spot-worksheet' }
+/* 어떤 문제지를 찍을까 — 말마다 한 벌씩이다.
+ * 영어 페이지에 한글 문제지를 붙여 두면 들어온 사람이 그대로 나가 버린다.
+ * 영어 그림은 이름 뒤에 -en 을 붙인다. */
+var PICKS = [
+  { id: 'sudoku',     level: 'easy' },
+  { id: 'wordsearch', level: 'easy' },
+  { id: 'math',       level: 'easy' },
+  { id: 'wordorder',  level: 'easy' },
+  { id: 'coloring',   level: 'normal' },
+  { id: 'spot',       level: 'normal' }
 ];
+var SHOTS = [];
+['ko', 'en'].forEach(function (lang) {
+  PICKS.forEach(function (q) {
+    SHOTS.push({ id: q.id, lang: lang, level: q.level,
+      file: q.id + '-worksheet' + (lang === 'ko' ? '' : '-en') });
+  });
+});
 
-function sheetHtml(css, inner) {
-  return '<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">' +
+function sheetHtml(css, inner, lang) {
+  return '<!DOCTYPE html><html lang="' + (lang || 'ko') + '"><head><meta charset="utf-8">' +
     '<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800;900&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">' +
     '<style>' +
     'html,body{margin:0;padding:0;background:#fff;}' +
@@ -167,7 +177,7 @@ SHOTS.forEach(function (s) {
   if (!grabbed) { console.log('  못 만듦: ' + s.id); return; }
 
   var file = path.join(tmp, s.file + '.html');
-  fs.writeFileSync(file, sheetHtml(css, grabbed));
+  fs.writeFileSync(file, sheetHtml(css, grabbed, s.lang));
 
   var h = measure(file) || 1000;
   if (h < 560) h = 560;                    /* 너무 납작하면 오히려 안 보인다 */
@@ -195,7 +205,8 @@ function ogHtml(lang) {
   var C = lang === 'en'
     ? { t: 'Saerok', s: 'Free brain puzzles for seniors', f: 'Play free · Print free · No sign-up' }
     : { t: '새록', s: '치매 예방 두뇌 훈련 · 무료 인쇄 문제지', f: '가입 없이 무료 · 문제지도 공짜' };
-  var pics = ['sudoku-worksheet', 'wordsearch-worksheet', 'coloring-worksheet'];
+  var tail = lang === 'ko' ? '' : '-en';
+  var pics = ['sudoku-worksheet' + tail, 'wordsearch-worksheet' + tail, 'coloring-worksheet' + tail];
   var cards = pics.map(function (n, i) {
     var rot = [-7, 0, 7][i], top = [40, 14, 40][i];
     return '<img src="' + n + '.png" style="width:236px;border:1px solid #D8E4DC;border-radius:10px;' +
@@ -271,7 +282,8 @@ SHOTS.forEach(function (s) {
   if (made.indexOf(s.file + '.png') < 0) return;  /* 문제지 그림이 없으면 만들 수 없다 */
   var w = loadAll(s.lang);
   var G = w.Games[s.id];
-  shoot(cardHtml(s.file + '.png', G.name, G.tagline || '', s.lang), s.id + '-og', 1200, 630);
+  shoot(cardHtml(s.file + '.png', G.name, G.tagline || '', s.lang),
+        s.id + '-og' + (s.lang === 'ko' ? '' : '-en'), 1200, 630);
 });
 
 console.log('\n그림 ' + made.length + '장을 images/ 에 넣었습니다.');

@@ -33,14 +33,22 @@ $swText = [regex]::Replace($swText, "malgeunddeul-v\d+", "malgeunddeul-v$new")
 Write-Host ""
 Write-Host ("  버전 v{0} -> v{1} 로 올렸습니다." -f $old, $new) -ForegroundColor Cyan
 
-# ---------- 1-2. 검색용 페이지 새로 만들기 ----------
+# ---------- 1-2. 내려받는 문제지(PDF) 새로 만들기 ----------
+# 영어권 사람들은 인쇄 창이 아니라 '파일 받기'를 기대합니다.
+# 미리 만들어 둔 PDF 가 있어야 그냥 나가 버리지 않습니다.
+# 검색용 페이지가 이 파일들의 크기를 읽어 적으므로 반드시 먼저 만듭니다.
+# 크롬이 없으면 그냥 건너뛰므로 배포가 멈추지 않습니다.
+& node (Join-Path $root 'tools\build-pdf.js')
+Write-Host ''
+
+# ---------- 1-3. 검색용 페이지 새로 만들기 ----------
 # 게임 정보를 읽어 /sudoku/ 같은 낱장 페이지와 sitemap.xml 을 다시 만듭니다.
 # 게임이 늘면 페이지도 저절로 늘어납니다.
 & node (Join-Path $root 'tools\build-seo.js')
 if ($LASTEXITCODE -ne 0) { throw '검색용 페이지를 만들지 못했습니다.' }
 Write-Host ''
 
-# ---------- 1-3. 문제지 미리보기 그림 새로 찍기 ----------
+# ---------- 1-4. 문제지 미리보기 그림 새로 찍기 ----------
 # 사람들이 '치매 문제지'를 이미지 검색으로 찾아 그림을 보고 들어옵니다.
 # 카톡에 주소를 보낼 때 나오는 그림도 여기서 만듭니다.
 # 크롬이 없으면 그냥 건너뛰므로 배포가 멈추지 않습니다.
@@ -61,6 +69,10 @@ Copy-Item (Join-Path $root 'favicon.ico'), (Join-Path $root 'favicon.png') -Dest
 Get-ChildItem $root -File -Filter 'google*.html' | ForEach-Object { Copy-Item $_.FullName -Destination $stage }
 Get-ChildItem $root -File -Filter 'naver*.html'  | ForEach-Object { Copy-Item $_.FullName -Destination $stage }
 Copy-Item (Join-Path $root 'css'), (Join-Path $root 'js'), (Join-Path $root 'icons') -Destination $stage -Recurse
+# 내려받는 문제지 (PDF)
+if (Test-Path (Join-Path $root 'pdf')) {
+  Copy-Item (Join-Path $root 'pdf') -Destination $stage -Recurse
+}
 # 문제지 미리보기 · 카톡 공유 그림
 if (Test-Path (Join-Path $root 'images')) {
   Copy-Item (Join-Path $root 'images') -Destination $stage -Recurse
