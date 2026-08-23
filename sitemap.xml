@@ -21,6 +21,9 @@
   <url><loc>https://playsaerok.com/spot/</loc>
     <image:image><image:loc>https://playsaerok.com/images/spot-worksheet.png</image:loc><image:title>틀린그림찾기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
   </url>
+  <url><loc>https://playsaerok.com/maze/</loc>
+    <image:image><image:loc>https://playsaerok.com/images/maze-worksheet.png</image:loc><image:title>미로찾기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
+  </url>
   <url><loc>https://playsaerok.com/print/</loc>
     <image:image><image:loc>https://playsaerok.com/images/sudoku-worksheet.png</image:loc><image:title>스도쿠 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
     <image:image><image:loc>https://playsaerok.com/images/wordsearch-worksheet.png</image:loc><image:title>낱말찾기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
@@ -28,6 +31,7 @@
     <image:image><image:loc>https://playsaerok.com/images/wordorder-worksheet.png</image:loc><image:title>단어 순서 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
     <image:image><image:loc>https://playsaerok.com/images/coloring-worksheet.png</image:loc><image:title>색칠 공부 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
     <image:image><image:loc>https://playsaerok.com/images/spot-worksheet.png</image:loc><image:title>틀린그림찾기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
+    <image:image><image:loc>https://playsaerok.com/images/maze-worksheet.png</image:loc><image:title>미로찾기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
   </url>
   <url><loc>https://playsaerok.com/en/sudoku/</loc>
     <image:image><image:loc>https://playsaerok.com/images/sudoku-worksheet-en.png</image:loc><image:title>Sudoku printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
@@ -48,6 +52,9 @@
   <url><loc>https://playsaerok.com/en/spot/</loc>
     <image:image><image:loc>https://playsaerok.com/images/spot-worksheet-en.png</image:loc><image:title>Spot the Difference printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
   </url>
+  <url><loc>https://playsaerok.com/en/maze/</loc>
+    <image:image><image:loc>https://playsaerok.com/images/maze-worksheet-en.png</image:loc><image:title>Maze printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
+  </url>
   <url><loc>https://playsaerok.com/en/print/</loc>
     <image:image><image:loc>https://playsaerok.com/images/sudoku-worksheet-en.png</image:loc><image:title>Sudoku printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
     <image:image><image:loc>https://playsaerok.com/images/wordsearch-worksheet-en.png</image:loc><image:title>Word Search printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
@@ -55,6 +62,7 @@
     <image:image><image:loc>https://playsaerok.com/images/wordorder-worksheet-en.png</image:loc><image:title>Word Scramble printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
     <image:image><image:loc>https://playsaerok.com/images/coloring-worksheet-en.png</image:loc><image:title>Colour by Number printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
     <image:image><image:loc>https://playsaerok.com/images/spot-worksheet-en.png</image:loc><image:title>Spot the Difference printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
+    <image:image><image:loc>https://playsaerok.com/images/maze-worksheet-en.png</image:loc><image:title>Maze printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
   </url>
   <url><loc>https://playsaerok.com/pdf/ko/sudoku-level1.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/ko/sudoku-level2.pdf</loc></url>
@@ -86,6 +94,11 @@
   <url><loc>https://playsaerok.com/pdf/ko/spot-level3.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/ko/spot-level4.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/ko/spot-level5.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/ko/maze-level1.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/ko/maze-level2.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/ko/maze-level3.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/ko/maze-level4.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/ko/maze-level5.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/en/sudoku-level1.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/en/sudoku-level2.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/en/sudoku-level3.pdf</loc></url>
@@ -116,4 +129,9 @@
   <url><loc>https://playsaerok.com/pdf/en/spot-level3.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/en/spot-level4.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/en/spot-level5.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/en/maze-level1.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/en/maze-level2.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/en/maze-level3.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/en/maze-level4.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/en/maze-level5.pdf</loc></url>
 </urlset>

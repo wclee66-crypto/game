@@ -392,13 +392,39 @@ window.Print = (function () {
   /* ---------------- 인쇄 실행 ---------------- */
 
   /** 게임마다 문제지를 만드는 함수 — 새 게임을 지원할 때 여기에 한 줄 더한다 */
+  /* ---------------- 미로찾기 ---------------- */
+
+  function mazeSheets(o) {
+    var pages = [];
+    for (var n = 0; n < o.count; n++) {
+      var b = Games.maze.makeForPrint(o.level);
+      var no = o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : '';
+
+      pages.push('<section class="ps-sheet">' +
+        sheetHead(T('미로찾기'), b.levelName + no,
+          T('왼쪽 위에서 출발해 오른쪽 아래 겹동그라미로 나가는 길을 연필로 그으세요.')) +
+        '<div class="ps-maze">' + b.body + '</div>' +
+      '</section>');
+
+      if (o.answer) {
+        pages.push('<section class="ps-sheet ps-sheet--ans">' +
+          sheetHead(T('미로찾기 정답'), b.levelName + no,
+            T('지름길은 {n}걸음입니다.', { n: b.steps })) +
+          '<div class="ps-maze">' + b.answer + '</div>' +
+        '</section>');
+      }
+    }
+    return pages.join('');
+  }
+
   var SHEETS = {
     sudoku: sudokuSheets,
     wordsearch: wordsearchSheets,
     math: mathSheets,
     wordorder: wordorderSheets,
     coloring: coloringSheets,
-    spot: spotSheets
+    spot: spotSheets,
+    maze: mazeSheets
   };
 
   /* 인쇄 내용은 **인쇄 창이 닫힌 뒤에** 지운다.

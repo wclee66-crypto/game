@@ -663,6 +663,72 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
   font-size: .82rem; color: var(--ink-2); line-height: 1.5;
 }
 
+/* ================= 미로찾기 ================= */
+
+.mz-wrap {
+  display: block; margin: 0 auto; width: 100%; max-width: 380px;
+  background: var(--surf); border: 1px solid var(--line); border-radius: var(--r);
+  padding: .5rem; box-sizing: border-box;
+  touch-action: none;                 /* 손가락으로 밀어 움직일 수 있게 */
+}
+.mz-wrap.is-bump { animation: shake .3s; }
+
+.mz-svg { display: block; width: 100%; height: auto; }
+
+/* 벽 — 굵고 또렷하게. 눈이 어두우셔도 길이 보여야 한다 */
+.mz-wall {
+  fill: none; stroke: var(--ink); stroke-width: 1.1;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.mz-start { fill: var(--accent-s); }
+.mz-goal  { fill: var(--accent-s); }
+.mz-home  { fill: var(--accent); opacity: .45; }
+.mz-flag  { fill: none; stroke: var(--accent); stroke-width: .9; }
+.mz-flag2 { fill: var(--accent); }
+
+/* 지나온 길 */
+.mz-trail {
+  fill: none; stroke: var(--accent); stroke-width: 3.2; opacity: .3;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+/* 힌트로 알려 준 길 */
+.mz-hint {
+  fill: none; stroke: var(--warn); stroke-width: 2.2;
+  stroke-dasharray: 2.4 2.2; stroke-linecap: round; stroke-linejoin: round;
+}
+/* 판이 끝난 뒤 보여 주는 지름길 */
+.mz-solve {
+  fill: none; stroke: var(--accent); stroke-width: 2.6; opacity: .55;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+/* 지금 내 자리 */
+.mz-me { fill: var(--accent-d); stroke: #fff; stroke-width: 1; }
+
+.mz-note {
+  margin: .7rem 0 0; text-align: center;
+  font-size: .82rem; color: var(--ink-2); line-height: 1.5;
+}
+
+/* 화살표 넷 — 손가락으로 눌러야 하므로 넉넉하게 */
+.mz-pad {
+  display: grid; gap: .5rem; margin: .9rem auto 0;
+  width: min(100%, 260px);
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: ".  up ." "lf .  rt" ".  dn .";
+}
+.mz-btn {
+  grid-area: var(--a);
+  min-height: 62px; border-radius: var(--r);
+  border: 1.5px solid var(--line-2); background: var(--surf);
+  color: var(--accent-d); font-size: 1.5rem; line-height: 1;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.mz-btn:active { background: var(--accent-s); border-color: var(--accent); }
+.mz-btn--up    { --a: up; }
+.mz-btn--left  { --a: lf; }
+.mz-btn--right { --a: rt; }
+.mz-btn--down  { --a: dn; }
+
 /* ================= 기록 ================= */
 
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: .45rem; }
@@ -1052,4 +1118,20 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
     font-size: 5px; font-weight: 800; fill: #000; text-anchor: middle;
     font-family: 'Manrope', sans-serif;
   }
+
+  /* ---- 미로찾기 ---- */
+  .ps-maze { margin: 0; }
+  .ps-maze svg {
+    display: block; margin: 0 auto; width: 150mm; height: 150mm;   /* A4 한 쪽에 넉넉히 들어가는 크기 */
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  /* 종이에서는 모두 검정 실선으로 — 옅은 색은 복사하면 사라진다 */
+  .ps-maze path      { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .ps-maze .mz-wall  { stroke: #000; stroke-width: 1.15; }
+  .ps-maze .mz-start,
+  .ps-maze .mz-goal  { fill: #EDEDED; }
+  .ps-maze .mz-home  { fill: #000; opacity: 1; }
+  .ps-maze .mz-flag  { stroke: #000; stroke-width: .9; fill: none; }
+  .ps-maze .mz-flag2 { fill: #000; }
+  .ps-maze .mz-solve { fill: none; stroke: #000; stroke-width: 2.2; opacity: 1; stroke-dasharray: 3 2.4; }
 }

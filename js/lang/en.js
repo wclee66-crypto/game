@@ -729,6 +729,78 @@ window.I18N.dict.en = {
   '문제지': 'worksheet',
   '도안': 'colouring sheet',
   '잘하셨습니다!': 'Well done!',
+
+  /* ---- 미로찾기 ---- */
+  '미로찾기': 'Maze',
+  '미로찾기 정답': 'Maze answer',
+  '미로찾기 점수 규칙': 'Maze scoring',
+  '길을 눈으로 더듬어 찾는 시간': 'Trace the way out with your eyes',
+
+  '5칸 미로 · 길이 단순합니다': '5×5 maze · a simple route',
+  '7칸 미로': '7×7 maze',
+  '9칸 미로': '9×9 maze',
+  '12칸 미로 · 갈림길이 많습니다': '12×12 maze · plenty of turnings',
+  '15칸 미로 · 막다른 길이 많습니다': '15×15 maze · plenty of dead ends',
+
+  '왼쪽 위에서 출발해': 'Start at the top left',
+  '오른쪽 아래로 나가는 길을 찾으세요.': 'and find your way out at the bottom right.',
+  '화살표를 누르면 갈림길까지 저절로 갑니다.': 'Each arrow takes you along to the next turning.',
+  '벽 쪽을 눌러도 점수가 깎이지 않습니다.': 'Bumping into a wall costs you nothing.',
+  '오른쪽 아래 겹동그라미로 나가시면 됩니다.': 'The way out is the ringed square at the bottom right.',
+  '굵은 선이 지나오신 길입니다.': 'The thick line is the way you came.',
+  '초록 선이 지름길입니다.': 'The green line is the shortest way.',
+  '가야 할 길을 조금만 알려 드렸습니다.': 'Here is a little of the way ahead.',
+
+  '걸음': 'Steps',
+  '위로': 'Up',
+  '아래로': 'Down',
+  '왼쪽으로': 'Left',
+  '오른쪽으로': 'Right',
+  '처음 자리로': 'Back to start',
+  '미로 보기': 'See the maze',
+  '{n}걸음까지 감': '{n} steps in',
+  '지금 판을 그만두고 새 미로로 시작할까요?': 'Leave this round and start a new maze?',
+
+  '나오셨습니다!': 'You made it out!',
+  '지름길로 한 번에 나오셨습니다.': 'You took the shortest way out.',
+  '{n}걸음 만에 나오셨습니다.': 'You made it out in {n} steps.',
+  '도착까지 {n}걸음 남았습니다.': 'You were {n} steps from the way out.',
+  '도착 점수': 'Getting out',
+  '간 만큼의 점수 ({n}%)': 'How far you got ({n}%)',
+  '지름길 보너스': 'Short-route bonus',
+  '지름길 보너스 ({a}걸음 / 지름길 {b}걸음)': 'Short-route bonus ({a} steps · shortest is {b})',
+
+  '움직이는 법': 'How to move',
+  '곧은 길은 저절로': 'Straight runs walk themselves',
+  '화살표를 누르면 길이 꺾이는 곳까지 저절로 갑니다.': 'Each arrow carries you along to the next turn.',
+  '한 번 누르면 길이 꺾이거나 갈라지는 곳까지 쭉 갑니다. 한 칸씩 스무 번 누르지 않으셔도 됩니다':
+    'One press carries you along until the path turns or branches, so you never have to tap twenty times square by square',
+  '벽에 부딪히면': 'If you hit a wall',
+  '1단계 5칸 · 2단계 7칸 · 3단계 9칸 · 4단계 12칸 · 5단계 15칸':
+    'Level 1 is 5×5 · Level 2 is 7×7 · Level 3 is 9×9 · Level 4 is 12×12 · Level 5 is 15×15',
+  '화살표 넷을 누르시면 됩니다. 휴대폰에서는 미로 위를 손가락으로 밀어도 되고, 컴퓨터에서는 키보드 화살표도 됩니다':
+    'Press one of the four arrows. On a phone you can also swipe across the maze, and on a computer the keyboard arrows work too',
+  '한 번 누르면 길이 갈라지는 곳까지 쭉 갑니다. 한 칸씩 스무 번 누르지 않으셔도 됩니다':
+    'One press carries you along until the path branches, so you never have to tap twenty times square by square',
+  '최대 600점 · 나가시면 600점, 못 나가셔도 가까이 간 만큼 드립니다':
+    'Up to 600 points · 600 for getting out, and part of it for how close you got',
+  '최대 300점 · 나가셨을 때만, 남은 시간에 비례':
+    'Up to 300 points · only if you get out, in proportion to the time left',
+  '최대 100점 · 지름길에 가깝게 나오실수록 높습니다':
+    'Up to 100 points · the closer to the shortest route, the higher',
+  '힌트 1회마다 50점 차감 (가야 할 길을 다섯 칸만 알려 줍니다)':
+    '50 points off per hint (it shows the next five squares of the way)',
+  '아무 일도 없습니다. 점수가 깎이지 않으니 마음껏 눌러 보셔도 됩니다':
+    'Nothing happens. It costs you nothing, so press away as much as you like',
+  '보통 +100점, 어려움 +250점 (나가셨을 때)':
+    'Normal +100, Hard +250 (when you get out)',
+  '간 만큼만 점수로 기록되고, 지름길을 초록 선으로 알려 드립니다':
+    'You keep the points for how far you got, and the shortest way is shown as a green line',
+
+  '왼쪽 위에서 출발해 오른쪽 아래 겹동그라미로 나가는 길을 연필로 그으세요.':
+    'Start at the top left and draw a pencil line to the ringed square at the bottom right.',
+  '지름길은 {n}걸음입니다.': 'The shortest way is {n} steps.',
+
   '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="지우개">':
     '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="Eraser">'
 };
