@@ -98,7 +98,11 @@
   /* 인터넷이 끊겨도 열리도록 (파일을 직접 열었을 때는 건너뜀) */
   if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('sw.js').catch(function () {});
+      /* updateViaCache:'none' — 이 파일만은 브라우저가 저장해 둔 것을 쓰지 않고
+         늘 새로 받아 온다. 이게 없으면 고친 내용이 몇 시간씩 반영되지 않는다.
+         (호스팅이 자바스크립트에 '몇 시간은 다시 묻지 말라'를 붙여 보내기 때문) */
+      navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' })
+        .catch(function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
     });
   }
 </script>
