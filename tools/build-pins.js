@@ -50,52 +50,52 @@ var PINS = [
     shots: ['wordsearch-worksheet-en', 'coloring-worksheet-en',
             'sudoku-worksheet-en', 'math-worksheet-en'],
     title: 'Free Printable<br>Dementia Activities',
-    sub: '7 puzzle types · 5 levels · ready to print',
-    badge: 'FREE PDF' },
+    sub: '7 puzzle types · 5 levels · play online or print',
+    badge: 'FREE · PLAY OR PRINT' },
 
   { file: 'pin-02-brain-games-seniors',
     shots: ['sudoku-worksheet-en', 'wordorder-worksheet-en',
             'spot-worksheet-en', 'coloring-worksheet-en'],
     title: '7 Free Printable<br>Brain Games',
-    sub: 'For seniors · no sign-up, no email · print as many as you like',
-    badge: 'FREE PDF' },
+    sub: 'For seniors · play online free, or download the PDF',
+    badge: 'FREE · PLAY OR PRINT' },
 
   { file: 'pin-03-sudoku', shot: 'sudoku-worksheet-en',
     title: 'Free Printable<br>Sudoku for Seniors',
-    sub: 'From easy 4×4 up to full 9×9 — five levels',
-    badge: 'FREE PDF' },
+    sub: 'Easy 4×4 up to full 9×9 · play online or print',
+    badge: 'FREE · PLAY OR PRINT' },
 
   { file: 'pin-04-word-search', shot: 'wordsearch-worksheet-en',
     title: 'Free Printable<br>Word Search',
-    sub: 'For seniors · 30 everyday themes · large, clear letters',
-    badge: 'FREE PDF' },
+    sub: 'For seniors · 30 themes · play online or print',
+    badge: 'FREE · PLAY OR PRINT' },
 
   { file: 'pin-05-math', shot: 'math-worksheet-en',
     title: 'Free Printable<br>Math Worksheets',
-    sub: 'For seniors · add, take away, multiply · five levels',
-    badge: 'FREE PDF' },
+    sub: 'For seniors · five levels · play online or print',
+    badge: 'FREE · PLAY OR PRINT' },
 
   { file: 'pin-06-word-scramble', shot: 'wordorder-worksheet-en',
     title: 'Free Printable<br>Word Scramble',
-    sub: 'For seniors · 600 everyday words · five levels',
-    badge: 'FREE PDF' },
+    sub: 'For seniors · 600 words · play online or print',
+    badge: 'FREE · PLAY OR PRINT' },
 
   { file: 'pin-07-colour-by-number', shot: 'coloring-worksheet-en',
     title: 'Free Printable<br>Colour by Number',
-    sub: 'For adults · 24 pictures · big, simple shapes',
-    badge: 'FREE PDF' },
+    sub: 'For adults · 24 pictures · colour on screen or on paper',
+    badge: 'FREE · PLAY OR PRINT' },
 
   { file: 'pin-08-spot-the-difference', shot: 'spot-worksheet-en',
     title: 'Free Printable<br>Spot the Difference',
-    sub: 'For seniors · big, clear pictures · five levels',
-    badge: 'FREE PDF' },
+    sub: 'For seniors · big, clear pictures · play online or print',
+    badge: 'FREE · PLAY OR PRINT' },
 
   { file: 'pin-09-carers',
     shots: ['coloring-worksheet-en', 'wordsearch-worksheet-en',
             'math-worksheet-en', 'spot-worksheet-en'],
     title: 'Activity Sheets<br>for Care Homes',
     sub: 'Generated fresh every time — never the same sheet twice',
-    badge: 'FREE PDF' }
+    badge: 'FREE · PLAY OR PRINT' }
 ];
 
 /* ================= 그림 한 장의 뼈대 =================
@@ -121,7 +121,7 @@ function pinHtml(p) {
 
     /* 맨 위 — 여기가 검색어다 */
     '.head{padding:58px 70px 0;text-align:center}' +
-    '.badge{display:inline-block;font-size:23px;font-weight:800;letter-spacing:.16em;' +
+    '.badge{display:inline-block;font-size:21px;font-weight:800;letter-spacing:.16em;' +
       'color:#fff;background:#0E9E62;border-radius:999px;padding:11px 26px}' +
     '.t{font-size:70px;font-weight:800;line-height:1.1;letter-spacing:-.035em;color:#0F2A20;margin:26px 0 0}' +
     '.s{font-size:30px;font-weight:500;color:#4F6459;margin:22px 0 0;line-height:1.45}' +
