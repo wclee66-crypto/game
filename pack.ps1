@@ -62,6 +62,10 @@ New-Item -ItemType Directory -Force $stage | Out-Null
 
 Copy-Item (Join-Path $root 'index.html'), (Join-Path $root 'manifest.json'), $swJs -Destination $stage
 Copy-Item (Join-Path $root 'sitemap.xml'), (Join-Path $root 'robots.txt') -Destination $stage
+# Cloudflare 에 '자바스크립트는 늘 새것인지 물어보라'고 알리는 파일
+if (Test-Path (Join-Path $root '_headers')) {
+  Copy-Item (Join-Path $root '_headers') -Destination $stage
+}
 # 브라우저가 주소 맨 뒤에서 저절로 찾는 아이콘 — 없으면 헛걸음을 한다
 Copy-Item (Join-Path $root 'favicon.ico'), (Join-Path $root 'favicon.png') -Destination $stage
 

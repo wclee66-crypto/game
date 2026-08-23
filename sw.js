@@ -4,7 +4,7 @@
  * 인터넷이 없거나 서버가 꺼져 있으면 저장해 둔 파일로 실행합니다.
  * 파일을 고친 뒤에는 아래 VERSION 을 올려 주세요. (js/app.js 의 APP_VERSION 도 같이)
  */
-var VERSION = 'malgeunddeul-v49';
+var VERSION = 'malgeunddeul-v50';
 /* 아래 목록은 '최소한 이것만은 저장해 둔다'는 안전망이다.
  * 실제로 저장할 파일은 install 때 index.html 을 읽어서 스스로 찾아낸다.
  * 그래서 새 게임 파일을 index.html 에 한 줄 넣으면 이 목록은 손대지 않아도 된다. */
@@ -98,8 +98,14 @@ self.addEventListener('fetch', function (e) {
   if (e.request.method !== 'GET') return;
   if (new URL(e.request.url).origin !== location.origin) return;  // 글꼴 등 바깥 주소는 그대로
 
+  /* 브라우저가 제 나름대로 저장해 둔 옛 파일을 그대로 내주지 않게 한다.
+   * 이걸 안 해 두면 '새 파일과 옛 파일이 섞이는' 일이 생긴다 —
+   * 2026-08-23 에 영어 사전만 옛것이라 새 게임 이름이 한국어로 나왔다.
+   * 화면 이동(navigate)은 건드리지 않는다. 값을 덧붙이면 요청의 성격이 바뀔 수 있다. */
+  var opt = (e.request.mode === 'navigate') ? undefined : { cache: 'reload' };
+
   e.respondWith(
-    fetch(e.request).then(function (res) {
+    fetch(e.request, opt).then(function (res) {
       if (res && res.ok) {                       // 200번대일 때만 새 파일로 인정
         var copy = res.clone();
         caches.open(VERSION).then(function (c) { c.put(e.request, copy); });

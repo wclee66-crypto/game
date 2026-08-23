@@ -1,0 +1,32 @@
+# Cloudflare Pages 에 보내는 알림 — 파일마다 얼마나 오래 저장해 둘지
+#
+# 왜 두는가 — 기본값이 '4시간 동안 다시 묻지 말라' 였다.
+# 그 탓에 고친 파일과 안 고친 파일이 섞여, 2026-08-23 에 영어 화면에
+# 새 게임 이름만 한국어로 나오는 일이 있었다.
+# 아래처럼 두면 브라우저가 매번 '바뀌었나요?' 하고 물어보고,
+# 안 바뀌었으면 서버가 '그대로다'라고만 답하므로 느려지지 않는다.
+
+/js/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/css/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/sw.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/manifest.json
+  Cache-Control: public, max-age=0, must-revalidate
+
+# 그림과 문제지는 좀처럼 바뀌지 않으므로 하루씩 저장해 둔다
+/images/*
+  Cache-Control: public, max-age=86400
+
+/pdf/*
+  Cache-Control: public, max-age=86400
+
+/icons/*
+  Cache-Control: public, max-age=86400
