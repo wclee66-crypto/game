@@ -729,6 +729,41 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
 .mz-btn--right { --a: rt; }
 .mz-btn--down  { --a: dn; }
 
+/* ================= 계산 퍼즐 ================= */
+
+.mc-wrap { display: flex; justify-content: center; }
+
+.mc-board {
+  display: grid;
+  grid-template-columns: repeat(var(--c), 1fr);
+  gap: 3px;
+  width: min(100%, 340px);
+}
+.mc-gap { display: block; aspect-ratio: 1; }
+
+/* 숫자 칸 · 기호 칸 — 네모를 또렷하게 둘러 종이 문제지처럼 보이게 */
+.mc-num, .mc-sym {
+  display: grid; place-items: center; aspect-ratio: 1;
+  border: 1.5px solid var(--line-2); border-radius: 8px;
+  font-family: var(--font-num); font-weight: 800;
+  font-size: clamp(.95rem, 5.2vw, 1.45rem); font-style: normal;
+  background: var(--bg); color: var(--ink);
+  padding: 0; line-height: 1;
+}
+.mc-sym { border-color: transparent; background: transparent; color: var(--ink-2); }
+.mc-num--given { background: var(--surf-2); }
+
+/* 채워 넣는 칸 */
+.mc-num--in { cursor: pointer; -webkit-tap-highlight-color: transparent; color: var(--accent-d); }
+.mc-num--in.is-sel { border-color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent-s); }
+.mc-num--in.is-ok  { background: var(--accent-s); border-color: var(--accent); }
+.mc-num--in.is-bad { background: var(--bad-s); border-color: var(--bad); color: var(--bad); }
+
+.mc-note {
+  margin: .8rem 0 0; text-align: center;
+  font-size: .82rem; color: var(--ink-2); line-height: 1.5;
+}
+
 /* ================= 기록 ================= */
 
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: .45rem; }
@@ -1134,4 +1169,36 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
   .ps-maze .mz-flag  { stroke: #000; stroke-width: .9; fill: none; }
   .ps-maze .mz-flag2 { fill: #000; }
   .ps-maze .mz-solve { fill: none; stroke: #000; stroke-width: 2.2; opacity: 1; stroke-dasharray: 3 2.4; }
+
+  /* ---- 계산 퍼즐 ---- */
+  /* 한 장에 여섯 판 — 두 줄 세 칸.
+     판마다 네모를 둘러야 한다. 안 그러면 옆 판의 칸과 붙어 보여
+     어느 식이 한 문제인지 알아볼 수가 없다. */
+  .ps-mcwrap {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 5mm; align-items: stretch; margin-top: 4mm;
+  }
+  .ps-mc {
+    display: grid; place-items: center;
+    border: 1pt solid #000; border-radius: 2mm; padding: 3mm 2.5mm;
+  }
+  .ps-mc .mc-board { width: 42mm; }
+  /* 7칸짜리는 두 칸으로 놓아 크게 — 작으면 어르신이 못 보신다 */
+  .ps-mcwrap--big { grid-template-columns: repeat(2, 1fr); gap: 4mm; }
+  .ps-mcwrap--big .mc-board { width: 55mm; }
+  .ps-mcwrap--big .mc-num, .ps-mcwrap--big .mc-sym { font-size: 12pt; }
+  .ps-mc .mc-board {
+    display: grid; grid-template-columns: repeat(var(--c), 1fr);
+    gap: 1mm; width: 100%;
+  }
+  .ps-mc .mc-gap { display: block; aspect-ratio: 1; }
+  .ps-mc .mc-num, .ps-mc .mc-sym {
+    display: grid; place-items: center; aspect-ratio: 1;
+    border: 0.9pt solid #000; border-radius: 1.2mm;
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 12pt;
+    font-style: normal; line-height: 1; color: #000; background: #fff;
+  }
+  .ps-mc .mc-sym { border-color: transparent; }
+  .ps-mc .mc-num--blank { background: #fff; }
+  .ps-mc .mc-num--ans { background: #EDEDED; }
 }

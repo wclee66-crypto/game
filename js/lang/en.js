@@ -730,6 +730,72 @@ window.I18N.dict.en = {
   '도안': 'colouring sheet',
   '잘하셨습니다!': 'Well done!',
 
+
+  /* ---- 계산 퍼즐 ---- */
+  '계산 퍼즐': 'Math Crossword',
+  '계산 퍼즐 정답': 'Math Crossword answer',
+  '계산 퍼즐 점수 규칙': 'Math Crossword scoring',
+  '가로와 세로가 맞아떨어지는 셈': 'Sums that add up across and down',
+
+  '가로와 세로가 모두 맞도록': 'Fill in the blanks so that',
+  '빈칸에 숫자를 넣으세요.': 'every sum works across and down.',
+  '빈칸의 답은 언제나 1부터 9까지입니다.': 'Every answer is a number from 1 to 9.',
+  '모서리 칸은 가로 식과 세로 식이 함께 씁니다.': 'A corner square belongs to two sums at once.',
+  '빈칸을 누르고 아래에서 숫자를 고르세요.': 'Tap a blank square, then choose a number below.',
+  '한 칸을 채워 드렸습니다.': 'One square has been filled in for you.',
+  '잘하셨습니다! 다음 판으로 갑니다.': 'Well done — on to the next one.',
+  '지금 판을 그만두고 새 문제로 시작할까요?': 'Leave this round and start a new puzzle?',
+
+  '판': 'Puzzle',
+  '{a}/{b}판': 'puzzle {a} of {b}',
+  '· {n}판 · 제한 {m}분': '· {n} puzzles · {m} min limit',
+  '다 채우셨습니다!': 'All filled in!',
+  '빈칸 {n}개를 모두 맞히셨습니다.': 'You filled in all {n} blanks correctly.',
+  '{a}칸 중 {b}칸을 채우셨습니다.': 'You filled in {b} of {a} blanks.',
+  '채운 칸 ({a}/{b}칸)': 'Squares filled ({a} of {b})',
+  '채우기 점수': 'Filling in',
+
+  '식 2개 · 10까지 · 더하기 빼기': '2 sums · up to 10 · adding and taking away',
+  '식 2개 · 15까지': '2 sums · up to 15',
+  '식 3개 · 20까지': '3 sums · up to 20',
+  '식 3~4개 · 30까지 · 곱하기도': '3–4 sums · up to 30 · times tables too',
+  '식 4개 · 50까지 · 네모 틀': '4 sums · up to 50 · the square frame',
+
+  '모양': 'Shapes',
+  '빈칸 수': 'How many blanks',
+  '빈칸의 답': 'What goes in a blank',
+  '틀렸을 때': 'If you put the wrong number',
+  '가로 식과 세로 식이 모두 맞도록 빈칸에 숫자를 넣습니다. 모서리 칸은 두 식이 함께 쓰므로, 한 칸을 채우면 다른 식도 함께 풀립니다':
+    'Fill in the blanks so that every sum works both across and down. A corner square belongs to two sums, so filling one square helps solve the other sum as well',
+  '언제나 1부터 9까지입니다. 숫자판에서 한 번만 누르면 됩니다':
+    'Always a number from 1 to 9, so one tap on the keypad is all it takes',
+  '식 하나에 하나씩입니다. 식이 둘이면 빈칸도 둘, 넷이면 넷입니다':
+    'One per sum. Two sums means two blanks, four sums means four',
+  '열여섯 가지가 돌아가며 나옵니다 — ㄱ · ㄴ · 十 · ㅗ · ㄷ · 네모 틀 …':
+    'Sixteen of them come round in turn — corners, a cross, a T, a U, a full square frame and more',
+  '1단계 식 2개·10까지 · 2단계 식 2개·15까지 · 3단계 식 3개·20까지 · 4단계 식 3~4개·30까지와 곱하기 · 5단계 식 4개·50까지':
+    'Level 1 two sums up to 10 · Level 2 two sums up to 15 · Level 3 three sums up to 20 · Level 4 three or four sums up to 30 with times tables · Level 5 four sums up to 50',
+  '최대 600점 · 맞게 채운 칸 수에 비례': 'Up to 600 points · in proportion to the squares filled in correctly',
+  '최대 300점 · 다 채웠을 때만, 남은 시간에 비례': 'Up to 300 points · only if you fill them all in, in proportion to the time left',
+  '최대 100점 · 틀린 숫자를 1번 넣을 때마다 10점씩 줄어듦': 'Up to 100 points · 10 points less each time you put in a wrong number',
+  '힌트 1회마다 50점 차감 (한 칸을 채워 줍니다)': '50 points off per hint (it fills in one square for you)',
+  '그 자리에 빨갛게 남습니다. 지우고 다시 넣으시면 됩니다':
+    'It stays there in red. Erase it and put in another number',
+  '보통 +100점, 어려움 +250점 (다 채웠을 때)': 'Normal +100, Hard +250 (when you fill them all in)',
+
+  '가로와 세로가 모두 맞도록 빈칸에 숫자를 넣으세요. 답은 1부터 9까지입니다.':
+    'Fill in the blanks so that every sum works across and down. Every answer is a number from 1 to 9.',
+
+  '식 4개 · 10까지 · 더하기 빼기': '4 sums · up to 10 · adding and taking away',
+  '식 4개 · 20까지': '4 sums · up to 20',
+  '식 5개 · 40까지': '5 sums · up to 40',
+  '식 5개 · 60까지': '5 sums · up to 60',
+  '식 6개 · 99까지': '6 sums · up to 99',
+  '더하기와 빼기만 나옵니다. 단계가 올라갈수록 식이 늘고 숫자가 커집니다 — 1단계 식 4개·10까지 · 2단계 식 4개·20까지 · 3단계 식 5개·40까지 · 4단계 식 5개·60까지 · 5단계 식 6개·99까지':
+    'Only adding and taking away. Each level adds another sum and bigger numbers — Level 1 four sums up to 10 · Level 2 four sums up to 20 · Level 3 five sums up to 40 · Level 4 five sums up to 60 · Level 5 six sums up to 99',
+  '판을 열 때마다 새로 짜므로 같은 모양이 되풀이되지 않습니다 — ㄱ · 十 · ㄷ · 네모 틀 · 사다리 …':
+    'A fresh shape is worked out every time, so the same one never comes round twice — corners, crosses, square frames, ladders and more',
+
   /* ---- 미로찾기 ---- */
   '미로찾기': 'Maze',
   '미로찾기 정답': 'Maze answer',

@@ -392,6 +392,30 @@ window.Print = (function () {
   /* ---------------- 인쇄 실행 ---------------- */
 
   /** 게임마다 문제지를 만드는 함수 — 새 게임을 지원할 때 여기에 한 줄 더한다 */
+  /* ---------------- 계산 퍼즐 ---------------- */
+
+  function mathcrossSheets(o) {
+    var pages = [];
+    for (var n = 0; n < o.count; n++) {
+      var b = Games.mathcross.makeForPrint(o.level);
+      var no = o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : '';
+
+      pages.push('<section class="ps-sheet">' +
+        sheetHead(T('계산 퍼즐'), b.levelName + no,
+          T('가로와 세로가 모두 맞도록 빈칸에 숫자를 넣으세요. 답은 1부터 9까지입니다.')) +
+        '<div class="ps-mcwrap' + (b.big ? ' ps-mcwrap--big' : '') + '">' + b.body + '</div>' +
+      '</section>');
+
+      if (o.answer) {
+        pages.push('<section class="ps-sheet ps-sheet--ans">' +
+          sheetHead(T('계산 퍼즐 정답'), b.levelName + no, '') +
+          '<div class="ps-mcwrap' + (b.big ? ' ps-mcwrap--big' : '') + '">' + b.answer + '</div>' +
+        '</section>');
+      }
+    }
+    return pages.join('');
+  }
+
   /* ---------------- 미로찾기 ---------------- */
 
   function mazeSheets(o) {
@@ -424,7 +448,8 @@ window.Print = (function () {
     wordorder: wordorderSheets,
     coloring: coloringSheets,
     spot: spotSheets,
-    maze: mazeSheets
+    maze: mazeSheets,
+    mathcross: mathcrossSheets
   };
 
   /* 인쇄 내용은 **인쇄 창이 닫힌 뒤에** 지운다.
