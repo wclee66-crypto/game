@@ -488,8 +488,8 @@ window.Games.spot = (function () {
 
     root.querySelector('#spHintBtn').addEventListener('click', useHint);
     root.querySelector('#spRestart').addEventListener('click', function () {
-      UI.confirm(T('새 판'), T('지금 판을 그만두고 새 그림으로 시작할까요?'), function () {
-        newGame(S.level); renderBoard();
+      UI.confirm(T('새 판'), T('지금 판을 그만두고 난이도부터 다시 고르시겠어요?'), function () {
+        Store.clearSession('spot'); S = null; renderIntro();
       }, T('새로 시작'));
     });
     root.querySelector('#spSwitch').addEventListener('click', function () { App.gameSwitcher('spot'); });

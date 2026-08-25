@@ -268,7 +268,7 @@ window.Games.sudoku = (function () {
     });
     root.querySelector('#sdHintBtn').addEventListener('click', useHint);
     root.querySelector('#sdRestart').addEventListener('click', function () {
-      UI.confirm(T('새 문제'), T('지금 풀던 문제는 사라집니다. 새로 시작할까요?'), function () {
+      UI.confirm(T('새 문제'), T('지금 판을 그만두고 난이도부터 다시 고르시겠어요?'), function () {
         Store.clearSession('sudoku');
         S = null; renderIntro();
       }, T('새로 시작'));

@@ -245,7 +245,8 @@ window.Games.quiz = (function () {
           }).join('') +
         '</div>' +
         '<div class="tools">' +
-          ('<button class="tool" id="qzQuit"><span>↺</span>' + T('그만두기') + '</button>') +
+          ('<button class="tool" id="qzNew"><span>↺</span>' + T('새 문제') + '</button>') +
+          ('<button class="tool" id="qzQuit"><span>⏹</span>' + T('그만두기') + '</button>') +
           ('<button class="tool" id="qzSwitch"><span>⇄</span>' + T('다른 게임') + '</button>') +
         '</div>' +
       '</section>';
@@ -256,6 +257,11 @@ window.Games.quiz = (function () {
       var b = e.target.closest('.qz-opt');
       if (!b || locked) return;
       answer(+b.dataset.i);
+    });
+    root.querySelector('#qzNew').addEventListener('click', function () {
+      UI.confirm(T('새 문제'), T('지금 판을 그만두고 난이도부터 다시 고르시겠어요?'), function () {
+        Store.clearSession('quiz'); S = null; renderIntro();
+      }, T('새로 시작'));
     });
     root.querySelector('#qzQuit').addEventListener('click', function () {
       UI.confirm(T('그만두기'), T('지금까지 푼 만큼만 점수로 기록됩니다. 그만둘까요?'), function () { finish(); }, T('그만두기'));

@@ -249,7 +249,8 @@ window.Games.wordorder = (function () {
         '</div>' +
 
         '<div class="tools">' +
-          ('<button class="tool" id="woQuit"><span>↺</span>' + T('그만두기') + '</button>') +
+          ('<button class="tool" id="woNew"><span>↺</span>' + T('새 문제') + '</button>') +
+          ('<button class="tool" id="woQuit"><span>⏹</span>' + T('그만두기') + '</button>') +
           ('<button class="tool" id="woSwitch"><span>⇄</span>' + T('다른 게임') + '</button>') +
         '</div>' +
       '</section>';
@@ -278,6 +279,11 @@ window.Games.wordorder = (function () {
     });
     root.querySelector('#woBack').addEventListener('click', function () { if (!locked) back(); });
     root.querySelector('#woOk').addEventListener('click', function () { if (!locked) submit(); });
+    root.querySelector('#woNew').addEventListener('click', function () {
+      UI.confirm(T('새 문제'), T('지금 판을 그만두고 난이도부터 다시 고르시겠어요?'), function () {
+        Store.clearSession('wordorder'); S = null; renderIntro();
+      }, T('새로 시작'));
+    });
     root.querySelector('#woQuit').addEventListener('click', function () {
       UI.confirm(T('그만두기'), T('지금까지 푼 만큼만 점수로 기록됩니다. 그만둘까요?'), function () { finish(); }, T('그만두기'));
     });

@@ -435,8 +435,8 @@ window.Games.mathcross = (function () {
     });
     root.querySelector('#mcHintBtn').addEventListener('click', useHint);
     root.querySelector('#mcRestart').addEventListener('click', function () {
-      UI.confirm(T('새 문제'), T('지금 판을 그만두고 새 문제로 시작할까요?'), function () {
-        newGame(S.level); renderBoard();
+      UI.confirm(T('새 문제'), T('지금 판을 그만두고 난이도부터 다시 고르시겠어요?'), function () {
+        Store.clearSession('mathcross'); S = null; renderIntro();
       }, T('새로 시작'));
     });
     root.querySelector('#mcSwitch').addEventListener('click', function () { App.gameSwitcher('mathcross'); });

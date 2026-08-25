@@ -731,6 +731,62 @@ window.I18N.dict.en = {
   '잘하셨습니다!': 'Well done!',
 
 
+
+  /* 「새 문제」 — 어느 게임에서든 난이도 고르는 화면으로 돌아간다 */
+  '지금 판을 그만두고 난이도부터 다시 고르시겠어요?':
+    'Leave this round and choose a level again?',
+
+  /* ---- 보고 그리기 ---- */
+  '보고 그리기': 'Copy the Figure',
+  '보고 그리기 정답': 'Copy the Figure answer',
+  '보고 그리기 점수 규칙': 'Copy the Figure scoring',
+  '본을 보고 똑같이 옮기는 눈': 'An eye for copying what you see',
+
+  '왼쪽 그림을 보고': 'Look at the figure on the left',
+  '오른쪽 점판에 똑같이 그리세요.': 'and copy it onto the dots on the right.',
+  '점 두 개를 차례로 누르면 선이 그어집니다.': 'Tap two dots and a line joins them.',
+  '같은 선을 다시 누르면 지워집니다.': 'Tap the same line again to rub it out.',
+  '선 하나를 그어 드렸습니다.': 'One line has been drawn for you.',
+  '잘하셨습니다! 다음 그림으로 갑니다.': 'Well done — on to the next figure.',
+  '왼쪽 그림을 보고 오른쪽 점판에 똑같이 그려 보세요.':
+    'Look at the figure on the left and copy it onto the dots on the right.',
+
+  '본': 'Copy this',
+  '따라 그리기': 'Draw it here',
+  '그림': 'Figure',
+  '다 지우기': 'Rub out all',
+  '다 그리셨습니다!': 'All copied!',
+  '그리기 점수': 'Drawing',
+  '그린 선 ({a}/{b}개)': 'Lines drawn ({a} of {b})',
+  '그림 {n}개를 모두 옮겨 그리셨습니다.': 'You copied all {n} figures.',
+  '선 {a}개 중 {b}개를 그리셨습니다.': 'You drew {b} of {a} lines.',
+
+  '점 3×3 · 선 3개': '3×3 dots · 3 lines',
+  '점 3×3 · 선 4개': '3×3 dots · 4 lines',
+  '점 3×3 · 선 6개': '3×3 dots · 6 lines',
+  '점 4×4 · 선 7개': '4×4 dots · 7 lines',
+  '점 4×4 · 선 9개': '4×4 dots · 9 lines',
+
+  '선 지우기': 'Rubbing out',
+  '그을 수 있는 선': 'Which lines you can draw',
+  '무엇에 좋은가': 'What it exercises',
+  '왼쪽 본을 보고 오른쪽 점판에 똑같이 그립니다. 점 두 개를 차례로 누르면 그 사이에 선이 그어집니다':
+    'Look at the figure on the left and copy it onto the dots on the right. Tap two dots and a line is drawn between them',
+  '같은 선을 다시 누르면 지워집니다. 「다 지우기」로 한꺼번에 지울 수도 있습니다':
+    'Tap the same line again to rub it out, or use “Rub out all” to clear the whole grid',
+  '가로·세로·대각선으로 곧게만 그을 수 있습니다. 점을 건너뛴 긴 선도 됩니다':
+    'Only straight lines — across, down or diagonally. A long line that passes over a dot is fine too',
+  '눈으로 본 것을 손으로 옮기는 힘을 씁니다. 치매에서 일찍 흐려지는 힘이라 검사에도 쓰입니다':
+    'It exercises the ability to copy what the eye sees. That ability fades early in dementia, so this kind of task is used in memory assessments',
+  '1단계 점 3×3·선 3개 · 2단계 선 4개 · 3단계 선 6개 · 4단계 점 4×4·선 7개 · 5단계 선 9개':
+    'Level 1 is 3×3 dots with 3 lines · Level 2 has 4 lines · Level 3 has 6 · Level 4 moves to 4×4 dots with 7 · Level 5 has 9',
+  '최대 600점 · 맞게 그은 선 수에 비례': 'Up to 600 points · in proportion to the lines drawn correctly',
+  '최대 300점 · 다 그렸을 때만, 남은 시간에 비례': 'Up to 300 points · only if you finish them all, in proportion to the time left',
+  '최대 100점 · 없는 선을 1번 그을 때마다 10점씩 줄어듦': 'Up to 100 points · 10 points less each time you draw a line that is not there',
+  '힌트 1회마다 50점 차감 (선 하나를 그어 줍니다)': '50 points off per hint (it draws one line for you)',
+  '그 선이 빨갛게 남습니다. 다시 눌러 지우시면 됩니다': 'The line stays there in red. Tap it again to rub it out',
+  '보통 +100점, 어려움 +250점 (다 그렸을 때)': 'Normal +100, Hard +250 (when you finish them all)',
+
   /* ---- 계산 퍼즐 ---- */
   '계산 퍼즐': 'Math Crossword',
   '계산 퍼즐 정답': 'Math Crossword answer',

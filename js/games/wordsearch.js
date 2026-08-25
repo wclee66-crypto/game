@@ -209,7 +209,7 @@ window.Games.wordsearch = (function () {
     bindSelection();
     root.querySelector('#wsHintBtn').addEventListener('click', useHint);
     root.querySelector('#wsRestart').addEventListener('click', function () {
-      UI.confirm(T('새 판'), T('지금 판은 사라집니다. 새로 시작할까요?'), function () {
+      UI.confirm(T('새 판'), T('지금 판을 그만두고 난이도부터 다시 고르시겠어요?'), function () {
         Store.clearSession('wordsearch'); S = null; renderIntro();
       }, T('새로 시작'));
     });
