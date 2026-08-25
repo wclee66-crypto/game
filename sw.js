@@ -4,7 +4,7 @@
  * 인터넷이 없거나 서버가 꺼져 있으면 저장해 둔 파일로 실행합니다.
  * 파일을 고친 뒤에는 아래 VERSION 을 올려 주세요. (js/app.js 의 APP_VERSION 도 같이)
  */
-var VERSION = 'malgeunddeul-v54';
+var VERSION = 'malgeunddeul-v55';
 /* 아래 목록은 '최소한 이것만은 저장해 둔다'는 안전망이다.
  * 실제로 저장할 파일은 install 때 index.html 을 읽어서 스스로 찾아낸다.
  * 그래서 새 게임 파일을 index.html 에 한 줄 넣으면 이 목록은 손대지 않아도 된다. */
@@ -89,7 +89,12 @@ function offlinePage() {
 function fromCache(req) {
   return caches.match(req).then(function (hit) {
     if (hit) return hit;
-    if (req.mode === 'navigate') return caches.match('./index.html');
+    /* 화면 열기는 ./ 를 먼저 찾는다.
+     * ./index.html 저장본은 '되돌려진 응답'이라 화면 열기에 그대로 내주면
+     * 크롬이 오류를 낸다 (설치한 앱이 안 켜지던 원인이다). */
+    if (req.mode === 'navigate') {
+      return caches.match('./').then(function (h2) { return h2 || caches.match('./index.html'); });
+    }
     return null;
   });
 }
@@ -106,6 +111,9 @@ self.addEventListener('fetch', function (e) {
 
   e.respondWith(
     fetch(e.request, opt).then(function (res) {
+      /* 주소를 다른 곳으로 되돌리는 응답(308 등)은 그대로 내보낸다 —
+       * 브라우저가 알아서 따라간다. 저장은 하지 않는다. */
+      if (res && res.type === 'opaqueredirect') return res;
       if (res && res.ok) {                       // 200번대일 때만 새 파일로 인정
         var copy = res.clone();
         caches.open(VERSION).then(function (c) { c.put(e.request, copy); });

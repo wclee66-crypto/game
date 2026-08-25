@@ -60,6 +60,30 @@ window.Games.copyfig = (function () {
     return dr === 0 || dc === 0 || Math.abs(dr) === Math.abs(dc);
   }
 
+  /** 선 하나를 '한 칸짜리 조각'들로 편다.
+   *  긴 선을 반씩 나눠 그어도, 이어서 한 번에 그어도 같은 조각이 되게 하려는 것이다.
+   *  본과 그린 것 모두 이 조각으로만 다루므로, 눈에 같으면 앱도 같다고 본다. */
+  function units(a, b) {
+    var r1 = rowOf(a), c1 = colOf(a), r2 = rowOf(b), c2 = colOf(b);
+    var n = Math.max(Math.abs(r2 - r1), Math.abs(c2 - c1));
+    var dr = (r2 - r1) / n || 0, dc = (c2 - c1) / n || 0;
+    var out = [];
+    for (var k = 0; k < n; k++) {
+      out.push(key(id(r1 + dr * k, c1 + dc * k), id(r1 + dr * (k + 1), c1 + dc * (k + 1))));
+    }
+    return out;
+  }
+
+  /** 선 목록을 조각으로 펴서 겹침 없이 모은다 */
+  function toUnits(keys) {
+    var set = {};
+    keys.forEach(function (k) {
+      var q = k.split('-').map(Number);
+      units(q[0], q[1]).forEach(function (u) { set[u] = 1; });
+    });
+    return Object.keys(set);
+  }
+
   /* ================= 본 만들기 ================= */
 
   /** 그 점에서 곧게 갈 수 있는 점들 */
@@ -110,7 +134,8 @@ window.Games.copyfig = (function () {
       keys.forEach(function (k) { k.split('-').forEach(function (x) { dots[x] = 1; }); });
       if (Object.keys(dots).length < 3) continue;
 
-      return keys;
+      /* 조각으로 펴서 돌려준다 — 긴 선과 그 토막이 겹쳐 들어가는 일이 없어진다 */
+      return toUnits(keys);
     }
     return null;
   }
@@ -251,15 +276,24 @@ window.Games.copyfig = (function () {
   }
 
 
-  /** 두 점 사이에 선을 긋거나 지운다 */
+  /** 두 점 사이에 선을 긋거나 지운다 — 조각 단위로 다룬다.
+   *  긴 선을 그으면 그 조각이 전부 그어지고, 이미 다 그어져 있으면 전부 지워진다. */
   function link(a, b) {
+    if (S.flip) return;                 /* 다음 판으로 넘어가는 중 — 잠깐 기다린다 */
     if (!joinable(a, b)) { S.sel = b; paint(); return; }
 
-    var k = key(a, b), got = mine();
-    if (got[k]) { delete got[k]; }       /* 같은 선을 다시 그으면 지워진다 */
-    else {
-      got[k] = 1;
-      if (cur().indexOf(k) < 0) { S.wrong++; UI.beep('no'); }
+    var us = units(a, b), got = mine();
+    var allOn = us.every(function (u) { return got[u]; });
+    if (allOn) {
+      us.forEach(function (u) { delete got[u]; });   /* 같은 선을 다시 그으면 지워진다 */
+    } else {
+      var miss = false;
+      us.forEach(function (u) {
+        if (got[u]) return;
+        got[u] = 1;
+        if (cur().indexOf(u) < 0) miss = true;
+      });
+      if (miss) { S.wrong++; UI.beep('no'); }
       else UI.beep('tick');
     }
     S.sel = null;
@@ -268,9 +302,11 @@ window.Games.copyfig = (function () {
 
     if (pageDone()) {
       if (S.at < S.list.length - 1) {
+        S.flip = true;
         UI.toast(T('잘하셨습니다! 다음 그림으로 갑니다.'));
         setTimeout(function () {
           if (!mounted || !S || S.done) return;
+          S.flip = false;
           S.at++; S.sel = null; paint(); persist();
         }, 700);
       } else finish(false);
