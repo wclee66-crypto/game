@@ -737,14 +737,17 @@ window.I18N.dict.en = {
     'Leave this round and choose a level again?',
 
   /* ---- 보고 그리기 ---- */
-  '보고 그리기': 'Copy the Figure',
-  '보고 그리기 정답': 'Copy the Figure answer',
-  '보고 그리기 점수 규칙': 'Copy the Figure scoring',
+  '따라 그리기': 'Copy the Pattern',
+  '따라 그리기 정답': 'Copy the Pattern answer',
+  '따라 그리기 점수 규칙': 'Copy the Pattern scoring',
   '본을 보고 똑같이 옮기는 눈': 'An eye for copying what you see',
 
   '왼쪽 그림을 보고': 'Look at the figure on the left',
   '오른쪽 점판에 똑같이 그리세요.': 'and copy it onto the dots on the right.',
-  '점 두 개를 차례로 누르면 선이 그어집니다.': 'Tap two dots and a line joins them.',
+  '마우스를 누르고 점을 잇거나,': 'Drag from one dot to another,',
+  '점 두 개를 차례로 누르면 선이 이어집니다.': 'or tap two dots in turn — either way a line joins them.',
+  '마우스를 누르고 점을 잇거나, 점 두 개를 차례로 누르면 선이 이어집니다.':
+    'Drag from one dot to another, or tap two dots in turn — either way a line joins them.',
   '같은 선을 다시 누르면 지워집니다.': 'Tap the same line again to rub it out.',
   '선 하나를 그어 드렸습니다.': 'One line has been drawn for you.',
   '잘하셨습니다! 다음 그림으로 갑니다.': 'Well done — on to the next figure.',
@@ -752,7 +755,7 @@ window.I18N.dict.en = {
     'Look at the figure on the left and copy it onto the dots on the right.',
 
   '본': 'Copy this',
-  '따라 그리기': 'Draw it here',
+  '여기에 그리세요': 'Draw it here',
   '그림': 'Figure',
   '다 지우기': 'Rub out all',
   '다 그리셨습니다!': 'All copied!',
@@ -770,8 +773,8 @@ window.I18N.dict.en = {
   '선 지우기': 'Rubbing out',
   '그을 수 있는 선': 'Which lines you can draw',
   '무엇에 좋은가': 'What it exercises',
-  '왼쪽 본을 보고 오른쪽 점판에 똑같이 그립니다. 점 두 개를 차례로 누르면 그 사이에 선이 그어집니다':
-    'Look at the figure on the left and copy it onto the dots on the right. Tap two dots and a line is drawn between them',
+  '왼쪽 본을 보고 오른쪽 점판에 똑같이 그립니다. 마우스를 누른 채 점에서 점으로 끌어도 되고, 점 두 개를 차례로 눌러도 선이 이어집니다':
+    'Look at the figure on the left and copy it onto the dots on the right. Either drag from one dot to another, or tap two dots in turn',
   '같은 선을 다시 누르면 지워집니다. 「다 지우기」로 한꺼번에 지울 수도 있습니다':
     'Tap the same line again to rub it out, or use “Rub out all” to clear the whole grid',
   '가로·세로·대각선으로 곧게만 그을 수 있습니다. 점을 건너뛴 긴 선도 됩니다':

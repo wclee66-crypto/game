@@ -76,7 +76,7 @@ function loadGames(lang) {
   run('js/data/order-words-en.js');
   run('js/data/pictures.js');
 
-  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross'].forEach(function (id) {
+  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig'].forEach(function (id) {
     run('js/games/' + id + '.js');
   });
 
@@ -185,7 +185,7 @@ var COPY = {
  * 그러려면 진짜 문제지 그림이 페이지에 있어야 하고, alt(그림 설명)에
  * 찾을 만한 말이 들어 있어야 합니다. 그림은 tools/build-images.js 가 만듭니다.
  */
-var SHOT_IDS = ['sudoku', 'wordsearch', 'math', 'wordorder', 'coloring', 'spot', 'maze', 'mathcross'];
+var SHOT_IDS = ['sudoku', 'wordsearch', 'math', 'wordorder', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig'];
 
 /** PNG 앞머리에서 가로·세로를 읽는다 (그림 파일 규칙상 늘 같은 자리에 있다) */
 function pngSize(f) {

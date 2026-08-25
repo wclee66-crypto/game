@@ -764,6 +764,39 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
   font-size: .82rem; color: var(--ink-2); line-height: 1.5;
 }
 
+/* ================= 보고 그리기 ================= */
+
+/* 본과 그리는 곳을 나란히 — 눈을 멀리 옮기지 않고 견주어 볼 수 있어야 한다 */
+.cf-pair { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; }
+.cf-panel { margin: 0; }
+.cf-panel figcaption {
+  margin: 0 0 .35rem; text-align: center;
+  font-size: .8rem; font-weight: 800; color: var(--ink-3);
+}
+.cf-panel > div {
+  background: var(--surf); border: 1.5px solid var(--line); border-radius: var(--r);
+  padding: .5rem;
+}
+
+.cf-svg { display: block; width: 100%; height: auto; }
+/* 끌어서 이을 때 화면이 함께 밀리면 안 된다 */
+.cf-svg--draw { touch-action: none; }
+.cf-dot { fill: var(--ink-3); }
+.cf-dot.is-sel { fill: var(--accent); r: 1.9; }
+/* 손가락으로 누를 자리 — 눈에 보이는 점보다 훨씬 넓게 */
+.cf-hit { fill: transparent; cursor: pointer; }
+
+.cf-line {
+  fill: none; stroke: var(--ink); stroke-width: 1.1;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.cf-line--bad { stroke: var(--bad); stroke-dasharray: 2 1.6; }
+
+.cf-note {
+  margin: .8rem 0 0; text-align: center;
+  font-size: .82rem; color: var(--ink-2); line-height: 1.5;
+}
+
 /* ================= 기록 ================= */
 
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: .45rem; }
@@ -1201,4 +1234,21 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
   .ps-mc .mc-sym { border-color: transparent; }
   .ps-mc .mc-num--blank { background: #fff; }
   .ps-mc .mc-num--ans { background: #EDEDED; }
+
+  /* ---- 보고 그리기 ---- */
+  /* 한 장에 여덟 판 — 두 칸 × 네 줄. 판마다 네모를 두르고 가운데 선으로 나눈다 */
+  .ps-cfwrap {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 5mm; margin-top: 4mm;
+  }
+  .ps-cf {
+    display: grid; grid-template-columns: 1fr 1fr;
+    border: 1.2pt solid #000; border-radius: 1mm;
+  }
+  .ps-cf__half { padding: 4mm; }
+  .ps-cf__half + .ps-cf__half { border-left: 1.2pt solid #000; }
+  .ps-cf .cf-svg { display: block; width: 100%; height: auto; }
+  .ps-cf .cf-dot { fill: #000; }
+  .ps-cf .cf-line { fill: none; stroke: #000; stroke-width: 1.15;
+    stroke-linecap: round; stroke-linejoin: round; }
 }

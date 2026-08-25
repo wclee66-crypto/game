@@ -392,6 +392,30 @@ window.Print = (function () {
   /* ---------------- 인쇄 실행 ---------------- */
 
   /** 게임마다 문제지를 만드는 함수 — 새 게임을 지원할 때 여기에 한 줄 더한다 */
+  /* ---------------- 따라 그리기 ---------------- */
+
+  function copyfigSheets(o) {
+    var pages = [];
+    for (var n = 0; n < o.count; n++) {
+      var b = Games.copyfig.makeForPrint(o.level);
+      var no = o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : '';
+
+      pages.push('<section class="ps-sheet">' +
+        sheetHead(T('따라 그리기'), b.levelName + no,
+          T('왼쪽 그림을 보고 오른쪽 점판에 똑같이 그려 보세요.')) +
+        '<div class="ps-cfwrap">' + b.body + '</div>' +
+      '</section>');
+
+      if (o.answer) {
+        pages.push('<section class="ps-sheet ps-sheet--ans">' +
+          sheetHead(T('따라 그리기 정답'), b.levelName + no, '') +
+          '<div class="ps-cfwrap">' + b.answer + '</div>' +
+        '</section>');
+      }
+    }
+    return pages.join('');
+  }
+
   /* ---------------- 계산 퍼즐 ---------------- */
 
   function mathcrossSheets(o) {
@@ -449,7 +473,8 @@ window.Print = (function () {
     coloring: coloringSheets,
     spot: spotSheets,
     maze: mazeSheets,
-    mathcross: mathcrossSheets
+    mathcross: mathcrossSheets,
+    copyfig: copyfigSheets
   };
 
   /* 인쇄 내용은 **인쇄 창이 닫힌 뒤에** 지운다.
