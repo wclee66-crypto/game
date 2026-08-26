@@ -30,6 +30,9 @@
   <url><loc>https://playsaerok.com/copyfig/</loc>
     <image:image><image:loc>https://playsaerok.com/images/copyfig-worksheet.png</image:loc><image:title>따라 그리기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
   </url>
+  <url><loc>https://playsaerok.com/dot2dot/</loc>
+    <image:image><image:loc>https://playsaerok.com/images/dot2dot-worksheet.png</image:loc><image:title>점 잇기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
+  </url>
   <url><loc>https://playsaerok.com/print/</loc>
     <image:image><image:loc>https://playsaerok.com/images/sudoku-worksheet.png</image:loc><image:title>스도쿠 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
     <image:image><image:loc>https://playsaerok.com/images/wordsearch-worksheet.png</image:loc><image:title>낱말찾기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
@@ -40,6 +43,7 @@
     <image:image><image:loc>https://playsaerok.com/images/maze-worksheet.png</image:loc><image:title>미로찾기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
     <image:image><image:loc>https://playsaerok.com/images/mathcross-worksheet.png</image:loc><image:title>계산 퍼즐 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
     <image:image><image:loc>https://playsaerok.com/images/copyfig-worksheet.png</image:loc><image:title>따라 그리기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
+    <image:image><image:loc>https://playsaerok.com/images/dot2dot-worksheet.png</image:loc><image:title>점 잇기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
   </url>
   <url><loc>https://playsaerok.com/en/sudoku/</loc>
     <image:image><image:loc>https://playsaerok.com/images/sudoku-worksheet-en.png</image:loc><image:title>Sudoku printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
@@ -69,6 +73,9 @@
   <url><loc>https://playsaerok.com/en/copyfig/</loc>
     <image:image><image:loc>https://playsaerok.com/images/copyfig-worksheet-en.png</image:loc><image:title>Copy the Pattern printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
   </url>
+  <url><loc>https://playsaerok.com/en/dot2dot/</loc>
+    <image:image><image:loc>https://playsaerok.com/images/dot2dot-worksheet-en.png</image:loc><image:title>Dot to Dot printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
+  </url>
   <url><loc>https://playsaerok.com/en/print/</loc>
     <image:image><image:loc>https://playsaerok.com/images/sudoku-worksheet-en.png</image:loc><image:title>Sudoku printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
     <image:image><image:loc>https://playsaerok.com/images/wordsearch-worksheet-en.png</image:loc><image:title>Word Search printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
@@ -79,6 +86,7 @@
     <image:image><image:loc>https://playsaerok.com/images/maze-worksheet-en.png</image:loc><image:title>Maze printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
     <image:image><image:loc>https://playsaerok.com/images/mathcross-worksheet-en.png</image:loc><image:title>Math Crossword printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
     <image:image><image:loc>https://playsaerok.com/images/copyfig-worksheet-en.png</image:loc><image:title>Copy the Pattern printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
+    <image:image><image:loc>https://playsaerok.com/images/dot2dot-worksheet-en.png</image:loc><image:title>Dot to Dot printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
   </url>
   <url><loc>https://playsaerok.com/pdf/ko/sudoku-level1.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/ko/sudoku-level2.pdf</loc></url>
@@ -125,6 +133,11 @@
   <url><loc>https://playsaerok.com/pdf/ko/copyfig-level3.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/ko/copyfig-level4.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/ko/copyfig-level5.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/ko/dot2dot-level1.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/ko/dot2dot-level2.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/ko/dot2dot-level3.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/ko/dot2dot-level4.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/ko/dot2dot-level5.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/en/sudoku-level1.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/en/sudoku-level2.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/en/sudoku-level3.pdf</loc></url>
@@ -170,4 +183,9 @@
   <url><loc>https://playsaerok.com/pdf/en/copyfig-level3.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/en/copyfig-level4.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/en/copyfig-level5.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/en/dot2dot-level1.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/en/dot2dot-level2.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/en/dot2dot-level3.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/en/dot2dot-level4.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/en/dot2dot-level5.pdf</loc></url>
 </urlset>

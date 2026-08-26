@@ -797,6 +797,47 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
   font-size: .82rem; color: var(--ink-2); line-height: 1.5;
 }
 
+/* ================= 점 잇기 ================= */
+
+.dd-wrap {
+  display: block; margin: 0 auto; width: min(100%, 400px);
+  background: var(--surf); border: 1.5px solid var(--line); border-radius: var(--r);
+  padding: .4rem;
+}
+.dd-svg { display: block; width: 100%; height: auto; touch-action: manipulation; }
+
+.dd-dot { fill: var(--ink-2); }
+.dd-dot.is-done { fill: var(--accent); }
+/* 다음에 누를 점 — 깜빡여서 어디를 눌러야 할지 늘 보이게 */
+.dd-dot.is-next { fill: var(--accent); animation: ddPulse 1s ease-in-out infinite; }
+.dd-dot.is-bad { fill: var(--bad); animation: ddBad .45s; }
+.dd-dot.is-wave { animation: ddWave .8s; }
+
+.dd-num { fill: var(--ink-2); font-family: var(--font-num); font-weight: 800; }
+.dd-num.is-done { fill: var(--ink-3); }
+.dd-num.is-next { fill: var(--accent-d); animation: ddPulse 1s ease-in-out infinite; }
+.dd-num.is-wave { animation: ddWave .8s; }
+
+.dd-hit { fill: transparent; cursor: pointer; }
+
+.dd-line {
+  fill: none; stroke: var(--ink); stroke-width: 1.3;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+/* 완성되는 순간 — 은은하게 차오른다 */
+.dd-fill { fill: var(--accent-s); animation: ddIn .7s ease-out; }
+
+@keyframes ddPulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+@keyframes ddBad { 0%,100% { opacity: 1; } 50% { opacity: .2; } }
+@keyframes ddWave { 0%,100% { transform: scale(1); } 50% { transform: scale(2.1); } }
+@keyframes ddIn { from { opacity: 0; } to { opacity: 1; } }
+.dd-dot, .dd-num { transform-box: fill-box; transform-origin: center; }
+
+.dd-note {
+  margin: .8rem 0 0; text-align: center;
+  font-size: .82rem; color: var(--ink-2); line-height: 1.5;
+}
+
 /* ================= 기록 ================= */
 
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: .45rem; }
@@ -1251,4 +1292,17 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
   .ps-cf .cf-dot { fill: #000; }
   .ps-cf .cf-line { fill: none; stroke: #000; stroke-width: 1.15;
     stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ---- 점 잇기 ---- */
+  /* 한 장에 넉 장 — 두 칸 × 두 줄. 점과 번호는 또렷한 검정으로 */
+  .ps-ddwrap {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 4mm; margin-top: 3mm;
+  }
+  .ps-dd { border: 1pt solid #000; border-radius: 2mm; padding: 2mm; }
+  .ps-dd .dd-svg { display: block; width: 100%; height: auto; }
+  .ps-dd .dd-dot { fill: #000; animation: none; }
+  .ps-dd .dd-num { fill: #000; font-family: 'Manrope', sans-serif; font-weight: 700; animation: none; }
+  .ps-dd .dd-line { fill: none; stroke: #000; stroke-width: 1.1; }
+  .ps-dd .dd-fill { fill: none; }
 }

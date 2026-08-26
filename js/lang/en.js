@@ -736,6 +736,59 @@ window.I18N.dict.en = {
   '지금 판을 그만두고 난이도부터 다시 고르시겠어요?':
     'Leave this round and choose a level again?',
 
+
+  /* ---- 점 잇기 ---- */
+  '점 잇기': 'Dot to Dot',
+  '점 잇기 정답': 'Dot to Dot answer',
+  '점 잇기 점수 규칙': 'Dot to Dot scoring',
+  '순서대로 이으면 그림이 나타나는': 'Join the dots and a picture appears',
+
+  '1부터 순서대로 점을 이으면': 'Join the dots in order from 1',
+  '숨어 있던 그림이 나타납니다.': 'and a hidden picture appears.',
+  '다음에 누를 점이 깜빡입니다.': 'The next dot blinks so you always know where to go.',
+  '다른 점을 눌러도 점수가 깎이지 않습니다.': 'Tapping the wrong dot costs you nothing.',
+  '깜빡이는 1번 점부터 순서대로 눌러 보세요.': 'Start at the blinking dot 1 and tap the dots in order.',
+  '다음 점을 흔들어 드렸습니다.': 'The next dot has been given a little shake.',
+  '다음 그림으로 갑니다.': 'On to the next picture.',
+  '다 이으셨습니다!': 'All joined up!',
+  '그림 {n}개를 모두 완성하셨습니다.': 'You finished all {n} pictures.',
+  '점 {a}개 중 {b}개를 이으셨습니다.': 'You joined {b} of {a} dots.',
+  '이은 점 ({a}/{b}개)': 'Dots joined ({a} of {b})',
+  '잇기 점수': 'Joining up',
+
+  '그림 3개 · 점 12개': '3 pictures · 12 dots each',
+  '그림 3개 · 점 16개': '3 pictures · 16 dots each',
+  '그림 4개 · 점 20개': '4 pictures · 20 dots each',
+  '그림 4개 · 점 28개까지': '4 pictures · up to 28 dots each',
+  '그림 4개 · 점 36개까지': '4 pictures · up to 36 dots each',
+
+  '별': 'Star',
+  '하트': 'Heart',
+  '번개': 'Lightning',
+  '왕관': 'Crown',
+  '보석': 'Gem',
+  '화살표': 'Arrow',
+  '초승달': 'Crescent moon',
+  '튤립': 'Tulip',
+
+  '다음 점': 'The next dot',
+  '1부터 순서대로 점을 누릅니다. 누를 때마다 선이 이어지고, 마지막 점을 누르면 그림이 완성됩니다':
+    'Tap the dots in order from 1. A line joins each tap, and the last dot completes the picture',
+  '다음에 누를 점이 초록으로 깜빡입니다. 헷갈리면 그것만 찾으시면 됩니다':
+    'The next dot blinks green. If you lose your place, just look for the blink',
+  '점의 개수로만 달라집니다 — 1단계 12개 · 2단계 16개 · 3단계 20개 · 4단계 28개 · 5단계 36개':
+    'Only the number of dots changes — Level 1 has 12 · Level 2 has 16 · Level 3 has 20 · Level 4 has 28 · Level 5 has 36',
+  '최대 600점 · 이은 점 수에 비례': 'Up to 600 points · in proportion to the dots joined',
+  '최대 300점 · 다 이었을 때만, 남은 시간에 비례': 'Up to 300 points · only if you finish, in proportion to the time left',
+  '최대 100점 · 다른 점을 1번 누를 때마다 5점씩 줄어듦': 'Up to 100 points · 5 points less each time you tap the wrong dot',
+  '힌트 1회마다 50점 차감 (다음 점을 흔들어 알려 줍니다)': '50 points off per hint (it shakes the next dot for you)',
+  '빨갛게 한 번 깜빡이고 맙니다. 이은 선이 지워지지 않습니다': 'It just blinks red once. The lines you have joined stay put',
+  '보통 +100점, 어려움 +250점 (다 이었을 때)': 'Normal +100, Hard +250 (when you finish)',
+  '이은 만큼만 점수로 기록됩니다': 'You keep the points for the dots you joined',
+
+  '1부터 순서대로 점을 연필로 이으세요. 마지막 점은 1번과 이으면 그림이 완성됩니다.':
+    'Join the dots in order from 1 with a pencil. Join the last dot back to 1 to complete the picture.',
+
   /* ---- 보고 그리기 ---- */
   '따라 그리기': 'Copy the Pattern',
   '따라 그리기 정답': 'Copy the Pattern answer',

@@ -392,6 +392,30 @@ window.Print = (function () {
   /* ---------------- 인쇄 실행 ---------------- */
 
   /** 게임마다 문제지를 만드는 함수 — 새 게임을 지원할 때 여기에 한 줄 더한다 */
+  /* ---------------- 점 잇기 ---------------- */
+
+  function dot2dotSheets(o) {
+    var pages = [];
+    for (var n = 0; n < o.count; n++) {
+      var b = Games.dot2dot.makeForPrint(o.level);
+      var no = o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : '';
+
+      pages.push('<section class="ps-sheet">' +
+        sheetHead(T('점 잇기'), b.levelName + no,
+          T('1부터 순서대로 점을 연필로 이으세요. 마지막 점은 1번과 이으면 그림이 완성됩니다.')) +
+        '<div class="ps-ddwrap">' + b.body + '</div>' +
+      '</section>');
+
+      if (o.answer) {
+        pages.push('<section class="ps-sheet ps-sheet--ans">' +
+          sheetHead(T('점 잇기 정답'), b.levelName + no, '') +
+          '<div class="ps-ddwrap">' + b.answer + '</div>' +
+        '</section>');
+      }
+    }
+    return pages.join('');
+  }
+
   /* ---------------- 따라 그리기 ---------------- */
 
   function copyfigSheets(o) {
@@ -474,7 +498,8 @@ window.Print = (function () {
     spot: spotSheets,
     maze: mazeSheets,
     mathcross: mathcrossSheets,
-    copyfig: copyfigSheets
+    copyfig: copyfigSheets,
+    dot2dot: dot2dotSheets
   };
 
   /* 인쇄 내용은 **인쇄 창이 닫힌 뒤에** 지운다.
