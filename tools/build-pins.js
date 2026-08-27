@@ -240,10 +240,37 @@ COL.forEach(function (c, i) {
     'sudoku', { level: lv[0] }, '스도쿠 — ' + lv[3]));
 });
 
+/* ---- 새 게임 넷 (2026-08-27 에 더함) ---- */
+PINS.push(one('pin-33-maze', 'Free Printable<br>Mazes for Seniors',
+  'Five levels, from a simple 5×5 up to 15×15 · play online or print',
+  'maze', { level: 'easy' }, '미로찾기'));
+PINS.push(one('pin-34-maze-hard', 'Free Printable<br>Hard Mazes',
+  'For adults and seniors · a 15×15 challenge · play online or print',
+  'maze', { level: 'hard' }, '미로찾기 — 어려움'));
+PINS.push(one('pin-35-mathcross', 'Free Printable<br>Math Crossword',
+  'For seniors · sums that add up across and down',
+  'mathcross', { level: 'normal' }, '계산 퍼즐'));
+PINS.push(one('pin-36-mathcross-easy', 'Easy Printable<br>Math Crossword',
+  'For seniors · adding and taking away, up to 20',
+  'mathcross', { level: 'step2' }, '계산 퍼즐 — 쉬움'));
+PINS.push(one('pin-37-copy-pattern', 'Free Printable<br>Copy the Pattern',
+  'For seniors · copy the figure onto the dot grid',
+  'copyfig', { level: 'normal' }, '따라 그리기'));
+PINS.push(one('pin-38-dot-to-dot', 'Free Printable<br>Dot to Dot',
+  'For adults and seniors · join the dots, find the picture',
+  'dot2dot', { level: 'easy' }, '점 잇기'));
+PINS.push(one('pin-39-dot-to-dot-easy', 'Easy Printable<br>Dot to Dot',
+  'For seniors · just 12 dots each · a gentle start',
+  'dot2dot', { level: 'step1' }, '점 잇기 — 쉬움'));
+PINS.push(one('pin-40-copy-pattern-easy', 'Easy Printable<br>Copy the Pattern',
+  'For seniors · 3×3 dots, three lines · a gentle start',
+  'copyfig', { level: 'step1' }, '따라 그리기 — 쉬움'));
+
 /* 핀마다 어디로 데려갈지 — 그 게임 화면으로 바로 들어가게 한다 */
 var GOTO = {
   sudoku: '#sudoku', wordsearch: '#wordsearch', math: '#math',
-  wordorder: '#wordorder', coloring: '#coloring', spot: '#spot'
+  wordorder: '#wordorder', coloring: '#coloring', spot: '#spot',
+  maze: '#maze', mathcross: '#mathcross', copyfig: '#copyfig', dot2dot: '#dot2dot'
 };
 PINS.forEach(function (p) {
   if (!p.link) p.link = SITE + '/?lang=en' + (GOTO[p.sheet.game] || '');
@@ -467,7 +494,7 @@ PINS.forEach(function (p) {
     /* 어느 서랍에 넣을지 — 색칠·틀린그림은 A(치매 활동지), 나머지는 B(두뇌 게임) */
     var g = (p.sheet && p.sheet.game) || '';
     p.board = p.file.indexOf('carers') >= 0 ? 'C'
-            : (!g || g === 'coloring' || g === 'spot') ? 'A' : 'B';
+            : (!g || g === 'coloring' || g === 'spot' || g === 'copyfig' || g === 'dot2dot') ? 'A' : 'B';
     p.desc = describe(p);
     made.push(p);
     console.log('  만듦: ' + p.file + '.png');
