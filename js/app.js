@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v57';                // sw.js 의 VERSION 과 함께 올린다
+  var APP_VERSION = 'v58';                // sw.js 의 VERSION 과 함께 올린다
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -208,14 +208,14 @@ window.App = (function () {
     var doneCount = GAMES.filter(function (g) { return best[g] != null; }).length;
     var goal = Math.min(DAY_GOAL, GAMES.length);
     var pct = Math.max(0, Math.min(1, doneCount / goal));
-    var R = 34, C = 2 * Math.PI * R;
+    var R = 28, C = 2 * Math.PI * R;
 
     return '<div class="ring">' +
-      '<svg class="ring__svg" width="86" height="86" viewBox="0 0 86 86" aria-label="' + T('오늘 {n}종목 완료', { n: doneCount }) + '">' +
-        '<circle class="ring__track" cx="43" cy="43" r="' + R + '" fill="none" stroke-width="10"></circle>' +
-        '<circle class="ring__fill" cx="43" cy="43" r="' + R + '" fill="none" stroke-width="10" stroke-linecap="round"' +
-          ' stroke-dasharray="' + (C * pct).toFixed(1) + ' ' + C.toFixed(1) + '" transform="rotate(-90 43 43)"></circle>' +
-        '<text class="ring__txt" x="43" y="48" text-anchor="middle">' + (doneCount >= goal ? T('다 함') : doneCount + '/' + goal) + '</text>' +
+      '<svg class="ring__svg" width="72" height="72" viewBox="0 0 72 72" aria-label="' + T('오늘 {n}종목 완료', { n: doneCount }) + '">' +
+        '<circle class="ring__track" cx="36" cy="36" r="' + R + '" fill="none" stroke-width="9"></circle>' +
+        '<circle class="ring__fill" cx="36" cy="36" r="' + R + '" fill="none" stroke-width="9" stroke-linecap="round"' +
+          ' stroke-dasharray="' + (C * pct).toFixed(1) + ' ' + C.toFixed(1) + '" transform="rotate(-90 36 36)"></circle>' +
+        '<text class="ring__txt" x="36" y="41" text-anchor="middle">' + (doneCount >= goal ? T('다 함') : doneCount + '/' + goal) + '</text>' +
       '</svg>' +
       '<div class="ring__body">' +
         '<div class="today__score"><b>' + UI.comma(total) + ('</b><span>' + T('점') + '</span></div>') +
@@ -304,12 +304,25 @@ window.App = (function () {
 
         introCard() +
 
-        '<div class="card card--today">' +
-          '<div class="today__head">' +
-            '<span class="today__date">' + lbl.text + '</span>' +
-            (streak > 0 ? '<span class="badge">' + T('연속 {n}일째', { n: streak }) + '</span>' : ('<span class="badge badge--soft">' + T('오늘 시작해요') + '</span>')) +
+        /* 점수 칸을 홀쭉하게 줄이고, 오른쪽에 「문제 인쇄」를 나란히 둔다 —
+           종이로 푸는 분들이 화면 맨 아래까지 내려가지 않게 하기 위해서다. */
+        '<div class="today-row">' +
+          '<div class="card card--today">' +
+            '<div class="today__head">' +
+              '<span class="today__date">' + lbl.text + '</span>' +
+              (streak > 0 ? '<span class="badge">' + T('연속 {n}일째', { n: streak }) + '</span>' : ('<span class="badge badge--soft">' + T('오늘 시작해요') + '</span>')) +
+            '</div>' +
+            progressRing(total) +
           '</div>' +
-          progressRing(total) +
+          '<button class="printcard" id="hmPrint">' +
+            '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+              '<path d="M6 9V3h12v6"></path>' +
+              '<path d="M6 18H4.5A1.5 1.5 0 0 1 3 16.5v-5A2.5 2.5 0 0 1 5.5 9h13A2.5 2.5 0 0 1 21 11.5v5a1.5 1.5 0 0 1-1.5 1.5H18"></path>' +
+              '<rect x="6" y="14" width="12" height="7" rx="1"></rect>' +
+            '</svg>' +
+            '<span class="printcard__name">' + T('문제 인쇄') + '</span>' +
+            '<span class="printcard__sub">' + T('A4 인쇄 · PDF 저장') + '</span>' +
+          '</button>' +
         '</div>' +
 
         ('<h2 class="sec">' + T('오늘의 게임') + '</h2>') +
@@ -324,11 +337,9 @@ window.App = (function () {
           ('<p class="card__foot">' + T('막대는 그날의 총점입니다. 같은 게임을 여러 번 하면 가장 높은 점수만 더해집니다.') + '</p>') +
         '</div>' +
 
-        '<div class="row3">' +
+        '<div class="row2">' +
           ('<button class="btn btn--ghost" id="hmRules">' + T('점수 규칙 한눈에') + '</button>') +
           ('<button class="btn btn--ghost" id="hmRecords">' + T('기록 자세히') + '</button>') +
-          ('<button class="btn btn--ghost btn--print" id="hmPrint">' + T('문제 인쇄') +
-            '<small>' + T('문제를 A4 용지로 인쇄하여 직접 풀이할 수 있습니다') + '</small></button>') +
         '</div>' +
 
         (Suggest.ready() ? ('<button class="linkbtn" id="hmSuggest">' + T('건의하기') + '</button>') : '') +
