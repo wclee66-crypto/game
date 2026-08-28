@@ -111,12 +111,22 @@ window.Print = (function () {
 
   /* ---------------- 숫자 계산 ---------------- */
 
+  /** 식 안의 □ 자리, 또는 식 끝의 답 자리에 네모 상자를 놓는다.
+   *  ans 를 주면 그 안에 답을 적는다(정답지). */
+  function mathRow(it, ans) {
+    var box = '<span class="pm-box' + (ans != null ? ' pm-a' : '') + '">' + (ans != null ? ans : '') + '</span>';
+    if (it.q.indexOf('□') >= 0) {
+      return '<span class="pm-q">' + esc(it.q).replace('□', '</span>' + box + '<span class="pm-q">') + '</span>';
+    }
+    return '<span class="pm-q">' + esc(it.q) + ' =</span>' + box;
+  }
+
   function mathSheets(o) {
     var pages = [];
     for (var n = 0; n < o.count; n++) {
-      var b = Games.math.makeForPrint(o.level, 24);
+      var b = Games.math.makeForPrint(o.level, 30);   /* 두 칸 × 열다섯 줄 — 한 장이 꽉 찬다 */
       var body = '<ol class="ps-math">' + b.items.map(function (it) {
-        return '<li><span class="pm-q">' + esc(it.q) + (it.noeq ? '' : ' =') + '</span><span class="pm-blank"></span></li>';
+        return '<li>' + mathRow(it) + '</li>';
       }).join('') + '</ol>';
 
       pages.push('<section class="ps-sheet ps-sheet--left">' +
@@ -129,7 +139,7 @@ window.Print = (function () {
         pages.push('<section class="ps-sheet ps-sheet--left ps-sheet--ans">' +
           sheetHead(T('숫자 계산 정답'), b.levelName + (o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : ''), '') +
           '<ol class="ps-math">' + b.items.map(function (it) {
-            return '<li><span class="pm-q">' + esc(it.q) + (it.noeq ? '' : ' =') + '</span><span class="pm-a">' + it.a + '</span></li>';
+            return '<li>' + mathRow(it, it.a) + '</li>';
           }).join('') + '</ol>' +
         '</section>');
       }

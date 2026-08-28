@@ -3,6 +3,10 @@
  *
  * 답은 보기에서 고르지 않고 숫자판으로 직접 넣는다.
  * 눈으로 고르는 것보다 머릿속에서 꺼내 쓰는 편이 훈련이 되기 때문이다.
+ *
+ * 2026-08-28 에 곱하기·나누기를 전부 뺐다. 이 게임을 찾는 분들께는
+ * 쉬운 곱셈도 벽이라, 어렵게 하는 것은 자릿수로만 한다.
+ * 더하고 빼는 수는 언제나 2 이상이다 — 1을 더하고 빼는 것은 훈련이 안 된다.
  */
 window.Games = window.Games || {};
 window.Games.math = (function () {
@@ -13,19 +17,19 @@ window.Games.math = (function () {
   var LEVELS = {
     step1:  { name: T('첫걸음'), step: 1, count: 10, limit: 300, bonus: 0,
               kinds: ['add1', 'add1', 'sub1e'],
-              note: T('한 자리 더하기 · 답이 10 이하') },
+              note: T('한 자리 더하기와 빼기 · 답이 10 이하') },
     step2:  { name: T('가볍게'), step: 2, count: 12, limit: 300, bonus: 0,
               kinds: ['add1b', 'sub1', 'blank1'],
               note: T('한 자리 더하기와 빼기 · 빈칸 채우기') },
     easy:   { name: T('쉬움'),   step: 3, count: 15, limit: 360, bonus: 0,
-              kinds: ['add2s', 'sub2s', 'mul_low', 'blank2'],
-              note: T('두 자리 ± 한 자리 · 쉬운 곱하기 · 빈칸 채우기') },
+              kinds: ['add2s', 'sub2s', 'blank2'],
+              note: T('두 자리 ± 한 자리 · 빈칸 채우기') },
     normal: { name: T('보통'),   step: 4, count: 18, limit: 420, bonus: 100,
-              kinds: ['add2', 'sub2', 'mul9', 'div9', 'blank3'],
-              note: T('두 자리 ± 두 자리 · 구구단 · 나눗셈 · 빈칸 채우기') },
+              kinds: ['add2', 'sub2', 'blank3', 'blankm'],
+              note: T('두 자리 ± 두 자리 · 빈칸 채우기') },
     hard:   { name: T('어려움'), step: 5, count: 20, limit: 480, bonus: 250,
-              kinds: ['add3', 'sub3', 'mul2d', 'div2d', 'chain', 'blank4'],
-              note: T('세 자리 계산 · 두 자리 곱하기·나누기 · 세 수 이어 계산') }
+              kinds: ['add3', 'sub3', 'chain', 'blankm'],
+              note: T('세 자리 더하기와 빼기 · 세 수 이어 계산') }
   };
   var ORDER = ['step1', 'step2', 'easy', 'normal', 'hard'];
 
@@ -41,17 +45,17 @@ window.Games.math = (function () {
 
   function rnd(lo, hi) { return lo + Math.floor(Math.random() * (hi - lo + 1)); }
 
-  /** 한 문제를 만든다. { q: 보여 줄 식, a: 답, noeq: 뒤에 = 를 붙이지 않음 } */
+  /** 한 문제를 만든다. { q: 보여 줄 식, a: 답, noeq: 뒤에 = 를 붙이지 않음 }
+   *  더하고 빼는 수는 언제나 2 이상이다. 곱하기·나누기는 내지 않는다. */
   function makeOne(kind) {
-    var a, b, c, t;
+    var a, b, c, t, ones, tens;
     switch (kind) {
       case 'add1':                                 // 한 자리 더하기, 답 10 이하
-        a = rnd(1, 8);
-        b = rnd(1, 9 - a + 1);
+        a = rnd(2, 8); b = rnd(2, 10 - a);
         return { q: a + ' + ' + b, a: a + b };
 
       case 'sub1e':                                // 10 이하에서 빼기
-        a = rnd(3, 10); b = rnd(1, a - 1);
+        a = rnd(5, 10); b = rnd(2, a - 2);
         return { q: a + ' − ' + b, a: a - b };
 
       case 'add1b':                                // 한 자리 더하기 (받아올림 있음)
@@ -59,62 +63,51 @@ window.Games.math = (function () {
         return { q: a + ' + ' + b, a: a + b };
 
       case 'sub1':                                 // 한 자리 빼기
-        a = rnd(4, 9); b = rnd(1, a - 1);
+        a = rnd(5, 9); b = rnd(2, a - 2);
         return { q: a + ' − ' + b, a: a - b };
 
       case 'blank1':                               // 3 + □ = 7
-        a = rnd(1, 8); c = rnd(a + 1, 10);
-        return { q: a + ' + □ = ' + c, a: c - a, noeq: true };
+        a = rnd(2, 7); b = rnd(2, 10 - a);
+        return { q: a + ' + □ = ' + (a + b), a: b, noeq: true };
 
       case 'add2s':                                // 두 자리 + 한 자리, 받아올림 없음
-        a = rnd(11, 89);
-        if (a % 10 === 9) a -= 1;
-        b = rnd(1, 9 - (a % 10));
+        ones = rnd(0, 7); tens = rnd(1, 8);
+        a = tens * 10 + ones; b = rnd(2, 9 - ones);
         return { q: a + ' + ' + b, a: a + b };
 
       case 'sub2s':                                // 두 자리 − 한 자리, 받아내림 없음
-        a = rnd(21, 99);
-        if (a % 10 === 0) a += 1;
-        b = rnd(1, a % 10);
+        ones = rnd(2, 9); tens = rnd(2, 9);
+        a = tens * 10 + ones; b = rnd(2, ones);
         return { q: a + ' − ' + b, a: a - b };
 
-      case 'mul_low':                              // 2~5단 구구단
-        a = rnd(2, 5); b = rnd(2, 9);
-        return { q: a + ' × ' + b, a: a * b };
-
       case 'blank2':                               // 두 자리 + □ = 두 자리 (받아올림 없음)
-        a = rnd(11, 89);
-        if (a % 10 === 9) a -= 1;
-        b = rnd(1, 9 - (a % 10));
+        ones = rnd(0, 7); tens = rnd(1, 8);
+        a = tens * 10 + ones; b = rnd(2, 9 - ones);
         return { q: a + ' + □ = ' + (a + b), a: b, noeq: true };
 
       case 'add2':                                 // 두 자리 + 두 자리, 받아올림 있음
         for (t = 0; t < 60; t++) {
           a = rnd(12, 79); b = rnd(12, 99 - a);
-          if (b >= 10 && (a % 10) + (b % 10) > 9) return { q: a + ' + ' + b, a: a + b };
+          if ((a % 10) + (b % 10) > 9) return { q: a + ' + ' + b, a: a + b };
         }
         a = rnd(15, 60); b = rnd(15, 39);
         return { q: a + ' + ' + b, a: a + b };
 
       case 'sub2':                                 // 두 자리 − 두 자리, 받아내림 있음
         for (t = 0; t < 60; t++) {
-          a = rnd(21, 99); b = rnd(10, a - 1);
+          a = rnd(21, 99); b = rnd(10, a - 2);
           if ((a % 10) < (b % 10)) return { q: a + ' − ' + b, a: a - b };
         }
         a = rnd(41, 99); b = rnd(10, a - 10);
         return { q: a + ' − ' + b, a: a - b };
 
-      case 'mul9':                                 // 구구단 전체
-        a = rnd(2, 9); b = rnd(2, 9);
-        return { q: a + ' × ' + b, a: a * b };
-
-      case 'div9':                                 // 구구단 거꾸로 — 딱 나누어떨어진다
-        b = rnd(2, 9); c = rnd(2, 9);
-        return { q: (b * c) + ' ÷ ' + b, a: c };
-
       case 'blank3':                               // □ + 27 = 61
         b = rnd(11, 49); c = rnd(b + 11, 99);
         return { q: '□ + ' + b + ' = ' + c, a: c - b, noeq: true };
+
+      case 'blankm':                               // 72 − □ = 45
+        a = rnd(31, 99); b = rnd(11, a - 11);
+        return { q: a + ' − □ = ' + (a - b), a: b, noeq: true };
 
       case 'add3':                                 // 세 자리 더하기 (10 단위로 떨어져 암산할 만하다)
         a = rnd(11, 49) * 10; b = rnd(11, 49) * 10;
@@ -124,27 +117,15 @@ window.Games.math = (function () {
         a = rnd(31, 90) * 10; b = rnd(11, 29) * 10;
         return { q: a + ' − ' + b, a: a - b };
 
-      case 'mul2d':                                // 두 자리 × 한 자리
-        a = rnd(11, 29); b = rnd(3, 9);
-        return { q: a + ' × ' + b, a: a * b };
-
-      case 'div2d':                                // 두 자리 ÷ 한 자리 — 딱 나누어떨어진다
-        b = rnd(3, 9); c = rnd(4, 15);
-        return { q: (b * c) + ' ÷ ' + b, a: c };
-
-      case 'blank4':                               // □ × 7 = 56
-        b = rnd(3, 9); c = rnd(3, 9);
-        return { q: '□ × ' + b + ' = ' + (b * c), a: c, noeq: true };
-
       case 'chain':                                // 세 수 이어 계산
         if (Math.random() < 0.5) {
-          a = rnd(11, 59); b = rnd(11, 40); c = rnd(5, a + b - 1);
+          a = rnd(11, 59); b = rnd(11, 40); c = rnd(5, a + b - 2);
           return { q: a + ' + ' + b + ' − ' + c, a: a + b - c };
         }
         a = rnd(31, 99); b = rnd(10, a - 5); c = rnd(5, 40);
         return { q: a + ' − ' + b + ' + ' + c, a: a - b + c };
     }
-    return { q: '1 + 1', a: 2 };
+    return { q: '2 + 2', a: 4 };
   }
 
   /** 한 판에 낼 문제를 모두 만든다.
@@ -257,10 +238,18 @@ window.Games.math = (function () {
           ('<div class="hud__item"><span class="hud__lbl">' + T('맞힘') + '</span><b id="mtRight">') + right + '</b></div>' +
         '</div>' +
 
+        /* 빈칸 문제(11 − □ = 7)는 답 상자가 □ 자리에 들어간다.
+           밖에 상자를 하나 더 달면 네모가 둘이 되어 헷갈린다. */
         '<div class="mt-card">' +
-          '<div class="mt-q"><span class="mt-expr">' + p.q + '</span>' +
-            (p.noeq ? '' : '<span class="mt-eq">=</span>') +
-            '<span class="mt-ans" id="mtAns"></span></div>' +
+          '<div class="mt-q">' +
+            (p.q.indexOf('□') >= 0
+              ? '<span class="mt-expr">' + p.q.split('□')[0] + '</span>' +
+                '<span class="mt-ans" id="mtAns"></span>' +
+                '<span class="mt-expr">' + p.q.split('□')[1] + '</span>'
+              : '<span class="mt-expr">' + p.q + '</span>' +
+                '<span class="mt-eq">=</span>' +
+                '<span class="mt-ans" id="mtAns"></span>') +
+          '</div>' +
           ('<p class="mt-hint" id="mtMsg">' + T('답을 누른 뒤') + ' <b>' + T('확인') + '</b>' + T('을 누르세요') + '</p>') +
         '</div>' +
 
@@ -444,13 +433,14 @@ window.Games.math = (function () {
     keyHandler = null;
   }
 
-  return {
+  return {
     art: '<path d="M4 8h6M7 5v6"/><path d="M14 8h6"/><path d="M4 17h6"/><path d="M14.5 14.5l5 5M19.5 14.5l-5 5"/>',
-    id: 'math', name: T('숫자 계산'), tagline: T('더하고 빼고 곱하며 머리 깨우기'),
+    id: 'math', name: T('숫자 계산'), tagline: T('더하고 빼며 머리 깨우기'),
     rules: {
       title: T('숫자 계산 점수 규칙'),
       lines: [
-        [T('난이도'), T('1단계 한 자리 더하기 · 2단계 한 자리 더하기·빼기와 빈칸 채우기 · 3단계 두 자리 ± 한 자리와 쉬운 곱하기 · 4단계 두 자리 ± 두 자리와 구구단·나눗셈 · 5단계 세 자리 계산과 두 자리 곱하기·나누기, 세 수 이어 계산')],
+        [T('난이도'), T('더하기와 빼기만 나옵니다 — 1단계 한 자리·답 10 이하 · 2단계 한 자리와 빈칸 채우기 · 3단계 두 자리 ± 한 자리 · 4단계 두 자리 ± 두 자리 · 5단계 세 자리와 세 수 이어 계산')],
+        [T('더하고 빼는 수'), T('언제나 2 이상입니다. 1을 더하거나 빼는 문제는 내지 않습니다')],
         [T('정답 점수'), T('최대 600점 · 맞힌 문제 수에 비례')],
         [T('시간 보너스'), T('최대 300점 · 끝까지 풀었을 때만, 남은 시간에 비례')],
         [T('연속 정답 보너스'), T('최대 100점 · 3연속 25 / 4연속 50 / 5연속 75 / 6연속 이상 100')],

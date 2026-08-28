@@ -709,16 +709,8 @@ window.I18N.dict.en = {
   '{n}번': 'no. {n}',
   '칸 칠함': 'squares filled',
   '번호 없이 마음대로': 'Free colouring, no numbers',
-  '더하고 빼고 곱하며 머리 깨우기': 'Add, take away and multiply to wake the mind',
+  '더하고 빼며 머리 깨우기': 'Add and take away to wake the mind',
   '한 자리 더하기와 빼기 · 빈칸 채우기': 'Single-digit adding and taking away · fill the blank',
-  '두 자리 ± 한 자리 · 쉬운 곱하기 · 빈칸 채우기':
-    'Two digits ± one digit · easy times tables · fill the blank',
-  '두 자리 ± 두 자리 · 구구단 · 나눗셈 · 빈칸 채우기':
-    'Two digits ± two digits · times tables · division · fill the blank',
-  '세 자리 계산 · 두 자리 곱하기·나누기 · 세 수 이어 계산':
-    'Three-digit sums · two-digit multiply and divide · three numbers in a row',
-  '1단계 한 자리 더하기 · 2단계 한 자리 더하기·빼기와 빈칸 채우기 · 3단계 두 자리 ± 한 자리와 쉬운 곱하기 · 4단계 두 자리 ± 두 자리와 구구단·나눗셈 · 5단계 세 자리 계산과 두 자리 곱하기·나누기, 세 수 이어 계산':
-    'Level 1 single-digit adding · Level 2 adding and taking away, fill the blank · Level 3 two digits ± one digit, easy times tables · Level 4 two digits ± two digits, times tables and division · Level 5 three-digit sums, two-digit multiply and divide, three numbers in a row',
   ' 경과': ' elapsed',
   '메모 모드입니다. 숫자를 작게 적어 둡니다.': 'Note mode. Numbers are written small.',
   '무엇을 했는지': 'what you played',
@@ -797,9 +789,9 @@ window.I18N.dict.en = {
 
   '왼쪽 그림을 보고': 'Look at the figure on the left',
   '오른쪽 점판에 똑같이 그리세요.': 'and copy it onto the dots on the right.',
-  '마우스를 누르고 점을 잇거나,': 'Drag from one dot to another,',
-  '점 두 개를 차례로 누르면 선이 이어집니다.': 'or tap two dots in turn — either way a line joins them.',
-  '마우스를 누르고 점을 잇거나, 점 두 개를 차례로 누르면 선이 이어집니다.':
+  '마우스를 누르고 점을 잇거나,': 'Drag from one dot to another,',
+  '점 두 개를 차례로 누르면 선이 이어집니다.': 'or tap two dots in turn — either way a line joins them.',
+  '마우스를 누르고 점을 잇거나, 점 두 개를 차례로 누르면 선이 이어집니다.':
     'Drag from one dot to another, or tap two dots in turn — either way a line joins them.',
   '같은 선을 다시 누르면 지워집니다.': 'Tap the same line again to rub it out.',
   '선 하나를 그어 드렸습니다.': 'One line has been drawn for you.',
@@ -826,7 +818,7 @@ window.I18N.dict.en = {
   '선 지우기': 'Rubbing out',
   '그을 수 있는 선': 'Which lines you can draw',
   '무엇에 좋은가': 'What it exercises',
-  '왼쪽 본을 보고 오른쪽 점판에 똑같이 그립니다. 마우스를 누른 채 점에서 점으로 끌어도 되고, 점 두 개를 차례로 눌러도 선이 이어집니다':
+  '왼쪽 본을 보고 오른쪽 점판에 똑같이 그립니다. 마우스를 누른 채 점에서 점으로 끌어도 되고, 점 두 개를 차례로 눌러도 선이 이어집니다':
     'Look at the figure on the left and copy it onto the dots on the right. Either drag from one dot to another, or tap two dots in turn',
   '같은 선을 다시 누르면 지워집니다. 「다 지우기」로 한꺼번에 지울 수도 있습니다':
     'Tap the same line again to rub it out, or use “Rub out all” to clear the whole grid',
@@ -867,12 +859,6 @@ window.I18N.dict.en = {
   '채운 칸 ({a}/{b}칸)': 'Squares filled ({a} of {b})',
   '채우기 점수': 'Filling in',
 
-  '식 2개 · 10까지 · 더하기 빼기': '2 sums · up to 10 · adding and taking away',
-  '식 2개 · 15까지': '2 sums · up to 15',
-  '식 3개 · 20까지': '3 sums · up to 20',
-  '식 3~4개 · 30까지 · 곱하기도': '3–4 sums · up to 30 · times tables too',
-  '식 4개 · 50까지 · 네모 틀': '4 sums · up to 50 · the square frame',
-
   '모양': 'Shapes',
   '빈칸 수': 'How many blanks',
   '빈칸의 답': 'What goes in a blank',
@@ -885,8 +871,6 @@ window.I18N.dict.en = {
     'One per sum. Two sums means two blanks, four sums means four',
   '열여섯 가지가 돌아가며 나옵니다 — ㄱ · ㄴ · 十 · ㅗ · ㄷ · 네모 틀 …':
     'Sixteen of them come round in turn — corners, a cross, a T, a U, a full square frame and more',
-  '1단계 식 2개·10까지 · 2단계 식 2개·15까지 · 3단계 식 3개·20까지 · 4단계 식 3~4개·30까지와 곱하기 · 5단계 식 4개·50까지':
-    'Level 1 two sums up to 10 · Level 2 two sums up to 15 · Level 3 three sums up to 20 · Level 4 three or four sums up to 30 with times tables · Level 5 four sums up to 50',
   '최대 600점 · 맞게 채운 칸 수에 비례': 'Up to 600 points · in proportion to the squares filled in correctly',
   '최대 300점 · 다 채웠을 때만, 남은 시간에 비례': 'Up to 300 points · only if you fill them all in, in proportion to the time left',
   '최대 100점 · 틀린 숫자를 1번 넣을 때마다 10점씩 줄어듦': 'Up to 100 points · 10 points less each time you put in a wrong number',
@@ -907,6 +891,17 @@ window.I18N.dict.en = {
     'Only adding and taking away. Each level adds another sum and bigger numbers — Level 1 four sums up to 10 · Level 2 four sums up to 20 · Level 3 five sums up to 40 · Level 4 five sums up to 60 · Level 5 six sums up to 99',
   '판을 열 때마다 새로 짜므로 같은 모양이 되풀이되지 않습니다 — ㄱ · 十 · ㄷ · 네모 틀 · 사다리 …':
     'A fresh shape is worked out every time, so the same one never comes round twice — corners, crosses, square frames, ladders and more',
+
+  /* ---- 숫자 계산 (2026-08-28 곱하기를 뺀 뒤) ---- */
+  '한 자리 더하기와 빼기 · 답이 10 이하': 'Single-digit adding and taking away · answers up to 10',
+  '두 자리 ± 한 자리 · 빈칸 채우기': 'Two digits ± one digit · fill the blank',
+  '두 자리 ± 두 자리 · 빈칸 채우기': 'Two digits ± two digits · fill the blank',
+  '세 자리 더하기와 빼기 · 세 수 이어 계산': 'Three-digit sums · three numbers in a row',
+  '더하고 빼는 수': 'The numbers you add and take away',
+  '언제나 2 이상입니다. 1을 더하거나 빼는 문제는 내지 않습니다':
+    'Always 2 or more. Adding or taking away 1 is never asked',
+  '더하기와 빼기만 나옵니다 — 1단계 한 자리·답 10 이하 · 2단계 한 자리와 빈칸 채우기 · 3단계 두 자리 ± 한 자리 · 4단계 두 자리 ± 두 자리 · 5단계 세 자리와 세 수 이어 계산':
+    'Only adding and taking away — Level 1 single digits with answers up to 10 · Level 2 single digits and fill-the-blank · Level 3 two digits ± one digit · Level 4 two digits ± two digits · Level 5 three digits and three numbers in a row',
 
   /* ---- 미로찾기 ---- */
   '미로찾기': 'Maze',

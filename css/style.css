@@ -397,20 +397,22 @@ button.install:active { transform: scale(.99); }
   padding: 1.6rem 1rem 1.1rem; text-align: center;
 }
 .mt-q {
-  display: flex; align-items: baseline; justify-content: center; flex-wrap: wrap;
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
   gap: .5rem; font-family: var(--font-num); font-weight: 800;
   letter-spacing: -.02em; line-height: 1.2;
 }
-.mt-expr { font-size: clamp(1.9rem, 9vw, 2.8rem); }
-.mt-eq { font-size: clamp(1.6rem, 7vw, 2.2rem); color: var(--ink-3); }
+.mt-expr { font-size: clamp(2.3rem, 11vw, 3.4rem); }
+.mt-eq { font-size: clamp(1.9rem, 9vw, 2.7rem); color: var(--ink-3); }
+/* 답 자리는 네모 상자 — 종이 문제지의 답 칸과 같은 모양이라 한눈에 통한다 */
 .mt-ans {
-  min-width: 3.2rem; padding: 0 .5rem .15rem;
-  font-size: clamp(1.9rem, 9vw, 2.8rem); color: var(--accent);
-  border-bottom: 3px solid var(--line-2);
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 4.4rem; min-height: 3.6rem; padding: 0 .5rem;
+  font-size: clamp(2.3rem, 11vw, 3.4rem); color: var(--accent);
+  border: 3px solid var(--line-2); border-radius: 14px; background: var(--bg);
 }
 .mt-ans.is-empty::after { content: '\00a0'; }
-.mt-ans.is-right { color: var(--accent); border-bottom-color: var(--accent); }
-.mt-ans.is-wrong { color: var(--bad); border-bottom-color: var(--bad); }
+.mt-ans.is-right { color: var(--accent); border-color: var(--accent); background: var(--accent-s); }
+.mt-ans.is-wrong { color: var(--bad); border-color: var(--bad); background: var(--bad-s); }
 .mt-hint { margin: 1rem 0 0; font-size: .82rem; color: var(--ink-3); }
 .mt-ok { color: var(--accent-d); font-size: 1rem; }
 .mt-no { color: var(--bad); font-size: 1rem; }
@@ -1143,14 +1145,15 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
 
   .ps-sheet--left { text-align: left; }
 
+  /* 한 장에 서른 문제(두 칸 × 열다섯 줄)를 꽉 채운다 — 아래가 허옇게 남지 않게 */
   .ps-math {
     list-style: none; margin: 0; padding: 0;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 7mm 12mm;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5.2mm 10mm;
     counter-reset: pm;
   }
   .ps-math li {
     counter-increment: pm;
-    display: flex; align-items: baseline; gap: 3mm;
+    display: flex; align-items: center; gap: 3mm;
     font-family: 'Manrope', sans-serif; font-size: 17pt; font-weight: 700;
   }
   .ps-math li::before {
@@ -1158,8 +1161,13 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
     font-size: 10pt; font-weight: 400; color: #666; min-width: 7mm;
   }
   .pm-q { white-space: nowrap; }
-  .pm-blank { flex: 1; border-bottom: 0.8pt solid #000; min-width: 18mm; height: 8mm; }
-  .pm-a { color: #444; }
+  /* 답 칸은 밑줄이 아니라 네모 상자 — 어디에 적는지 한눈에 보인다 */
+  .pm-box {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 15mm; height: 9.5mm; padding: 0 1.5mm;
+    border: 1pt solid #000; border-radius: 1.5mm; vertical-align: middle;
+  }
+  .pm-a { color: #000; }
 
   /* 10문제가 A4 한 장을 꽉 채우도록 줄 높이와 글씨를 크게 잡았다 (한 줄 약 23mm) */
   .ps-wo { border-collapse: collapse; width: 100%; margin: 0 auto; }
