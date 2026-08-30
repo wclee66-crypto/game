@@ -277,21 +277,24 @@ window.Games.math = (function () {
             return '<button class="pad__key" data-n="' + n + '">' + n + '</button>';
           }).join('') +
         '</div>' +
-        /* 확인 단추는 없다 — 답을 누르면 저절로 채점된다 (autoCheck) */
+        /* 확인 단추는 없다 — 답을 누르면 저절로 채점된다 (autoCheck).
+           지우기는 3단계부터만 나온다. 1~2단계는 한 자리 답이면 누르는 순간
+           채점되고, 두 자리 답이면 큰 단추로 한 번에 답하므로 지울 틈이 없다. */
         (quick
           ? '<div class="pad mt-pad mt-pad--cont">' +
               '<button class="pad__key" data-n="0">0</button>' +
               p.opts.map(function (v) {
                 return '<button class="pad__key" data-choice="' + v + '">' + v + '</button>';
               }).join('') +
-            '</div>' +
-            '<div class="pad mt-pad mt-pad--fn1 mt-pad--cont">' +
-              ('<button class="pad__key pad__key--fn" data-act="back">' + T('지우기') + '</button>') +
             '</div>'
-          : '<div class="pad mt-pad mt-pad--fn2 mt-pad--cont">' +
-              '<button class="pad__key" data-n="0">0</button>' +
-              ('<button class="pad__key pad__key--fn" data-act="back">' + T('지우기') + '</button>') +
-            '</div>') +
+          : L.step <= 2
+            ? '<div class="pad mt-pad mt-pad--fn1 mt-pad--cont">' +
+                '<button class="pad__key" data-n="0">0</button>' +
+              '</div>'
+            : '<div class="pad mt-pad mt-pad--fn2 mt-pad--cont">' +
+                '<button class="pad__key" data-n="0">0</button>' +
+                ('<button class="pad__key pad__key--fn" data-act="back">' + T('지우기') + '</button>') +
+              '</div>') +
 
         '<div class="tools">' +
           ('<button class="tool" id="mtNew"><span>↺</span>' + T('새 문제') + '</button>') +

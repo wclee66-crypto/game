@@ -341,13 +341,14 @@ button.install:active { transform: scale(.99); }
 @keyframes pulse { 50% { opacity: .35; } }
 
 .tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(0,1fr)); gap: .45rem; margin-top: 1rem; }
+/* 새 문제·그만두기·다른 게임 — 눈 나쁜 어르신 기준으로 글씨를 키웠다 (2026-08-30) */
 .tool {
-  display: flex; flex-direction: column; align-items: center; gap: .15rem;
+  display: flex; flex-direction: column; align-items: center; gap: .18rem;
   background: var(--surf); border: 1px solid var(--line);
-  border-radius: 12px; padding: .6rem .2rem;
-  font-size: .72rem; font-weight: 700; color: var(--ink-2);
+  border-radius: 12px; padding: .7rem .2rem;
+  font-size: .92rem; font-weight: 700; color: var(--ink-2);
 }
-.tool span { font-size: 1rem; }
+.tool span { font-size: 1.2rem; }
 .tool.is-on { background: var(--accent); border-color: var(--accent); color: #fff; }
 .tool:active { transform: scale(.97); }
 
@@ -431,7 +432,15 @@ button.install:active { transform: scale(.99); }
 .mt-ok { color: var(--accent-d); font-size: 1rem; }
 .mt-no { color: var(--bad); font-size: 1rem; }
 
+/* 숫자판 단추는 눈 나쁜 어르신 기준으로 크고 진하게.
+   화면이 넓을수록(태블릿·컴퓨터) 아래 공간이 남으므로 더 키운다 */
 .mt-pad { grid-template-columns: repeat(3, 1fr); }
+.mt-pad .pad__key { min-height: 4rem; font-size: 2rem; font-weight: 900; }
+.mt-pad .pad__key--fn { font-size: 1.05rem; font-weight: 800; }
+@media (min-width: 720px) {
+  .mt-pad .pad__key { min-height: 4.8rem; font-size: 2.6rem; }
+  .mt-pad .pad__key--fn { font-size: 1.2rem; }
+}
 /* 첫걸음·가볍게 — 답이 두 자리일 때 0 옆에 끼어드는 큰 숫자 단추 (0 · 18 · 16).
    이어지는 줄은 숫자판과 한 몸으로 보이게 사이 간격을 gap 과 맞춘다 */
 .mt-pad--cont { margin-top: .4rem; }
