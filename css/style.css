@@ -789,8 +789,10 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
   margin: 0 0 .35rem; text-align: center;
   font-size: .8rem; font-weight: 800; color: var(--ink-3);
 }
+/* 두 상자의 테두리를 진하고 굵게 — 선이 흐리면 점만 떠 보여서
+   어디가 본이고 어디가 그리는 곳인지 갈피를 잡기 어렵다 */
 .cf-panel > div {
-  background: var(--surf); border: 1.5px solid var(--line); border-radius: var(--r);
+  background: var(--surf); border: 3px solid var(--ink-2); border-radius: var(--r);
   padding: .5rem;
 }
 
