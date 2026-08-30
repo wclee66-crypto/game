@@ -925,8 +925,10 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
 .modal__msg { margin: 0 0 .9rem; color: var(--ink-2); line-height: 1.65; font-size: .93rem; }
 .modal__msg.small { font-size: .8rem; color: var(--ink-3); }
 .modal__actions { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: 1.2rem; }
+/* 단추가 넷 이상이면 한 줄에 셋까지만 놓고 다음 줄로 넘긴다 —
+   한 줄에 다 욱여넣으면 글자가 잘려 못 읽는다 */
 .modal__actions .btn {
-  flex: 1 1 0; min-width: 0; white-space: nowrap;
+  flex: 1 1 0; min-width: 30%; white-space: nowrap;
   padding-left: .5rem; padding-right: .5rem; font-size: .9rem;
 }
 

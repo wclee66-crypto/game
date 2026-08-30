@@ -459,29 +459,30 @@ window.Games.sudoku = (function () {
     if (sc.penalty) rows.push({ label: T('힌트 사용 ({n}회)', { n: S.hints }), value: sc.penalty, minus: true });
 
     UI.resultModal({
-      title: T('스도쿠를 다 풀었습니다!'),
+      title: T('축하드립니다!'),
       score: sc.total,
-      headline: praise(sc.total),
+      headline: T('스도쿠 {n}단계 완료!', { n: L.step }),
       rows: rows,
       note: T('오늘 스도쿠 최고 기록: {n}점', { n: UI.comma(Store.dayBest()['sudoku'] || sc.total) }),
-      actions: [
-        { label: T('다른 게임'), onClick: function () { App.gameSwitcher('sudoku'); } },
-        { label: T('기록 보기'), onClick: function () { App.go('records'); } },
-        { label: T('한 판 더'), kind: 'accent', onClick: function () { S = null; renderIntro(); } }
-      ]
+      /* 「다음 단계」로 바로 이어 가시게 한다. 마지막 단계에서는 「한 판 더」가 초록이 된다.
+         새 판 만들기가 느릴 수 있어 시작 화면과 같은 setTimeout 을 쓴다. */
+      actions: (function () {
+        var idx = ORDER.indexOf(S.level);
+        var prv = ORDER[idx - 1], nxt = ORDER[idx + 1];
+        var a = [{ label: T('다른 게임'), onClick: function () { App.gameSwitcher('sudoku'); } }];
+        if (prv) a.push({ label: T('이전 단계'),
+          onClick: function () { setTimeout(function () { newGame(prv); renderBoard(); }, 30); } });
+        a.push({ label: T('한 판 더'), kind: nxt ? undefined : 'accent', onClick: function () { S = null; renderIntro(); } });
+        if (nxt) a.push({ label: T('다음 단계'), kind: 'accent',
+          onClick: function () { setTimeout(function () { newGame(nxt); renderBoard(); }, 30); } });
+        return a;
+      })()
     });
-  }
-
-  function praise(n) {
-    if (n >= 1000) return T('아주 훌륭합니다. 오늘 머리가 맑으시네요!');
-    if (n >= 700) return T('잘하셨습니다. 꾸준함이 힘입니다.');
-    if (n >= 400) return T('좋습니다. 한 판 더 해 볼까요?');
-    return T('끝까지 푸신 것이 가장 큰 성과입니다.');
   }
 
   /* ================= 진입점 ================= */
 
-  return {
+  return {
     art: '<path d="M3 3h18v18H3z"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/>',
     id: 'sudoku', name: T('스도쿠'), tagline: T('숫자로 하는 두뇌 체조'),
     rules: {

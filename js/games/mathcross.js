@@ -569,17 +569,25 @@ window.Games.mathcross = (function () {
     if (sc.penalty) rows.push({ label: T('힌트 사용 ({n}회)', { n: S.hints }), value: sc.penalty, minus: true });
 
     UI.resultModal({
-      title: timeUp ? T('시간이 다 되었습니다') : T('다 채우셨습니다!'),
+      title: timeUp ? T('시간이 다 되었습니다') : T('축하드립니다!'),
       score: sc.total,
       headline: sc.all
-        ? T('빈칸 {n}개를 모두 맞히셨습니다.', { n: S.need })
+        ? T('계산 퍼즐 {n}단계 완료!', { n: L.step })
         : T('{a}칸 중 {b}칸을 채우셨습니다.', { a: S.need, b: S.filled }),
       rows: rows,
-      actions: [
-        { label: T('닫기') },
-        { label: T('다른 게임'), onClick: function () { App.gameSwitcher('mathcross'); } },
-        { label: T('한 판 더'), kind: 'accent', onClick: function () { S = null; renderIntro(); } }
-      ]
+      /* 다 채웠을 때는 「다음 단계」로 바로 이어 가시게 한다.
+         못 채운 판과 마지막 단계에서는 「한 판 더」가 초록이 된다. */
+      actions: (function () {
+        var idx = ORDER.indexOf(S.level);
+        var prv = ORDER[idx - 1];
+        var nxt = sc.all ? ORDER[idx + 1] : null;
+        var a = [{ label: sc.all ? T('다른 게임') : T('닫기'),
+                   onClick: sc.all ? function () { App.gameSwitcher('mathcross'); } : undefined }];
+        if (prv) a.push({ label: T('이전 단계'), onClick: function () { newGame(prv); renderBoard(); } });
+        a.push({ label: T('한 판 더'), kind: nxt ? undefined : 'accent', onClick: function () { S = null; renderIntro(); } });
+        if (nxt) a.push({ label: T('다음 단계'), kind: 'accent', onClick: function () { newGame(nxt); renderBoard(); } });
+        return a;
+      })()
     });
   }
 

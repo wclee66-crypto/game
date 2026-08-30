@@ -385,24 +385,28 @@ window.Games.quiz = (function () {
     if (sc.bonus) rows.push({ label: T('난이도 보너스 ({name})', { name: LEVELS[S.level].name }), value: sc.bonus });
 
     UI.resultModal({
-      title: T('퀴즈가 끝났습니다'),
+      title: T('축하드립니다!'),
       score: sc.total,
-      headline: sc.correct === sc.count ? T('전부 맞히셨습니다. 대단합니다!') : T('{n}문제를 맞히셨습니다.', { n: sc.correct }),
+      headline: T('상식 퀴즈 {n}단계 완료!', { n: LEVELS[S.level].step }),
       rows: rows,
       note: missed
         ? T('틀린 {n}문제를 오답 노트에 담았습니다.', { n: missed })
         : T('연속 정답 보너스는 3연속부터 25점씩 올라가 최대 100점입니다.'),
-      actions: missed
-        ? [
-            { label: T('다른 게임'), onClick: function () { App.gameSwitcher('quiz'); } },
-            { label: T('한 판 더'), onClick: function () { S = null; renderIntro(); } },
-            { label: T('틀린 문제만'), kind: 'accent', onClick: startReviewNow }
-          ]
-        : [
-            { label: T('다른 게임'), onClick: function () { App.gameSwitcher('quiz'); } },
-            { label: T('기록 보기'), onClick: function () { App.go('records'); } },
-            { label: T('한 판 더'), kind: 'accent', onClick: function () { S = null; renderIntro(); } }
-          ]
+      /* 「다음 단계」로 바로 이어 가시게 한다 (같은 분야로). 마지막 단계에서는 안 나온다.
+         틀린 문제가 있으면 「틀린 문제만」 복습을 초록으로 권한다. */
+      actions: (function () {
+        var idx = ORDER.indexOf(S.level);
+        var prv = ORDER[idx - 1], nxt = ORDER[idx + 1];
+        var cat = S.cat;
+        var a = [{ label: T('다른 게임'), onClick: function () { App.gameSwitcher('quiz'); } }];
+        if (missed) a.push({ label: T('틀린 문제만'), kind: 'accent', onClick: startReviewNow });
+        if (prv) a.push({ label: T('이전 단계'), onClick: function () { newGame(prv, cat); renderQuestion(); } });
+        a.push({ label: T('한 판 더'), kind: (missed || nxt) ? undefined : 'accent',
+                 onClick: function () { S = null; renderIntro(); } });
+        if (nxt) a.push({ label: T('다음 단계'), kind: missed ? undefined : 'accent',
+                          onClick: function () { newGame(nxt, cat); renderQuestion(); } });
+        return a;
+      })()
     });
   }
 
@@ -449,7 +453,7 @@ window.Games.quiz = (function () {
 
   return {
     /* langs 를 적지 않는다 — 한국어·영어 문제 은행이 모두 있어 두 말에서 다 나온다.
-       새 말을 더할 때는 그 말의 문제 은행을 만들고 bank() 에 한 줄 더한다. */
+       새 말을 더할 때는 그 말의 문제 은행을 만들고 bank() 에 한 줄 더한다. */
     art: '<circle cx="12" cy="12" r="9"/><path d="M9.3 9.2a2.8 2.8 0 1 1 3.2 3.4v1.4"/><circle cx="12.4" cy="17.4" r=".9" fill="currentColor" stroke="none"/>',
     id: 'quiz', name: T('상식 퀴즈'), tagline: T('아는 만큼 빨리 맞히기'),
     rules: {

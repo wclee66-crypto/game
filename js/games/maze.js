@@ -516,11 +516,19 @@ window.Games.maze = (function () {
         : T('도착까지 {n}걸음 남았습니다.', { n: sc.left }),
       rows: sc.arrived ? undefined : rows,
       note: sc.arrived ? '' : T('초록 선이 지름길입니다.'),
-      actions: [
-        { label: T('미로 보기') },
-        { label: T('다른 게임'), onClick: function () { App.gameSwitcher('maze'); } },
-        { label: T('한 판 더'), kind: 'accent', onClick: function () { S = null; renderIntro(); } }
-      ]
+      /* 나왔을 때는 「다음 단계」로 바로 이어 가시게 한다.
+         못 나온 판(미로 보기가 필요함)과 마지막 단계에서는 「한 판 더」가 초록이 된다. */
+      actions: (function () {
+        var idx = ORDER.indexOf(S.level);
+        var prv = ORDER[idx - 1];
+        var nxt = sc.arrived ? ORDER[idx + 1] : null;
+        var a = [{ label: sc.arrived ? T('다른 게임') : T('미로 보기'),
+                   onClick: sc.arrived ? function () { App.gameSwitcher('maze'); } : undefined }];
+        if (prv) a.push({ label: T('이전 단계'), onClick: function () { newGame(prv); renderBoard(); } });
+        a.push({ label: T('한 판 더'), kind: nxt ? undefined : 'accent', onClick: function () { S = null; renderIntro(); } });
+        if (nxt) a.push({ label: T('다음 단계'), kind: 'accent', onClick: function () { newGame(nxt); renderBoard(); } });
+        return a;
+      })()
     });
   }
 

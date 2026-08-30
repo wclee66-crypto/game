@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v60';                // sw.js 의 VERSION 과 함께 올린다
+  var APP_VERSION = 'v61';                // sw.js 의 VERSION 과 함께 올린다
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -536,10 +536,13 @@ window.App = (function () {
   }
 
   function gameSwitcher(from) {
-    var others = GAMES.concat(['records']).filter(function (g) { return g !== from; });
+    /* 하던 게임도 목록에 남겨 둔다 — 눌러 들어가면 단계 고르는 화면이 나와서
+       단계를 바꿔 다시 시작할 수 있다. */
+    var others = GAMES.concat(['records']);
     var body = '<div class="switcher">' + others.map(function (g) {
       var name = g === 'records' ? T('나의 기록') : Games[g].name;
       var sub = g === 'records' ? T('날짜별 점수 보기')
+        : g === from ? T('단계 다시 고르기')
         : (Games[g].hasProgress() ? T('진행 중인 판이 있습니다') : T('새로 시작하기'));
       return '<button class="switcher__item" data-go="' + g + '">' +
         '<span class="switcher__txt">' + name + '<em>' + sub + '</em></span>' +

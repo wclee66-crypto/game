@@ -492,17 +492,25 @@ window.Games.coloring = (function () {
     });
 
     /* 완성한 그림이 주인공이다 — 창은 아래에 작게 붙이고 점수 세부는 넣지 않는다.
-       (세부는 '나의 기록'과 '점수 규칙'에서 볼 수 있다) */
+       (세부는 '나의 기록'과 '점수 규칙'에서 볼 수 있다)
+       단추는 셋까지만 — 「다음 단계」로 바로 이어 가시게 한다.
+       마지막 단계에서는 다음이 없으므로 「한 장 더」가 초록이 된다. */
+    var idx = ORDER.indexOf(S.level);
+    var prv = ORDER[idx - 1], nxt = ORDER[idx + 1];
+    var acts = [{ label: T('다른 게임'), onClick: function () { App.gameSwitcher('coloring'); } }];
+    if (prv) acts.push({ label: T('이전 단계'),
+      onClick: function () { newGame(prv, 'random', false); renderBoard(); } });
+    acts.push({ label: T('한 장 더'), kind: nxt ? undefined : 'accent',
+      onClick: function () { S = null; pic = null; renderIntro(); } });
+    if (nxt) acts.push({ label: T('다음 단계'), kind: 'accent',
+      onClick: function () { newGame(nxt, 'random', false); renderBoard(); } });
+
     UI.resultModal({
       title: T('축하드립니다!'),
       low: true,
       score: sc.total,
       headline: T('색칠 공부 {n}단계 완료!', { n: LEVELS[S.level].step }),
-      actions: [
-        { label: T('인쇄하기'), keepOpen: true, onClick: printDone },
-        { label: T('기록 보기'), onClick: function () { App.go('records'); } },
-        { label: T('한 장 더'), kind: 'accent', onClick: function () { S = null; pic = null; renderIntro(); } }
-      ]
+      actions: acts
     });
   }
 

@@ -640,18 +640,26 @@ window.Games.spot = (function () {
     });
 
     UI.resultModal({
-      title: timeUp ? T('시간이 다 되었습니다') : T('다 찾으셨습니다!'),
+      title: timeUp ? T('시간이 다 되었습니다') : T('축하드립니다!'),
       score: sc.total,
       headline: sc.all
-        ? T('다른 곳 {n}군데를 모두 찾으셨습니다.', { n: S.diffs.length })
+        ? T('틀린그림찾기 {n}단계 완료!', { n: L.step })
         : T('못 찾으신 곳: {list}', { list: missed.join(', ') }),
       rows: rows,
       note: sc.all ? '' : T('「그림 보기」를 누르시면 못 찾은 곳을 점선 동그라미로 알려 드립니다.'),
-      actions: [
-        { label: T('그림 보기') },
-        { label: T('다른 게임'), onClick: function () { App.gameSwitcher('spot'); } },
-        { label: T('한 판 더'), kind: 'accent', onClick: function () { S = null; renderIntro(); } }
-      ]
+      /* 다 찾았을 때는 「다음 단계」로 바로 이어 가시게 한다.
+         못 찾은 판(그림 보기가 필요함)과 마지막 단계에서는 「한 판 더」가 초록이 된다. */
+      actions: (function () {
+        var idx = ORDER.indexOf(S.level);
+        var prv = ORDER[idx - 1];
+        var nxt = sc.all ? ORDER[idx + 1] : null;
+        var a = [{ label: sc.all ? T('다른 게임') : T('그림 보기'),
+                   onClick: sc.all ? function () { App.gameSwitcher('spot'); } : undefined }];
+        if (prv) a.push({ label: T('이전 단계'), onClick: function () { newGame(prv); renderBoard(); } });
+        a.push({ label: T('한 판 더'), kind: nxt ? undefined : 'accent', onClick: function () { S = null; renderIntro(); } });
+        if (nxt) a.push({ label: T('다음 단계'), kind: 'accent', onClick: function () { newGame(nxt); renderBoard(); } });
+        return a;
+      })()
     });
   }
 
@@ -669,7 +677,7 @@ window.Games.spot = (function () {
 
   /* ================= 바깥에 내보내기 ================= */
 
-  return {
+  return {
     art: '<path d="M3 4h8v8H3zM13 4h8v8h-8z"/><circle cx="7" cy="8" r="1.7"/><circle cx="17" cy="8" r="1.7"/><path d="M6 16.5h5M13 16.5h5M6 19.5h3M13 19.5h5"/>',
     id: 'spot', name: T('틀린그림찾기'), tagline: T('두 그림을 견주어 보는 눈'),
     rules: {

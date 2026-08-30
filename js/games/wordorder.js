@@ -431,16 +431,21 @@ window.Games.wordorder = (function () {
     if (sc.bonus) rows.push({ label: T('난이도 보너스 ({name})', { name: L.name }), value: sc.bonus });
 
     UI.resultModal({
-      title: T('단어 순서를 마쳤습니다'),
+      title: T('축하드립니다!'),
       score: sc.total,
-      headline: sc.correct === sc.count ? T('전부 맞히셨습니다. 대단합니다!') : T('{n}낱말을 바로잡으셨습니다.', { n: sc.correct }),
+      headline: T('단어 순서 {n}단계 완료!', { n: L.step }),
       rows: rows,
       note: sc.all ? '' : T('끝까지 풀어야 시간 보너스와 난이도 보너스를 받습니다.'),
-      actions: [
-        { label: T('다른 게임'), onClick: function () { App.gameSwitcher('wordorder'); } },
-        { label: T('기록 보기'), onClick: function () { App.go('records'); } },
-        { label: T('한 판 더'), kind: 'accent', onClick: function () { S = null; renderIntro(); } }
-      ]
+      /* 「다음 단계」로 바로 이어 가시게 한다. 마지막 단계에서는 「한 판 더」가 초록이 된다. */
+      actions: (function () {
+        var idx = ORDER.indexOf(S.level);
+        var prv = ORDER[idx - 1], nxt = ORDER[idx + 1];
+        var a = [{ label: T('다른 게임'), onClick: function () { App.gameSwitcher('wordorder'); } }];
+        if (prv) a.push({ label: T('이전 단계'), onClick: function () { newGame(prv); renderQuestion(); } });
+        a.push({ label: T('한 판 더'), kind: nxt ? undefined : 'accent', onClick: function () { S = null; renderIntro(); } });
+        if (nxt) a.push({ label: T('다음 단계'), kind: 'accent', onClick: function () { newGame(nxt); renderQuestion(); } });
+        return a;
+      })()
     });
   }
 
