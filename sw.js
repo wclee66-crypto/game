@@ -4,7 +4,7 @@
  * 인터넷이 없거나 서버가 꺼져 있으면 저장해 둔 파일로 실행합니다.
  * 파일을 고친 뒤에는 아래 VERSION 을 올려 주세요. (js/app.js 의 APP_VERSION 도 같이)
  */
-var VERSION = 'malgeunddeul-v61';
+var VERSION = 'malgeunddeul-v62';
 /* 아래 목록은 '최소한 이것만은 저장해 둔다'는 안전망이다.
  * 실제로 저장할 파일은 install 때 index.html 을 읽어서 스스로 찾아낸다.
  * 그래서 새 게임 파일을 index.html 에 한 줄 넣으면 이 목록은 손대지 않아도 된다. */

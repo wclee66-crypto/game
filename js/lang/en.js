@@ -731,6 +731,11 @@ window.I18N.dict.en = {
   '스도쿠 {n}단계 완료!': 'Sudoku — Level {n} complete!',
   '낱말찾기 {n}단계 완료!': 'Word Search — Level {n} complete!',
   '숫자 계산 {n}단계 완료!': 'Mental Math — Level {n} complete!',
+  '정답입니다': 'Correct!',
+  '큰 단추를 누르거나, 숫자판으로 넣으세요': 'Tap a big button, or use the keypad',
+  '답 넣는 법': 'How to answer',
+  '1~2단계에서 답이 두 자리 수이면 큰 숫자 단추 두 개가 함께 나옵니다. 그중 맞는 것을 누르면 바로 채점되고, 숫자판으로 직접 넣어도 됩니다':
+    'On Levels 1–2, when the answer has two digits, two big number buttons appear as well. Tap the right one and it counts straight away — or type on the keypad as usual',
   '단어 순서 {n}단계 완료!': 'Word Scramble — Level {n} complete!',
   '상식 퀴즈 {n}단계 완료!': 'General Knowledge — Level {n} complete!',
   '틀린그림찾기 {n}단계 완료!': 'Spot the Difference — Level {n} complete!',

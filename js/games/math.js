@@ -221,12 +221,26 @@ window.Games.math = (function () {
 
   /* ================= 화면: 문제 ================= */
 
+  /* 첫걸음·가볍게에서 답이 두 자리 수이면, 숫자판 위에 큰 숫자 단추 두 개를
+     함께 띄운다 (정답 하나 + 정답과 1~3 차이 나는 두 자리 수 하나).
+     두 자리를 한 자리씩 누르고 확인까지 누르는 것이 어르신께는 벽이라,
+     단추 하나로 답할 길을 열어 두는 것이다. 숫자판으로 직접 넣어도 된다. */
+  function makeOpts(a) {
+    var d = a;
+    while (d === a || d < 10) {
+      d = a + (Math.random() < 0.5 ? -1 : 1) * rnd(1, 3);
+    }
+    return Math.random() < 0.5 ? [a, d] : [d, a];
+  }
+
   function renderQuestion() {
     if (!mounted) return;
     if (S.i >= S.probs.length) return finish();
     var L = lv(), p = S.probs[S.i];
     S.input = '';
     locked = false;
+    var quick = L.step <= 2 && p.a >= 10;  // 첫걸음·가볍게 + 두 자리 답일 때만
+    if (quick && !p.opts) { p.opts = makeOpts(p.a); persist(); }
     var right = S.picks.filter(function (x) { return x.correct; }).length;
 
     root.innerHTML =
@@ -250,17 +264,35 @@ window.Games.math = (function () {
                 '<span class="mt-eq">=</span>' +
                 '<span class="mt-ans" id="mtAns"></span>') +
           '</div>' +
-          ('<p class="mt-hint" id="mtMsg">' + T('답을 누른 뒤') + ' <b>' + T('확인') + '</b>' + T('을 누르세요') + '</p>') +
+          ('<p class="mt-hint" id="mtMsg">' +
+            (quick ? T('큰 단추를 누르거나, 숫자판으로 넣으세요')
+                   : T('답을 누른 뒤') + ' <b>' + T('확인') + '</b>' + T('을 누르세요')) +
+          '</p>') +
         '</div>' +
 
+        /* 두 자리 답이면 0 옆에 큰 숫자 단추 두 개가 끼어들고 (0 · 18 · 16),
+           지우기·확인 둘만 아랫줄로 내려간다 */
         '<div class="pad mt-pad" id="mtPad">' +
           [1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (n) {
             return '<button class="pad__key" data-n="' + n + '">' + n + '</button>';
           }).join('') +
-          ('<button class="pad__key pad__key--fn" data-act="back">' + T('지우기') + '</button>') +
-          '<button class="pad__key" data-n="0">0</button>' +
-          ('<button class="pad__key pad__key--ok" data-act="ok">' + T('확인') + '</button>') +
         '</div>' +
+        (quick
+          ? '<div class="pad mt-pad mt-pad--cont">' +
+              '<button class="pad__key" data-n="0">0</button>' +
+              p.opts.map(function (v) {
+                return '<button class="pad__key" data-choice="' + v + '">' + v + '</button>';
+              }).join('') +
+            '</div>' +
+            '<div class="pad mt-pad mt-pad--fn2 mt-pad--cont">' +
+              ('<button class="pad__key pad__key--fn" data-act="back">' + T('지우기') + '</button>') +
+              ('<button class="pad__key pad__key--ok" data-act="ok">' + T('확인') + '</button>') +
+            '</div>'
+          : '<div class="pad mt-pad mt-pad--cont">' +
+              ('<button class="pad__key pad__key--fn" data-act="back">' + T('지우기') + '</button>') +
+              '<button class="pad__key" data-n="0">0</button>' +
+              ('<button class="pad__key pad__key--ok" data-act="ok">' + T('확인') + '</button>') +
+            '</div>') +
 
         '<div class="tools">' +
           ('<button class="tool" id="mtNew"><span>↺</span>' + T('새 문제') + '</button>') +
@@ -277,12 +309,20 @@ window.Games.math = (function () {
       pad: root.querySelector('#mtPad')
     };
 
-    els.pad.addEventListener('click', function (e) {
+    function onPad(e) {
       var k = e.target.closest('.pad__key');
       if (!k || locked) return;
-      if (k.dataset.act === 'back') back();
+      if (k.dataset.choice) {              // 두 자리 답 단추 — 누르는 즉시 채점 (확인 필요 없음)
+        S.input = k.dataset.choice;
+        paintAns();
+        submit();
+      }
+      else if (k.dataset.act === 'back') back();
       else if (k.dataset.act === 'ok') submit();
       else type(k.dataset.n);
+    }
+    root.querySelectorAll('.mt-pad').forEach(function (pd) {
+      pd.addEventListener('click', onPad);
     });
     root.querySelector('#mtNew').addEventListener('click', function () {
       UI.confirm(T('새 문제'), T('지금 판을 그만두고 난이도부터 다시 고르시겠어요?'), function () {
@@ -323,7 +363,7 @@ window.Games.math = (function () {
 
     els.ans.classList.add(ok ? 'is-right' : 'is-wrong');
     els.msg.innerHTML = ok
-      ? ('<b class="mt-ok">' + T('잘하셨습니다!') + '</b>')
+      ? ('<b class="mt-ok">' + T('정답입니다') + '</b>')
       : ('<b class="mt-no">' + T('정답은') + ' ') + p.a + (T('입니다') + '</b>');
     if (ok) els.right.textContent = S.picks.filter(function (x) { return x.correct; }).length;
     UI.beep(ok ? 'ok' : 'no');
@@ -447,6 +487,7 @@ window.Games.math = (function () {
       lines: [
         [T('난이도'), T('더하기와 빼기만 나옵니다 — 1단계 한 자리·답 10 이하 · 2단계 한 자리와 빈칸 채우기 · 3단계 두 자리 ± 한 자리 · 4단계 두 자리 ± 두 자리 · 5단계 세 자리와 세 수 이어 계산')],
         [T('더하고 빼는 수'), T('언제나 2 이상입니다. 1을 더하거나 빼는 문제는 내지 않습니다')],
+        [T('답 넣는 법'), T('1~2단계에서 답이 두 자리 수이면 큰 숫자 단추 두 개가 함께 나옵니다. 그중 맞는 것을 누르면 바로 채점되고, 숫자판으로 직접 넣어도 됩니다')],
         [T('정답 점수'), T('최대 600점 · 맞힌 문제 수에 비례')],
         [T('시간 보너스'), T('최대 300점 · 끝까지 풀었을 때만, 남은 시간에 비례')],
         [T('연속 정답 보너스'), T('최대 100점 · 3연속 25 / 4연속 50 / 5연속 75 / 6연속 이상 100')],

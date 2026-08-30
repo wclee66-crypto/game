@@ -432,6 +432,10 @@ button.install:active { transform: scale(.99); }
 .mt-no { color: var(--bad); font-size: 1rem; }
 
 .mt-pad { grid-template-columns: repeat(3, 1fr); }
+/* 첫걸음·가볍게 — 답이 두 자리일 때 0 옆에 끼어드는 큰 숫자 단추 (0 · 18 · 16).
+   이어지는 줄은 숫자판과 한 몸으로 보이게 사이 간격을 gap 과 맞춘다 */
+.mt-pad--cont { margin-top: .4rem; }
+.mt-pad--fn2 { grid-template-columns: 1fr 1fr; }
 .pad__key--ok { background: var(--accent); border-color: var(--accent); color: #fff; font-family: var(--font-body); font-size: .95rem; font-weight: 800; }
 .pad__key--ok:active { background: var(--accent-d); }
 
