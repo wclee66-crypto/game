@@ -491,20 +491,13 @@ window.Games.coloring = (function () {
       detail: { picture: pic.name, cells: S.fills.length, wrong: S.wrong, hints: S.hints }
     });
 
-    var rows = [
-      { label: T('칠한 칸 ({n}칸 모두)', { n: S.fills.length }), value: sc.fill },
-      { label: T('정확도 보너스 (실수 {n}회)', { n: S.wrong }), value: sc.acc },
-      { label: T('시간 보너스 ({t} 걸림)', { t: UI.fmtTime(S.elapsed) }), value: sc.time }
-    ];
-    if (sc.bonus) rows.push({ label: T('난이도 보너스 ({name})', { name: LEVELS[S.level].name }), value: sc.bonus });
-    if (sc.penalty) rows.push({ label: T('힌트 사용 ({n}회)', { n: S.hints }), value: sc.penalty, minus: true });
-
+    /* 완성한 그림이 주인공이다 — 창은 아래에 작게 붙이고 점수 세부는 넣지 않는다.
+       (세부는 '나의 기록'과 '점수 규칙'에서 볼 수 있다) */
     UI.resultModal({
-      title: T('그림을 다 칠했습니다!'),
+      title: T('축하드립니다!'),
+      low: true,
       score: sc.total,
-      headline: T('‘{p}’ 완성', { p: pic.name }),
-      rows: rows,
-      note: T('칠한 그림은 “인쇄하기”로 종이에 남길 수 있습니다.'),
+      headline: T('색칠 공부 {n}단계 완료!', { n: LEVELS[S.level].step }),
       actions: [
         { label: T('인쇄하기'), keepOpen: true, onClick: printDone },
         { label: T('기록 보기'), onClick: function () { App.go('records'); } },
@@ -515,7 +508,7 @@ window.Games.coloring = (function () {
 
   /* ================= 바깥으로 ================= */
 
-  return {
+  return {
     art: '<path d="M4 20l1.2-3.6 8.6-8.6 2.4 2.4-8.6 8.6z"/><path d="M14.6 5.2l2-2a1.7 1.7 0 0 1 2.4 2.4l-2 2z"/><path d="M4 20h16"/>',
     id: 'coloring', name: T('색칠 공부'), tagline: T('번호대로 색을 채워 가는 시간'),
     rules: {

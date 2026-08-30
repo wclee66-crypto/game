@@ -718,6 +718,13 @@ window.I18N.dict.en = {
   '같은 게임을 여러 번 해도 그날 총점에는 <b>가장 높은 점수</b>만 반영됩니다. 판마다의 기록은 모두 남습니다.':
     'If you play the same game more than once, only your <b>best score</b> counts towards that day’s total. Every round is still kept in your record.',
   '점수 규칙': 'Scoring',
+
+  /* ---- 그림이 남는 게임의 완료 창 (2026-08-30 작게 줄인 뒤) ---- */
+  '축하드립니다!': 'Congratulations!',
+  '색칠 공부 {n}단계 완료!': 'Colour by Number — Level {n} complete!',
+  '따라 그리기 {n}단계 완료!': 'Copy the Pattern — Level {n} complete!',
+  '점 잇기 {n}단계 완료!': 'Dot to Dot — Level {n} complete!',
+  '미로찾기 {n}단계 완료!': 'Maze — Level {n} complete!',
   '문제지': 'worksheet',
   '도안': 'colouring sheet',
   '잘하셨습니다!': 'Well done!',

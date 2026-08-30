@@ -492,13 +492,16 @@ window.Games.copyfig = (function () {
     if (sc.bonus) rows.push({ label: T('난이도 보너스 ({name})', { name: L.name }), value: sc.bonus });
     if (sc.penalty) rows.push({ label: T('힌트 사용 ({n}회)', { n: S.hints }), value: sc.penalty, minus: true });
 
+    /* 그린 그림이 주인공이다 — 다 그렸을 때는 창을 아래에 작게 붙이고
+       점수 세부는 넣지 않는다. 시간이 다 됐을 때만 세부를 보여 준다. */
     UI.resultModal({
-      title: timeUp ? T('시간이 다 되었습니다') : T('다 그리셨습니다!'),
+      title: timeUp ? T('시간이 다 되었습니다') : T('축하드립니다!'),
+      low: true,
       score: sc.total,
-      headline: sc.all
-        ? T('그림 {n}개를 모두 옮겨 그리셨습니다.', { n: S.list.length })
-        : T('선 {a}개 중 {b}개를 그리셨습니다.', { a: S.need, b: sc.done }),
-      rows: rows,
+      headline: timeUp
+        ? T('선 {a}개 중 {b}개를 그리셨습니다.', { a: S.need, b: sc.done })
+        : T('따라 그리기 {n}단계 완료!', { n: L.step }),
+      rows: timeUp ? rows : undefined,
       actions: [
         { label: T('닫기') },
         { label: T('다른 게임'), onClick: function () { App.gameSwitcher('copyfig'); } },

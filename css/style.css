@@ -932,6 +932,16 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
 
 @media (min-width: 560px) { .modal { align-items: center; } }
 
+/* 결과물을 보여 주는 게임(색칠 공부 등)의 완료 창 —
+   넓은 화면에서도 아래에 붙이고, 뒤를 어둡게 가리지 않으며,
+   창 자체를 작게 눌러 완성한 그림이 다 보이게 한다 */
+.modal.modal--low { align-items: flex-end; background: rgba(14, 26, 20, .12); backdrop-filter: none; }
+.modal--low .modal__card { max-width: 480px; padding: .95rem 1.1rem .85rem; }
+.modal--low .modal__title { margin-bottom: .3rem; font-size: 1.15rem; }
+.modal--low .score__num { font-size: 2.3rem; }
+.modal--low .score__headline { margin: .3rem 0 0; }
+.modal--low .modal__actions { margin-top: .75rem; }
+
 /* 결과 화면 */
 .score { text-align: center; }
 .score__big { display: flex; align-items: baseline; justify-content: center; gap: .25rem; }

@@ -41,7 +41,9 @@ window.UI = (function () {
     root.hidden = false;
     root.innerHTML = '';
 
-    var wrap = h('<div class="modal"><div class="modal__card" role="dialog" aria-modal="true"></div></div>');
+    /* low: 색칠 공부처럼 완성한 그림을 봐야 하는 게임 — 창을 아래에 붙이고
+       뒤를 어둡게 가리지 않아, 결과물이 창 위로 보인다 */
+    var wrap = h('<div class="modal' + (opts.low ? ' modal--low' : '') + '"><div class="modal__card" role="dialog" aria-modal="true"></div></div>');
     var card = wrap.querySelector('.modal__card');
 
     if (opts.title) card.appendChild(h('<h2 class="modal__title">' + esc(opts.title) + '</h2>'));
@@ -147,6 +149,7 @@ window.UI = (function () {
       title: o.title,
       body: body,
       dismissable: false,
+      low: o.low,
       actions: o.actions
     });
   }
