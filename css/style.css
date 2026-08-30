@@ -436,6 +436,7 @@ button.install:active { transform: scale(.99); }
    이어지는 줄은 숫자판과 한 몸으로 보이게 사이 간격을 gap 과 맞춘다 */
 .mt-pad--cont { margin-top: .4rem; }
 .mt-pad--fn2 { grid-template-columns: 1fr 1fr; }
+.mt-pad--fn1 { grid-template-columns: 1fr; }
 .pad__key--ok { background: var(--accent); border-color: var(--accent); color: #fff; font-family: var(--font-body); font-size: .95rem; font-weight: 800; }
 .pad__key--ok:active { background: var(--accent-d); }
 

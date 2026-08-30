@@ -266,7 +266,7 @@ window.Games.math = (function () {
           '</div>' +
           ('<p class="mt-hint" id="mtMsg">' +
             (quick ? T('큰 단추를 누르거나, 숫자판으로 넣으세요')
-                   : T('답을 누른 뒤') + ' <b>' + T('확인') + '</b>' + T('을 누르세요')) +
+                   : T('답을 누르면 저절로 채점됩니다')) +
           '</p>') +
         '</div>' +
 
@@ -277,6 +277,7 @@ window.Games.math = (function () {
             return '<button class="pad__key" data-n="' + n + '">' + n + '</button>';
           }).join('') +
         '</div>' +
+        /* 확인 단추는 없다 — 답을 누르면 저절로 채점된다 (autoCheck) */
         (quick
           ? '<div class="pad mt-pad mt-pad--cont">' +
               '<button class="pad__key" data-n="0">0</button>' +
@@ -284,14 +285,12 @@ window.Games.math = (function () {
                 return '<button class="pad__key" data-choice="' + v + '">' + v + '</button>';
               }).join('') +
             '</div>' +
-            '<div class="pad mt-pad mt-pad--fn2 mt-pad--cont">' +
+            '<div class="pad mt-pad mt-pad--fn1 mt-pad--cont">' +
               ('<button class="pad__key pad__key--fn" data-act="back">' + T('지우기') + '</button>') +
-              ('<button class="pad__key pad__key--ok" data-act="ok">' + T('확인') + '</button>') +
             '</div>'
-          : '<div class="pad mt-pad mt-pad--cont">' +
-              ('<button class="pad__key pad__key--fn" data-act="back">' + T('지우기') + '</button>') +
+          : '<div class="pad mt-pad mt-pad--fn2 mt-pad--cont">' +
               '<button class="pad__key" data-n="0">0</button>' +
-              ('<button class="pad__key pad__key--ok" data-act="ok">' + T('확인') + '</button>') +
+              ('<button class="pad__key pad__key--fn" data-act="back">' + T('지우기') + '</button>') +
             '</div>') +
 
         '<div class="tools">' +
@@ -312,13 +311,12 @@ window.Games.math = (function () {
     function onPad(e) {
       var k = e.target.closest('.pad__key');
       if (!k || locked) return;
-      if (k.dataset.choice) {              // 두 자리 답 단추 — 누르는 즉시 채점 (확인 필요 없음)
+      if (k.dataset.choice) {              // 두 자리 답 단추 — 누르는 즉시 채점
         S.input = k.dataset.choice;
         paintAns();
         submit();
       }
       else if (k.dataset.act === 'back') back();
-      else if (k.dataset.act === 'ok') submit();
       else type(k.dataset.n);
     }
     root.querySelectorAll('.mt-pad').forEach(function (pd) {
@@ -343,8 +341,30 @@ window.Games.math = (function () {
     if (S.input === '' && d === '0') return;
     S.input += d;
     paintAns();
+    autoCheck();
   }
-  function back() { S.input = S.input.slice(0, -1); paintAns(); }
+  function back() {
+    clearAuto();
+    S.input = S.input.slice(0, -1);
+    paintAns();
+    if (S.input) autoCheck();
+  }
+
+  /* 답을 누르면 확인 단추 없이 저절로 채점한다 (2026-08-30).
+     정답 자릿수만큼 누르면 곧장 채점하고, 그보다 짧게 누르고 멈추면
+     2초 뒤에 그 답으로 채점한다 — 틀린 답이 정답보다 짧을 수 있어서다. */
+  var autoTimer = null;
+  function clearAuto() { if (autoTimer) clearTimeout(autoTimer); autoTimer = null; }
+  function autoCheck() {
+    clearAuto();
+    var need = String(S.probs[S.i].a).length;
+    if (S.input.length >= need) { submit(); return; }
+    autoTimer = setTimeout(function () {
+      autoTimer = null;
+      if (!mounted || !S || S.done || locked) return;
+      if (S.input) submit();
+    }, 2000);
+  }
 
   function paintAns() {
     els.ans.textContent = S.input || '';
@@ -352,7 +372,8 @@ window.Games.math = (function () {
   }
 
   function submit() {
-    if (!S.input) { UI.toast(T('답을 먼저 눌러 주세요.')); return; }
+    if (!S.input || locked) return;
+    clearAuto();
     locked = true;
     stopTimer();
 
@@ -487,14 +508,14 @@ window.Games.math = (function () {
       lines: [
         [T('난이도'), T('더하기와 빼기만 나옵니다 — 1단계 한 자리·답 10 이하 · 2단계 한 자리와 빈칸 채우기 · 3단계 두 자리 ± 한 자리 · 4단계 두 자리 ± 두 자리 · 5단계 세 자리와 세 수 이어 계산')],
         [T('더하고 빼는 수'), T('언제나 2 이상입니다. 1을 더하거나 빼는 문제는 내지 않습니다')],
-        [T('답 넣는 법'), T('1~2단계에서 답이 두 자리 수이면 큰 숫자 단추 두 개가 함께 나옵니다. 그중 맞는 것을 누르면 바로 채점되고, 숫자판으로 직접 넣어도 됩니다')],
+        [T('답 넣는 법'), T('확인 단추 없이, 답을 누르면 저절로 채점됩니다. 1~2단계에서 답이 두 자리 수이면 큰 숫자 단추 두 개가 함께 나와 하나만 누르면 됩니다')],
         [T('정답 점수'), T('최대 600점 · 맞힌 문제 수에 비례')],
         [T('시간 보너스'), T('최대 300점 · 끝까지 풀었을 때만, 남은 시간에 비례')],
         [T('연속 정답 보너스'), T('최대 100점 · 3연속 25 / 4연속 50 / 5연속 75 / 6연속 이상 100')],
         [T('오답 감점'), T('없음 — 틀리면 정답을 보여 주고 다음 문제로 넘어갑니다')],
         [T('난이도 보너스'), T('보통 +100점, 어려움 +250점 (끝까지 풀었을 때)')],
         [T('최고 점수'), T('1~3단계 1,000점 / 보통 1,100점 / 어려움 1,250점')],
-        [T('자판'), T('PC에서는 숫자 키로 입력, Backspace 지우기, Enter 확인')]
+        [T('자판'), T('PC에서는 숫자 키로 입력하고 Backspace 로 지웁니다. 답은 저절로 채점됩니다')]
       ]
     },
     mount: function (container) {
@@ -506,7 +527,7 @@ window.Games.math = (function () {
     },
     unmount: function () {
       mounted = false;
-      stopTimer(); clearPending(); unbindKeys(); persist();
+      stopTimer(); clearPending(); clearAuto(); unbindKeys(); persist();
     },
     hasProgress: function () { return !!Store.getSession('math'); },
     levels: LEVELS,

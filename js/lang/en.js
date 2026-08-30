@@ -733,9 +733,12 @@ window.I18N.dict.en = {
   '숫자 계산 {n}단계 완료!': 'Mental Math — Level {n} complete!',
   '정답입니다': 'Correct!',
   '큰 단추를 누르거나, 숫자판으로 넣으세요': 'Tap a big button, or use the keypad',
+  '답을 누르면 저절로 채점됩니다': 'Your answer is checked as soon as you tap it',
   '답 넣는 법': 'How to answer',
-  '1~2단계에서 답이 두 자리 수이면 큰 숫자 단추 두 개가 함께 나옵니다. 그중 맞는 것을 누르면 바로 채점되고, 숫자판으로 직접 넣어도 됩니다':
-    'On Levels 1–2, when the answer has two digits, two big number buttons appear as well. Tap the right one and it counts straight away — or type on the keypad as usual',
+  '확인 단추 없이, 답을 누르면 저절로 채점됩니다. 1~2단계에서 답이 두 자리 수이면 큰 숫자 단추 두 개가 함께 나와 하나만 누르면 됩니다':
+    'There is no confirm button — your answer is checked as soon as you tap it. On Levels 1–2, when the answer has two digits, two big number buttons appear so one tap is enough',
+  'PC에서는 숫자 키로 입력하고 Backspace 로 지웁니다. 답은 저절로 채점됩니다':
+    'On a PC, type with the number keys and erase with Backspace. Answers are checked automatically',
   '단어 순서 {n}단계 완료!': 'Word Scramble — Level {n} complete!',
   '상식 퀴즈 {n}단계 완료!': 'General Knowledge — Level {n} complete!',
   '틀린그림찾기 {n}단계 완료!': 'Spot the Difference — Level {n} complete!',
