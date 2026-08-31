@@ -402,6 +402,39 @@ window.Print = (function () {
   /* ---------------- 인쇄 실행 ---------------- */
 
   /** 게임마다 문제지를 만드는 함수 — 새 게임을 지원할 때 여기에 한 줄 더한다 */
+  /* ---------------- 도형 세기 ---------------- */
+
+  function shapecountSheets(o) {
+    var pages = [];
+    for (var n = 0; n < o.count; n++) {
+      var b = Games.shapecount.makeForPrint(o.level, 6);
+      var no = o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : '';
+
+      /* 문제지와 정답지가 같은 그림을 쓴다 — b 를 한 번만 만든다 */
+      var grid = function (withAns) {
+        return '<div class="ps-scgrid">' + b.items.map(function (it, i) {
+          return '<div class="ps-scitem">' + it.svg +
+            '<p class="ps-scq">' + (i + 1) + '. ' + esc(it.q) + ' ' +
+            '<span class="ps-scbox' + (withAns ? ' ps-a' : '') + '">' + (withAns ? it.a : '') + '</span></p></div>';
+        }).join('') + '</div>';
+      };
+
+      pages.push('<section class="ps-sheet">' +
+        sheetHead(T('도형 세기'), b.levelName + no,
+          T('그림마다 묻는 도형이 몇 개인지 세어 네모 칸에 적으세요.')) +
+        grid(false) +
+      '</section>');
+
+      if (o.answer) {
+        pages.push('<section class="ps-sheet ps-sheet--ans">' +
+          sheetHead(T('도형 세기 정답'), b.levelName + no, '') +
+          grid(true) +
+        '</section>');
+      }
+    }
+    return pages.join('');
+  }
+
   /* ---------------- 점 잇기 ---------------- */
 
   function dot2dotSheets(o) {
@@ -509,7 +542,8 @@ window.Print = (function () {
     maze: mazeSheets,
     mathcross: mathcrossSheets,
     copyfig: copyfigSheets,
-    dot2dot: dot2dotSheets
+    dot2dot: dot2dotSheets,
+    shapecount: shapecountSheets
   };
 
   /* 인쇄 내용은 **인쇄 창이 닫힌 뒤에** 지운다.

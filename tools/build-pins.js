@@ -95,7 +95,7 @@ function load(lang) {
   run('js/data/words.js'); run('js/data/words-en.js');
   run('js/data/order-words.js'); run('js/data/order-words-en.js');
   run('js/data/pictures.js');
-  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig', 'dot2dot'].forEach(function (id) {
+  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig', 'dot2dot', 'shapecount'].forEach(function (id) {
     run('js/games/' + id + '.js');
   });
   run('js/print.js');
@@ -265,12 +265,19 @@ PINS.push(one('pin-39-dot-to-dot-easy', 'Easy Printable<br>Dot to Dot',
 PINS.push(one('pin-40-copy-pattern-easy', 'Easy Printable<br>Copy the Pattern',
   'For seniors · 3×3 dots, three lines · a gentle start',
   'copyfig', { level: 'step1' }, '따라 그리기 — 쉬움'));
+PINS.push(one('pin-41-count-shapes', 'Free Printable<br>Count the Shapes',
+  'For seniors · visual attention puzzles · play online or print',
+  'shapecount', { level: 'easy' }, '도형 세기'));
+PINS.push(one('pin-42-count-shapes-easy', 'Easy Printable<br>Count the Shapes',
+  'For seniors · 5 shapes, none overlap · a gentle start',
+  'shapecount', { level: 'step1' }, '도형 세기 — 쉬움'));
 
 /* 핀마다 어디로 데려갈지 — 그 게임 화면으로 바로 들어가게 한다 */
 var GOTO = {
   sudoku: '#sudoku', wordsearch: '#wordsearch', math: '#math',
   wordorder: '#wordorder', coloring: '#coloring', spot: '#spot',
-  maze: '#maze', mathcross: '#mathcross', copyfig: '#copyfig', dot2dot: '#dot2dot'
+  maze: '#maze', mathcross: '#mathcross', copyfig: '#copyfig', dot2dot: '#dot2dot',
+  shapecount: '#shapecount'
 };
 PINS.forEach(function (p) {
   if (!p.link) p.link = SITE + '/?lang=en' + (GOTO[p.sheet.game] || '');
@@ -494,7 +501,7 @@ PINS.forEach(function (p) {
     /* 어느 서랍에 넣을지 — 색칠·틀린그림은 A(치매 활동지), 나머지는 B(두뇌 게임) */
     var g = (p.sheet && p.sheet.game) || '';
     p.board = p.file.indexOf('carers') >= 0 ? 'C'
-            : (!g || g === 'coloring' || g === 'spot' || g === 'copyfig' || g === 'dot2dot') ? 'A' : 'B';
+            : (!g || g === 'coloring' || g === 'spot' || g === 'copyfig' || g === 'dot2dot' || g === 'shapecount') ? 'A' : 'B';
     p.desc = describe(p);
     made.push(p);
     console.log('  만듦: ' + p.file + '.png');

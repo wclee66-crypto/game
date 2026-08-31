@@ -449,6 +449,20 @@ button.install:active { transform: scale(.99); }
 .pad__key--ok { background: var(--accent); border-color: var(--accent); color: #fff; font-family: var(--font-body); font-size: .95rem; font-weight: 800; }
 .pad__key--ok:active { background: var(--accent-d); }
 
+/* ================= 도형 세기 ================= */
+
+.sc-card {
+  background: var(--surf); border: 1px solid var(--line); border-radius: var(--r);
+  padding: .7rem .7rem .85rem; text-align: center;
+}
+.sc-card .mt-hint { margin-top: .45rem; }
+.sc-svg { display: block; width: 100%; max-width: 470px; margin: 0 auto; height: auto; color: var(--ink); }
+.sc-q { margin: .45rem 0 0; text-align: center; font-size: 1.35rem; font-weight: 800; letter-spacing: -.02em; }
+
+/* 누른 숫자 단추에 맞고 틀림을 그 자리에서 물들인다 */
+.pad__key.is-good { background: var(--accent-s); border-color: var(--accent); color: var(--accent-d); }
+.pad__key.is-bad  { background: var(--bad-s); border-color: var(--bad); color: var(--bad); }
+
 /* ================= 단어 순서 바로잡기 ================= */
 
 .wo-card {
@@ -1334,6 +1348,20 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
   .ps-cf .cf-dot { fill: #000; }
   .ps-cf .cf-line { fill: none; stroke: #000; stroke-width: 1.15;
     stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ---- 도형 세기 ---- */
+  /* 한 장에 여섯 판 — 두 칸 × 세 줄. 판마다 네모를 둘러 옆 판과 붙어 보이지 않게 */
+  .ps-scgrid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 4mm; margin-top: 3mm;
+  }
+  .ps-scitem { border: 1pt solid #000; border-radius: 2mm; padding: 2.5mm 2.5mm 1.5mm; }
+  .ps-scsvg { display: block; width: 100%; height: auto; color: #000; }
+  .ps-scq { margin: 1.5mm 0 0; font-size: 10.5pt; font-weight: 700; text-align: center; }
+  .ps-scbox {
+    display: inline-block; min-width: 11mm; min-height: 6.5mm; vertical-align: middle;
+    border: 1pt solid #000; border-radius: 1.5mm; text-align: center; font-weight: 800;
+  }
 
   /* ---- 점 잇기 ---- */
   /* 한 장에 넉 장 — 두 칸 × 두 줄. 점과 번호는 또렷한 검정으로 */

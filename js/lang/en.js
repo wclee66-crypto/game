@@ -732,6 +732,30 @@ window.I18N.dict.en = {
   '낱말찾기 {n}단계 완료!': 'Word Search — Level {n} complete!',
   '숫자 계산 {n}단계 완료!': 'Mental Math — Level {n} complete!',
   '정답입니다': 'Correct!',
+
+  /* ---- 도형 세기 ---- */
+  '도형 세기': 'Count the Shapes',
+  '도형 세기 정답': 'Count the Shapes answers',
+  '도형 세기 점수 규칙': 'Count the Shapes scoring',
+  '겹친 그림 속 도형 헤아리기': 'Find and count the tangled shapes',
+  '그림 속에서 한 가지 도형만 골라 셉니다.': 'Count just one kind of shape in the picture.',
+  '몇 개인지 숫자를 누르면 바로 채점됩니다.': 'Tap how many and it is checked straight away.',
+  '세모는 몇 개일까요?': 'How many triangles?',
+  '네모는 몇 개일까요?': 'How many squares?',
+  '동그라미는 몇 개일까요?': 'How many circles?',
+  '정답은 {n}개입니다': 'The answer is {n}',
+  '도형 5개 · 겹치지 않아요': '5 shapes · none overlap',
+  '도형 7개 · 살짝 겹쳐요': '7 shapes · a little overlap',
+  '도형 9개 · 겹쳐 나와요': '9 shapes · they overlap',
+  '도형 11개 · 많이 겹쳐요': '11 shapes · plenty of overlap',
+  '도형 14개 · 비스듬히 겹쳐요': '14 shapes · tilted and tangled',
+  '도형 세기 {n}단계 완료!': 'Count the Shapes — Level {n} complete!',
+  '단계가 올라갈수록 도형이 많아지고 서로 겹쳐 나옵니다 — 1단계 5개 · 2단계 7개 · 3단계 9개 · 4단계 11개 · 5단계 14개(비스듬히)':
+    'The higher the level, the more shapes there are and the more they overlap — Level 1 has 5 · Level 2 has 7 · Level 3 has 9 · Level 4 has 11 · Level 5 has 14 (tilted)',
+  '묻는 도형이 몇 개인지 세어 숫자 단추를 누르면 바로 채점됩니다. 답은 언제나 2~9개입니다':
+    'Count the shape asked for and tap the number — it is checked straight away. The answer is always 2 to 9',
+  '그림마다 묻는 도형이 몇 개인지 세어 네모 칸에 적으세요.':
+    'For each picture, count the shape asked for and write the number in the box.',
   '큰 단추를 누르거나, 숫자판으로 넣으세요': 'Tap a big button, or use the keypad',
   '답을 누르면 저절로 채점됩니다': 'Your answer is checked as soon as you tap it',
   '답 넣는 법': 'How to answer',

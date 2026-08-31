@@ -83,7 +83,7 @@ function loadAll(lang) {
   run('js/data/quiz-data.js'); run('js/data/quiz-data-en.js');
   run('js/data/words.js'); run('js/data/words-en.js'); run('js/data/order-words.js');
   run('js/data/order-words-en.js'); run('js/data/pictures.js');
-  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig', 'dot2dot'].forEach(function (id) {
+  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig', 'dot2dot', 'shapecount'].forEach(function (id) {
     run('js/games/' + id + '.js');
   });
   run('js/print.js');
@@ -107,7 +107,8 @@ var PICKS = [
   { id: 'maze',       level: 'easy' },
   { id: 'mathcross',  level: 'normal' },
   { id: 'copyfig',    level: 'normal' },
-  { id: 'dot2dot',    level: 'easy' }
+  { id: 'dot2dot',    level: 'easy' },
+  { id: 'shapecount', level: 'easy' }
 ];
 var SHOTS = [];
 ['ko', 'en'].forEach(function (lang) {
