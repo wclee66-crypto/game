@@ -178,17 +178,26 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 /* 고리형 오늘 점수 */
 .ring { display: flex; align-items: center; gap: .85rem; margin-top: .55rem; }
+/* 휴대폰처럼 좁을 때는 고리도 줄이고 사이도 좁힌다 */
+@media (max-width: 480px) {
+  .ring { gap: .5rem; }
+  .ring__svg { width: 56px; height: 56px; }
+  .ring__txt { font-size: 15px; }   /* 뷰박스가 그대로라 실제로는 더 작게 보인다 */
+  .today__meta { font-size: .68rem; }
+}
 .ring__svg { flex: none; }
 .ring__track { stroke: var(--track); }
 .ring__fill { stroke: var(--accent); transition: stroke-dasharray .7s cubic-bezier(.2,.8,.2,1); }
 .ring__body { flex: 1; min-width: 0; }
 .today__score { display: flex; align-items: baseline; gap: .25rem; }
+/* 좁은 화면에서는 숫자가 화면 폭에 맞춰 줄어든다 — 1,000점이 칸 밖으로 밀려 나가지 않게 */
 .today__score b {
-  font-family: var(--font-num); font-size: 2.2rem; font-weight: 800;
+  font-family: var(--font-num); font-size: clamp(1.45rem, 5.5vw, 2.2rem); font-weight: 800;
   line-height: 1; letter-spacing: -.04em; font-variant-numeric: tabular-nums;
 }
 .today__score span { font-size: .82rem; color: var(--ink-3); font-weight: 700; }
-.today__meta { margin: .4rem 0 0; font-size: .72rem; color: var(--ink-3); line-height: 1.5; }
+/* 줄을 바꿀 때 낱말 가운데를 자르지 않는다 ('목표'가 '목/표'로 꺾이지 않게) */
+.today__meta { margin: .4rem 0 0; font-size: .72rem; color: var(--ink-3); line-height: 1.5; word-break: keep-all; }
 
 .gamelist { display: flex; flex-direction: column; gap: .5rem; }
 /* 게임 이름이 주인공이다. 앞에 붙던 기호 동그라미는 없앴다 —
