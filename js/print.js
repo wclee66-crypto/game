@@ -435,6 +435,40 @@ window.Print = (function () {
     return pages.join('');
   }
 
+  /* ---------------- 시계 보기 ---------------- */
+
+  function clockSheets(o) {
+    var pages = [];
+    for (var n = 0; n < o.count; n++) {
+      var b = Games.clock.makeForPrint(o.level, 6);
+      var no = o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : '';
+
+      /* 문제지와 정답지가 같은 시계를 쓴다 — b 를 한 번만 만든다 */
+      var grid = function (withAns) {
+        return '<div class="ps-ckgrid">' + b.items.map(function (it, i) {
+          return '<div class="ps-ckitem">' + it.svg +
+            '<p class="ps-ckq">' + (i + 1) + '. ' +
+            (withAns ? '<span class="ps-cka">' + esc(it.a) + '</span>' : esc(T('__ 시 __ 분'))) +
+            '</p></div>';
+        }).join('') + '</div>';
+      };
+
+      pages.push('<section class="ps-sheet">' +
+        sheetHead(T('시계 보기'), b.levelName + no,
+          T('시계가 가리키는 시각을 빈칸에 적으세요.')) +
+        grid(false) +
+      '</section>');
+
+      if (o.answer) {
+        pages.push('<section class="ps-sheet ps-sheet--ans">' +
+          sheetHead(T('시계 보기 정답'), b.levelName + no, '') +
+          grid(true) +
+        '</section>');
+      }
+    }
+    return pages.join('');
+  }
+
   /* ---------------- 점 잇기 ---------------- */
 
   function dot2dotSheets(o) {
@@ -543,7 +577,8 @@ window.Print = (function () {
     mathcross: mathcrossSheets,
     copyfig: copyfigSheets,
     dot2dot: dot2dotSheets,
-    shapecount: shapecountSheets
+    shapecount: shapecountSheets,
+    clock: clockSheets
   };
 
   /* 인쇄 내용은 **인쇄 창이 닫힌 뒤에** 지운다.

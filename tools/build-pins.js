@@ -95,7 +95,7 @@ function load(lang) {
   run('js/data/words.js'); run('js/data/words-en.js');
   run('js/data/order-words.js'); run('js/data/order-words-en.js');
   run('js/data/pictures.js');
-  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig', 'dot2dot', 'shapecount'].forEach(function (id) {
+  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig', 'dot2dot', 'shapecount', 'clock'].forEach(function (id) {
     run('js/games/' + id + '.js');
   });
   run('js/print.js');
@@ -272,12 +272,121 @@ PINS.push(one('pin-42-count-shapes-easy', 'Easy Printable<br>Count the Shapes',
   'For seniors · 5 shapes, none overlap · a gentle start',
   'shapecount', { level: 'step1' }, '도형 세기 — 쉬움'));
 
+/* ---- 핀이 적던 게임들을 다섯 장씩으로 채움 (2026-09-01, 43~69번) ----
+ * 42장을 다 올린 뒤 더한 것. 같은 게임이라도 핀마다 노리는 검색어를 다르게 잡는다 —
+ * 단계(easy/hard), 쓰임새(dementia/OT), 딴 이름(connect the dots/anagram) 순으로 돌린다. */
+
+/* 숫자 계산 +4 */
+PINS.push(one('pin-43-math-easy', 'Easy Printable<br>Math for Seniors',
+  'Single-digit adding and taking away · a gentle start',
+  'math', { level: 'step1' }, '숫자 계산 — 쉬움'));
+PINS.push(one('pin-44-addition', 'Free Printable<br>Addition Worksheets',
+  'For seniors · adding within 100 · answer key included',
+  'math', { level: 'normal' }, '숫자 계산 — 덧셈'));
+PINS.push(one('pin-45-subtraction', 'Free Printable<br>Subtraction Worksheets',
+  'For seniors · fill-in-the-blank sums · answer key included',
+  'math', { level: 'easy' }, '숫자 계산 — 뺄셈·빈칸'));
+PINS.push(one('pin-46-math-dementia', 'Printable Math for<br>Dementia Patients',
+  'Gentle mental math · five levels · free to print',
+  'math', { level: 'step2' }, '숫자 계산 — 치매 환자용'));
+
+/* 단어 순서 +4 */
+PINS.push(one('pin-47-scramble-easy', 'Easy Printable<br>Word Scramble',
+  'Short words · a gentle start for seniors',
+  'wordorder', { level: 'step1' }, '단어 순서 — 쉬움'));
+PINS.push(one('pin-48-scramble-hard', 'Hard Printable<br>Word Scramble',
+  'Long words · for someone who wants a challenge',
+  'wordorder', { level: 'hard' }, '단어 순서 — 어려움'));
+PINS.push(one('pin-49-unscramble', 'Free Printable<br>Unscramble Puzzles',
+  'For seniors · everyday words · answer key included',
+  'wordorder', { level: 'normal' }, '단어 순서 — 보통'));
+PINS.push(one('pin-50-anagram', 'Free Printable<br>Anagram Puzzles',
+  'Word games for seniors · play online or print',
+  'wordorder', { level: 'easy' }, '단어 순서 — 애너그램'));
+
+/* 틀린그림찾기 +4 */
+PINS.push(one('pin-51-spot-easy', 'Easy Printable<br>Spot the Difference',
+  'Big clear pictures · just a few differences · for seniors',
+  'spot', { level: 'step1' }, '틀린그림찾기 — 쉬움'));
+PINS.push(one('pin-52-spot-hard', 'Hard Printable<br>Spot the Difference',
+  'For adults and seniors · a real visual challenge',
+  'spot', { level: 'hard' }, '틀린그림찾기 — 어려움'));
+PINS.push(one('pin-53-find-differences', 'Free Printable<br>Find the Differences',
+  'Picture puzzles for seniors · answer key included',
+  'spot', { level: 'easy' }, '틀린그림찾기 — 그림 퍼즐'));
+PINS.push(one('pin-54-spot-dementia', 'Printable Picture Puzzles<br>for Dementia',
+  'Spot the difference · gentle visual games',
+  'spot', { level: 'step2' }, '틀린그림찾기 — 치매용'));
+
+/* 미로찾기 +3 */
+PINS.push(one('pin-55-maze-easy', 'Easy Printable<br>Mazes',
+  'A small 5×5 maze to start · for seniors',
+  'maze', { level: 'step1' }, '미로찾기 — 첫걸음'));
+PINS.push(one('pin-56-maze-puzzles', 'Free Printable<br>Maze Puzzles',
+  'For adults and seniors · answer path included',
+  'maze', { level: 'normal' }, '미로찾기 — 보통'));
+PINS.push(one('pin-57-maze-dementia', 'Printable Mazes for<br>Dementia Patients',
+  'Gentle wayfinding practice · five levels · free',
+  'maze', { level: 'step2' }, '미로찾기 — 치매용'));
+
+/* 계산 퍼즐 +3 */
+PINS.push(one('pin-58-number-crossword', 'Free Printable<br>Number Crossword',
+  'Across and down sums share a square · for seniors',
+  'mathcross', { level: 'easy' }, '계산 퍼즐 — 쉬움'));
+PINS.push(one('pin-59-mathcross-hard', 'Hard Printable<br>Math Crossword',
+  'Six sums, numbers up to 99 · a real challenge',
+  'mathcross', { level: 'hard' }, '계산 퍼즐 — 어려움'));
+PINS.push(one('pin-60-math-puzzle', 'Free Printable<br>Math Puzzle Worksheets',
+  'Cross-number sums · answer key included',
+  'mathcross', { level: 'normal' }, '계산 퍼즐 — 보통'));
+
+/* 따라 그리기 +3 */
+PINS.push(one('pin-61-grid-copy', 'Free Printable<br>Grid Copy Drawing',
+  'Copy the figure dot by dot · visual skills for seniors',
+  'copyfig', { level: 'easy' }, '따라 그리기 — 쉬움'));
+PINS.push(one('pin-62-copy-hard', 'Hard Printable<br>Copy the Pattern',
+  'A 5×5 dot-grid challenge for adults and seniors',
+  'copyfig', { level: 'hard' }, '따라 그리기 — 어려움'));
+PINS.push(one('pin-63-visual-perception', 'Printable Visual<br>Perception Worksheets',
+  'Copy the shape · for seniors and OT activities',
+  'copyfig', { level: 'normal' }, '따라 그리기 — 시지각'));
+
+/* 점 잇기 +3 */
+PINS.push(one('pin-64-connect-dots', 'Free Printable<br>Connect the Dots',
+  'For adults and seniors · a picture appears',
+  'dot2dot', { level: 'normal' }, '점 잇기 — 보통'));
+PINS.push(one('pin-65-dot-hard', 'Hard Printable<br>Dot to Dot',
+  'Lots of dots · for someone who wants a challenge',
+  'dot2dot', { level: 'hard' }, '점 잇기 — 어려움'));
+PINS.push(one('pin-66-dot-dementia', 'Printable Dot to Dot<br>for Dementia Patients',
+  'Just a few dots · a gentle pencil activity',
+  'dot2dot', { level: 'step2' }, '점 잇기 — 치매용'));
+
+/* 도형 세기 +3 */
+PINS.push(one('pin-67-shapes-hard', 'Hard Printable<br>Count the Shapes',
+  '14 tilted, tangled shapes · a real challenge',
+  'shapecount', { level: 'hard' }, '도형 세기 — 어려움'));
+PINS.push(one('pin-68-visual-attention', 'Printable Visual<br>Attention Worksheets',
+  'Count the shapes · focus practice for seniors',
+  'shapecount', { level: 'normal' }, '도형 세기 — 주의력'));
+PINS.push(one('pin-69-shapes-dementia', 'Printable Counting Puzzles<br>for Dementia',
+  'How many triangles? · a gentle visual game',
+  'shapecount', { level: 'step2' }, '도형 세기 — 치매용'));
+
+/* 시계 보기 (2026-09-01 에 더함) */
+PINS.push(one('pin-70-clock', 'Free Printable<br>Clock Worksheets',
+  'Telling time practice for seniors · play online or print',
+  'clock', { level: 'easy' }, '시계 보기'));
+PINS.push(one('pin-71-clock-dementia', 'Printable Telling Time<br>for Dementia Patients',
+  "O'clock and half hours · a gentle daily-living activity",
+  'clock', { level: 'step2' }, '시계 보기 — 치매용'));
+
 /* 핀마다 어디로 데려갈지 — 그 게임 화면으로 바로 들어가게 한다 */
 var GOTO = {
   sudoku: '#sudoku', wordsearch: '#wordsearch', math: '#math',
   wordorder: '#wordorder', coloring: '#coloring', spot: '#spot',
   maze: '#maze', mathcross: '#mathcross', copyfig: '#copyfig', dot2dot: '#dot2dot',
-  shapecount: '#shapecount'
+  shapecount: '#shapecount', clock: '#clock'
 };
 PINS.forEach(function (p) {
   if (!p.link) p.link = SITE + '/?lang=en' + (GOTO[p.sheet.game] || '');
@@ -501,7 +610,7 @@ PINS.forEach(function (p) {
     /* 어느 서랍에 넣을지 — 색칠·틀린그림은 A(치매 활동지), 나머지는 B(두뇌 게임) */
     var g = (p.sheet && p.sheet.game) || '';
     p.board = p.file.indexOf('carers') >= 0 ? 'C'
-            : (!g || g === 'coloring' || g === 'spot' || g === 'copyfig' || g === 'dot2dot' || g === 'shapecount') ? 'A' : 'B';
+            : (!g || g === 'coloring' || g === 'spot' || g === 'copyfig' || g === 'dot2dot' || g === 'shapecount' || g === 'clock') ? 'A' : 'B';
     p.desc = describe(p);
     made.push(p);
     console.log('  만듦: ' + p.file + '.png');

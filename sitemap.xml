@@ -36,6 +36,9 @@
   <url><loc>https://playsaerok.com/shapecount/</loc>
     <image:image><image:loc>https://playsaerok.com/images/shapecount-worksheet.png</image:loc><image:title>도형 세기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
   </url>
+  <url><loc>https://playsaerok.com/clock/</loc>
+    <image:image><image:loc>https://playsaerok.com/images/clock-worksheet.png</image:loc><image:title>시계 보기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
+  </url>
   <url><loc>https://playsaerok.com/print/</loc>
     <image:image><image:loc>https://playsaerok.com/images/sudoku-worksheet.png</image:loc><image:title>스도쿠 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
     <image:image><image:loc>https://playsaerok.com/images/wordsearch-worksheet.png</image:loc><image:title>낱말찾기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
@@ -48,6 +51,7 @@
     <image:image><image:loc>https://playsaerok.com/images/copyfig-worksheet.png</image:loc><image:title>따라 그리기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
     <image:image><image:loc>https://playsaerok.com/images/dot2dot-worksheet.png</image:loc><image:title>점 잇기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
     <image:image><image:loc>https://playsaerok.com/images/shapecount-worksheet.png</image:loc><image:title>도형 세기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
+    <image:image><image:loc>https://playsaerok.com/images/clock-worksheet.png</image:loc><image:title>시계 보기 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)</image:title></image:image>
   </url>
   <url><loc>https://playsaerok.com/en/sudoku/</loc>
     <image:image><image:loc>https://playsaerok.com/images/sudoku-worksheet-en.png</image:loc><image:title>Sudoku printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
@@ -83,6 +87,9 @@
   <url><loc>https://playsaerok.com/en/shapecount/</loc>
     <image:image><image:loc>https://playsaerok.com/images/shapecount-worksheet-en.png</image:loc><image:title>Count the Shapes printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
   </url>
+  <url><loc>https://playsaerok.com/en/clock/</loc>
+    <image:image><image:loc>https://playsaerok.com/images/clock-worksheet-en.png</image:loc><image:title>Clock Reading printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
+  </url>
   <url><loc>https://playsaerok.com/en/print/</loc>
     <image:image><image:loc>https://playsaerok.com/images/sudoku-worksheet-en.png</image:loc><image:title>Sudoku printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
     <image:image><image:loc>https://playsaerok.com/images/wordsearch-worksheet-en.png</image:loc><image:title>Word Search printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
@@ -95,6 +102,7 @@
     <image:image><image:loc>https://playsaerok.com/images/copyfig-worksheet-en.png</image:loc><image:title>Copy the Pattern printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
     <image:image><image:loc>https://playsaerok.com/images/dot2dot-worksheet-en.png</image:loc><image:title>Dot to Dot printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
     <image:image><image:loc>https://playsaerok.com/images/shapecount-worksheet-en.png</image:loc><image:title>Count the Shapes printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
+    <image:image><image:loc>https://playsaerok.com/images/clock-worksheet-en.png</image:loc><image:title>Clock Reading printable worksheet — free A4 brain training activity sheet for seniors</image:title></image:image>
   </url>
   <url><loc>https://playsaerok.com/pdf/ko/sudoku-level1.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/ko/sudoku-level2.pdf</loc></url>
@@ -151,6 +159,11 @@
   <url><loc>https://playsaerok.com/pdf/ko/shapecount-level3.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/ko/shapecount-level4.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/ko/shapecount-level5.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/ko/clock-level1.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/ko/clock-level2.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/ko/clock-level3.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/ko/clock-level4.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/ko/clock-level5.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/en/sudoku-level1.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/en/sudoku-level2.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/en/sudoku-level3.pdf</loc></url>
@@ -206,4 +219,9 @@
   <url><loc>https://playsaerok.com/pdf/en/shapecount-level3.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/en/shapecount-level4.pdf</loc></url>
   <url><loc>https://playsaerok.com/pdf/en/shapecount-level5.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/en/clock-level1.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/en/clock-level2.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/en/clock-level3.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/en/clock-level4.pdf</loc></url>
+  <url><loc>https://playsaerok.com/pdf/en/clock-level5.pdf</loc></url>
 </urlset>

@@ -733,6 +733,31 @@ window.I18N.dict.en = {
   '숫자 계산 {n}단계 완료!': 'Mental Math — Level {n} complete!',
   '정답입니다': 'Correct!',
 
+  /* ---- 시계 보기 ---- */
+  '시계 보기': 'Clock Reading',
+  '시계 보기 정답': 'Clock Reading answers',
+  '시계 보기 점수 규칙': 'Clock Reading scoring',
+  '바늘이 가리키는 시각 읽기': 'Read the time from the hands',
+  '바늘 시계가 가리키는 시각을 읽습니다.': 'Read the time on the clock face.',
+  '맞는 시각을 하나 누르면 바로 채점됩니다.': 'Tap the right time and it is checked straight away.',
+  '몇 시일까요?': 'What time is it?',
+  '몇 시 몇 분일까요?': 'What time is it?',
+  '{h}시 {m}분': '{h}:{m}',
+  '{h}시': "{h} o'clock",
+  '정답은 {t}입니다': 'The answer is {t}',
+  '정각만 나와요 (3시, 7시)': "O'clock only (3:00, 7:00)",
+  '30분 단위 (3시 30분)': 'Half hours (3:30)',
+  '15분 단위 (3시 15분)': 'Quarter hours (3:15)',
+  '5분 단위 (3시 40분)': 'Five-minute steps (3:40)',
+  '1분 단위 · 숫자 없는 시계판': 'To the minute · no numbers on the face',
+  '시계 보기 {n}단계 완료!': 'Clock Reading — Level {n} complete!',
+  '분 눈금이 촘촘해집니다 — 1단계 정각 · 2단계 30분 · 3단계 15분 · 4단계 5분 · 5단계 1분 단위에 숫자 없는 시계판':
+    'The minutes get finer — Level 1 on the hour · Level 2 half hours · Level 3 quarter hours · Level 4 five-minute steps · Level 5 to the minute, with no numbers on the face',
+  '시각 단추 가운데 맞는 것을 하나 누르면 바로 채점됩니다':
+    'Tap the right time among the buttons — it is checked straight away',
+  '시계가 가리키는 시각을 빈칸에 적으세요.': 'Write the time each clock shows in the blank.',
+  '__ 시 __ 분': '____ : ____',
+
   /* ---- 도형 세기 ---- */
   '도형 세기': 'Count the Shapes',
   '도형 세기 정답': 'Count the Shapes answers',
