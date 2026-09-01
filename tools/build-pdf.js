@@ -86,7 +86,7 @@ function load(lang) {
     var code = fs.readFileSync(path.join(ROOT, rel), 'utf8');
     (new Function('window', 'with (window) { ' + code + '\n }'))(w);
   }
-  run('js/i18n.js'); run('js/lang/en.js'); w.I18N.set(lang);
+  run('js/i18n.js'); run('js/lang/en.js'); run('js/lang/ja.js'); w.I18N.set(lang);
   run('js/data/quiz-data.js'); run('js/data/quiz-data-en.js');
   run('js/data/words.js'); run('js/data/words-en.js');
   run('js/data/order-words.js'); run('js/data/order-words-en.js');
@@ -142,7 +142,7 @@ if (!chrome) {
 try { fs.rmSync(OUT, { recursive: true, force: true }); } catch (e) {}
 
 var made = [];
-var LANGS = ['ko', 'en'];
+var LANGS = ['ko', 'en', 'ja'];
 
 LANGS.forEach(function (lang) {
   var w = load(lang);
@@ -152,6 +152,7 @@ LANGS.forEach(function (lang) {
   Object.keys(w.Games).forEach(function (id) {
     var G = w.Games[id];
     if (!G.makeForPrint) return;                       /* 종이로 못 푸는 게임은 건너뛴다 */
+    if (G.langs && G.langs.indexOf(lang) < 0) return;  /* 그 말의 문제 은행이 없는 게임도 */
     var order = G.levelOrder || Object.keys(G.levels || {});
 
     order.forEach(function (lv, i) {

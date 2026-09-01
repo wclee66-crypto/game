@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v67';                // sw.js 의 VERSION 과 함께 올린다
+  var APP_VERSION = 'v68';                // sw.js 의 VERSION 과 함께 올린다
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -77,7 +77,10 @@ window.App = (function () {
      처음 오신 분에게는 꼭 필요하지만, 매일 오시는 분에게는 자리만 차지하므로
      닫으면 다시 나오지 않는다. (설정에 introDone 으로 남는다) */
   /* 검색용 낱장 페이지로 가는 길. 말에 따라 주소가 다르다. */
-  function aboutHref() { return (I18N.get() === 'en' ? '/en' : '') + '/print/'; }
+  function aboutHref() {
+    var l = I18N.get();
+    return (l === 'ko' ? '' : '/' + l) + '/print/';
+  }
 
   function introCard() {
     if (Store.settings().introDone) return '';

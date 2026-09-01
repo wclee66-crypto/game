@@ -456,6 +456,8 @@ window.Games.quiz = (function () {
        새 말을 더할 때는 그 말의 문제 은행을 만들고 bank() 에 한 줄 더한다. */
     art: '<circle cx="12" cy="12" r="9"/><path d="M9.3 9.2a2.8 2.8 0 1 1 3.2 3.4v1.4"/><circle cx="12.4" cy="17.4" r=".9" fill="currentColor" stroke="none"/>',
     id: 'quiz', name: T('상식 퀴즈'), tagline: T('아는 만큼 빨리 맞히기'),
+    langs: ['ko', 'en'],            // 일본어 문제 은행이 아직 없다 — 만들면 'ja' 를 더한다
+
     rules: {
       title: T('상식 퀴즈 점수 규칙'),
       lines: [

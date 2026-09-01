@@ -79,7 +79,7 @@ function loadAll(lang) {
     (new Function('window', 'with (window) { ' + code + '\n }'))(w);
   }
 
-  run('js/i18n.js'); run('js/lang/en.js'); w.I18N.set(lang);
+  run('js/i18n.js'); run('js/lang/en.js'); run('js/lang/ja.js'); w.I18N.set(lang);
   run('js/data/quiz-data.js'); run('js/data/quiz-data-en.js');
   run('js/data/words.js'); run('js/data/words-en.js'); run('js/data/order-words.js');
   run('js/data/order-words-en.js'); run('js/data/pictures.js');
@@ -111,11 +111,17 @@ var PICKS = [
   { id: 'shapecount', level: 'easy' },
   { id: 'clock',      level: 'easy' }
 ];
+/* 말별 파일 꼬리표 — 한국어는 없음, 영어 -en, 일본어 -ja */
+var TAIL = { ko: '', en: '-en', ja: '-ja' };
+/* 일본어 낱말 은행이 없는 게임은 일본어 그림을 만들지 않는다 */
+var NO_JA = { wordsearch: 1, wordorder: 1, quiz: 1 };
+
 var SHOTS = [];
-['ko', 'en'].forEach(function (lang) {
+['ko', 'en', 'ja'].forEach(function (lang) {
   PICKS.forEach(function (q) {
+    if (lang === 'ja' && NO_JA[q.id]) return;
     SHOTS.push({ id: q.id, lang: lang, level: q.level,
-      file: q.id + '-worksheet' + (lang === 'ko' ? '' : '-en') });
+      file: q.id + '-worksheet' + TAIL[lang] });
   });
 });
 
@@ -210,9 +216,13 @@ SHOTS.forEach(function (s) {
 function ogHtml(lang) {
   var C = lang === 'en'
     ? { t: 'Saerok', s: 'Free brain puzzles for seniors', f: 'Play free · Print free · No sign-up' }
+    : lang === 'ja'
+    ? { t: 'サエロク', s: '認知症予防の脳トレ · 無料プリント', f: '登録なしで無料 · プリントも無料' }
     : { t: '새록', s: '치매 예방 두뇌 훈련 · 무료 인쇄 문제지', f: '가입 없이 무료 · 문제지도 공짜' };
-  var tail = lang === 'ko' ? '' : '-en';
-  var pics = ['sudoku-worksheet' + tail, 'wordsearch-worksheet' + tail, 'coloring-worksheet' + tail];
+  var tail = TAIL[lang];
+  /* 일본어에는 낱말찾기 그림이 없어 숫자 계산으로 바꿔 넣는다 */
+  var mid = lang === 'ja' ? 'math-worksheet' : 'wordsearch-worksheet';
+  var pics = ['sudoku-worksheet' + tail, mid + tail, 'coloring-worksheet' + tail];
   var cards = pics.map(function (n, i) {
     var rot = [-7, 0, 7][i], top = [40, 14, 40][i];
     return '<img src="' + n + '.png" style="width:236px;border:1px solid #D8E4DC;border-radius:10px;' +
@@ -234,10 +244,10 @@ function ogHtml(lang) {
     '</body></html>';
 }
 
-['ko', 'en'].forEach(function (lang) {
+['ko', 'en', 'ja'].forEach(function (lang) {
   var f = path.join(OUT, '_og-' + lang + '.html');       /* 그림 옆에 두어야 문제지 그림을 읽는다 */
   fs.writeFileSync(f, ogHtml(lang));
-  var out = path.join(OUT, 'saerok-og' + (lang === 'ko' ? '' : '-en') + '.png');
+  var out = path.join(OUT, 'saerok-og' + TAIL[lang] + '.png');
   try {
     cp.execFileSync(chrome, ['--headless=new', '--disable-gpu', '--hide-scrollbars',
       '--force-device-scale-factor=1', '--window-size=1200,630', '--virtual-time-budget=5000',
@@ -251,7 +261,9 @@ function ogHtml(lang) {
  * 카톡·페이스북은 가로로 넓은 그림만 크게 보여 줍니다.
  * 문제지는 세로라 그대로 쓰면 작게 잘려 나오므로, 옆에 이름을 적어 한 장으로 만듭니다. */
 function cardHtml(shot, title, sub, lang) {
-  var foot = lang === 'en' ? 'playsaerok.com · free, no sign-up' : 'playsaerok.com · 가입 없이 무료';
+  var foot = lang === 'en' ? 'playsaerok.com · free, no sign-up'
+           : lang === 'ja' ? 'playsaerok.com · 登録なしで無料'
+           : 'playsaerok.com · 가입 없이 무료';
   return '<!DOCTYPE html><html lang="' + lang + '"><head><meta charset="utf-8">' +
     '<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;700;800;900&family=Manrope:wght@700;800&display=swap" rel="stylesheet">' +
     '<style>html,body{margin:0;padding:0}' +
@@ -289,7 +301,7 @@ SHOTS.forEach(function (s) {
   var w = loadAll(s.lang);
   var G = w.Games[s.id];
   shoot(cardHtml(s.file + '.png', G.name, G.tagline || '', s.lang),
-        s.id + '-og' + (s.lang === 'ko' ? '' : '-en'), 1200, 630);
+        s.id + '-og' + TAIL[s.lang], 1200, 630);
 });
 
 console.log('\n그림 ' + made.length + '장을 images/ 에 넣었습니다.');

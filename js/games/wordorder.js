@@ -468,6 +468,8 @@ window.Games.wordorder = (function () {
   return {
     art: '<path d="M3 7h5v5H3zM10 7h5v5h-5zM17 7h4v5h-4z"/><path d="M4 17h13"/><path d="M14 14.5 17 17l-3 2.5"/>',
     id: 'wordorder', name: T('단어 순서'), tagline: T('뒤섞인 글자를 바로잡기'),
+    langs: ['ko', 'en'],            // 일본어 낱말 은행이 아직 없다 — 만들면 'ja' 를 더한다
+
     rules: {
       title: T('단어 순서 바로잡기 점수 규칙'),
       lines: [

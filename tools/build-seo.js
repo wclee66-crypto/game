@@ -67,6 +67,7 @@ function loadGames(lang) {
 
   run('js/i18n.js');
   run('js/lang/en.js');
+  run('js/lang/ja.js');
   w.I18N.set(lang);
   run('js/data/quiz-data.js');
   run('js/data/quiz-data-en.js');
@@ -87,7 +88,8 @@ function loadGames(lang) {
     out.push({
       id: id, name: G.name, tagline: G.tagline || '',
       rules: G.rules, levels: G.levels, order: G.levelOrder || [],
-      canPrint: !!G.makeForPrint
+      canPrint: !!G.makeForPrint,
+      langs: G.langs || null                                  /* 어느 말에서 되는 게임인가 */
     });
   });
   return { games: out, T: w.I18N.t };
@@ -177,6 +179,45 @@ var COPY = {
            'hope that they help someone else too.',
     shotCap: 'A real worksheet. Every sheet is generated fresh when you print.',
     shotList: 'Worksheet preview'
+  },
+  ja: {
+    brand: 'サエロク',
+    siteName: 'サエロク · 脳トレ',
+    home: 'ホーム',
+    play: 'いますぐ遊ぶ — インストール不要',
+    printPage: '無料プリント',
+    otherGames: 'ほかのゲーム',
+    levels: 'レベルは 5 段階',
+    scoring: '点数のルール',
+    free: 'すべて無料です。登録もいりません。',
+    intro: 'サエロクは、初期の認知症や軽い物忘れの予防に役立つゲームを無料で遊べる脳トレの広場です。' +
+           'パソコン・タブレット・スマホのどれでも開け、画面が使いにくいときは問題を印刷して紙で解くこともできます。',
+    printTitle: '高齢者向け 無料脳トレプリント',
+    printLead: 'ナンプレ・計算ドリル・迷路・点つなぎ・まちがいさがし・数字ぬり絵などの A4 プリントを、' +
+               '何枚でも無料で印刷できます。登録も費用もいりません。',
+    printWho: '介護施設・デイサービス・ご家庭でそのままお使いいただけます。' +
+              '押すたびに新しい問題が作られるので、同じプリントを配ることがありません。',
+    printHow: '印刷のしかた',
+    printSteps: [
+      'ホーム画面の「プリント印刷」を押します。',
+      'どのゲームを、どのレベルで、何枚印刷するかえらびます。',
+      '「作る」を押すと印刷画面が開きます。',
+      '紙に出さずファイルにするには、印刷画面のプリンターを「PDF に保存」に変えてください。'
+    ],
+    printNote: 'プリントに時間や点数は印刷されません。答えのページも一緒に印刷できます。',
+    printList: '印刷できるプリント',
+    pdfTitle: 'プリントのダウンロード (PDF)',
+    pdfLead: 'ここからすぐダウンロードして印刷できます。' +
+             '1 ファイルにプリント 4 枚と答えが入っています。',
+    pdfFresh: 'ダウンロードのファイルは作りおきなので、いつも同じ問題です。' +
+              '毎回新しい問題がほしいときは、ホームの「プリント印刷」をお使いください。',
+    pdfEach: 'ダウンロード',
+    langNote: '日本語',
+    aboutTitle: 'このサイトについて',
+    story: '認知症の母のために問題を探しても、なかなか良いものが見つからず、自分で作って使っていたものです。' +
+           'ほかの方のお役にも立てばと思い、公開しています。',
+    shotCap: '実際に印刷されるプリントです。押すたびに新しい問題が作られます。',
+    shotList: 'プリントの見本'
   }
 };
 
@@ -195,10 +236,21 @@ function pngSize(f) {
   } catch (e) { return null; }          /* 그림이 아직 없어도 페이지는 만들어져야 한다 */
 }
 
-/* 말별로 한 벌씩 — 영어 그림은 이름 뒤에 -en 이 붙는다 */
-var SHOT = { ko: {}, en: {} };
-['ko', 'en'].forEach(function (lang) {
-  var tail = lang === 'ko' ? '' : '-en';
+/* 말마다 다른 것들을 한 곳에 모아 둔다 — 새 말을 더할 때 여기와 COPY 만 채우면 된다 */
+var LX = {
+  ko: { base: '',    qs: '',         tail: '',    og: 'saerok-og.png',    self: '한국어' },
+  en: { base: '/en', qs: '?lang=en', tail: '-en', og: 'saerok-og-en.png', self: 'English' },
+  ja: { base: '/ja', qs: '?lang=ja', tail: '-ja', og: 'saerok-og-ja.png', self: '日本語' }
+};
+var ALL_LANGS = ['ko', 'en', 'ja'];
+
+/** 그 게임이 그 말에서 되는가 */
+function playable(g, lang) { return !g.langs || g.langs.indexOf(lang) >= 0; }
+
+/* 말별로 한 벌씩 — 영어 그림은 -en, 일본어 그림은 -ja 가 붙는다 */
+var SHOT = { ko: {}, en: {}, ja: {} };
+ALL_LANGS.forEach(function (lang) {
+  var tail = LX[lang].tail;
   SHOT_IDS.forEach(function (id) {
     var f = id + '-worksheet' + tail + '.png';
     var d = pngSize(f);
@@ -210,13 +262,13 @@ var SHOT = { ko: {}, en: {} };
 function shot(id, lang) { return (SHOT[lang] || {})[id] || null; }
 
 /** 카톡·페이스북에 나올 가로 그림 이름 */
-function ogName(id, lang) { return id + '-og' + (lang === 'ko' ? '' : '-en') + '.png'; }
+function ogName(id, lang) { return id + '-og' + LX[lang].tail + '.png'; }
 
 /** 그림 설명 — 검색에 걸리는 것은 사실상 이 문장이다 */
 function shotAlt(name, lang) {
-  return lang === 'ko'
-    ? name + ' 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)'
-    : name + ' printable worksheet — free A4 brain training activity sheet for seniors';
+  if (lang === 'ko') return name + ' 무료 인쇄 문제지 — 어르신 치매 예방 두뇌 훈련 활동지 (A4 한 장)';
+  if (lang === 'ja') return name + ' 無料プリント — 高齢者の認知症予防 脳トレ活動シート (A4 一枚)';
+  return name + ' printable worksheet — free A4 brain training activity sheet for seniors';
 }
 
 /** 그림이 있으면 페이지에 붙일 조각을 돌려준다 */
@@ -234,11 +286,13 @@ function esc(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-/** 페이지 한 장의 뼈대 */
+/** 페이지 한 장의 뼈대.
+ *  o.alts: [{lang, href}] — 이 페이지의 말별 주소들 (자기 자신 포함).
+ *  구글이 나라에 맞는 말의 페이지를 보여 주게 하는 표시다. */
 function page(o) {
-  var alt = o.altUrl
-    ? '<link rel="alternate" hreflang="' + (o.lang === 'ko' ? 'en' : 'ko') + '" href="' + o.altUrl + '">'
-    : '';
+  var alt = (o.alts || []).map(function (a) {
+    return '<link rel="alternate" hreflang="' + a.lang + '" href="' + a.href + '">';
+  }).join('\n');
   return '<!DOCTYPE html>\n' +
 '<html lang="' + o.lang + '">\n' +
 '<head>\n' +
@@ -255,7 +309,7 @@ alt + (alt ? '\n' : '') +
 '<meta property="og:description" content="' + esc(o.desc) + '">\n' +
 '<meta property="og:url" content="' + o.url + '">\n' +
 '<meta property="og:site_name" content="' + esc(o.siteName || '') + '">\n' +
-'<meta property="og:image" content="' + SITE + '/images/' + (o.image || (o.lang === 'ko' ? 'saerok-og.png' : 'saerok-og-en.png')) + '">\n' +
+'<meta property="og:image" content="' + SITE + '/images/' + (o.image || LX[o.lang].og) + '">\n' +
 '<meta property="og:image:width" content="1200">\n' +
 '<meta property="og:image:height" content="630">\n' +
 '<meta property="og:image:alt" content="' + esc(o.imageAlt || o.title) + '">\n' +
@@ -275,29 +329,39 @@ o.body +
 '\n</body>\n</html>\n';
 }
 
-function header(C, lang, altUrl) {
+function header(C, lang, altLinks) {
+  var others = (altLinks || []).map(function (a) {
+    return '  <a class="doc__lang" href="' + a.href + '">' + a.label + '</a>\n';
+  }).join('');
   return '<header class="doc__top">\n' +
-    '  <a class="doc__brand" href="' + (lang === 'ko' ? '/' : '/?lang=en') + '">' +
+    '  <a class="doc__brand" href="/' + LX[lang].qs + '">' +
       '<svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="26" fill="currentColor"></rect>' +
       '<g fill="#fff"><path d="M45 80 Q40.8 58.8 22 48 Q26.2 69.3 45 80 Z" opacity=".55"></path>' +
       '<path d="M56 80 Q75.2 66.4 77 43 Q57.8 56.6 56 80 Z" opacity=".78"></path>' +
       '<path d="M50 81 Q61.5 49 50 17 Q38.5 49 50 81 Z"></path></g></svg>' +
       '<span>' + C.brand + '</span></a>\n' +
-    (altUrl ? '  <a class="doc__lang" href="' + altUrl + '">' + C.langNote + '</a>\n' : '') +
+    others +
     '</header>\n';
+}
+
+/** 같은 페이지의 다른 말 주소들 — 머리(눈에 보이는 링크)와 head(구글용)가 함께 쓴다 */
+function altsOf(kind, lang, avail) {
+  return (avail || ALL_LANGS).filter(function (l) { return l !== lang; }).map(function (l) {
+    return { lang: l, label: LX[l].self, href: SITE + LX[l].base + '/' + kind + '/' };
+  });
 }
 
 function footer(C, lang, games, hereId) {
   var links = games.filter(function (g) { return g.id !== hereId; }).map(function (g) {
-    return '<a href="' + (lang === 'ko' ? '' : '/en') + '/' + g.id + '/">' + esc(g.name) + '</a>';
+    return '<a href="' + LX[lang].base + '/' + g.id + '/">' + esc(g.name) + '</a>';
   }).join('');
   return '<nav class="doc__more">\n' +
     '  <h2>' + C.otherGames + '</h2>\n' +
     '  <div class="doc__links">' + links + '</div>\n' +
     '</nav>\n' +
     '<footer class="doc__foot">\n' +
-    '  <a href="' + (lang === 'ko' ? '/' : '/?lang=en') + '">' + C.home + '</a> · ' +
-    '<a href="' + (lang === 'ko' ? '' : '/en') + '/print/">' + C.printPage + '</a>\n' +
+    '  <a href="/' + LX[lang].qs + '">' + C.home + '</a> · ' +
+    '<a href="' + LX[lang].base + '/print/">' + C.printPage + '</a>\n' +
     '  <p>' + C.free + '</p>\n' +
     '</footer>\n';
 }
@@ -319,9 +383,9 @@ function pdfKb(lang, id, n) {
 
 /** 받았을 때 남을 파일 이름 — 주소는 영어로 두고, 이름만 알아보기 쉽게 준다 */
 function pdfName(lang, g, n) {
-  return lang === 'ko'
-    ? g.name + '-' + n + '단계-문제지.pdf'
-    : (g.name + ' level ' + n + ' worksheets').replace(/\s+/g, '-').toLowerCase() + '.pdf';
+  if (lang === 'ko') return g.name + '-' + n + '단계-문제지.pdf';
+  if (lang === 'ja') return g.name + '-レベル' + n + '-プリント.pdf';
+  return (g.name + ' level ' + n + ' worksheets').replace(/\s+/g, '-').toLowerCase() + '.pdf';
 }
 
 /** 게임 하나치 — 단계마다 단추 하나 */
@@ -333,7 +397,7 @@ function pdfRow(lang, g) {
     var href = '/pdf/' + lang + '/' + g.id + '-level' + n + '.pdf';
     pdfUrls.push(href);
     return '<a class="doc__dl" href="' + href + '" download="' + esc(pdfName(lang, g, n)) + '">' +
-      '<b>' + esc(L.step + (lang === 'ko' ? '단계' : '')) + '</b>' +
+      '<b>' + esc(lang === 'ko' ? L.step + '단계' : lang === 'ja' ? 'レベル' + L.step : L.step) + '</b>' +
       '<span>' + esc(L.name) + '</span>' +
       '<em>PDF · ' + kb + 'KB</em></a>';
   }).join('');
@@ -355,14 +419,16 @@ function pdfBlock(lang, C, list) {
 /* ================= 게임 한 장 ================= */
 
 function gamePage(g, lang, C, games) {
-  var base = lang === 'ko' ? '' : '/en';
+  var base = LX[lang].base;
   var url = SITE + base + '/' + g.id + '/';
-  var altUrl = SITE + (lang === 'ko' ? '/en' : '') + '/' + g.id + '/';
-  var appUrl = '/' + (lang === 'ko' ? '' : '?lang=en') + '#' + g.id;
+  /* 이 게임이 되는 말들끼리만 서로 가리킨다 */
+  var avail = ALL_LANGS.filter(function (l) { return playable(g, l); });
+  var alts = altsOf(g.id, lang, avail);
+  var appUrl = '/' + LX[lang].qs + '#' + g.id;
 
   var lv = g.order.map(function (k) {
     var L = g.levels[k];
-    return '<li><b>' + esc(L.step + (lang === 'ko' ? '단계 ' : '. ') + L.name) + '</b>' +
+    return '<li><b>' + esc((lang === 'ko' ? L.step + '단계 ' : lang === 'ja' ? 'レベル' + L.step + ' ' : L.step + '. ') + L.name) + '</b>' +
       (L.note ? ' — ' + esc(L.note) : '') + '</li>';
   }).join('');
 
@@ -371,7 +437,7 @@ function gamePage(g, lang, C, games) {
   }).join('');
 
   var body =
-    header(C, lang, altUrl) +
+    header(C, lang, alts) +
     '<main class="doc__main">\n' +
     '<h1>' + esc(g.name) + '</h1>\n' +
     '<p class="doc__lead">' + esc(g.tagline) + '</p>\n' +
@@ -390,7 +456,8 @@ function gamePage(g, lang, C, games) {
   return {
     dir: base + '/' + g.id,
     html: page({
-      lang: lang, url: url, altUrl: altUrl,
+      lang: lang, url: url,
+      alts: avail.map(function (l) { return { lang: l, href: SITE + LX[l].base + '/' + g.id + '/' }; }),
       title: g.name + ' · ' + C.siteName,
       desc: g.tagline + ' — ' + C.free,
       siteName: C.siteName,
@@ -404,9 +471,9 @@ function gamePage(g, lang, C, games) {
 /* ================= 문제지 안내 한 장 ================= */
 
 function printPage(lang, C, games) {
-  var base = lang === 'ko' ? '' : '/en';
+  var base = LX[lang].base;
   var url = SITE + base + '/print/';
-  var altUrl = SITE + (lang === 'ko' ? '/en' : '') + '/print/';
+  var alts = altsOf('print', lang);
 
   var list = games.filter(function (g) { return g.canPrint; }).map(function (g) {
     return '<li><a href="' + base + '/' + g.id + '/"><b>' + esc(g.name) + '</b></a> — ' + esc(g.tagline) + '</li>';
@@ -424,11 +491,11 @@ function printPage(lang, C, games) {
   }).join('');
 
   var body =
-    header(C, lang, altUrl) +
+    header(C, lang, alts) +
     '<main class="doc__main">\n' +
     '<h1>' + esc(C.printTitle) + '</h1>\n' +
     '<p class="doc__lead">' + esc(C.printLead) + '</p>\n' +
-    '<p class="doc__cta"><a class="doc__btn" href="/' + (lang === 'ko' ? '' : '?lang=en') + '">' + C.play + '</a></p>\n' +
+    '<p class="doc__cta"><a class="doc__btn" href="/' + LX[lang].qs + '">' + C.play + '</a></p>\n' +
     '<p>' + esc(C.printWho) + '</p>\n' +
     pdfBlock(lang, C, games.filter(function (g) { return g.canPrint; })) +
     (gallery ? '<h2>' + C.shotList + '</h2>\n<div class="doc__tiles">' + gallery + '</div>\n' : '') +
@@ -442,7 +509,8 @@ function printPage(lang, C, games) {
   return {
     dir: base + '/print',
     html: page({
-      lang: lang, url: url, altUrl: altUrl,
+      lang: lang, url: url,
+      alts: ALL_LANGS.map(function (l) { return { lang: l, href: SITE + LX[l].base + '/print/' }; }),
       title: C.printTitle + ' · ' + C.brand,
       desc: C.printLead,
       siteName: C.siteName,
@@ -470,7 +538,7 @@ function write(rel, html) {
 
 var made = [];
 var shots = {};          /* 페이지마다 딸린 그림 — 이미지 검색에 알리려고 */
-['ko', 'en'].forEach(function (lang) {
+ALL_LANGS.forEach(function (lang) {
   var loaded = loadGames(lang);
   var C = COPY[lang];
   var games = loaded.games;

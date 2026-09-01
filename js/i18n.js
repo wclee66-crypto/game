@@ -20,7 +20,8 @@ window.I18N = (function () {
   /* 쓸 수 있는 말. 새 말을 더하면 설정 화면에 저절로 나타난다. */
   var LANGS = [
     { code: 'ko', name: '한국어', htmlLang: 'ko' },
-    { code: 'en', name: 'English', htmlLang: 'en' }
+    { code: 'en', name: 'English', htmlLang: 'en' },
+    { code: 'ja', name: '日本語', htmlLang: 'ja' }
   ];
 
   /* ================= 사전 =================

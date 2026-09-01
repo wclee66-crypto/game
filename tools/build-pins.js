@@ -90,7 +90,7 @@ function load(lang) {
     var code = fs.readFileSync(path.join(ROOT, rel), 'utf8');
     (new Function('window', 'with (window) { ' + code + '\n }'))(w);
   }
-  run('js/i18n.js'); run('js/lang/en.js'); w.I18N.set(lang);
+  run('js/i18n.js'); run('js/lang/en.js'); run('js/lang/ja.js'); w.I18N.set(lang);
   run('js/data/quiz-data.js'); run('js/data/quiz-data-en.js');
   run('js/data/words.js'); run('js/data/words-en.js');
   run('js/data/order-words.js'); run('js/data/order-words-en.js');
