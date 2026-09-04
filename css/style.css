@@ -165,7 +165,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .printcard:active { transform: scale(.98); }
 .printcard svg { color: var(--accent-d); }
-.printcard__name { font-weight: 800; font-size: 1.06rem; letter-spacing: -.03em; color: var(--accent-d); }
+.printcard__name { font-weight: 800; font-size: 1.06rem; letter-spacing: -.03em; color: var(--accent-d); word-break: keep-all; }
 .printcard__sub { font-size: .68rem; font-weight: 700; color: var(--ink-3); }
 /* 좁은 화면에서는 배지가 날짜 아랫줄로 통째로 내려간다 — 글자가 꺾이지 않게 */
 .today__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .3rem .5rem; }
@@ -218,9 +218,10 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .gcard.is-resume { background: var(--bg); border-color: #C6E7D6; }
 
 .gcard__body { flex: 1; min-width: 0; display: block; }
+/* 좁은 화면·큰 글씨에서 줄이 바뀌어도 낱말 가운데(기억하/기)를 자르지 않는다 */
 .gcard__name {
   display: block; font-weight: 800; font-size: 1.28rem;
-  letter-spacing: -.035em; line-height: 1.25;
+  letter-spacing: -.035em; line-height: 1.25; word-break: keep-all;
 }
 .gcard__sub {
   display: block; margin-top: .15rem;
