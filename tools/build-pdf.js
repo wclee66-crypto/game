@@ -91,7 +91,7 @@ function load(lang) {
   run('js/data/words.js'); run('js/data/words-en.js');
   run('js/data/order-words.js'); run('js/data/order-words-en.js');
   run('js/data/pictures.js');
-  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig', 'dot2dot', 'shapecount', 'clock'].forEach(function (id) {
+  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig', 'dot2dot', 'shapecount', 'clock', 'numsearch'].forEach(function (id) {
     run('js/games/' + id + '.js');
   });
   run('js/print.js');
@@ -138,8 +138,11 @@ if (!chrome) {
   process.exit(0);
 }
 
-/* 통째로 지웠다가 다시 만든다 — 없어진 단계의 파일이 남아 있으면 안 된다 */
-try { fs.rmSync(OUT, { recursive: true, force: true }); } catch (e) {}
+/* 통째로 지웠다가 다시 만든다 — 없어진 단계의 파일이 남아 있으면 안 된다.
+   다만 게임 하나만 새로 만들 때(G=numsearch node tools/build-pdf.js)는
+   그 게임 것만 만들고 나머지는 그대로 둔다 — 185개를 다시 찍을 까닭이 없다. */
+var ONLY = process.env.G || '';
+if (!ONLY) { try { fs.rmSync(OUT, { recursive: true, force: true }); } catch (e) {} }
 
 var made = [];
 var LANGS = ['ko', 'en', 'ja'];
@@ -151,6 +154,7 @@ LANGS.forEach(function (lang) {
 
   Object.keys(w.Games).forEach(function (id) {
     var G = w.Games[id];
+    if (ONLY && id !== ONLY) return;                   /* 한 게임만 만들 때 */
     if (!G.makeForPrint) return;                       /* 종이로 못 푸는 게임은 건너뛴다 */
     if (G.langs && G.langs.indexOf(lang) < 0) return;  /* 그 말의 문제 은행이 없는 게임도 */
     var order = G.levelOrder || Object.keys(G.levels || {});

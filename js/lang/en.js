@@ -1048,6 +1048,43 @@ window.I18N.dict.en = {
     'Start at the top left and draw a pencil line to the ringed square at the bottom right.',
   '지름길은 {n}걸음입니다.': 'The shortest way is {n} steps.',
 
+  /* ---- 숫자 찾기 ---- */
+  '숫자 찾기': 'Number Search',
+  '숫자 찾기 점수 규칙': 'Number Search scoring',
+  '뒤섞인 숫자를 차례대로 찾기': 'Find the scrambled numbers in order',
+  '뒤섞인 숫자판에서 1부터 차례대로 찾아 누릅니다.': 'Find and tap the numbers in order on a scrambled grid.',
+  '다음에 찾을 숫자는 판 위에 크게 보여 드립니다.': 'The next number to find is shown big above the grid.',
+  '{n}번째 판부터': 'From grid {n}',
+  '{n}판 · 제한 {m}분': '{n} grids · {m} min limit',
+  '3×3 · 1부터 9까지': '3×3 · 1 to 9',
+  '4×4 · 1부터 16까지': '4×4 · 1 to 16',
+  '5×5 · 1부터 25까지': '5×5 · 1 to 25',
+  '6×6 · 1부터 36까지': '6×6 · 1 to 36',
+  '6×6 · 36부터 거꾸로 1까지': '6×6 · 36 down to 1',
+  '다음 숫자': 'Next number',
+  '1부터 {n}까지 차례대로 누르세요': 'Tap 1 to {n} in order',
+  '{n}부터 거꾸로 1까지 차례대로 누르세요': 'Tap {n} down to 1 in order',
+  '지금은 {n}을 찾으세요': 'Find {n} now',
+  '판 완성!': 'Grid done!',
+  '판 완성! 한 번도 틀리지 않았어요': 'Grid done — not a single slip!',
+  '찾기 점수 ({a}/{b}개)': 'Search points ({a}/{b} numbers)',
+  '집중 보너스 (틀리지 않은 판 {a}/{b})': 'Focus bonus ({a}/{b} grids without a slip)',
+  '숫자 찾기 {n}단계 완료!': 'Number Search — Level {n} complete!',
+  '판이 커집니다 — 1단계 3×3 · 2단계 4×4 · 3단계 5×5 · 4단계 6×6 · 5단계 6×6 을 큰 수부터 거꾸로':
+    'The grid grows — Level 1 3×3 · Level 2 4×4 · Level 3 5×5 · Level 4 6×6 · Level 5 6×6 counting down from the top',
+  '하는 법': 'How to play',
+  '판 위에 보이는 「다음 숫자」를 찾아 누릅니다. 맞으면 그 칸이 초록으로 바뀝니다':
+    'Find and tap the "next number" shown above the grid. A correct tap turns the cell green',
+  '찾기 점수': 'Search points',
+  '최대 600점 · 찾은 숫자 수에 비례': 'Up to 600 · in proportion to the numbers found',
+  '집중 보너스': 'Focus bonus',
+  '최대 100점 · 한 번도 틀리지 않고 마친 판마다': 'Up to 100 · for every grid finished without a single slip',
+  '없음 — 잘못 누르면 그 칸이 잠깐 붉어질 뿐입니다': 'None — a wrong tap only flashes the cell red for a moment',
+  '1 → {n}': '1 → {n}',
+  '{n} → 1': '{n} → 1',
+  '1부터 {n}까지 차례대로 찾아 연필로 이으세요.': 'Find 1 to {n} in order and join them with a pencil.',
+  '{n}부터 거꾸로 1까지 차례대로 찾아 연필로 이으세요.': 'Find {n} down to 1 in order and join them with a pencil.',
+
   '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="지우개">':
     '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="Eraser">'
 };

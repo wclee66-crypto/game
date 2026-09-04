@@ -469,6 +469,46 @@ window.Print = (function () {
     return pages.join('');
   }
 
+  /* ---------------- 숫자 찾기 ---------------- */
+
+  /** 숫자판 한 장을 SVG 로 */
+  function nsSvg(grid, size) {
+    var u = 20, W = size * u, out = [], i, r, c;
+    var fs = size >= 6 ? 8.5 : size >= 5 ? 9.5 : 11;
+    for (i = 0; i < grid.length; i++) {
+      r = Math.floor(i / size); c = i % size;
+      out.push('<rect x="' + (c * u) + '" y="' + (r * u) + '" width="' + u + '" height="' + u + '" fill="none" stroke="#000" stroke-width="1"/>');
+      out.push('<text x="' + (c * u + u / 2) + '" y="' + (r * u + u / 2 + fs * 0.36) + '" text-anchor="middle" font-size="' + fs +
+        '" font-weight="800" fill="#000">' + grid[i] + '</text>');
+    }
+    return '<svg class="ps-nssvg" viewBox="-1 -1 ' + (W + 2) + ' ' + (W + 2) + '" xmlns="http://www.w3.org/2000/svg">' + out.join('') + '</svg>';
+  }
+
+  /* 정답지는 만들지 않는다 — 답이 '숫자를 차례대로'라서 적을 것이 없고,
+     이은 선을 그려 보았더니 실뭉치처럼 얽혀 아무것도 알아볼 수 없었다. */
+  function numsearchSheets(o) {
+    var pages = [];
+    for (var n = 0; n < o.count; n++) {
+      var b = Games.numsearch.makeForPrint(o.level, 4);
+      var no = o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : '';
+      var last = b.size * b.size;
+
+      pages.push('<section class="ps-sheet">' +
+        sheetHead(T('숫자 찾기'), b.levelName + no,
+          b.rev ? T('{n}부터 거꾸로 1까지 차례대로 찾아 연필로 이으세요.', { n: last })
+                : T('1부터 {n}까지 차례대로 찾아 연필로 이으세요.', { n: last })) +
+        '<div class="ps-nsgrid">' + b.grids.map(function (g, i) {
+          return '<div class="ps-nsitem">' +
+            '<p class="ps-nsq">' + (i + 1) + '. ' +
+              esc(b.rev ? T('{n} → 1', { n: last }) : T('1 → {n}', { n: last })) + '</p>' +
+            nsSvg(g, b.size) +
+            '</div>';
+        }).join('') + '</div>' +
+      '</section>');
+    }
+    return pages.join('');
+  }
+
   /* ---------------- 점 잇기 ---------------- */
 
   function dot2dotSheets(o) {
@@ -578,7 +618,8 @@ window.Print = (function () {
     copyfig: copyfigSheets,
     dot2dot: dot2dotSheets,
     shapecount: shapecountSheets,
-    clock: clockSheets
+    clock: clockSheets,
+    numsearch: numsearchSheets
   };
 
   /* 인쇄 내용은 **인쇄 창이 닫힌 뒤에** 지운다.

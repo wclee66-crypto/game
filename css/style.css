@@ -503,6 +503,39 @@ button.install:active { transform: scale(.99); }
 .ck-opts .pad__key { font-size: 1.5rem; white-space: nowrap; }
 .ck-opts .pad__key:last-child:nth-child(odd) { grid-column: 1 / -1; }
 
+/* ================= 숫자 찾기 ================= */
+
+/* 다음에 찾을 숫자 — 판 위에 크게. 눈이 여기와 판 사이만 오가면 된다 */
+.ns-top { text-align: center; margin-top: .8rem; }
+.ns-top__lbl { display: block; font-size: .82rem; font-weight: 700; color: var(--ink-3); }
+.ns-next { display: block; font-family: var(--font-num); font-size: 3rem; font-weight: 900; line-height: 1.1; color: var(--accent-d); letter-spacing: -.03em; }
+.ns-msg { margin-top: .2rem; }
+/* 숫자판 — 한 변의 칸 수에 따라 3~6열. 칸은 정사각형이고 너비를 다 쓴다 */
+.ns-grid { display: grid; gap: .35rem; margin: .8rem auto 0; max-width: 520px; }
+.ns-grid--3 { grid-template-columns: repeat(3, 1fr); max-width: 360px; }
+.ns-grid--4 { grid-template-columns: repeat(4, 1fr); max-width: 440px; }
+.ns-grid--5 { grid-template-columns: repeat(5, 1fr); }
+.ns-grid--6 { grid-template-columns: repeat(6, 1fr); }
+/* 칸 크기는 열 너비가 정한다 — min-height 를 두면 「아주 크게」 글씨에서 정사각형이
+   열보다 커져 판이 화면 밖으로 삐져나간다 */
+.ns-cell {
+  aspect-ratio: 1; min-width: 0; padding: .2em 0; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--surf);
+  font-family: var(--font-num); font-size: 1.7rem; font-weight: 800; letter-spacing: -.03em; color: var(--ink);
+}
+.ns-grid--5 .ns-cell { font-size: 1.5rem; }
+.ns-grid--6 .ns-cell { font-size: 1.3rem; border-radius: 10px; }
+.ns-cell:active { background: var(--accent-s); }
+/* 찾은 칸은 초록으로 물들고 옅어진다 — 남은 숫자만 눈에 들어오게 */
+.ns-cell.is-done { background: var(--accent); border-color: var(--accent); color: #fff; opacity: .5; }
+.ns-cell.is-bad  { background: var(--bad-s); border-color: var(--bad); color: var(--bad); }
+@media (min-width: 720px) {
+  .ns-next { font-size: 3.6rem; }
+  .ns-cell { font-size: 2.1rem; }
+  .ns-grid--5 .ns-cell { font-size: 1.9rem; }
+  .ns-grid--6 .ns-cell { font-size: 1.7rem; }
+}
+
 /* ================= 단어 순서 바로잡기 ================= */
 
 .wo-card {
@@ -1413,6 +1446,16 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
   .ps-cksvg { display: block; width: 52mm; margin: 0 auto; height: auto; color: #000; }
   .ps-ckq { margin: 2mm 0 0; font-size: 11.5pt; font-weight: 700; letter-spacing: .06em; }
   .ps-cka { font-weight: 800; }
+
+  /* ---- 숫자 찾기 ---- */
+  /* 한 장에 넉 판 — 두 칸 × 두 줄. 판마다 네모를 둘러 옆 판과 붙어 보이지 않게 */
+  .ps-nsgrid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 5mm; margin-top: 3mm;
+  }
+  .ps-nsitem { border: 1pt solid #000; border-radius: 2mm; padding: 3mm 3mm 2.5mm; text-align: center; }
+  .ps-nsq { margin: 0 0 2mm; font-size: 10.5pt; font-weight: 700; }
+  .ps-nssvg { display: block; width: 72mm; margin: 0 auto; height: auto; color: #000; }
 
   /* ---- 점 잇기 ---- */
   /* 한 장에 넉 장 — 두 칸 × 두 줄. 점과 번호는 또렷한 검정으로 */
