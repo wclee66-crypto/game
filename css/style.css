@@ -472,6 +472,28 @@ button.install:active { transform: scale(.99); }
 .pad__key.is-good { background: var(--accent-s); border-color: var(--accent); color: var(--accent-d); }
 .pad__key.is-bad  { background: var(--bad-s); border-color: var(--bad); color: var(--bad); }
 
+/* ================= 듣고 기억하기 ================= */
+
+.ls-card { padding: 1rem .9rem 1.1rem; }
+.ls-step { margin: 0 0 .6rem; font-size: .82rem; font-weight: 800; color: var(--accent-d); letter-spacing: .02em; }
+/* 들려주는 문장 — 크고 줄 간격 넉넉하게. 답할 때는 아예 화면에서 사라진다 */
+.ls-text { text-align: left; }
+.ls-text p { margin: .35rem 0; font-size: 1.25rem; font-weight: 700; line-height: 1.6; letter-spacing: -.01em; }
+.ls-text.is-hidden { display: none; }
+.ls-veil { margin: .4rem 0 .2rem; font-size: .85rem; color: var(--ink-3); line-height: 1.5; }
+.ls-q { margin: 0; font-size: 1.4rem; font-weight: 800; line-height: 1.5; letter-spacing: -.02em; }
+.ls-btns { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; margin-top: .9rem; }
+.ls-btns .btn { flex: 1 1 40%; min-width: 0; }
+.ls-btns--sub { margin-top: .6rem; }
+.ls-btns--sub .btn { flex: 0 1 auto; padding-left: 1.1rem; padding-right: 1.1rem; font-size: .9rem; }
+.ls-play { flex-basis: 100% !important; font-size: 1.25rem; }
+.ls-play span { font-size: .9em; margin-right: .2rem; }
+.ls-play.is-on, .btn.is-on { background: var(--accent-s); border-color: var(--accent); color: var(--accent-d); }
+/* 보기 단추 — 낱말이 길 수 있어 한 줄에 둘씩, 글자는 줄여 넣지 않고 줄을 바꾼다 */
+.ls-opts { grid-template-columns: 1fr 1fr; }
+.ls-opts .pad__key { font-family: var(--font-body); font-size: 1.25rem; min-height: 4rem; white-space: normal; line-height: 1.3; padding: .5rem .4rem; }
+.ls-opts .pad__key:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
 /* ================= 시계 보기 ================= */
 
 .ck-svg { display: block; width: min(62vw, 300px); margin: 0 auto; height: auto; color: var(--ink); }

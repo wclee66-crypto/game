@@ -76,8 +76,9 @@ function loadGames(lang) {
   run('js/data/order-words.js');
   run('js/data/order-words-en.js');
   run('js/data/pictures.js');
+  run('js/data/listen-data.js');
 
-  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig', 'dot2dot', 'shapecount', 'clock'].forEach(function (id) {
+  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig', 'dot2dot', 'shapecount', 'clock', 'listen'].forEach(function (id) {
     run('js/games/' + id + '.js');
   });
 
