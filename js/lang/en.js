@@ -641,8 +641,8 @@ window.I18N.dict.en = {
   '글자를 차례대로 눌러 주세요': 'Tap the letters in order',
   '힌트 보기': 'Show hint',
   '한 글자 지우기': 'Delete one letter',
-  '빈칸이 다 찼습니다. 확인을 누르세요.': 'All blanks are filled. Tap Check.',
-  '다 채우셨습니다. 확인을 누르세요.': 'All filled in. Tap Check.',
+  '빈칸이 다 찼습니다. 곧 채점됩니다.': 'All blanks are filled. Checking now.',
+  '다 채우셨습니다. 곧 채점됩니다.': 'All filled in. Checking now.',
   '빈칸을 모두 채워 주세요.': 'Please fill in every blank.',
   '<b>잘하셨습니다!</b>': '<b>Well done!</b>',
   '바른 낱말은': 'The word was',
@@ -1084,6 +1084,8 @@ window.I18N.dict.en = {
   '{n} → 1': '{n} → 1',
   '1부터 {n}까지 차례대로 찾아 연필로 이으세요.': 'Find 1 to {n} in order and join them with a pencil.',
   '{n}부터 거꾸로 1까지 차례대로 찾아 연필로 이으세요.': 'Find {n} down to 1 in order and join them with a pencil.',
+
+  '마우스 화살표': 'Mouse pointer',
 
   '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="지우개">':
     '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="Eraser">'

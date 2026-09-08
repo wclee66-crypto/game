@@ -1222,6 +1222,15 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
 
 #printRoot { display: none; }
 
+/* ---------- 마우스 화살표 「크게」 (설정) ----------
+   흰 화면에서 흰 화살표를 잃어버리기 쉬운 어르신을 위해, 크고 초록으로 채운 화살표(흰 테두리)로 바꾼다.
+   단추 위에서도 같은 화살표를 써서 모양이 바뀌며 헷갈리지 않게 한다.
+   크롬은 화살표가 창 가장자리에 걸치면 잠시 보통 화살표로 돌려놓는다 — 어쩔 수 없는 제한이다. */
+html[data-cursor="lg"], html[data-cursor="lg"] * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M4 3 L4 36 L12 29 L18 43 L25 40 L19 26 L31 26 Z' fill='%230E9E62' stroke='%23fff' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E") 4 3, auto !important;
+}
+.score__auto { margin: .9rem 0 0; font-size: .85rem; font-weight: 700; color: var(--accent-d); }
+
 @media print {
   @page { size: A4 portrait; margin: 12mm; }
 

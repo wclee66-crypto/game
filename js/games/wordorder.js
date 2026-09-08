@@ -297,9 +297,15 @@ window.Games.wordorder = (function () {
   function place(tileIndex) {
     var p = S.probs[S.i];
     if (S.slots.indexOf(tileIndex) >= 0) return;      // 이미 넣은 글자
-    if (S.slots.length >= p.w.length) { UI.toast(T('빈칸이 다 찼습니다. 확인을 누르세요.')); return; }
+    if (S.slots.length >= p.w.length) { UI.toast(T('빈칸이 다 찼습니다. 곧 채점됩니다.')); return; }
     S.slots.push(tileIndex);
     paint();
+    /* 마지막 글자를 놓으면 「확인」을 따로 누르지 않아도 바로 채점한다.
+       낱말찾기처럼 손이 서툰 어르신도 한 단계를 더 누르지 않게 한 것이다.
+       완성된 낱말을 잠깐 보실 시간을 드린 뒤에 채점한다. */
+    if (S.slots.length === p.w.length) {
+      setTimeout(function () { if (!locked && S.slots.length === p.w.length) submit(); }, 350);
+    }
   }
 
   /** 빈칸을 눌러 그 자리의 글자를 도로 뺀다 */
@@ -329,7 +335,7 @@ window.Games.wordorder = (function () {
       el.classList.toggle('is-used', S.slots.indexOf(k) >= 0);
     });
     if (!locked) {
-      els.msg.textContent = full ? T('다 채우셨습니다. 확인을 누르세요.') : T('글자를 차례대로 눌러 주세요');
+      els.msg.textContent = full ? T('다 채우셨습니다. 곧 채점됩니다.') : T('글자를 차례대로 눌러 주세요');
       els.msg.className = 'wo-msg' + (full ? ' is-ready' : '');
     }
   }

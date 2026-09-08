@@ -841,6 +841,8 @@ window.I18N.dict.ja = {
   '1부터 {n}까지 차례대로 찾아 연필로 이으세요.': '1 から {n} まで順番にさがして、えんぴつで線でつなぎましょう。',
   '{n}부터 거꾸로 1까지 차례대로 찾아 연필로 이으세요.': '{n} から 1 まで逆順にさがして、えんぴつで線でつなぎましょう。',
 
+  '마우스 화살표': 'マウスの矢印',
+
   '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="지우개">':
     '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="消しゴム">'
 };

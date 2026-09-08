@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v71';                // sw.js 의 VERSION 과 함께 올린다
+  var APP_VERSION = 'v72';                // sw.js 의 VERSION 과 함께 올린다
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -583,6 +583,16 @@ window.App = (function () {
             }).join('') +
           '</div>' +
         '</div>' +
+        /* 마우스 화살표는 마우스가 있는 기기(컴퓨터)에서만 나온다 —
+           손가락으로 누르는 휴대폰·태블릿에는 화살표가 없어 고를 것이 없다. */
+        (hasMouse() ? ('<div class="set">' +
+          ('<span class="set__lbl">' + T('마우스 화살표') + '</span>') +
+          '<div class="seg" id="setCur">' +
+            [['md', T('보통')], ['lg', T('크게')]].map(function (o) {
+              return '<button data-v="' + o[0] + '"' + ((s.cursor || 'lg') === o[0] ? ' class="is-on"' : '') + '>' + o[1] + '</button>';
+            }).join('') +
+          '</div>' +
+        '</div>') : '') +
         '<div class="set">' +
           ('<span class="set__lbl">' + T('소리') + '</span>') +
           '<div class="seg" id="setSound">' +
@@ -619,6 +629,14 @@ window.App = (function () {
         b.classList.add('is-on');
       });
     });
+    m.card.querySelectorAll('#setCur button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        Store.setSetting('cursor', b.dataset.v);
+        applySettings();
+        m.card.querySelectorAll('#setCur button').forEach(function (x) { x.classList.remove('is-on'); });
+        b.classList.add('is-on');
+      });
+    });
     var sgb = m.card.querySelector('#setSuggest');
     if (sgb) sgb.addEventListener('click', function () { m.close(); Suggest.open(); });
     m.card.querySelector('#setUpdate').addEventListener('click', forceUpdate);
@@ -635,6 +653,11 @@ window.App = (function () {
 
   function applySettings() {
     document.documentElement.dataset.fs = Store.settings().fontScale || 'md';
+    document.documentElement.dataset.cursor = Store.settings().cursor || 'lg';
+  }
+
+  function hasMouse() {
+    return !!(window.matchMedia && window.matchMedia('(pointer: fine)').matches);
   }
 
   /** 서버에서 새 파일을 받아 온다. 점수 기록은 건드리지 않는다.
