@@ -1087,6 +1087,28 @@ window.I18N.dict.en = {
 
   '마우스 화살표': 'Mouse pointer',
 
+  /* ---- 그림자 맞추기 ---- */
+  '그림자 맞추기': 'Shadow Match',
+  '같은 모양의 그림자 찾기': 'Find the matching shadow',
+  '위 그림과 똑같은 모양의 그림자를 아래에서 찾아 누릅니다.': 'Find and tap the shadow below that matches the picture above.',
+  '누르면 바로 채점됩니다.': 'It is scored the moment you tap.',
+  '보기 3개 중에서 찾아요': 'Find it among 3 choices',
+  '보기 4개 중에서 찾아요': 'Find it among 4 choices',
+  '보기 5개 중에서 찾아요': 'Find it among 5 choices',
+  '보기 6개 중에서 찾아요': 'Find it among 6 choices',
+  '보기 8개 중에서 찾아요': 'Find it among 8 choices',
+  '이 그림과 같은 그림자를 찾으세요': 'Find the shadow that matches this picture',
+  '그림자를 누르면 저절로 채점됩니다': 'Tap a shadow and it is scored right away',
+  '바로 이 그림자입니다': 'This is the matching shadow',
+  '그림자 맞추기 {n}단계 완료!': 'Shadow Match level {n} complete!',
+  '그림자 맞추기 점수 규칙': 'Shadow Match scoring rules',
+  '단계가 올라갈수록 보기 그림자 수가 늘어납니다 — 1단계 3개 · 2단계 4개 · 3단계 5개 · 4단계 6개 · 5단계 8개':
+    'The number of shadow choices grows with the level — Level 1: 3 · Level 2: 4 · Level 3: 5 · Level 4: 6 · Level 5: 8',
+  '위 초록 그림과 똑같은 모양의 검정 그림자를 아래에서 눌러 고릅니다': 'Tap the black shadow below that matches the shape of the green picture above',
+  '없음 — 틀리면 바른 그림자를 보여 주고 다음 문제로 넘어갑니다': 'None — a wrong answer shows the correct shadow and moves on',
+  '그림자 맞추기 정답': 'Shadow Match — answers',
+  '맨 앞 그림과 똑같은 모양의 그림자를 찾아, 그 번호를 네모 칸에 적으세요.': 'Find the shadow shaped like the picture at the front, and write its number in the box.',
+
   '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="지우개">':
     '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="Eraser">'
 };

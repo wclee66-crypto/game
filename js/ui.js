@@ -107,15 +107,17 @@ window.UI = (function () {
     try {
       actx = actx || new (window.AudioContext || window.webkitAudioContext)();
       if (actx.state === 'suspended') actx.resume();
+      /* 정답 소리(ok)는 반짝이는 종소리 느낌을 내려고 셋째 자리에 파형(triangle)을 적었다.
+         적지 않은 소리는 예전 그대로 sine 이다 — 오답·똑딱임·완료 소리는 손대지 않았다. */
       var seq = {
-        ok: [[660, 0, 0.09], [880, 0.08, 0.12]],
+        ok: [[784, 0, 0.07, 'triangle'], [988, 0.06, 0.08, 'triangle'], [1175, 0.12, 0.16, 'triangle']],
         no: [[196, 0, 0.18]],
         tick: [[520, 0, 0.05]],
         win: [[523, 0, 0.12], [659, 0.11, 0.12], [784, 0.22, 0.14], [1046, 0.34, 0.3]]
       }[kind] || [[600, 0, 0.08]];
       seq.forEach(function (n) {
         var o = actx.createOscillator(), g = actx.createGain();
-        o.type = 'sine';
+        o.type = n[3] || 'sine';
         o.frequency.value = n[0];
         var t0 = actx.currentTime + n[1];
         g.gain.setValueAtTime(0.0001, t0);

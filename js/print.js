@@ -469,6 +469,46 @@ window.Print = (function () {
     return pages.join('');
   }
 
+  /* ---------------- 그림자 맞추기 ---------------- */
+  /* 한 장에 넉 문제 — 보기가 여덟 개까지도 나오므로 한 줄에 하나씩(세로로) 쌓는다.
+     보기마다 번호를 붙여, 종이에서는 그 번호를 네모 칸에 적게 한다. */
+  function shadowSheets(o) {
+    var pages = [];
+    for (var n = 0; n < o.count; n++) {
+      var b = Games.shadow.makeForPrint(o.level, 4);
+      var no = o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : '';
+
+      var list = function (withAns) {
+        return '<div class="ps-sdlist">' + b.items.map(function (it, i) {
+          return '<div class="ps-sditem">' +
+            '<div class="ps-sdhead">' +
+              '<span class="ps-sdno">' + (i + 1) + '.</span>' +
+              it.targetSvg +
+              '<span class="ps-sdbox' + (withAns ? ' ps-a' : '') + '">' + (withAns ? it.a : '') + '</span>' +
+            '</div>' +
+            '<div class="ps-sdopts">' + it.opts.map(function (svg, k) {
+              return '<span class="ps-sdopt">' + svg + '<em>' + (k + 1) + '</em></span>';
+            }).join('') + '</div>' +
+          '</div>';
+        }).join('') + '</div>';
+      };
+
+      pages.push('<section class="ps-sheet">' +
+        sheetHead(T('그림자 맞추기'), b.levelName + no,
+          T('맨 앞 그림과 똑같은 모양의 그림자를 찾아, 그 번호를 네모 칸에 적으세요.')) +
+        list(false) +
+      '</section>');
+
+      if (o.answer) {
+        pages.push('<section class="ps-sheet ps-sheet--ans">' +
+          sheetHead(T('그림자 맞추기 정답'), b.levelName + no, '') +
+          list(true) +
+        '</section>');
+      }
+    }
+    return pages.join('');
+  }
+
   /* ---------------- 숫자 찾기 ---------------- */
 
   /** 숫자판 한 장을 SVG 로 */
@@ -619,7 +659,8 @@ window.Print = (function () {
     dot2dot: dot2dotSheets,
     shapecount: shapecountSheets,
     clock: clockSheets,
-    numsearch: numsearchSheets
+    numsearch: numsearchSheets,
+    shadow: shadowSheets
   };
 
   /* 인쇄 내용은 **인쇄 창이 닫힌 뒤에** 지운다.
