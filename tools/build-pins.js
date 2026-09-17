@@ -95,7 +95,7 @@ function load(lang) {
   run('js/data/words.js'); run('js/data/words-en.js');
   run('js/data/order-words.js'); run('js/data/order-words-en.js');
   run('js/data/pictures.js');
-  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig', 'dot2dot', 'shapecount', 'clock', 'numsearch', 'shadow'].forEach(function (id) {
+  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig', 'dot2dot', 'shapecount', 'clock', 'numsearch', 'shadow', 'numpair'].forEach(function (id) {
     run('js/games/' + id + '.js');
   });
   run('js/print.js');
@@ -397,12 +397,21 @@ PINS.push(one('pin-75-shadow-match-dementia', 'Printable Shadow Matching<br>for 
   'Just 3 simple shadows to choose from · a gentle visual activity',
   'shadow', { level: 'step1' }, '그림자 맞추기 — 치매용'));
 
+/* 숫자 짝 찾기 (2026-09-17 에 더함) */
+PINS.push(one('pin-76-number-pair-match', 'Free Printable<br>Number Pair Puzzles',
+  'Find the numbers that appear twice · attention practice for seniors · play online or print',
+  'numpair', { level: 'easy' }, '숫자 짝 찾기'));
+PINS.push(one('pin-77-number-pair-dementia', 'Printable Number Pair Match<br>for Dementia Patients',
+  'Just 16 tiles, 2 pairs to find · a gentle focus activity',
+  'numpair', { level: 'step1' }, '숫자 짝 찾기 — 치매용'));
+
 /* 핀마다 어디로 데려갈지 — 그 게임 화면으로 바로 들어가게 한다 */
 var GOTO = {
   sudoku: '#sudoku', wordsearch: '#wordsearch', math: '#math',
   wordorder: '#wordorder', coloring: '#coloring', spot: '#spot',
   maze: '#maze', mathcross: '#mathcross', copyfig: '#copyfig', dot2dot: '#dot2dot',
-  shapecount: '#shapecount', clock: '#clock', numsearch: '#numsearch', shadow: '#shadow'
+  shapecount: '#shapecount', clock: '#clock', numsearch: '#numsearch', shadow: '#shadow',
+  numpair: '#numpair'
 };
 PINS.forEach(function (p) {
   if (!p.link) p.link = SITE + '/?lang=en' + (GOTO[p.sheet.game] || '');
@@ -626,7 +635,7 @@ PINS.forEach(function (p) {
     /* 어느 서랍에 넣을지 — 색칠·틀린그림은 A(치매 활동지), 나머지는 B(두뇌 게임) */
     var g = (p.sheet && p.sheet.game) || '';
     p.board = p.file.indexOf('carers') >= 0 ? 'C'
-            : (!g || g === 'coloring' || g === 'spot' || g === 'copyfig' || g === 'dot2dot' || g === 'shapecount' || g === 'clock' || g === 'numsearch' || g === 'shadow') ? 'A' : 'B';
+            : (!g || g === 'coloring' || g === 'spot' || g === 'copyfig' || g === 'dot2dot' || g === 'shapecount' || g === 'clock' || g === 'numsearch' || g === 'shadow' || g === 'numpair') ? 'A' : 'B';
     p.desc = describe(p);
     made.push(p);
     console.log('  만듦: ' + p.file + '.png');

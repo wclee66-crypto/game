@@ -498,6 +498,21 @@ button.install:active { transform: scale(.99); }
 .sd-opt.is-bad  .sd-opt-svg { color: var(--bad); }
 .sd-opt.is-answer { border-color: var(--accent); border-width: 2px; }
 
+/* ================= 숫자 짝 찾기 ================= */
+
+.np-grid { display: grid; gap: .35rem; margin: .8rem auto 0; max-width: 520px; }
+.np-cell {
+  aspect-ratio: 1; min-width: 0; padding: .2em 0;
+  border-radius: 10px; border: 1px solid var(--line); background: var(--surf);
+  font-family: var(--font-num); font-weight: 800; font-size: 1.2rem; letter-spacing: -.02em;
+}
+.np-cell:active { background: var(--accent-s); }
+.np-cell.is-done { background: var(--accent); border-color: var(--accent); color: #fff; opacity: .5; }
+.np-cell.is-bad  { background: var(--bad-s); border-color: var(--bad); color: var(--bad); }
+@media (min-width: 420px) {
+  .np-cell { font-size: 1.4rem; }
+}
+
 /* ================= 듣고 기억하기 ================= */
 
 .ls-card { padding: 1rem .9rem 1.1rem; }
@@ -1487,6 +1502,16 @@ html[data-cursor="lg"], html[data-cursor="lg"] * {
   .ps-sdoptsvg { display: block; width: 100%; height: 100%; color: #000; }
   .ps-sdopt em { position: absolute; left: 0; bottom: -3.2mm; width: 100%; text-align: center;
     font-style: normal; font-size: 8pt; font-weight: 700; }
+
+  /* ---- 숫자 짝 찾기 ---- */
+  /* 한 장에 넉 판 — 두 칸 × 두 줄. 정답지는 짝인 두 칸을 옅은 초록으로 물들인다 (npSvg 의 mark) */
+  .ps-npgrid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 5mm; margin-top: 3mm;
+  }
+  .ps-npitem { border: 1pt solid #000; border-radius: 2mm; padding: 3mm 3mm 2.5mm; text-align: center; }
+  .ps-npq { margin: 0 0 2mm; font-size: 10.5pt; font-weight: 700; }
+  .ps-npsvg { display: block; width: 72mm; margin: 0 auto; height: auto; color: #000; }
 
   /* ---- 시계 보기 ---- */
   /* 한 장에 여섯 개 — 두 칸 × 세 줄 */

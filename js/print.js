@@ -549,6 +549,59 @@ window.Print = (function () {
     return pages.join('');
   }
 
+  /* ---------------- 숫자 짝 찾기 ---------------- */
+
+  /** 네모난 판이 아니라 cols 줄짜리 판이라 nsSvg 와 따로 둔다.
+   *  mark 에 든 자리는 배경을 옅은 초록으로 물들인다 — 정답지에서 짝을 보여 줄 때 쓴다. */
+  function npSvg(grid, cols, mark) {
+    var u = 20, rows = Math.ceil(grid.length / cols), W = cols * u, H = rows * u;
+    var out = [], i, r, c;
+    for (i = 0; i < grid.length; i++) {
+      r = Math.floor(i / cols); c = i % cols;
+      if (mark && mark.indexOf(i) >= 0) {
+        out.push('<rect x="' + (c * u) + '" y="' + (r * u) + '" width="' + u + '" height="' + u + '" fill="#E2F4EB"/>');
+      }
+      out.push('<rect x="' + (c * u) + '" y="' + (r * u) + '" width="' + u + '" height="' + u + '" fill="none" stroke="#000" stroke-width="1"/>');
+      out.push('<text x="' + (c * u + u / 2) + '" y="' + (r * u + u / 2 + 3.6) + '" text-anchor="middle" font-size="9.5" font-weight="800" fill="#000">' + grid[i] + '</text>');
+    }
+    return '<svg class="ps-npsvg" viewBox="-1 -1 ' + (W + 2) + ' ' + (H + 2) + '" xmlns="http://www.w3.org/2000/svg">' + out.join('') + '</svg>';
+  }
+
+  /** 판에서 두 번씩 나오는 숫자의 자리를 찾는다 — 정답지 색칠에 쓴다 */
+  function npPairIdx(grid) {
+    var idx = [];
+    grid.forEach(function (v, i) {
+      if (grid.indexOf(v) !== i || grid.lastIndexOf(v) !== i) idx.push(i);
+    });
+    return idx;
+  }
+
+  function numpairSheets(o) {
+    var pages = [];
+    for (var n = 0; n < o.count; n++) {
+      var b = Games.numpair.makeForPrint(o.level, 4);
+      var no = o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : '';
+
+      pages.push('<section class="ps-sheet">' +
+        sheetHead(T('숫자 짝 찾기'), b.levelName + no,
+          T('똑같은 숫자가 두 번 나오는 자리를 찾아 두 칸 모두 동그라미 치세요. ({n}쌍)', { n: b.pairs })) +
+        '<div class="ps-npgrid">' + b.grids.map(function (g, i) {
+          return '<div class="ps-npitem"><p class="ps-npq">' + (i + 1) + '.</p>' + npSvg(g, b.cols) + '</div>';
+        }).join('') + '</div>' +
+      '</section>');
+
+      if (o.answer) {
+        pages.push('<section class="ps-sheet ps-sheet--ans">' +
+          sheetHead(T('숫자 짝 찾기 정답'), b.levelName + no, '') +
+          '<div class="ps-npgrid">' + b.grids.map(function (g, i) {
+            return '<div class="ps-npitem"><p class="ps-npq">' + (i + 1) + '.</p>' + npSvg(g, b.cols, npPairIdx(g)) + '</div>';
+          }).join('') + '</div>' +
+        '</section>');
+      }
+    }
+    return pages.join('');
+  }
+
   /* ---------------- 점 잇기 ---------------- */
 
   function dot2dotSheets(o) {
@@ -660,7 +713,8 @@ window.Print = (function () {
     shapecount: shapecountSheets,
     clock: clockSheets,
     numsearch: numsearchSheets,
-    shadow: shadowSheets
+    shadow: shadowSheets,
+    numpair: numpairSheets
   };
 
   /* 인쇄 내용은 **인쇄 창이 닫힌 뒤에** 지운다.

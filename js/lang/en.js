@@ -1109,6 +1109,29 @@ window.I18N.dict.en = {
   '그림자 맞추기 정답': 'Shadow Match — answers',
   '맨 앞 그림과 똑같은 모양의 그림자를 찾아, 그 번호를 네모 칸에 적으세요.': 'Find the shadow shaped like the picture at the front, and write its number in the box.',
 
+  /* ---- 숫자 짝 찾기 ---- */
+  '숫자 짝 찾기': 'Number Pair Match',
+  '두 번 나오는 숫자 찾기': 'Find the number that appears twice',
+  '판 안에서 똑같은 숫자가 두 번 나오는 자리를 찾습니다.': 'Find the spot on the board where the same number appears twice.',
+  '하나를 누르면 나머지 짝도 함께 표시됩니다.': 'Tap one and its matching partner is revealed too.',
+  '16칸 · 2쌍 찾기': '16 tiles · find 2 pairs',
+  '20칸 · 3쌍 찾기': '20 tiles · find 3 pairs',
+  '24칸 · 3쌍 찾기': '24 tiles · find 3 pairs',
+  '30칸 · 4쌍 찾기': '30 tiles · find 4 pairs',
+  '36칸 · 5쌍 찾기': '36 tiles · find 5 pairs',
+  '같은 숫자가 두 번 나오는 자리를 찾아 누르세요': 'Find and tap a number that appears twice',
+  '그 숫자는 한 번만 나와요': 'That number appears only once',
+  '숫자 짝 찾기 {n}단계 완료!': 'Number Pair Match level {n} complete!',
+  '숫자 짝 찾기 점수 규칙': 'Number Pair Match scoring rules',
+  '판이 커지고 짝 수가 늘어납니다 — 1단계 16칸 2쌍 · 2단계 20칸 3쌍 · 3단계 24칸 3쌍 · 4단계 30칸 4쌍 · 5단계 36칸 5쌍':
+    'The board grows and the number of pairs increases — Level 1: 16 tiles/2 pairs · Level 2: 20 tiles/3 pairs · Level 3: 24 tiles/3 pairs · Level 4: 30 tiles/4 pairs · Level 5: 36 tiles/5 pairs',
+  '판 안에서 똑같은 숫자가 두 번 나오는 자리 하나를 찾아 누릅니다. 나머지 짝도 함께 표시됩니다': 'Tap one spot where the same number appears twice on the board. Its matching partner is revealed too',
+  '찾기 점수 ({a}/{b}쌍)': 'Search score ({a}/{b} pairs)',
+  '최대 600점 · 찾은 짝 수에 비례': 'Up to 600 · in proportion to pairs found',
+  '찾은 짝': 'Pairs found',
+  '숫자 짝 찾기 정답': 'Number Pair Match — answers',
+  '똑같은 숫자가 두 번 나오는 자리를 찾아 두 칸 모두 동그라미 치세요. ({n}쌍)': 'Find the spots where the same number appears twice and circle both squares. ({n} pairs)',
+
   '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="지우개">':
     '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="Eraser">'
 };
