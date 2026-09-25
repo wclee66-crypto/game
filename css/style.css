@@ -513,6 +513,55 @@ button.install:active { transform: scale(.99); }
   .np-cell { font-size: 1.4rem; }
 }
 
+/* ================= 규칙 찾기 ================= */
+
+.nr-card {
+  background: var(--surf); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 1.6rem 1rem 1.1rem; text-align: center;
+}
+.nr-seq { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: .5rem; }
+.nr-item {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 3.2rem; min-height: 3.2rem; padding: 0 .3rem;
+  font-family: var(--font-num); font-weight: 800; font-size: 1.4rem; letter-spacing: -.02em;
+  border: 1px solid var(--line); border-radius: 12px; background: var(--surf); color: var(--ink);
+}
+/* 빈칸 자리는 숫자 계산의 답 상자와 같은 모양이라 한눈에 통한다 */
+.nr-item--blank {
+  min-width: 3.8rem; min-height: 3.6rem; font-size: 1.7rem; color: var(--accent);
+  border: 3px solid var(--line-2); border-radius: 14px; background: var(--bg);
+}
+.nr-item--blank.is-empty::after { content: '\00a0'; }
+.nr-item--blank.is-right { color: var(--accent); border-color: var(--accent); background: var(--accent-s); }
+.nr-item--blank.is-wrong { color: var(--bad); border-color: var(--bad); background: var(--bad-s); }
+@media (min-width: 480px) {
+  .nr-item { min-width: 3.8rem; min-height: 3.8rem; font-size: 1.7rem; }
+  .nr-item--blank { min-width: 4.4rem; min-height: 4.2rem; font-size: 2rem; }
+}
+
+/* ================= 숫자 이어가기 ================= */
+
+/* 숫자가 이미 있는 칸은 잔잔하게, 새로 채울 빈칸은 하얗게 둔다. 다음 숫자 하나만
+   크게 보여 주어 눈이 ‘숫자 → 이웃 칸’ 두 곳만 오가도록 했다. */
+.nt-top { text-align: center; margin-top: .8rem; }
+.nt-top__lbl { display: block; font-size: .82rem; font-weight: 700; color: var(--ink-3); }
+.nt-next { display: block; font-family: var(--font-num); font-size: 3rem; font-weight: 900; line-height: 1.1; color: var(--accent-d); letter-spacing: -.03em; }
+.nt-msg { margin-top: .2rem; }
+.nt-grid { display: grid; gap: .35rem; margin: .8rem auto 0; max-width: 520px; }
+.nt-grid--4 { grid-template-columns: repeat(4, 1fr); max-width: 360px; }
+.nt-grid--5 { grid-template-columns: repeat(5, 1fr); max-width: 430px; }
+.nt-grid--6 { grid-template-columns: repeat(6, 1fr); }
+.nt-grid--7 { grid-template-columns: repeat(7, 1fr); }
+.nt-cell { aspect-ratio: 1; min-width: 0; padding: .2em 0; border-radius: 10px; border: 1px solid var(--accent); background: #fff; font-family: var(--font-num); font-size: 1.5rem; font-weight: 800; color: var(--accent-d); }
+.nt-grid--6 .nt-cell { font-size: 1.3rem; }
+.nt-grid--7 .nt-cell { font-size: 1.1rem; border-radius: 8px; }
+.nt-cell.is-given { border-color: var(--line); background: var(--surf-2); color: var(--ink-2); }
+.nt-cell.is-done { background: var(--accent); border-color: var(--accent); color: #fff; }
+.nt-cell.is-bad { background: var(--bad-s); border-color: var(--bad); color: var(--bad); }
+.nt-cell:disabled { opacity: 1; }
+.nt-cell:not(:disabled):active { background: var(--accent-s); }
+@media (min-width: 720px) { .nt-next { font-size: 3.6rem; } .nt-cell { font-size: 2rem; } .nt-grid--6 .nt-cell { font-size: 1.7rem; } .nt-grid--7 .nt-cell { font-size: 1.45rem; } }
+
 /* ================= 듣고 기억하기 ================= */
 
 .ls-card { padding: 1rem .9rem 1.1rem; }
@@ -1510,6 +1559,10 @@ html[data-cursor="lg"], html[data-cursor="lg"] * {
     gap: 5mm; margin-top: 3mm;
   }
   .ps-npitem { border: 1pt solid #000; border-radius: 2mm; padding: 3mm 3mm 2.5mm; text-align: center; }
+  .ps-ntgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+  .ps-ntitem { border: 1pt solid #000; border-radius: 2mm; padding: 3mm 3mm 2.5mm; text-align: center; }
+  .ps-ntq { margin: 0 0 1mm; text-align: left; font-size: 10pt; font-weight: 800; }
+  .ps-ntsvg { display: block; width: 66mm; height: 66mm; margin: 0 auto; }
   .ps-npq { margin: 0 0 2mm; font-size: 10.5pt; font-weight: 700; }
   .ps-npsvg { display: block; width: 72mm; margin: 0 auto; height: auto; color: #000; }
 

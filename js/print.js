@@ -549,6 +549,39 @@ window.Print = (function () {
     return pages.join('');
   }
 
+  /* ---------------- 규칙 찾기 ---------------- */
+
+  /** 숫자 배열 한 줄 — 빈칸 자리만 네모 상자(pm-box, 숫자 계산과 같은 모양)로 그린다 */
+  function nrRow(it, showAns) {
+    return it.seq.map(function (v, i) {
+      var cell = i === it.blank
+        ? '<span class="pm-box' + (showAns ? ' pm-a' : '') + '">' + (showAns ? it.a : '') + '</span>'
+        : '<span class="pm-q">' + v + '</span>';
+      return i > 0 ? '<span class="pm-q">, </span>' + cell : cell;
+    }).join('');
+  }
+
+  function numruleSheets(o) {
+    var pages = [];
+    for (var n = 0; n < o.count; n++) {
+      var b = Games.numrule.makeForPrint(o.level, 20);   /* 두 칸 × 열 줄 */
+      var no = o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : '';
+
+      pages.push('<section class="ps-sheet ps-sheet--left">' +
+        sheetHead(T('규칙 찾기'), b.levelName + no, T('빈칸에 들어갈 숫자를 적으세요.')) +
+        '<ol class="ps-math ps-nr">' + b.items.map(function (it) { return '<li>' + nrRow(it) + '</li>'; }).join('') + '</ol>' +
+      '</section>');
+
+      if (o.answer) {
+        pages.push('<section class="ps-sheet ps-sheet--left ps-sheet--ans">' +
+          sheetHead(T('규칙 찾기 정답'), b.levelName + no, '') +
+          '<ol class="ps-math ps-nr">' + b.items.map(function (it) { return '<li>' + nrRow(it, true) + '</li>'; }).join('') + '</ol>' +
+        '</section>');
+      }
+    }
+    return pages.join('');
+  }
+
   /* ---------------- 숫자 짝 찾기 ---------------- */
 
   /** 네모난 판이 아니라 cols 줄짜리 판이라 nsSvg 와 따로 둔다.
@@ -598,6 +631,31 @@ window.Print = (function () {
           }).join('') + '</div>' +
         '</section>');
       }
+    }
+    return pages.join('');
+  }
+
+  /* ---------------- 숫자 이어가기 ---------------- */
+
+  /** 빈칸은 큰 네모만 남기고, 정답지에는 길의 모든 숫자를 넣는다. */
+  function ntSvg(b, answer) {
+    var u = 18, n = b.n, W = n * u, out = [], i, r, c, v;
+    var fs = n >= 7 ? 7.5 : 9;
+    for (i = 0; i < b.answer.length; i++) {
+      r = Math.floor(i / n); c = i % n; v = answer ? b.answer[i] : b.shown[i];
+      if (answer && !b.shown[i]) out.push('<rect x="' + (c * u) + '" y="' + (r * u) + '" width="' + u + '" height="' + u + '" fill="#E2F4EB"/>');
+      out.push('<rect x="' + (c * u) + '" y="' + (r * u) + '" width="' + u + '" height="' + u + '" fill="none" stroke="#000" stroke-width="1"/>');
+      if (v) out.push('<text x="' + (c * u + u / 2) + '" y="' + (r * u + u / 2 + fs * .36) + '" text-anchor="middle" font-size="' + fs + '" font-weight="800" fill="#000">' + v + '</text>');
+    }
+    return '<svg class="ps-ntsvg" viewBox="-1 -1 ' + (W + 2) + ' ' + (W + 2) + '" xmlns="http://www.w3.org/2000/svg">' + out.join('') + '</svg>';
+  }
+  function numpathSheets(o) {
+    var pages = [];
+    for (var n = 0; n < o.count; n++) {
+      var b = Games.numpath.makeForPrint(o.level, 4);
+      var no = o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : '';
+      pages.push('<section class="ps-sheet">' + sheetHead(T('숫자 이어가기'), b.levelName + no, T('1부터 마지막 숫자까지 가로·세로로 맞닿게 빈칸을 채우세요.')) + '<div class="ps-ntgrid">' + b.boards.map(function (q, i) { return '<div class="ps-ntitem"><p class="ps-ntq">' + (i + 1) + '.</p>' + ntSvg(q, false) + '</div>'; }).join('') + '</div></section>');
+      if (o.answer) pages.push('<section class="ps-sheet ps-sheet--ans">' + sheetHead(T('숫자 이어가기 정답'), b.levelName + no, '') + '<div class="ps-ntgrid">' + b.boards.map(function (q, i) { return '<div class="ps-ntitem"><p class="ps-ntq">' + (i + 1) + '.</p>' + ntSvg(q, true) + '</div>'; }).join('') + '</div></section>');
     }
     return pages.join('');
   }
@@ -714,7 +772,9 @@ window.Print = (function () {
     clock: clockSheets,
     numsearch: numsearchSheets,
     shadow: shadowSheets,
-    numpair: numpairSheets
+    numpair: numpairSheets,
+    numrule: numruleSheets,
+    numpath: numpathSheets
   };
 
   /* 인쇄 내용은 **인쇄 창이 닫힌 뒤에** 지운다.

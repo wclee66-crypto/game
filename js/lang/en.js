@@ -1132,6 +1132,48 @@ window.I18N.dict.en = {
   '숫자 짝 찾기 정답': 'Number Pair Match — answers',
   '똑같은 숫자가 두 번 나오는 자리를 찾아 두 칸 모두 동그라미 치세요. ({n}쌍)': 'Find the spots where the same number appears twice and circle both squares. ({n} pairs)',
 
+  /* ---- 규칙 찾기 ---- */
+  '규칙 찾기': 'Number Pattern',
+  '숫자 배열 속 빈칸 채우기': 'Fill in the missing number',
+  '숫자가 일정하게 늘거나 줄어드는 규칙을 찾습니다.': 'Find the pattern as the numbers steadily go up or down.',
+  '빈칸에 들어갈 숫자를 숫자판으로 넣으세요.': 'Type the missing number on the number pad.',
+  '1부터 10까지 · 1씩 또는 2씩 늘어나요': '1 to 10 · counting up by 1s or 2s',
+  '1부터 20까지 · 조금씩 늘어나요': '1 to 20 · counting up a little at a time',
+  '2·3·5·10씩 뛰어 세기': 'Skip counting by 2s, 3s, 5s or 10s',
+  '늘어나거나 줄어드는 숫자': 'Counting up or down',
+  '더 큰 숫자로 늘어나거나 줄어드는 숫자': 'Counting up or down with bigger numbers',
+  '숫자가 일정하게 늘거나 줄어드는 규칙을 찾아, 빈칸에 들어갈 숫자를 숫자판으로 넣습니다': 'Find the pattern as the numbers steadily go up or down, then type the missing number on the number pad',
+  '확인 단추 없이, 답을 누르면 저절로 채점됩니다': 'No confirm button — the moment you tap an answer, it is scored',
+  '규칙 찾기 {n}단계 완료!': 'Number Pattern level {n} complete!',
+  '규칙 찾기 점수 규칙': 'Number Pattern scoring rules',
+  '배열이 길어지고 숫자가 커집니다 — 1단계 1~2씩 · 2단계 1~3씩 · 3단계 2·3·5·10씩 · 4단계 늘거나 줄어듦 · 5단계 더 큰 수로 늘거나 줄어듦':
+    'The row gets longer and the numbers get bigger — Level 1: by 1s or 2s · Level 2: by 1s to 3s · Level 3: by 2, 3, 5 or 10 · Level 4: counting up or down · Level 5: bigger numbers, up or down',
+  '규칙 찾기 정답': 'Number Pattern — answers',
+  '빈칸에 들어갈 숫자를 적으세요.': 'Write the missing number in the box.',
+
+  /* ---- 숫자 이어가기 ---- */
+  '숫자 이어가기': 'Number Path',
+  '숫자가 이어지는 길 완성하기': 'Complete the path of numbers',
+  '1부터 마지막 숫자까지 가로·세로로 이어지는 길입니다.': 'The numbers make one path from 1 to the last number, touching up, down, left, or right.',
+  '판 위 숫자 다음에 들어갈 빈칸을 누르세요.': 'Tap the empty square where the next number belongs.',
+  '4×4 · 빈칸 5개': '4×4 · 5 empty squares',
+  '5×5 · 빈칸 9개': '5×5 · 9 empty squares',
+  '5×5 · 빈칸 13개': '5×5 · 13 empty squares',
+  '6×6 · 빈칸 21개': '6×6 · 21 empty squares',
+  '7×7 · 빈칸 33개': '7×7 · 33 empty squares',
+  '지금 넣을 숫자': 'Number to place',
+  '바로 앞 숫자와 가로·세로로 닿는 빈칸을 누르세요': 'Tap the empty square next to the number before it',
+  '그곳은 아니에요. 앞 숫자 옆을 살펴보세요': 'Not there. Look beside the number before it',
+  '숫자 이어가기 {n}단계 완료!': 'Number Path — Level {n} complete!',
+  '숫자 이어가기 점수 규칙': 'Number Path scoring',
+  '판이 커지고 빈칸이 늘어납니다 — 1단계 4×4 · 2~3단계 5×5 · 4단계 6×6 · 5단계 7×7': 'The board grows and has more blanks — Level 1: 4×4 · Levels 2–3: 5×5 · Level 4: 6×6 · Level 5: 7×7',
+  '1부터 마지막 숫자까지 가로·세로로 맞닿은 길이 됩니다. 판 위에 보이는 다음 숫자가 들어갈 빈칸을 누릅니다': 'Make a path from 1 to the last number, with each number touching the next up, down, left, or right. Tap the blank square for the number shown above',
+  '이어가기 점수': 'Path points',
+  '최대 600점 · 바르게 채운 빈칸 수에 비례': 'Up to 600 · in proportion to the blanks filled correctly',
+  '이어가기 점수 ({a}/{b}칸)': 'Path points ({a}/{b} squares)',
+  '숫자 이어가기 정답': 'Number Path — answers',
+  '1부터 마지막 숫자까지 가로·세로로 맞닿게 빈칸을 채우세요.': 'Fill the blanks so the numbers from 1 to the last one touch up, down, left, or right.',
+
   '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="지우개">':
     '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="Eraser">'
 };

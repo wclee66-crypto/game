@@ -83,7 +83,7 @@ function loadAll(lang) {
   run('js/data/quiz-data.js'); run('js/data/quiz-data-en.js');
   run('js/data/words.js'); run('js/data/words-en.js'); run('js/data/order-words.js');
   run('js/data/order-words-en.js'); run('js/data/pictures.js');
-  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig', 'dot2dot', 'shapecount', 'clock', 'numsearch', 'shadow', 'numpair'].forEach(function (id) {
+  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig', 'dot2dot', 'shapecount', 'clock', 'numsearch', 'shadow', 'numpair', 'numrule', 'numpath'].forEach(function (id) {
     run('js/games/' + id + '.js');
   });
   run('js/print.js');
@@ -112,7 +112,9 @@ var PICKS = [
   { id: 'clock',      level: 'easy' },
   { id: 'numsearch',  level: 'easy' },
   { id: 'shadow',     level: 'easy' },
-  { id: 'numpair',    level: 'easy' }
+  { id: 'numpair',    level: 'easy' },
+  { id: 'numrule',    level: 'easy' },
+  { id: 'numpath',    level: 'easy' }
 ];
 /* 말별 파일 꼬리표 — 한국어는 없음, 영어 -en, 일본어 -ja */
 var TAIL = { ko: '', en: '-en', ja: '-ja' };
