@@ -7,11 +7,11 @@
 window.Games = window.Games || {};
 window.Games.numpath = (function () {
   var LEVELS = {
-    step1:  { name: T('첫걸음'), step: 1, n: 4, show: 11, rounds: 3, limit: 300, bonus: 0, note: T('4×4 · 빈칸 5개') },
-    step2:  { name: T('가볍게'), step: 2, n: 5, show: 16, rounds: 3, limit: 360, bonus: 0, note: T('5×5 · 빈칸 9개') },
-    easy:   { name: T('쉬움'),   step: 3, n: 5, show: 12, rounds: 3, limit: 420, bonus: 0, note: T('5×5 · 빈칸 13개') },
-    normal: { name: T('보통'),   step: 4, n: 6, show: 15, rounds: 2, limit: 480, bonus: 100, note: T('6×6 · 빈칸 21개') },
-    hard:   { name: T('어려움'), step: 5, n: 7, show: 16, rounds: 2, limit: 600, bonus: 250, note: T('7×7 · 빈칸 33개') }
+    step1:  { name: T('첫걸음'), step: 1, n: 4, show: 11, rounds: 3, limit: 300, bonus: 0, random: false, note: T('4×4 · 빈칸 5개') },
+    step2:  { name: T('가볍게'), step: 2, n: 5, show: 16, rounds: 3, limit: 360, bonus: 0, random: true,  note: T('5×5 · 빈칸 9개 · 길이 뒤섞임') },
+    easy:   { name: T('쉬움'),   step: 3, n: 5, show: 12, rounds: 3, limit: 420, bonus: 0, random: true,  note: T('5×5 · 빈칸 13개 · 길이 뒤섞임') },
+    normal: { name: T('보통'),   step: 4, n: 6, show: 15, rounds: 2, limit: 480, bonus: 100, random: true, note: T('6×6 · 빈칸 21개 · 길이 뒤섞임') },
+    hard:   { name: T('어려움'), step: 5, n: 7, show: 16, rounds: 2, limit: 600, bonus: 250, random: true, note: T('7×7 · 빈칸 33개 · 길이 뒤섞임') }
   };
   var ORDER = ['step1', 'step2', 'easy', 'normal', 'hard'];
   var S = null, root = null, timer = null, nextTimer = null, badTimer = null, els = {}, locked = false, mounted = false;
@@ -20,20 +20,48 @@ window.Games.numpath = (function () {
   function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function clearPending() { if (nextTimer) clearTimeout(nextTimer); if (badTimer) clearTimeout(badTimer); nextTimer = badTimer = null; }
 
-  /* 뱀처럼 지나는 길을 네 방향으로 돌리거나 뒤집는다. 길이 하나뿐이라 빈칸마다
-     답이 하나이며, 무작위 숫자판처럼 막히거나 답이 여러 개인 문제가 생기지 않는다. */
-  function makeBoard(L) {
-    var n = L.n, cells = [], r, c, i, path = [];
+  function snakePath(n) {
+    var path = [], r, c;
     for (r = 0; r < n; r++) for (c = 0; c < n; c++) path.push(r * n + (r % 2 ? n - 1 - c : c));
-    var turn = Math.floor(Math.random() * 4), flip = Math.random() < .5, pos = [];
-    for (i = 0; i < path.length; i++) {
-      var old = path[i], rr = Math.floor(old / n), cc = old % n, nr = rr, nc = cc;
-      if (turn === 1) { nr = cc; nc = n - 1 - rr; }
-      else if (turn === 2) { nr = n - 1 - rr; nc = n - 1 - cc; }
-      else if (turn === 3) { nr = n - 1 - cc; nc = rr; }
-      pos.push(nr * n + nc);
+    return path;
+  }
+
+  /* 길을 무작정 꺾으면 중간에 갇혀 끝까지 못 가기 쉽다. 아직 갈 수 있는 길이 적은
+     칸부터 먼저 고르는 방법으로 1부터 마지막까지 한 줄로 이어지는 길을 만든다.
+     여러 번 해도 안 나오면 첫걸음용 뱀길로 돌아가므로 화면이 멈추지 않는다. */
+  function randomPath(n) {
+    var all = n * n, dirs = [[1,0],[-1,0],[0,1],[0,-1]], attempt, used, path, steps;
+    function neighbors(at) {
+      var r = Math.floor(at / n), c = at % n, out = [];
+      dirs.forEach(function (d) {
+        var rr = r + d[0], cc = c + d[1], next = rr * n + cc;
+        if (rr >= 0 && rr < n && cc >= 0 && cc < n && !used[next]) out.push(next);
+      });
+      return out;
     }
-    if (flip) pos.reverse();
+    function walk(at) {
+      steps++;
+      if (steps > 30000) return false;      /* 어려운 판도 잠시 멈추지 않게 한다 */
+      used[at] = true; path.push(at);
+      if (path.length === all) return true;
+      var nexts = neighbors(at), i, j, t;
+      for (i = nexts.length - 1; i > 0; i--) { j = Math.floor(Math.random() * (i + 1)); t = nexts[i]; nexts[i] = nexts[j]; nexts[j] = t; }
+      nexts.sort(function (a, b) { return neighbors(a).length - neighbors(b).length; });
+      for (i = 0; i < nexts.length; i++) if (walk(nexts[i])) return true;
+      used[at] = false; path.pop();
+      return false;
+    }
+    for (attempt = 0; attempt < 80; attempt++) {
+      used = []; path = []; steps = 0;
+      if (walk(Math.floor(Math.random() * all))) return path;
+    }
+    return snakePath(n);
+  }
+
+  /* 1단계는 길의 규칙을 익히도록 단순하게 둔다. 2단계부터는 매번 다른 길을
+     만들지만, 모든 숫자는 가로·세로로 이어져 있어 답이 없거나 끊기는 일은 없다. */
+  function makeBoard(L) {
+    var n = L.n, cells = [], i, pos = L.random ? randomPath(n) : snakePath(n);
     for (i = 0; i < n * n; i++) cells.push(0);
     pos.forEach(function (at, no) { cells[at] = no + 1; });
 
