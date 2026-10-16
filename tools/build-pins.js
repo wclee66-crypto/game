@@ -421,6 +421,46 @@ PINS.push(one('pin-81-number-path-dementia', 'Printable Number Path<br>for Demen
   'A small 4×4 grid with just a few blanks · a gentle focus activity',
   'numpath', { level: 'step1' }, '숫자 이어가기 — 치매용'));
 
+/* ---- 낱말찾기·색칠 공부를 주제·그림별로 더 늘림 (2026-10-16, 102~121번) ----
+ * 82~101번은 다른 작업에서 따로 만들어 올리는-법-82-101.txt 에 있다. 이어서 102번부터.
+ * 쓰지 않던 주제·그림을 하나씩 — 주제가 곧 검색어이므로 낱말 하나 더 만들지 않고 핀이 늘어난다. */
+var WS2 = [
+  ['tree', 'Tree', 'oak, maple, willow, birch and more', '나무'],
+  ['house', 'Home', 'door, window, roof, garden and more', '집'],
+  ['furniture', 'Furniture', 'chair, table, sofa, shelf and more', '가구'],
+  ['family', 'Family', 'mother, father, sister, uncle and more', '가족'],
+  ['job', 'Jobs', 'nurse, baker, farmer, doctor and more', '직업'],
+  ['ride', 'Transport', 'bus, train, bicycle, ferry and more', '탈것'],
+  ['sport', 'Sports', 'golf, tennis, rugby, cricket and more', '운동'],
+  ['drink', 'Drinks', 'tea, coffee, juice, milk and more', '마실 것'],
+  ['tool', 'Tools', 'hammer, saw, drill, spanner and more', '연장'],
+  ['travel', 'Travel', 'ticket, hotel, passport, beach and more', '여행'],
+  ['party', 'Party', 'balloon, candle, gift, dance and more', '잔치'],
+  ['color', 'Colours', 'red, green, yellow, purple and more', '색깔']
+];
+var COL2 = [
+  ['turtle', 'Turtle', '거북이'],
+  ['tulip', 'Tulip', '튤립'],
+  ['boat', 'Sailing Boat', '배'],
+  ['teacup', 'Teacup', '찻잔'],
+  ['snowman', 'Snowman', '눈사람'],
+  ['kite', 'Kite', '연'],
+  ['lighthouse', 'Lighthouse', '등대'],
+  ['patchwork', 'Patchwork Quilt', '조각보']
+];
+WS2.forEach(function (t, i) {
+  PINS.push(one('pin-' + (102 + i) + '-wordsearch-' + t[0],
+    'Free Printable<br>' + t[1] + ' Word Search',
+    'For seniors · ' + t[2],
+    'wordsearch', { level: 'normal', themeId: t[0] }, '낱말찾기 — ' + t[3]));
+});
+COL2.forEach(function (c, i) {
+  PINS.push(one('pin-' + (114 + i) + '-colour-' + c[0],
+    'Free Printable<br>' + c[1] + ' Colour by Number',
+    'For adults and seniors · big, simple shapes',
+    'coloring', { level: 'normal', picId: c[0] }, '색칠 공부 — ' + c[2]));
+});
+
 /* 핀마다 어디로 데려갈지 — 그 게임 화면으로 바로 들어가게 한다 */
 var GOTO = {
   sudoku: '#sudoku', wordsearch: '#wordsearch', math: '#math',
@@ -515,7 +555,7 @@ function describe(p) {
     'people living with dementia, carers and care homes.';
 }
 
-function guide(list) {
+function guide(list, first) {
   var BOARD = {
     A: 'Free Printable Dementia Activities',
     B: 'Brain Games for Seniors',
@@ -573,7 +613,8 @@ function guide(list) {
   ];
 
   list.forEach(function (p, i) {
-    var n = (i + 1 < 10 ? ' ' : '') + (i + 1);
+    var num = (first || 1) + i;
+    var n = (num < 10 ? ' ' : '') + num;
     out.push('══════════════════════════════════════════════════');
     out.push('  ' + n + '번    ' + (p.ko || ''));
     out.push('══════════════════════════════════════════════════');
@@ -611,6 +652,16 @@ var chrome = findChrome();
 if (!chrome) {
   console.log('크롬을 찾지 못해 핀터레스트 그림 만들기를 건너뜁니다.');
   process.exit(0);
+}
+
+/* PIN_FROM=102 처럼 주면 그 번호부터만 만든다 — 이미 올린 핀 그림을 다시 찍어 바꾸지 않기 위해서다.
+ * 안내서도 올리는-법-<처음>-<끝>.txt 로 따로 만들어, 82~101번 안내서를 덮어쓰지 않는다. */
+var FROM = parseInt(process.env.PIN_FROM || '0', 10);
+if (FROM) {
+  PINS = PINS.filter(function (p) {
+    var m = /^pin-(\d+)-/.exec(p.file);
+    return m && parseInt(m[1], 10) >= FROM;
+  });
 }
 
 var w = load('en');
@@ -662,7 +713,12 @@ PINS.forEach(function (p) {
 
 try { fs.rmSync(tmp, { recursive: true, force: true }); } catch (e) {}
 
-fs.writeFileSync(path.join(OUT, '올리는-법.txt'), '\uFEFF' + guide(made), 'utf8');
+if (FROM) {
+  var last = FROM + made.length - 1;
+  fs.writeFileSync(path.join(OUT, '올리는-법-' + FROM + '-' + last + '.txt'), '\uFEFF' + guide(made, FROM), 'utf8');
+} else {
+  fs.writeFileSync(path.join(OUT, '올리는-법.txt'), '\uFEFF' + guide(made), 'utf8');
+}
 
 console.log('\n핀터레스트 그림 ' + made.length + '장을 만들었습니다.');
 console.log(OUT);
