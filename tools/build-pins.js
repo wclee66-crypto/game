@@ -95,7 +95,7 @@ function load(lang) {
   run('js/data/words.js'); run('js/data/words-en.js');
   run('js/data/order-words.js'); run('js/data/order-words-en.js');
   run('js/data/pictures.js');
-  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig', 'dot2dot', 'shapecount', 'clock', 'numsearch', 'shadow', 'numpair', 'numrule', 'numpath'].forEach(function (id) {
+  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig', 'dot2dot', 'shapecount', 'clock', 'numsearch', 'shadow', 'numpair', 'numrule', 'numpath', 'cardmatch', 'nonogram', 'queens'].forEach(function (id) {
     run('js/games/' + id + '.js');
   });
   run('js/print.js');
@@ -461,6 +461,66 @@ COL2.forEach(function (c, i) {
     'coloring', { level: 'normal', picId: c[0] }, '색칠 공부 — ' + c[2]));
 });
 
+/* ---- 일반인용 두뇌 게임 핀 (122~) — 2026-11-01 「두뇌 게임」 입구를 열며 더했다 ----
+ * 어르신·치매 말은 쓰지 않고, 파란 「두뇌 게임」 입구로 바로 데려간다 (?mode=play).
+ * 그림도 그 입구와 같은 파랑으로 찍는다 (play: true). 서랍은 D(일반 두뇌 게임)다. */
+function playPin(file, title, sub, game, opt, ko) {
+  var p = one(file, title, sub, game, opt, ko);
+  p.play = true;
+  p.link = SITE + '/?lang=en&mode=play#' + game;
+  return p;
+}
+PINS.push(playPin('pin-122-queens-puzzle', 'Free Queens<br>Logic Puzzle',
+  'Place one crown in every row, column and colour · new board every time',
+  'queens', { level: 'easy' }, '퀸 놓기 (일반인용)'));
+PINS.push(playPin('pin-123-nonogram', 'Free Nonogram<br>Puzzles Online',
+  'Picture logic puzzles · 5×5 up to 10×10 · play in your browser',
+  'nonogram', { level: 'easy' }, '네모로직 (일반인용)'));
+PINS.push(playPin('pin-124-memory-match', 'Free Memory<br>Match Game',
+  'Flip the cards, find the pairs · five levels · play online',
+  'cardmatch', { level: 'normal' }, '짝 맞추기 (일반인용)'));
+PINS.push(playPin('pin-125-daily-sudoku', 'Free Sudoku<br>Online Daily',
+  'Easy to hard · a fresh puzzle every time · no app needed',
+  'sudoku', { level: 'hard' }, '스도쿠 (일반인용)'));
+PINS.push({
+  file: 'pin-126-brain-games-adults', play: true,
+  title: 'Free Brain Games<br>for Adults',
+  sub: 'Queens, Nonogram, Sudoku, Math Crossword and more',
+  ko: '여러 게임 모음 (일반인용)',
+  link: SITE + '/?lang=en&mode=play',
+  sheets: [
+    { game: 'queens', opt: { level: 'normal' } },
+    { game: 'nonogram', opt: { level: 'easy' } },
+    { game: 'sudoku', opt: { level: 'normal' } },
+    { game: 'mathcross', opt: { level: 'normal' } }
+  ]
+});
+PINS.push({
+  file: 'pin-127-daily-brain-challenge', play: true,
+  title: 'Daily Brain<br>Challenge',
+  sub: 'Three new puzzles every day · just 10 minutes',
+  ko: '오늘의 도전 소개 (일반인용)',
+  link: SITE + '/?lang=en&mode=play',
+  sheets: [
+    { game: 'nonogram', opt: { level: 'normal' } },
+    { game: 'queens', opt: { level: 'easy' } },
+    { game: 'numpath', opt: { level: 'normal' } },
+    { game: 'numrule', opt: { level: 'normal' } }
+  ]
+});
+PINS.push(playPin('pin-128-math-crossword-online', 'Free Math<br>Crossword Puzzles',
+  'Mental math logic puzzles · play online, five levels',
+  'mathcross', { level: 'hard' }, '계산 퍼즐 (일반인용)'));
+PINS.push(playPin('pin-129-number-path', 'Number Path<br>Logic Puzzle',
+  'Fill the path from 1 to the end · free online puzzle',
+  'numpath', { level: 'hard' }, '숫자 이어가기 (일반인용)'));
+PINS.push(playPin('pin-130-hard-nonogram', 'Hard Nonogram<br>Puzzles 10×10',
+  'Picture cross puzzles for a real challenge · free online',
+  'nonogram', { level: 'hard' }, '네모로직 어려움 (일반인용)'));
+PINS.push(playPin('pin-131-hard-queens', 'Hard Queens<br>Puzzles 9×9',
+  'The crown logic puzzle at full size · free online',
+  'queens', { level: 'hard' }, '퀸 놓기 어려움 (일반인용)'));
+
 /* 핀마다 어디로 데려갈지 — 그 게임 화면으로 바로 들어가게 한다 */
 var GOTO = {
   sudoku: '#sudoku', wordsearch: '#wordsearch', math: '#math',
@@ -530,15 +590,19 @@ function pinHtml(p, sheets, css) {
     '.foot{background:#0F2A20;color:#fff;text-align:center;padding:34px 0 36px}' +
     '.u{font-size:46px;font-weight:800;letter-spacing:-.02em;margin:0}' +
     '.n{font-size:24px;font-weight:500;color:#9FCBB6;margin:11px 0 0}' +
+    /* 일반인용 핀 — 「두뇌 게임」 입구와 같은 파랑 */
+    (p.play ? 'body{background:#EEF1FC}.badge{background:#3451D1}.t{color:#0F1631}.s{color:#4A5372}' +
+      '.card{border-color:#CDD5F3;box-shadow:0 14px 34px rgba(30,45,120,.18)}' +
+      '.foot{background:#1E2F8F}.n{color:#BFC9F7}' : '') +
     '</style></head><body>' +
     '<div class="head">' +
-      '<span class="badge">FREE · PLAY OR PRINT</span>' +
+      '<span class="badge">' + (p.play ? 'FREE · PLAY ONLINE' : 'FREE · PLAY OR PRINT') + '</span>' +
       '<p class="t">' + p.title + '</p>' +
       '<p class="s">' + p.sub + '</p>' +
     '</div>' +
     '<div class="pics">' + pics + '</div>' +
     '<div class="foot"><p class="u">playsaerok.com</p>' +
-      '<p class="n">free · no sign-up · print at home</p></div>' +
+      '<p class="n">' + (p.play ? 'free · no sign-up · no download' : 'free · no sign-up · print at home') + '</p></div>' +
     '</body></html>';
 }
 
@@ -547,6 +611,13 @@ function plain(t) { return t.replace(/<br>/g, ' '); }
 
 /** 핀 하나의 설명글 — 그림 위의 글을 풀어 쓰고, 늘 같은 약속으로 끝맺는다 */
 function describe(p) {
+  /* 일반인용 — 어르신·치매 말 없이, 무료·가입 없음·매일 새 문제를 앞세운다 */
+  if (p.play) {
+    return plain(p.title) + '. ' + p.sub.charAt(0).toUpperCase() + p.sub.slice(1) + '. ' +
+      'Free brain games you can play right in your browser — no sign-up, no download, no ads in the middle of a puzzle. ' +
+      'Five difficulty levels, a fresh puzzle every time, and a new Daily Challenge every day. ' +
+      'Your scores are saved on your device so you can keep a streak going.';
+  }
   return plain(p.title).replace(/^Free Printable /, 'Free printable ') + '. ' +
     p.sub.charAt(0).toUpperCase() + p.sub.slice(1) + '. ' +
     'Large clear print and five difficulty levels. ' +
@@ -559,7 +630,8 @@ function guide(list, first) {
   var BOARD = {
     A: 'Free Printable Dementia Activities',
     B: 'Brain Games for Seniors',
-    C: 'Activity Ideas for Care Homes'
+    C: 'Activity Ideas for Care Homes',
+    D: 'Free Brain Games & Logic Puzzles'     /* 일반인용 — 2026-11-01 */
   };
 
   var out = [
@@ -701,7 +773,7 @@ PINS.forEach(function (p) {
   if (fs.existsSync(out)) {
     /* 어느 서랍에 넣을지 — 색칠·틀린그림은 A(치매 활동지), 나머지는 B(두뇌 게임) */
     var g = (p.sheet && p.sheet.game) || '';
-    p.board = p.file.indexOf('carers') >= 0 ? 'C'
+    p.board = p.play ? 'D' : p.file.indexOf('carers') >= 0 ? 'C'
             : (!g || g === 'coloring' || g === 'spot' || g === 'copyfig' || g === 'dot2dot' || g === 'shapecount' || g === 'clock' || g === 'numsearch' || g === 'shadow' || g === 'numpair' || g === 'numrule' || g === 'numpath') ? 'A' : 'B';
     p.desc = describe(p);
     made.push(p);
