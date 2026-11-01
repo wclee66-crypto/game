@@ -303,6 +303,11 @@ html[data-mode="play"] {
   --track: #E4E8F3;
 }
 html[data-mode="play"] .sd-cell.is-peer { background: #F3F5FB; }
+/* 두뇌 게임 입구에는 종이 문제지가 없다 — 홈의 「문제 인쇄」와 게임마다의 「종이로 풀 문제 만들기」를 감춘다.
+   (색칠 공부를 마친 뒤 내 그림을 인쇄하는 것은 문제지가 아니므로 남긴다) */
+html[data-mode="play"] .printcard,
+html[data-mode="play"] .btn--print { display: none; }
+html[data-mode="play"] .today-row { grid-template-columns: 1fr; }
 .btn--wide { width: 100%; margin-top: .7rem; min-height: 2.9rem; font-size: .9rem; }
 
 .ring__txt {
