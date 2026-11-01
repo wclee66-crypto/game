@@ -24,12 +24,13 @@ window.App = (function () {
    * 고른 입구는 설정(mode)에 남는다. 점수 기록은 두 입구가 함께 쓴다. */
   function mode() { return Store.settings().mode === 'play' ? 'play' : 'care'; }
 
-  /* 두뇌 게임 입구에서는 어르신 재활용 성격이 짙은 셋을 뺀다 —
-     일반 사람에게는 너무 쉬워 '어린이용인가' 하고 나가게 된다. */
-  var PLAY_HIDE = ['clock', 'copyfig', 'dot2dot'];
+  /* 두뇌 게임 입구에서는 인지 활동 성격이 짙은 것을 뺀다 —
+     일반 사람에게는 너무 쉬워 '어린이용인가' 하고 나가게 된다.
+     (그림자 맞추기는 2026-11-01 사용자가 '인지활동 수준'이라 하여 더 뺐다) */
+  var PLAY_HIDE = ['clock', 'copyfig', 'dot2dot', 'shadow'];
   /* 퍼즐 맛이 진한 것부터 — 처음 온 사람이 '제대로 된 두뇌 게임'이라 느끼게 */
   var PLAY_ORDER = ['sudoku', 'nonogram', 'cardmatch', 'mathcross', 'numpath', 'numrule', 'wordsearch', 'maze', 'spot',
-                    'numpair', 'math', 'wordorder', 'quiz', 'shapecount', 'numsearch', 'shadow',
+                    'numpair', 'math', 'wordorder', 'quiz', 'shapecount', 'numsearch',
                     'listen', 'coloring'];
 
   function relist() {
