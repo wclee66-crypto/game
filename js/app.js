@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v80';                // sw.js 의 VERSION 과 함께 올린다
+  var APP_VERSION = 'v81';                // sw.js 의 VERSION 과 함께 올린다
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -16,10 +16,45 @@ window.App = (function () {
   var ALL_GAMES = Object.keys(window.Games || {});
   var GAMES = ALL_GAMES;                 // 말을 고를 때 다시 추린다 (relist)
 
+  /* ================= 입구 둘 =================
+   * 'care' 인지 훈련 — 처음부터 있던 새록. 어르신·보호자를 위한 곳이다.
+   * 'play' 두뇌 게임 — 누구나 즐기는 곳. 2026-11-01 에 더했다.
+   *   '치매 예방' 만 내세우니 일반 사람은 자기 얘기가 아니라고 여기고 나갔다.
+   *   게임은 같고, 첫인상(문구·색·고르는 게임·오늘의 도전)만 다르다.
+   * 고른 입구는 설정(mode)에 남는다. 점수 기록은 두 입구가 함께 쓴다. */
+  function mode() { return Store.settings().mode === 'play' ? 'play' : 'care'; }
+
+  /* 두뇌 게임 입구에서는 어르신 재활용 성격이 짙은 셋을 뺀다 —
+     일반 사람에게는 너무 쉬워 '어린이용인가' 하고 나가게 된다. */
+  var PLAY_HIDE = ['clock', 'copyfig', 'dot2dot'];
+  /* 퍼즐 맛이 진한 것부터 — 처음 온 사람이 '제대로 된 두뇌 게임'이라 느끼게 */
+  var PLAY_ORDER = ['sudoku', 'mathcross', 'numpath', 'numrule', 'wordsearch', 'maze', 'spot',
+                    'numpair', 'math', 'wordorder', 'quiz', 'shapecount', 'numsearch', 'shadow',
+                    'listen', 'coloring'];
+
   function relist() {
     var code = I18N.get();
     GAMES = ALL_GAMES.filter(function (g) { return playableIn(g, code); });
+    if (mode() === 'play') {
+      var at = function (g) { var i = PLAY_ORDER.indexOf(g); return i < 0 ? 99 : i; };
+      GAMES = GAMES.filter(function (g) { return PLAY_HIDE.indexOf(g) < 0; })
+        .map(function (g, i) { return { g: g, i: i }; })
+        .sort(function (a, b) { return at(a.g) - at(b.g) || a.i - b.i; })
+        .map(function (x) { return x.g; });
+    }
     MAX_DAY = MAX_PER_GAME * GAMES.length;
+  }
+
+  /** 오늘의 도전 — 날짜로 셋을 고른다. 같은 날이면 누구에게나 같은 셋이 나온다.
+      (매일 바뀌는 것이 있어야 내일 또 들어온다) */
+  function dailyPicks() {
+    var k = Store.dayKey(), seed = 7, pool = GAMES.slice(), out = [];
+    for (var i = 0; i < k.length; i++) seed = (Math.imul(seed, 31) + k.charCodeAt(i)) >>> 0;
+    while (out.length < Math.min(DAY_GOAL, GAMES.length)) {
+      seed = (Math.imul(seed, 1103515245) + 12345) >>> 0;
+      out.push(pool.splice((seed >>> 8) % pool.length, 1)[0]);
+    }
+    return out;
   }
 
   var MAX_PER_GAME = 1250;               // 한 게임에서 받을 수 있는 최고 점수
@@ -83,6 +118,7 @@ window.App = (function () {
   }
 
   function introCard() {
+    if (mode() === 'play') return playIntro();
     if (Store.settings().introDone) return '';
     return '<section class="about">' +
       '<button class="about__x" id="hmAboutX" aria-label="' + T('닫기') + '">×</button>' +
@@ -98,6 +134,20 @@ window.App = (function () {
           '직접 만들어 쓰던 것입니다. 다른 분들에게도 도움이 되면 좋겠다는 생각에 올려 봅니다.') +
       '</p>' +
       '<button class="about__more" id="hmAbout">' + T('종이 문제지 안내 보기') + '</button>' +
+    '</section>';
+  }
+
+  /* 두뇌 게임 입구의 첫 안내 — 치료·예방 이야기는 하지 않는다.
+     닫은 것은 인지 훈련 쪽과 따로 기억한다 (introPlayDone). */
+  function playIntro() {
+    if (Store.settings().introPlayDone) return '';
+    return '<section class="about">' +
+      '<button class="about__x" id="hmAboutX" aria-label="' + T('닫기') + '">×</button>' +
+      '<h2 class="about__h">' + T('하루 10분, 머리를 깨우는 퍼즐') + '</h2>' +
+      '<p class="about__p">' +
+        T('스도쿠·계산 퍼즐·미로·낱말찾기 등 {n}가지 두뇌 게임을 무료로 즐기실 수 있습니다. ' +
+          '가입도 설치도 필요 없습니다. 날마다 바뀌는 오늘의 도전 세 가지부터 해 보세요.', { n: GAMES.length }) +
+      '</p>' +
     '</section>';
   }
 
@@ -171,12 +221,15 @@ window.App = (function () {
     document.querySelectorAll('.tab').forEach(function (t) {
       t.classList.toggle('is-on', t.dataset.route === tabRoute);
     });
-    document.getElementById('btnBack').hidden = (route === 'home');
+    document.getElementById('btnBack').hidden = (route === 'home' || route === 'door');
+    /* 입구 고르기 화면에는 아래 탭을 두지 않는다 — 아직 어느 쪽인지 고르지 않았으므로 */
+    document.body.classList.toggle('is-door', route === 'door');
 
     /* 화면 위 제목 — 게임 화면의 제목·설명은 게임 파일이 스스로 들고 있다.
      * (name 과 tagline) 그래서 게임이 늘어도 여기는 손대지 않는다. */
     var FIXED = {
-      home:    [T('새록'), T('매일 조금씩, 기억이 새록새록')],
+      door:    [T('새록'), T('어느 쪽으로 들어가실까요')],
+      home:    titles_default(),
       games:   [T('게임 고르기'), T('오늘은 무엇을 해 볼까요')],
       records: [T('나의 기록'), T('날짜별 점수를 모아 봅니다')]
     };
@@ -189,14 +242,71 @@ window.App = (function () {
     view.scrollTop = 0;
     window.scrollTo(0, 0);
 
-    if (route === 'home') renderHome();
+    if (route === 'door') renderDoor();
+    else if (route === 'home') renderHome();
     else if (route === 'games') renderPicker();
     else if (route === 'records') renderRecords();
     else Games[route].mount(view);
 
     location.hash = route;
   }
-  function titles_default() { return [T('새록'), T('매일 조금씩, 기억이 새록새록')]; }
+  function titles_default() {
+    return mode() === 'play' ? [T('새록'), T('매일 10분, 두뇌 운동')]
+                             : [T('새록'), T('매일 조금씩, 기억이 새록새록')];
+  }
+
+  /* ================= 입구 고르기 ================= */
+
+  /* 두 입구를 처음 화면에 나란히 둔다. 고른 뒤에는 다시 묻지 않는다.
+     인지 훈련은 지금까지의 새록 그대로이고, 두뇌 게임은 누구나를 위한 새 입구다. */
+  var DOOR_ART = {
+    play: '<svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round">' +
+          '<rect x="9" y="9" width="30" height="30" rx="4"></rect><path d="M19 9v30M29 9v30M9 19h30M9 29h30"></path>' +
+          '<rect x="20.5" y="20.5" width="7" height="7" rx="1.5" fill="#fff" stroke="none"></rect></svg>',
+    care: '<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="#fff">' +
+          '<path d="M45 80 Q40.8 58.8 22 48 Q26.2 69.3 45 80 Z" opacity=".55"></path>' +
+          '<path d="M56 80 Q75.2 66.4 77 43 Q57.8 56.6 56 80 Z" opacity=".78"></path>' +
+          '<path d="M50 81 Q61.5 49 50 17 Q38.5 49 50 81 Z"></path></g></svg>'
+  };
+
+  function renderDoor() {
+    var door = function (m, who, name, desc, go) {
+      return '<button class="doorcard doorcard--' + m + '" data-mode="' + m + '">' +
+        '<span class="doorcard__art">' + DOOR_ART[m] + '</span>' +
+        '<span class="doorcard__who">' + who + '</span>' +
+        '<span class="doorcard__name">' + name + '</span>' +
+        '<span class="doorcard__desc">' + desc + '</span>' +
+        '<span class="doorcard__go">' + go + ' →</span>' +
+      '</button>';
+    };
+    view.innerHTML =
+      '<section class="door">' +
+        '<h2 class="door__h">' + T('어떤 두뇌 훈련을 찾으세요?') + '</h2>' +
+        '<p class="door__lead">' + T('게임은 모두 무료이고, 가입하지 않아도 됩니다.') + '</p>' +
+        '<div class="door__list">' +
+          door('play', T('누구나'), T('두뇌 게임'),
+            T('스도쿠·계산 퍼즐·미로 같은 퍼즐을 매일 10분씩. 날마다 바뀌는 오늘의 도전이 기다립니다.'),
+            T('두뇌 게임 하기')) +
+          door('care', T('어르신 · 보호자 · 요양 기관'), T('인지 훈련'),
+            T('큰 글씨와 쉬운 단계로 천천히. 치매 예방을 돕는 놀이와 무료 인쇄 문제지가 있습니다.'),
+            T('인지 훈련 하기')) +
+        '</div>' +
+        '<p class="door__foot">' + T('나중에 설정(⚙)에서 언제든 바꾸실 수 있습니다. 점수 기록은 함께 쓰입니다.') + '</p>' +
+      '</section>';
+
+    view.querySelectorAll('[data-mode]').forEach(function (b) {
+      b.addEventListener('click', function () { enterMode(b.dataset.mode); });
+    });
+  }
+
+  /** 입구를 고른다. 게임 목록·색·글이 모두 달라지므로 처음부터 다시 연다. */
+  function enterMode(m) {
+    var same = mode() === m;              // 고르기 전에도 인지 훈련으로 열려 있다
+    Store.setSetting('mode', m);
+    if (same) { go('home'); return; }
+    location.hash = 'home';
+    location.reload();
+  }
 
   /* ================= 홈 ================= */
 
@@ -299,8 +409,12 @@ window.App = (function () {
     });
     var chartMax = Math.max(1000, Math.max.apply(null, chartData.map(function (d) { return d.value; })));
 
-    var doneCount = GAMES.filter(function (g) { return best[g] != null; }).length;
-    var homeList = pickForHome(best);
+    var play = mode() === 'play';
+    /* 두뇌 게임 입구는 '오늘의 도전' 셋을 먼저 보이고, 넓은 화면이면 나머지를 그 아래에 둔다 */
+    var homeList = play ? dailyPicks() : pickForHome(best);
+    var restList = play && wideScreen()
+      ? GAMES.filter(function (g) { return homeList.indexOf(g) < 0; }) : [];
+    var shown = homeList.length + restList.length;
 
     view.innerHTML =
       '<section class="home">' +
@@ -328,9 +442,15 @@ window.App = (function () {
           '</button>' +
         '</div>' +
 
-        ('<h2 class="sec">' + T('오늘의 게임') + '</h2>') +
+        (play
+          ? '<h2 class="sec">' + T('오늘의 도전') + '<span class="sec__note">' + T('날마다 바뀝니다') + '</span></h2>'
+          : '<h2 class="sec">' + T('오늘의 게임') + '</h2>') +
         '<div class="gamelist">' + homeList.map(gameCard).join('') + '</div>' +
-        (homeList.length < GAMES.length
+        (restList.length
+          ? '<h2 class="sec">' + T('나머지 게임') + '</h2>' +
+            '<div class="gamelist">' + restList.map(gameCard).join('') + '</div>'
+          : '') +
+        (shown < GAMES.length
           ? '<button class="btn btn--ghost btn--wide" id="hmMore">' + T('게임 모두 보기 ({n}가지)', { n: GAMES.length }) + '</button>'
           : '') +
 
@@ -347,7 +467,12 @@ window.App = (function () {
 
         (Suggest.ready() ? ('<button class="linkbtn" id="hmSuggest">' + T('건의하기') + '</button>') : '') +
 
-        ('<p class="tipline">' + T('매일 조금씩, 여러 종목을 골고루 하는 것이 두뇌 건강에 좋습니다.') + '</p>') +
+        ('<p class="tipline">' + (play
+          ? T('오늘의 도전은 날마다 바뀝니다. 내일 또 만나요.')
+          : T('매일 조금씩, 여러 종목을 골고루 하는 것이 두뇌 건강에 좋습니다.')) + '</p>') +
+        /* 다른 입구로 가는 길 — 잘못 들어오신 분이 설정을 뒤지지 않아도 되게 */
+        '<button class="linkbtn" id="hmDoor">' +
+          (play ? T('어르신용 인지 훈련으로 가기') : T('누구나 하는 두뇌 게임으로 가기')) + '</button>' +
       '</section>';
 
     view.querySelectorAll('[data-go]').forEach(function (b) {
@@ -355,9 +480,10 @@ window.App = (function () {
     });
     var ax = view.querySelector('#hmAboutX');
     if (ax) ax.addEventListener('click', function () {
-      Store.setSetting('introDone', true);
+      Store.setSetting(play ? 'introPlayDone' : 'introDone', true);
       renderHome();
     });
+    view.querySelector('#hmDoor').addEventListener('click', function () { enterMode(play ? 'care' : 'play'); });
     var mb = view.querySelector('#hmMore');
     if (mb) mb.addEventListener('click', function () { go('games'); });
     view.querySelector('#hmRules').addEventListener('click', function () { showRules('all'); });
@@ -567,6 +693,14 @@ window.App = (function () {
     var body =
       '<div class="settings">' +
         '<div class="set">' +
+          '<span class="set__lbl">' + T('입구') + '</span>' +
+          '<div class="seg" id="setMode">' +
+            [['play', T('두뇌 게임')], ['care', T('인지 훈련')]].map(function (o) {
+              return '<button data-v="' + o[0] + '"' + (mode() === o[0] ? ' class="is-on"' : '') + '>' + o[1] + '</button>';
+            }).join('') +
+          '</div>' +
+        '</div>' +
+        '<div class="set">' +
           '<span class="set__lbl">' + T('언어') + '</span>' +
           '<div class="seg" id="setLang">' +
             I18N.langs.map(function (o) {
@@ -621,6 +755,14 @@ window.App = (function () {
       });
     });
 
+    m.card.querySelectorAll('#setMode button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        if (mode() === b.dataset.v) return;
+        m.close();
+        enterMode(b.dataset.v);
+      });
+    });
+
     m.card.querySelectorAll('#setFs button').forEach(function (b) {
       b.addEventListener('click', function () {
         Store.setSetting('fontScale', b.dataset.v);
@@ -654,6 +796,7 @@ window.App = (function () {
   function applySettings() {
     document.documentElement.dataset.fs = Store.settings().fontScale || 'md';
     document.documentElement.dataset.cursor = Store.settings().cursor || 'lg';
+    document.documentElement.dataset.mode = mode();     // 두뇌 게임 입구는 포인트 색이 다르다
   }
 
   function hasMouse() {
@@ -710,14 +853,29 @@ window.App = (function () {
       inst.querySelector('.appbar__inst-txt').textContent = T('앱 설치');
       inst.setAttribute('aria-label', T('앱으로 설치하기'));
     }
-    document.title = T('새록 · 두뇌 훈련');
+    var play = mode() === 'play';
+    document.title = play ? T('새록 · 두뇌 게임') : T('새록 · 두뇌 훈련');
     var meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute('content', T('스도쿠·낱말찾기·숫자 계산·단어 순서·상식퀴즈·색칠 공부·틀린그림찾기를 매일 조금씩. 날짜별 점수가 기록되는 치매 예방 두뇌 훈련 앱'));
+    if (meta) meta.setAttribute('content', play
+      ? T('스도쿠·계산 퍼즐·미로 등 날마다 바뀌는 두뇌 게임을 무료로. 가입 없이 바로 시작하고, 날짜별 점수가 기록됩니다.')
+      : T('스도쿠·낱말찾기·숫자 계산·단어 순서·상식퀴즈·색칠 공부·틀린그림찾기를 매일 조금씩. 날짜별 점수가 기록되는 치매 예방 두뇌 훈련 앱'));
+  }
+
+  /** 입구를 정한다 — 주소에 ?mode= 가 있으면 그것, 이미 쓰시던 분은 인지 훈련.
+      아무것도 정해지지 않은 처음 오신 분만 입구 고르기 화면을 본다. */
+  function settleMode() {
+    var q = /[?&]mode=(play|care)\b/.exec(location.search);
+    if (q) { Store.setSetting('mode', q[1]); return; }
+    if (Store.settings().mode) return;
+    /* 2026-11-01 이전부터 쓰시던 분은 묻지 않고 그대로 인지 훈련으로 연다 —
+       매일 오시는 어르신께 낯선 고르기 화면이 갑자기 나오면 안 된다. */
+    if (Object.keys(Store.allRecords()).length || Store.settings().introDone) Store.setSetting('mode', 'care');
   }
 
 
   function init() {
     view = document.getElementById('view');
+    settleMode();
     relist();                            // 말은 js/i18n.js 에서 이미 정해졌다
     localizeShell();
     applySettings();
@@ -747,7 +905,10 @@ window.App = (function () {
     }
 
     var start = (location.hash || '').replace('#', '');
-    go(['home', 'records'].concat(GAMES).indexOf(start) >= 0 ? start : 'home');
+    if (['door', 'home', 'records'].concat(GAMES).indexOf(start) < 0) start = 'home';
+    /* 게임으로 바로 들어오는 주소(#sudoku 등)는 고르기를 건너뛴다 — 핀·검색 페이지에서 온 분 */
+    if (start === 'home' && !Store.settings().mode) start = 'door';
+    go(start);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

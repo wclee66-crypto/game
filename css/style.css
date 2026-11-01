@@ -17,6 +17,7 @@
   --accent:    #0E9E62;   /* 포인트 초록 */
   --accent-d:  #0A7B4C;
   --accent-s:  #E2F4EB;   /* 옅은 초록 */
+  --accent-b:  #C6E7D6;   /* 옅은 초록 칸의 테두리 */
   --track:     #E4EBE7;
 
   --warn:      #C98A16;   /* 힌트 */
@@ -88,7 +89,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-size: .78rem; font-weight: 800; line-height: 1;
   display: flex; align-items: center; gap: .25rem;
 }
-.appbar__inst:active { background: #C6E7D6; }
+.appbar__inst:active { background: var(--accent-b); }
 .appbar__inst-ico { font-size: .95rem; }
 /* 좁은 화면에서는 글자를 접고 그림만 남긴다 */
 @media (max-width: 460px) {
@@ -140,7 +141,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .btn--danger { color: var(--bad); border-color: #F0D3D1; background: var(--bg); }
 .btn--big { width: 100%; min-height: 3.6rem; font-size: 1.02rem; margin: .2rem 0 1rem; }
 .btn--big small { display: block; font-weight: 500; font-size: .74rem; opacity: .9; margin-top: .12rem; }
-.btn--note { background: var(--accent-s); border-color: #C6E7D6; color: var(--accent-d); }
+.btn--note { background: var(--accent-s); border-color: var(--accent-b); color: var(--accent-d); }
 .btn--note small { color: var(--accent-d); opacity: .8; }
 .btn--print { width: 100%; margin-top: 1rem; min-height: 3.2rem; }
 .btn--print small { display: block; font-weight: 500; font-size: .72rem; color: var(--ink-3); margin-top: .1rem; }
@@ -161,7 +162,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .printcard {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: .3rem; text-align: center; padding: .7rem .5rem;
-  background: var(--accent-s); border: 1px solid #C6E7D6; border-radius: var(--r);
+  background: var(--accent-s); border: 1px solid var(--accent-b); border-radius: var(--r);
   transition: transform .1s ease;
 }
 .printcard:active { transform: scale(.98); }
@@ -214,9 +215,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .gcard:active { transform: scale(.99); }
 
 /* 오늘 한 게임 — 옅은 초록 바탕 */
-.gcard.is-done { background: var(--accent-s); border-color: #C6E7D6; }
+.gcard.is-done { background: var(--accent-s); border-color: var(--accent-b); }
 /* 하다 만 게임 — 초록 테두리만 */
-.gcard.is-resume { background: var(--bg); border-color: #C6E7D6; }
+.gcard.is-resume { background: var(--bg); border-color: var(--accent-b); }
 
 .gcard__body { flex: 1; min-width: 0; display: block; }
 /* 좁은 화면·큰 글씨에서 줄이 바뀌어도 낱말 가운데(기억하/기)를 자르지 않는다 */
@@ -244,6 +245,64 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .gcard__go.is-new.is-resume { background: var(--bg); color: var(--accent-d); box-shadow: inset 0 0 0 1.5px var(--accent); }
 
 .tipline { margin: 1.5rem .2rem 0; font-size: .76rem; color: var(--ink-3); line-height: 1.6; text-align: center; }
+.sec__note { margin-left: .45rem; font-size: .7rem; font-weight: 700; color: var(--ink-3); }
+
+/* ================= 입구 고르기 =================
+   두 입구가 한눈에 다른 곳으로 보이도록 각자의 색을 가진다.
+   (아직 어느 쪽도 고르지 않은 화면이라 --accent 를 쓰지 않는다) */
+:root {
+  --door-play: #3451D1; --door-play-s: #E8ECFB;
+  --door-care: #0E9E62; --door-care-s: #E2F4EB;
+}
+body.is-door .tabbar { display: none; }
+body.is-door .view { max-width: 900px; padding-bottom: calc(env(safe-area-inset-bottom) + 2rem); }
+.door { padding-top: .4rem; }
+.door__h { margin: .5rem .1rem .35rem; font-size: 1.5rem; font-weight: 900; letter-spacing: -.045em; line-height: 1.3; word-break: keep-all; }
+.door__lead { margin: 0 .1rem 1.2rem; font-size: .88rem; color: var(--ink-2); word-break: keep-all; }
+.door__list { display: grid; gap: .8rem; }
+@media (min-width: 760px) { .door__list { grid-template-columns: 1fr 1fr; gap: 1rem; } }
+.doorcard {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; align-items: flex-start; gap: .45rem;
+  min-height: 15.5rem; padding: 1.3rem 1.2rem 1.2rem; text-align: left;
+  background: var(--bg); border: 2px solid var(--line); border-radius: var(--r-lg);
+  transition: border-color .15s ease, transform .1s ease;
+}
+.doorcard--play { --c: var(--door-play); --cs: var(--door-play-s); }
+.doorcard--care { --c: var(--door-care); --cs: var(--door-care-s); }
+/* 오른쪽 위의 큰 동그라미 — 두 칸을 색으로 먼저 구별하게 한다 */
+.doorcard::before {
+  content: ''; position: absolute; right: -3rem; top: -3rem;
+  width: 9.5rem; height: 9.5rem; border-radius: 50%; background: var(--cs);
+}
+.doorcard > * { position: relative; }
+.doorcard:hover, .doorcard:focus-visible { border-color: var(--c); outline: none; }
+.doorcard:active { transform: scale(.985); }
+.doorcard__art {
+  width: 3.4rem; height: 3.4rem; margin-bottom: .35rem; border-radius: 16px;
+  background: var(--c); display: grid; place-items: center;
+}
+.doorcard__art svg { width: 2.3rem; height: 2.3rem; display: block; }
+.doorcard__who { font-size: .76rem; font-weight: 800; color: var(--c); word-break: keep-all; }
+.doorcard__name { font-size: 1.5rem; font-weight: 900; letter-spacing: -.045em; line-height: 1.2; color: var(--ink); }
+.doorcard__desc { font-size: .86rem; line-height: 1.65; color: var(--ink-2); word-break: keep-all; }
+.doorcard__go {
+  margin-top: auto; padding: .72rem 1.15rem; border-radius: 999px;
+  background: var(--c); color: #fff; font-size: .92rem; font-weight: 800; white-space: nowrap;
+}
+.door__foot { margin: 1.2rem .3rem 0; font-size: .76rem; line-height: 1.6; color: var(--ink-3); text-align: center; word-break: keep-all; }
+
+/* ================= 두뇌 게임 입구 (누구나) =================
+   인지 훈련(처음부터 있던 새록)과 다른 곳임을 알 수 있도록 색만 파랑 계열로 바꾼다.
+   크기·모양은 그대로 두어 게임 화면이 어긋나지 않게 한다. */
+html[data-mode="play"] {
+  --surf: #F4F6FC; --surf-2: #EAEEF8;
+  --ink: #0F1631; --ink-2: #4A5372; --ink-3: #868EA8;
+  --line: #E3E7F2; --line-2: #D0D6E7;
+  --accent: #3451D1; --accent-d: #263DA8; --accent-s: #E6EAFB; --accent-b: #C9D2F5;
+  --track: #E4E8F3;
+}
+html[data-mode="play"] .sd-cell.is-peer { background: #F3F5FB; }
 .btn--wide { width: 100%; margin-top: .7rem; min-height: 2.9rem; font-size: .9rem; }
 
 .ring__txt {
@@ -274,7 +333,7 @@ html[data-fs="lg"] .chart__lbl, html[data-fs="xl"] .chart__lbl { font-size: .58r
 .install {
   display: flex; align-items: center; gap: .8rem; width: 100%; text-align: left;
   margin-bottom: .85rem; padding: .85rem .9rem;
-  border: 1px solid #C6E7D6; border-radius: var(--r);
+  border: 1px solid var(--accent-b); border-radius: var(--r);
   background: var(--accent-s); color: var(--ink);
 }
 .install--tip { background: var(--surf); border-color: var(--line); }
@@ -1198,7 +1257,7 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
 /* 이 사이트가 무엇을 하는 곳인지 — 한 번 닫으면 다시 나오지 않는다 */
 .about {
   position: relative; margin-top: 1rem; padding: 1.1rem 2.4rem 1.1rem 1.1rem;
-  background: var(--accent-s); border: 1px solid #C6E7D6; border-radius: var(--r);
+  background: var(--accent-s); border: 1px solid var(--accent-b); border-radius: var(--r);
 }
 .about__h { margin: 0 0 .45rem; font-size: 1.02rem; font-weight: 800; color: var(--accent-d); letter-spacing: -.03em; }
 .about__p { margin: 0; font-size: .82rem; line-height: 1.7; color: var(--ink-2); }

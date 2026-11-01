@@ -6,6 +6,32 @@
  */
 window.I18N.dict.en = {
 
+  /* ---------- 입구 둘 (두뇌 게임 · 인지 훈련) ---------- */
+  '어느 쪽으로 들어가실까요': 'Choose your way in',
+  '어떤 두뇌 훈련을 찾으세요?': 'What kind of brain training are you looking for?',
+  '게임은 모두 무료이고, 가입하지 않아도 됩니다.': 'Every game is free, and there is nothing to sign up for.',
+  '누구나': 'For everyone',
+  '두뇌 게임': 'Brain Games',
+  '스도쿠·계산 퍼즐·미로 같은 퍼즐을 매일 10분씩. 날마다 바뀌는 오늘의 도전이 기다립니다.': 'Sudoku, math crosswords, mazes and more — ten minutes a day. A new Daily Challenge waits every day.',
+  '두뇌 게임 하기': 'Play brain games',
+  '어르신 · 보호자 · 요양 기관': 'Seniors · Carers · Care homes',
+  '인지 훈련': 'Senior Brain Training',
+  '큰 글씨와 쉬운 단계로 천천히. 치매 예방을 돕는 놀이와 무료 인쇄 문제지가 있습니다.': 'Large print and gentle levels, at your own pace. Activities that support memory, plus free printable worksheets.',
+  '인지 훈련 하기': 'Start senior training',
+  '나중에 설정(⚙)에서 언제든 바꾸실 수 있습니다. 점수 기록은 함께 쓰입니다.': 'You can switch any time in Settings (⚙). Your scores are shared between both.',
+  '매일 10분, 두뇌 운동': 'Ten minutes a day for your brain',
+  '하루 10분, 머리를 깨우는 퍼즐': 'Ten minutes of puzzles to wake up your brain',
+  '스도쿠·계산 퍼즐·미로·낱말찾기 등 {n}가지 두뇌 게임을 무료로 즐기실 수 있습니다. 가입도 설치도 필요 없습니다. 날마다 바뀌는 오늘의 도전 세 가지부터 해 보세요.': 'Enjoy {n} free brain games — Sudoku, math crosswords, mazes, word searches and more. No sign-up, no download. Start with today\'s three Daily Challenge games.',
+  '오늘의 도전': 'Daily Challenge',
+  '날마다 바뀝니다': 'new every day',
+  '나머지 게임': 'More games',
+  '오늘의 도전은 날마다 바뀝니다. 내일 또 만나요.': 'The Daily Challenge changes every day. See you tomorrow!',
+  '어르신용 인지 훈련으로 가기': 'Go to Senior Brain Training',
+  '누구나 하는 두뇌 게임으로 가기': 'Go to Brain Games for everyone',
+  '입구': 'Mode',
+  '새록 · 두뇌 게임': 'Saerok · Brain Games',
+  '스도쿠·계산 퍼즐·미로 등 날마다 바뀌는 두뇌 게임을 무료로. 가입 없이 바로 시작하고, 날짜별 점수가 기록됩니다.': 'Free daily brain games — Sudoku, math crosswords, mazes and more. Start right away with no sign-up; your scores are saved by date.',
+
   /* ---------- 앱 설치 안내 ---------- */
   '홈 화면에 설치되었습니다.': 'Added to your home screen.',
   '여기서는 설치할 수 없습니다': 'Cannot install here',
