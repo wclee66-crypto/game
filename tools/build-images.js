@@ -83,7 +83,7 @@ function loadAll(lang) {
   run('js/data/quiz-data.js'); run('js/data/quiz-data-en.js');
   run('js/data/words.js'); run('js/data/words-en.js'); run('js/data/order-words.js');
   run('js/data/order-words-en.js'); run('js/data/pictures.js');
-  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig', 'dot2dot', 'shapecount', 'clock', 'numsearch', 'shadow', 'numpair', 'numrule', 'numpath'].forEach(function (id) {
+  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig', 'dot2dot', 'shapecount', 'clock', 'numsearch', 'shadow', 'numpair', 'numrule', 'numpath', 'cardmatch', 'nonogram', 'queens'].forEach(function (id) {
     run('js/games/' + id + '.js');
   });
   run('js/print.js');
@@ -114,16 +114,24 @@ var PICKS = [
   { id: 'shadow',     level: 'easy' },
   { id: 'numpair',    level: 'easy' },
   { id: 'numrule',    level: 'easy' },
-  { id: 'numpath',    level: 'easy' }
+  { id: 'numpath',    level: 'easy' },
+  { id: 'cardmatch',  level: 'normal' },
+  { id: 'nonogram',   level: 'easy' },
+  { id: 'queens',     level: 'easy' }
 ];
 /* 말별 파일 꼬리표 — 한국어는 없음, 영어 -en, 일본어 -ja */
 var TAIL = { ko: '', en: '-en', ja: '-ja' };
 /* 일본어 낱말 은행이 없는 게임은 일본어 그림을 만들지 않는다 */
 var NO_JA = { wordsearch: 1, wordorder: 1, quiz: 1 };
 
+/* 새 게임 그림만 찍을 때 — G=queens,nonogram node tools/build-images.js
+   나머지 그림과 사이트 공유 그림은 그대로 둔다 (문제가 바뀌어 괜히 전부 새 그림이 되지 않게) */
+var ONLY = (process.env.G || '').split(',').filter(Boolean);
+
 var SHOTS = [];
 ['ko', 'en', 'ja'].forEach(function (lang) {
   PICKS.forEach(function (q) {
+    if (ONLY.length && ONLY.indexOf(q.id) < 0) return;
     if (lang === 'ja' && NO_JA[q.id]) return;
     SHOTS.push({ id: q.id, lang: lang, level: q.level,
       file: q.id + '-worksheet' + TAIL[lang] });
@@ -249,7 +257,7 @@ function ogHtml(lang) {
     '</body></html>';
 }
 
-['ko', 'en', 'ja'].forEach(function (lang) {
+(ONLY.length ? [] : ['ko', 'en', 'ja']).forEach(function (lang) {
   var f = path.join(OUT, '_og-' + lang + '.html');       /* 그림 옆에 두어야 문제지 그림을 읽는다 */
   fs.writeFileSync(f, ogHtml(lang));
   var out = path.join(OUT, 'saerok-og' + TAIL[lang] + '.png');
