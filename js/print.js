@@ -836,6 +836,53 @@ window.Print = (function () {
     return pages.join('');
   }
 
+  /* ---------------- 퀸 놓기 ---------------- */
+
+  /** 구역은 옅은 색과 굵은 경계선 둘 다로 나눈다 — 흑백으로 찍혀도 굵은 선만으로 구역이 보인다.
+   *  정답지에는 왕관 자리에 검은 왕관을 그린다. */
+  function qnSvg(B, answer) {
+    var n = B.n, u = 10, out = [], i, y, x;
+    var colors = Games.queens.colors;
+    for (i = 0; i < n * n; i++) {
+      y = Math.floor(i / n); x = i % n;
+      out.push('<rect x="' + (x * u) + '" y="' + (y * u) + '" width="' + u + '" height="' + u + '" fill="' + colors[B.reg[i] % colors.length] + '" stroke="#000" stroke-width=".25"/>');
+    }
+    for (i = 0; i < n * n; i++) {
+      y = Math.floor(i / n); x = i % n;
+      if (x < n - 1 && B.reg[i + 1] !== B.reg[i]) out.push('<line x1="' + ((x + 1) * u) + '" y1="' + (y * u) + '" x2="' + ((x + 1) * u) + '" y2="' + ((y + 1) * u) + '" stroke="#000" stroke-width="1.3" stroke-linecap="square"/>');
+      if (y < n - 1 && B.reg[i + n] !== B.reg[i]) out.push('<line x1="' + (x * u) + '" y1="' + ((y + 1) * u) + '" x2="' + ((x + 1) * u) + '" y2="' + ((y + 1) * u) + '" stroke="#000" stroke-width="1.3" stroke-linecap="square"/>');
+    }
+    out.push('<rect x="0" y="0" width="' + (n * u) + '" height="' + (n * u) + '" fill="none" stroke="#000" stroke-width="1.6"/>');
+    if (answer) B.sol.forEach(function (c, r) {
+      out.push('<g transform="translate(' + (c * u + 1.8) + ' ' + (r * u + 1.8) + ') scale(.27)">' +
+        '<path d="M3 8l4.5 3.5L12 5l4.5 6.5L21 8l-2 10H5L3 8z"/><rect x="5" y="19.2" width="14" height="2" rx="1"/></g>');
+    });
+    return '<svg class="ps-qnsvg" viewBox="-1 -1 ' + (n * u + 2) + ' ' + (n * u + 2) + '" xmlns="http://www.w3.org/2000/svg">' + out.join('') + '</svg>';
+  }
+
+  function queensSheets(o) {
+    var pages = [];
+    for (var k = 0; k < o.count; k++) {
+      var b = Games.queens.makeForPrint(o.level);
+      var no = o.count > 1 ? ' · ' + T('{n}번', { n: k + 1 }) : '';
+      var item = function (q, i, ans) {
+        return '<div class="ps-ngitem"><p class="ps-ngq">' + (i + 1) + '.</p>' + qnSvg(q, ans) + '</div>';
+      };
+      pages.push('<section class="ps-sheet">' +
+        sheetHead(T('퀸 놓기'), b.levelName + no,
+          T('가로줄·세로줄·굵은 선으로 나뉜 구역마다 동그라미를 하나씩 그리세요. 동그라미끼리는 대각선으로도 닿으면 안 됩니다.')) +
+        '<div class="ps-nggrid">' + b.boards.map(function (q, i) { return item(q, i, false); }).join('') + '</div>' +
+      '</section>');
+      if (o.answer) {
+        pages.push('<section class="ps-sheet ps-sheet--ans">' +
+          sheetHead(T('퀸 놓기 정답'), b.levelName + no, '') +
+          '<div class="ps-nggrid">' + b.boards.map(function (q, i) { return item(q, i, true); }).join('') + '</div>' +
+        '</section>');
+      }
+    }
+    return pages.join('');
+  }
+
   var SHEETS = {
     sudoku: sudokuSheets,
     wordsearch: wordsearchSheets,
@@ -855,7 +902,8 @@ window.Print = (function () {
     numrule: numruleSheets,
     numpath: numpathSheets,
     cardmatch: cardmatchSheets,
-    nonogram: nonogramSheets
+    nonogram: nonogramSheets,
+    queens: queensSheets
   };
 
   /* 인쇄 내용은 **인쇄 창이 닫힌 뒤에** 지운다.

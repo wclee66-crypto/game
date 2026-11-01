@@ -85,6 +85,26 @@ window.I18N.dict.en = {
   '줄마다 적힌 숫자만큼 칸을 이어서 칠하세요. 숫자가 둘 이상이면 사이를 한 칸 이상 띄웁니다.': 'Shade as many squares in a row as each number says. With two or more numbers, leave at least one gap between the groups.',
   '네모로직 정답': 'Nonogram — answers',
 
+  /* ---------- 퀸 놓기 (2026-11-01) ---------- */
+  '퀸 놓기': 'Queens',
+  '가로줄·세로줄·같은 색 구역마다 왕관을 하나씩 놓습니다.': 'Place one crown in every row, every column and every colour region.',
+  '왕관끼리는 대각선으로도 서로 닿으면 안 됩니다.': 'Crowns may not touch each other — not even diagonally.',
+  '줄마다·색마다 왕관을 하나씩 놓으세요': 'Place one crown in each row, column and colour',
+  '붉은 왕관끼리 규칙에 맞지 않아요': 'The red crowns break a rule',
+  '모두 맞게 놓았습니다!': 'All placed correctly!',
+  '잘못 놓은 왕관을 걷어 냈습니다': 'A misplaced crown was removed',
+  '맞는 자리에 왕관 하나를 놓았습니다': 'One crown was placed in the right spot',
+  '퀸 놓기 {n}단계 완료!': 'Queens level {n} complete!',
+  '줄마다·색마다 왕관 하나씩': 'One crown per row, column and colour',
+  '퀸 놓기 점수 규칙': 'Queens scoring',
+  '판이 커집니다 — 1단계 5×5 · 2단계 6×6 · 3단계 7×7 · 4단계 8×8 · 5단계 9×9': 'The board grows — Level 1: 5×5 · Level 2: 6×6 · Level 3: 7×7 · Level 4: 8×8 · Level 5: 9×9',
+  '가로줄·세로줄·같은 색 구역마다 왕관을 하나씩 놓습니다. 왕관끼리는 대각선으로도 닿으면 안 됩니다': 'Place one crown in every row, column and colour region. Crowns may not touch, even diagonally',
+  '왕관이 못 들어갈 칸에 X 를 놓아 두면 헷갈리지 않습니다. 누른 채 밀면 여러 칸에 한꺼번에 놓입니다': 'Mark squares that cannot hold a crown with X to keep track. Press and drag to mark several at once',
+  '최대 600점 · 다 푼 판 수에 비례 (그만둔 판은 맞게 놓은 왕관만큼)': 'Up to 600 · based on puzzles solved (an unfinished puzzle counts for the crowns placed correctly)',
+  '없음 — 규칙에 어긋난 왕관은 붉게 보일 뿐입니다': 'None — crowns that break a rule simply turn red',
+  '가로줄·세로줄·굵은 선으로 나뉜 구역마다 동그라미를 하나씩 그리세요. 동그라미끼리는 대각선으로도 닿으면 안 됩니다.': 'Draw one circle in every row, every column and every region outlined in bold. Circles may not touch each other, even diagonally.',
+  '퀸 놓기 정답': 'Queens — answers',
+
   /* ---------- 앱 설치 안내 ---------- */
   '홈 화면에 설치되었습니다.': 'Added to your home screen.',
   '여기서는 설치할 수 없습니다': 'Cannot install here',
