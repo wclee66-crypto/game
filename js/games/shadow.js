@@ -161,7 +161,7 @@ window.Games.shadow = (function () {
           iconSvg(p.target, 'sd-target') +
         '</div>' +
 
-        '<div class="sd-grid" id="sdGrid" style="grid-template-columns:repeat(' + Math.min(4, p.opts.length) + ',1fr)">' +
+        '<div class="sd-opts" id="sdGrid" style="grid-template-columns:repeat(' + Math.min(4, p.opts.length) + ',1fr)">' +
           p.opts.map(function (id, k) {
             return '<button class="sd-opt" data-id="' + id + '" data-k="' + k + '">' + iconSvg(id, 'sd-opt-svg') + '</button>';
           }).join('') +

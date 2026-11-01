@@ -484,7 +484,7 @@ button.install:active { transform: scale(.99); }
 /* 대상 그림은 초록으로 채워, 아래 검정 그림자들과 한눈에 구별된다 */
 .sd-target { display: block; width: 92px; height: 92px; margin: 0 auto; color: var(--accent-d); }
 
-.sd-grid { display: grid; gap: .5rem; margin-top: .9rem; }
+.sd-opts { display: grid; gap: .5rem; margin-top: .9rem; }
 .sd-opt {
   min-height: 4.6rem; border-radius: 14px; border: 1px solid var(--line); background: var(--surf);
   display: flex; align-items: center; justify-content: center; padding: .4rem;
@@ -1276,7 +1276,7 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
   .appbar { padding-left: calc(var(--gut) + 1rem); padding-right: calc(var(--gut) + 1rem); }
   .tabbar { padding-left: calc(var(--gut) + .4rem); padding-right: calc(var(--gut) + .4rem); }
 
-  .sd-grid, .pad, .hud, .tools { max-width: 540px; margin-left: auto; margin-right: auto; }
+  .sd-grid, .sd-opts, .pad, .hud, .tools { max-width: 540px; margin-left: auto; margin-right: auto; }
   .qz-q { font-size: 1.45rem; }
   /* 화면이 넓으면 두 그림을 나란히 놓는다 */
   .sp-wrap { flex-direction: row; }
