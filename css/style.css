@@ -577,6 +577,82 @@ button.install:active { transform: scale(.99); }
   .np-cell { font-size: 1.4rem; }
 }
 
+/* ================= 짝 맞추기 ================= */
+
+.cm-grid {
+  display: grid; grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
+  gap: .5rem; margin: .8rem auto 0; max-width: 520px;
+}
+.cm-card { position: relative; aspect-ratio: 3 / 4; padding: 0; border: 0; background: none; perspective: 700px; }
+.cm-back, .cm-face {
+  position: absolute; inset: 0; display: grid; place-items: center; border-radius: 12px;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden; transition: transform .35s ease;
+}
+/* 뒷면 — 포인트 색 바탕에 옅은 동그라미 하나. 그림이 비치지 않게 꽉 채운다 */
+.cm-back {
+  background: var(--accent) radial-gradient(circle, rgba(255,255,255,.24) 0 22%, transparent 23%);
+  border: 1px solid var(--accent-d);
+}
+.cm-face { background: var(--bg); border: 2px solid var(--line-2); transform: rotateY(180deg); }
+.cm-face svg { width: 64%; height: 64%; display: block; }
+.cm-card.is-up .cm-back { transform: rotateY(-180deg); }
+.cm-card.is-up .cm-face { transform: rotateY(0); }
+.cm-card.is-done .cm-face { border-color: var(--accent); background: var(--accent-s); }
+.cm-card:active .cm-back { filter: brightness(.94); }
+@media (prefers-reduced-motion: reduce) { .cm-back, .cm-face { transition: none; } }
+
+/* ================= 네모로직 ================= */
+
+/* 왼쪽 숫자 줄 + n 칸. 손가락으로 밀어 칠할 때 화면이 함께 밀리지 않게 touch-action 을 끈다 */
+.ng-board {
+  display: grid; grid-template-columns: auto repeat(var(--n), minmax(0, 1fr));
+  max-width: 520px; margin: .8rem auto 0;
+  touch-action: none; user-select: none; -webkit-user-select: none;
+}
+.ng-cc { display: flex; align-items: flex-end; justify-content: center; padding-bottom: .3rem; }
+.ng-col { display: flex; flex-direction: column; align-items: center; }
+.ng-rc { display: flex; align-items: center; justify-content: flex-end; padding-right: .45rem; }
+.ng-row { display: flex; gap: .4rem; }
+.ng-col b, .ng-row b {
+  font-family: var(--font-num); font-weight: 800; font-size: .95rem; line-height: 1.2; color: var(--ink);
+}
+.ng-board--big .ng-col b, .ng-board--big .ng-row b { font-size: .8rem; }
+.ng-board--big .ng-row { gap: .3rem; }
+/* 다 맞은 줄의 숫자는 흐리게 — 남은 줄만 눈에 들어오게 */
+.ng-rc.is-ok b, .ng-cc.is-ok b { color: var(--ink-3); opacity: .5; }
+
+.ng-cell {
+  position: relative; aspect-ratio: 1; cursor: pointer; background: var(--bg);
+  border-right: 1px solid var(--line-2); border-bottom: 1px solid var(--line-2);
+}
+.ng-cell.is-r5    { border-right: 2px solid var(--ink-3); }
+.ng-cell.is-b5    { border-bottom: 2px solid var(--ink-3); }
+.ng-cell.is-top    { border-top: 2px solid var(--ink-2); }
+.ng-cell.is-left   { border-left: 2px solid var(--ink-2); }
+.ng-cell.is-right  { border-right: 2px solid var(--ink-2); }
+.ng-cell.is-bottom { border-bottom: 2px solid var(--ink-2); }
+.ng-cell.is-fill { background: var(--ink); }
+.ng-cell.is-x::after {
+  content: '✕'; position: absolute; inset: 0; display: grid; place-items: center;
+  color: var(--ink-3); font-size: .9rem; font-weight: 700;
+}
+.ng-cell.is-hint { outline: 3px solid var(--warn); outline-offset: -3px; z-index: 1; }
+.ng-board.is-solved .ng-cell.is-fill { background: var(--accent); transition: background .4s ease; }
+
+.ng-mode { display: grid; grid-template-columns: 1fr 1fr; gap: .45rem; max-width: 520px; margin: .9rem auto 0; }
+.ng-mode button {
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+  padding: .75rem .5rem; border-radius: var(--r-sm); border: 2px solid var(--line);
+  background: var(--surf); color: var(--ink-2); font-size: .95rem; font-weight: 800;
+}
+.ng-mode button.is-on { border-color: var(--accent); background: var(--accent-s); color: var(--accent-d); }
+.ng-sw {
+  width: 1.1rem; height: 1.1rem; display: inline-grid; place-items: center;
+  border-radius: 3px; font-style: normal; font-size: .75rem; line-height: 1;
+}
+.ng-sw--fill { background: var(--ink); }
+.ng-sw--x { border: 1.5px solid var(--ink-3); color: var(--ink-3); }
+
 /* ================= 규칙 찾기 ================= */
 
 .nr-card {
@@ -1615,6 +1691,26 @@ html[data-cursor="lg"], html[data-cursor="lg"] * {
   .ps-sdoptsvg { display: block; width: 100%; height: 100%; color: #000; }
   .ps-sdopt em { position: absolute; left: 0; bottom: -3.2mm; width: 100%; text-align: center;
     font-style: normal; font-size: 8pt; font-weight: 700; }
+
+  /* ---- 짝 맞추기 (오려 쓰는 카드) ---- */
+  /* 점선이 오리는 자리다. 색 그림은 그대로 찍는다 (흑백 인쇄기에서도 모양으로 가린다) */
+  .ps-cmgrid { display: grid; grid-template-columns: repeat(var(--pc, 3), 1fr); margin-top: 4mm; }
+  /* 정사각 카드 — 20장도 A4 한 장에 들어가도록 (6장까지 한 줄에 셋 · 16장까지 넷 · 20장은 다섯) */
+  .ps-cmcard {
+    aspect-ratio: 1; display: grid; place-items: center;
+    border: .6pt dashed #000; margin: -.3pt;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .ps-cmcard svg { width: 62%; height: auto; display: block; }
+
+  /* ---- 네모로직 ---- */
+  /* 5~8칸은 넉 판(두 칸 × 두 줄), 10칸은 두 판을 위아래로 크게 */
+  .ps-nggrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5mm; margin-top: 3mm; }
+  .ps-nggrid--one { grid-template-columns: 1fr; }
+  .ps-ngitem { border: 1pt solid #000; border-radius: 2mm; padding: 3mm; break-inside: avoid; }
+  .ps-ngq { margin: 0 0 1mm; font-size: 10pt; font-weight: 800; }
+  .ps-ngsvg { display: block; width: 100%; max-width: 82mm; height: auto; margin: 0 auto; color: #000; }
+  .ps-nggrid--one .ps-ngsvg { max-width: 105mm; }
 
   /* ---- 숫자 짝 찾기 ---- */
   /* 한 장에 넉 판 — 두 칸 × 두 줄. 정답지는 짝인 두 칸을 옅은 초록으로 물들인다 (npSvg 의 mark) */

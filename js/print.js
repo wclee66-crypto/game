@@ -321,9 +321,11 @@ window.Print = (function () {
     if (o.game !== 'mixed' && SHEETS[o.game]) {
       for (i = 0; i < o.count; i++) order.push(o.game);   /* 한 종목만 여러 장 */
     } else {
-      var bag = ids.slice();                              /* 종목을 돌아가며 */
+      /* 짝 맞추기는 푸는 문제지가 아니라 오려 쓰는 카드라 섞어 뽑기에는 넣지 않는다 */
+      var pool = ids.filter(function (id) { return id !== 'cardmatch'; });
+      var bag = pool.slice();                             /* 종목을 돌아가며 */
       while (order.length < o.count) {
-        if (!bag.length) bag = ids.slice();
+        if (!bag.length) bag = pool.slice();
         order.push(bag.splice(Math.floor(Math.random() * bag.length), 1)[0]);
       }
     }
@@ -757,6 +759,83 @@ window.Print = (function () {
     return pages.join('');
   }
 
+  /* ---------------- 짝 맞추기 (오려 쓰는 카드) ---------------- */
+
+  /** 종이에서는 짝 맞추기를 '풀' 수가 없어, 카드 한 벌을 찍어 오려 쓰게 한다.
+   *  요양 기관에서 탁자에 엎어 놓고 함께 하기 좋다. 정답지는 필요 없다. */
+  function cardmatchSheets(o) {
+    var pages = [];
+    for (var n = 0; n < o.count; n++) {
+      var b = Games.cardmatch.makeForPrint(o.level);
+      var no = o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : '';
+      pages.push('<section class="ps-sheet">' +
+        sheetHead(T('짝 맞추기 카드'), b.levelName + no,
+          T('점선을 따라 카드 {n}장을 오리세요. 뒤집어 섞어 놓고 두 장씩 열어 같은 그림을 찾습니다.', { n: b.cards.length })) +
+        '<div class="ps-cmgrid" style="--pc:' + (b.cards.length <= 6 ? 3 : (b.cards.length <= 16 ? 4 : 5)) + '">' +
+          b.cards.map(function (svg) { return '<div class="ps-cmcard">' + svg + '</div>'; }).join('') +
+        '</div>' +
+      '</section>');
+    }
+    return pages.join('');
+  }
+
+  /* ---------------- 네모로직 ---------------- */
+
+  /** 숫자 줄까지 한 그림에 담는다. answer 면 칠할 칸을 검게 채운다. */
+  function ngSvg(b, n, answer) {
+    var u = 10, fs = 5.6;
+    var rw = Math.max.apply(null, b.rows.map(function (x) { return x.length; }));
+    var ch = Math.max.apply(null, b.cols.map(function (x) { return x.length; }));
+    var L = rw * 6 + 3, Tp = ch * 6.4 + 3, W = L + n * u, H = Tp + n * u;
+    var out = [], r, c;
+    b.rows.forEach(function (row, r) {
+      row.forEach(function (v, k) {
+        out.push('<text x="' + (L - 3 - (row.length - 1 - k) * 6) + '" y="' + (Tp + r * u + u / 2 + 2) + '" text-anchor="end" font-size="' + fs + '" font-weight="800">' + v + '</text>');
+      });
+    });
+    b.cols.forEach(function (col, c) {
+      col.forEach(function (v, k) {
+        out.push('<text x="' + (L + c * u + u / 2) + '" y="' + (Tp - 3 - (col.length - 1 - k) * 6.4) + '" text-anchor="middle" font-size="' + fs + '" font-weight="800">' + v + '</text>');
+      });
+    });
+    for (r = 0; r < n; r++) for (c = 0; c < n; c++) {
+      var on = answer && b.sol.charAt(r * n + c) === '1';
+      out.push('<rect x="' + (L + c * u) + '" y="' + (Tp + r * u) + '" width="' + u + '" height="' + u + '" fill="' + (on ? '#000' : 'none') + '" stroke="#000" stroke-width=".35"/>');
+    }
+    /* 다섯 칸마다 굵은 선과 바깥 테두리 — 칸을 세기 쉽게 */
+    for (var k = 0; k <= n; k++) {
+      var w = (k === 0 || k === n) ? 1 : (k % 5 === 0 ? .8 : 0);
+      if (!w) continue;
+      out.push('<line x1="' + (L + k * u) + '" y1="' + Tp + '" x2="' + (L + k * u) + '" y2="' + H + '" stroke="#000" stroke-width="' + w + '"/>');
+      out.push('<line x1="' + L + '" y1="' + (Tp + k * u) + '" x2="' + W + '" y2="' + (Tp + k * u) + '" stroke="#000" stroke-width="' + w + '"/>');
+    }
+    return '<svg class="ps-ngsvg" viewBox="-1 -1 ' + (W + 2) + ' ' + (H + 2) + '" xmlns="http://www.w3.org/2000/svg" font-family="Manrope, sans-serif">' + out.join('') + '</svg>';
+  }
+
+  function nonogramSheets(o) {
+    var pages = [];
+    for (var n = 0; n < o.count; n++) {
+      var b = Games.nonogram.makeForPrint(o.level);
+      var no = o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : '';
+      var cls = 'ps-nggrid' + (b.boards.length <= 2 ? ' ps-nggrid--one' : '');
+      var item = function (q, i, ans) {
+        return '<div class="ps-ngitem"><p class="ps-ngq">' + (i + 1) + '.</p>' + ngSvg(q, b.n, ans) + '</div>';
+      };
+      pages.push('<section class="ps-sheet">' +
+        sheetHead(T('네모로직'), b.levelName + no,
+          T('줄마다 적힌 숫자만큼 칸을 이어서 칠하세요. 숫자가 둘 이상이면 사이를 한 칸 이상 띄웁니다.')) +
+        '<div class="' + cls + '">' + b.boards.map(function (q, i) { return item(q, i, false); }).join('') + '</div>' +
+      '</section>');
+      if (o.answer) {
+        pages.push('<section class="ps-sheet ps-sheet--ans">' +
+          sheetHead(T('네모로직 정답'), b.levelName + no, '') +
+          '<div class="' + cls + '">' + b.boards.map(function (q, i) { return item(q, i, true); }).join('') + '</div>' +
+        '</section>');
+      }
+    }
+    return pages.join('');
+  }
+
   var SHEETS = {
     sudoku: sudokuSheets,
     wordsearch: wordsearchSheets,
@@ -774,7 +853,9 @@ window.Print = (function () {
     shadow: shadowSheets,
     numpair: numpairSheets,
     numrule: numruleSheets,
-    numpath: numpathSheets
+    numpath: numpathSheets,
+    cardmatch: cardmatchSheets,
+    nonogram: nonogramSheets
   };
 
   /* 인쇄 내용은 **인쇄 창이 닫힌 뒤에** 지운다.
