@@ -270,6 +270,52 @@ function ogHtml(lang) {
   try { fs.unlinkSync(f); } catch (e) {}
 });
 
+/* ---------- 일반인용 두뇌 게임 안내(/brain-games/)의 공유 그림 ----------
+ * 「두뇌 게임」 입구와 같은 파랑. 치매·어르신 말은 넣지 않는다.
+ * 이것만 다시 찍으려면 G=brain node tools/build-images.js */
+function brainOgHtml(lang) {
+  var C = lang === 'en'
+    ? { t: 'Free Brain Games', s: 'A new Daily Challenge every day', f: 'playsaerok.com · no sign-up, no download' }
+    : lang === 'ja'
+    ? { t: '無料 脳トレゲーム', s: '毎日かわる「今日のチャレンジ」', f: 'playsaerok.com · 登録なし · インストール不要' }
+    : { t: '무료 두뇌 게임', s: '날마다 바뀌는 오늘의 도전', f: 'playsaerok.com · 가입 없이 · 설치 없이' };
+  var tail = TAIL[lang];
+  var pics = ['nonogram-worksheet' + tail, 'queens-worksheet' + tail, 'sudoku-worksheet' + tail];
+  var cards = pics.map(function (n, i) {
+    var rot = [-7, 0, 7][i], top = [40, 14, 40][i];
+    /* 문제지 위쪽만 보이게 잘라 높이를 맞춘다 — 통째로 넣으면 아래 글자를 덮는다 */
+    return '<img src="' + n + '.png" style="width:236px;height:220px;object-fit:cover;object-position:top;' +
+      'border-radius:10px;background:#fff;' +
+      'box-shadow:0 12px 30px rgba(10,20,70,.35);transform:rotate(' + rot + 'deg);margin-top:' + top + 'px">';
+  }).join('');
+  return '<!DOCTYPE html><html lang="' + lang + '"><head><meta charset="utf-8">' +
+    '<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;700;800;900&family=Manrope:wght@700;800&display=swap" rel="stylesheet">' +
+    '<style>html,body{margin:0;padding:0}' +
+    'body{width:1200px;height:630px;background:#3451D1;font-family:"Gothic A1","Manrope",sans-serif;' +
+    'display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}' +
+    '.t{font-size:64px;font-weight:900;letter-spacing:-.04em;color:#fff;margin:0}' +
+    '.s{font-size:28px;font-weight:700;color:#DCE3FF;margin:10px 0 0}' +
+    '.row{display:flex;gap:22px;align-items:flex-start;margin-top:22px;height:262px}' +
+    '.f{font-size:20px;font-weight:700;color:#C3CDFA;margin:22px 0 0}' +
+    '</style></head><body>' +
+    '<p class="t">' + C.t + '</p><p class="s">' + C.s + '</p>' +
+    '<div class="row">' + cards + '</div>' +
+    '<p class="f">' + C.f + '</p>' +
+    '</body></html>';
+}
+(!ONLY.length || ONLY.indexOf('brain') >= 0 ? ['ko', 'en', 'ja'] : []).forEach(function (lang) {
+  var f = path.join(OUT, '_brain-' + lang + '.html');
+  fs.writeFileSync(f, brainOgHtml(lang));
+  var out = path.join(OUT, 'brain-og' + TAIL[lang] + '.png');
+  try {
+    cp.execFileSync(chrome, ['--headless=new', '--disable-gpu', '--hide-scrollbars',
+      '--force-device-scale-factor=1', '--window-size=1200,630', '--virtual-time-budget=5000',
+      '--screenshot=' + out, 'file:///' + f.replace(/\\/g, '/')], { stdio: 'ignore', timeout: 60000 });
+    if (fs.existsSync(out)) { made.push(path.basename(out)); console.log('  만듦: ' + path.basename(out)); }
+  } catch (e) { console.log('  찍기 실패: brain og ' + lang); }
+  try { fs.unlinkSync(f); } catch (e) {}
+});
+
 /* ---------- 게임마다 카톡용 가로 그림 (1200×630) ----------
  * 카톡·페이스북은 가로로 넓은 그림만 크게 보여 줍니다.
  * 문제지는 세로라 그대로 쓰면 작게 잘려 나오므로, 옆에 이름을 적어 한 장으로 만듭니다. */

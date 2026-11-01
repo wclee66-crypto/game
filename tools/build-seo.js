@@ -138,7 +138,31 @@ var COPY = {
     story: '제가 치매를 앓으시는 어머니를 위해 인터넷에서 문제를 검색하다가 찾기가 너무 힘들어 ' +
            '직접 만들어 쓰던 것입니다. 다른 분들에게도 도움이 되면 좋겠다는 생각에 올려 봅니다.',
     shotCap: '실제로 인쇄되는 문제지입니다. 누를 때마다 새 문제가 만들어집니다.',
-    shotList: '문제지 미리 보기'
+    shotList: '문제지 미리 보기',
+    /* 일반인용 두뇌 게임 안내 (/brain-games/) — 치매·어르신 이야기는 하지 않는다 */
+    brainLink: '무료 두뇌 게임',
+    brainTitle: '무료 두뇌 게임 — 매일 10분 두뇌 퍼즐',
+    brainLead: '스도쿠·네모로직·퀸 놓기·짝 맞추기·계산 퍼즐·미로 등 {n}가지 두뇌 게임을 무료로 즐기세요. ' +
+               '가입도 설치도 없이 휴대폰과 컴퓨터에서 바로 열립니다.',
+    brainPlay: '두뇌 게임 시작하기',
+    brainDailyH: '날마다 바뀌는 오늘의 도전',
+    brainDaily: '매일 세 가지 게임이 「오늘의 도전」으로 나옵니다. 같은 날에는 누구에게나 같은 셋이라 ' +
+                '가족·친구와 점수를 견주어 보기 좋습니다. 하루 10분이면 충분합니다.',
+    brainListH: '어떤 게임이 있나요',
+    brainWhyH: '이렇게 즐기세요',
+    brainWhy: [
+      '난이도는 다섯 단계입니다. 편한 단계에서 시작해 한 단계씩 올려 보세요.',
+      '날짜별 점수가 이 기기에 저절로 기록되어, 내가 얼마나 꾸준히 했는지 그래프로 볼 수 있습니다.',
+      '틀려도 점수가 깎이지 않습니다. 시간이 남으면 보너스가 붙을 뿐입니다.',
+      '문제는 매번 새로 만들어집니다. 같은 문제를 두 번 풀 일이 없습니다.'
+    ],
+    faqH: '자주 묻는 질문',
+    faq: [
+      ['정말 무료인가요?', '네. 모든 게임이 무료이고, 앞으로도 무료입니다.'],
+      ['가입해야 하나요?', '아니요. 주소를 열면 바로 시작됩니다. 점수는 이 기기에만 저장됩니다.'],
+      ['휴대폰에서도 되나요?', '네. 휴대폰·태블릿·컴퓨터 어디서나 됩니다. 홈 화면에 앱처럼 설치하면 인터넷 없이도 열립니다.'],
+      ['어르신용 쉬운 게임도 있나요?', '네. 첫 화면에서 「인지 훈련」을 고르시면 큰 글씨와 쉬운 단계, 무료 인쇄 문제지가 있습니다.']
+    ]
   },
   en: {
     brand: 'Saerok',
@@ -179,7 +203,30 @@ var COPY = {
            'far too hard to find good ones — so I made these for her. I am putting them here in the ' +
            'hope that they help someone else too.',
     shotCap: 'A real worksheet. Every sheet is generated fresh when you print.',
-    shotList: 'Worksheet preview'
+    shotList: 'Worksheet preview',
+    brainLink: 'Free brain games',
+    brainTitle: 'Free Brain Games Online — Daily Puzzles',
+    brainLead: 'Play {n} free brain games — Sudoku, Nonogram, Queens, Memory Match, Math Crossword, mazes and more. ' +
+               'No sign-up, no download: it opens right away on your phone or computer.',
+    brainPlay: 'Play brain games now',
+    brainDailyH: 'A new Daily Challenge every day',
+    brainDaily: 'Every day three games are picked as the Daily Challenge. Everyone gets the same three on the same day, ' +
+                'so it is easy to compare scores with family and friends. Ten minutes a day is plenty.',
+    brainListH: 'The games',
+    brainWhyH: 'How it works',
+    brainWhy: [
+      'Each game has five levels. Start where it feels comfortable and move up one step at a time.',
+      'Your daily scores are saved on your device automatically, so you can see your streak on a chart.',
+      'Mistakes never cost points. Finishing with time to spare simply earns a bonus.',
+      'Every puzzle is generated fresh, so you never solve the same one twice.'
+    ],
+    faqH: 'Frequently asked questions',
+    faq: [
+      ['Is it really free?', 'Yes. Every game is free, and will stay free.'],
+      ['Do I need an account?', 'No. Open the page and start playing. Your scores are stored only on your device.'],
+      ['Does it work on a phone?', 'Yes — on phones, tablets and computers. Add it to your home screen and it even works offline.'],
+      ['Are there easier games for seniors?', 'Yes. Choose “Senior Brain Training” on the first screen for large print, gentle levels and free printable worksheets.']
+    ]
   },
   ja: {
     brand: 'サエロク',
@@ -218,7 +265,30 @@ var COPY = {
     story: '認知症の母のために問題を探しても、なかなか良いものが見つからず、自分で作って使っていたものです。' +
            'ほかの方のお役にも立てばと思い、公開しています。',
     shotCap: '実際に印刷されるプリントです。押すたびに新しい問題が作られます。',
-    shotList: 'プリントの見本'
+    shotList: 'プリントの見本',
+    brainLink: '無料 脳トレゲーム',
+    brainTitle: '無料 脳トレゲーム — 毎日10分のパズル',
+    brainLead: 'ナンプレ・お絵かきロジック・クイーン置き・神経衰弱・計算パズル・迷路など {n} 種類の脳トレゲームを無料で。' +
+               '登録もインストールもいらず、スマホでもパソコンでもすぐ遊べます。',
+    brainPlay: '脳トレゲームを始める',
+    brainDailyH: '日替わりの「今日のチャレンジ」',
+    brainDaily: '毎日3つのゲームが「今日のチャレンジ」になります。同じ日はだれでも同じ3つなので、' +
+                '家族や友だちと点数をくらべるのも楽しいです。1日10分で十分です。',
+    brainListH: 'どんなゲームがありますか',
+    brainWhyH: '遊び方',
+    brainWhy: [
+      'レベルは5段階です。楽なレベルから始めて、1段階ずつ上げてみましょう。',
+      '日ごとの得点がこの端末に自動で記録され、どれだけ続けたかをグラフで見られます。',
+      'まちがえても減点はありません。時間が残ればボーナスがつくだけです。',
+      '問題は毎回新しく作られます。同じ問題を2回解くことはありません。'
+    ],
+    faqH: 'よくある質問',
+    faq: [
+      ['本当に無料ですか？', 'はい。すべてのゲームが無料で、これからも無料です。'],
+      ['登録は必要ですか？', 'いいえ。開けばすぐに始まります。得点はこの端末にだけ保存されます。'],
+      ['スマホでも遊べますか？', 'はい。スマホ・タブレット・パソコンのどれでも遊べます。ホーム画面に追加すれば、ネットがなくても開けます。'],
+      ['高齢の方向けのやさしいゲームもありますか？', 'はい。最初の画面で「認知トレーニング」をえらぶと、大きな文字とやさしい段階、無料の印刷プリントがあります。']
+    ]
   }
 };
 
@@ -362,7 +432,8 @@ function footer(C, lang, games, hereId) {
     '</nav>\n' +
     '<footer class="doc__foot">\n' +
     '  <a href="/' + LX[lang].qs + '">' + C.home + '</a> · ' +
-    '<a href="' + LX[lang].base + '/print/">' + C.printPage + '</a>\n' +
+    '<a href="' + LX[lang].base + '/print/">' + C.printPage + '</a> · ' +
+    '<a href="' + LX[lang].base + '/brain-games/">' + C.brainLink + '</a>\n' +
     '  <p>' + C.free + '</p>\n' +
     '</footer>\n';
 }
@@ -520,6 +591,77 @@ function printPage(lang, C, games) {
   };
 }
 
+/* ================= 일반인용 두뇌 게임 안내 한 장 (/brain-games/) ================= *
+ * 2026-11-01 「두뇌 게임」 입구를 열며 더했다. 다른 페이지는 모두 어르신·치매 쪽 말이라
+ * '무료 두뇌 게임'을 찾는 일반인이 들어올 길이 없었다.
+ * 단추는 모두 ?mode=play 를 달고 있어, 누르면 입구 고르기 없이 두뇌 게임 쪽으로 바로 들어간다.
+ * 어떤 게임을 뺄지·어떤 순서로 놓을지는 js/app.js 의 PLAY_HIDE·PLAY_ORDER 를 그대로 읽어 온다.
+ */
+function playLists() {
+  var src = fs.readFileSync(path.join(ROOT, 'js/app.js'), 'utf8');
+  function grab(name) {
+    var m = new RegExp('var ' + name + ' = \\[([^\\]]*)\\]').exec(src);
+    return m ? (m[1].match(/'[^']+'/g) || []).map(function (s) { return s.slice(1, -1); }) : [];
+  }
+  return { hide: grab('PLAY_HIDE'), order: grab('PLAY_ORDER') };
+}
+var PLAY = playLists();
+
+function playHref(lang, id) {
+  return '/' + (LX[lang].qs ? LX[lang].qs + '&' : '?') + 'mode=play' + (id ? '#' + id : '');
+}
+
+function brainPage(lang, C, games) {
+  var base = LX[lang].base;
+  var url = SITE + base + '/brain-games/';
+  var alts = altsOf('brain-games', lang);
+  var at = function (g) { var i = PLAY.order.indexOf(g.id); return i < 0 ? 99 : i; };
+  var list = games.filter(function (g) { return PLAY.hide.indexOf(g.id) < 0; })
+    .sort(function (a, b) { return at(a) - at(b); });
+
+  var items = list.map(function (g) {
+    return '<li><a href="' + playHref(lang, g.id) + '"><b>' + esc(g.name) + '</b></a> — ' + esc(g.tagline) + '</li>';
+  }).join('');
+  var why = C.brainWhy.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('');
+  var faq = C.faq.map(function (q) { return '<h3>' + esc(q[0]) + '</h3>\n<p>' + esc(q[1]) + '</p>'; }).join('\n');
+  /* 자주 묻는 질문을 구글이 알아보는 꼴로도 적는다 — 검색 결과에 질문이 펼쳐져 나올 수 있다 */
+  var ld = JSON.stringify({
+    '@context': 'https://schema.org', '@type': 'FAQPage',
+    mainEntity: C.faq.map(function (q) {
+      return { '@type': 'Question', name: q[0], acceptedAnswer: { '@type': 'Answer', text: q[1] } };
+    })
+  }).replace(/</g, '\\u003c');
+  var lead = C.brainLead.replace('{n}', list.length);
+
+  var body =
+    header(C, lang, alts) +
+    '<main class="doc__main">\n' +
+    '<h1>' + esc(C.brainTitle) + '</h1>\n' +
+    '<p class="doc__lead">' + esc(lead) + '</p>\n' +
+    '<p class="doc__cta"><a class="doc__btn" href="' + playHref(lang) + '">' + esc(C.brainPlay) + '</a></p>\n' +
+    '<h2>' + esc(C.brainDailyH) + '</h2>\n<p>' + esc(C.brainDaily) + '</p>\n' +
+    '<h2>' + esc(C.brainListH) + '</h2>\n<ul class="doc__lv">' + items + '</ul>\n' +
+    '<h2>' + esc(C.brainWhyH) + '</h2>\n<ul class="doc__lv">' + why + '</ul>\n' +
+    '<p class="doc__cta"><a class="doc__btn" href="' + playHref(lang) + '">' + esc(C.brainPlay) + '</a></p>\n' +
+    '<h2>' + esc(C.faqH) + '</h2>\n' + faq + '\n' +
+    '</main>\n' +
+    '<script type="application/ld+json">' + ld + '</script>\n' +
+    footer(C, lang, games, null);
+
+  return {
+    dir: base + '/brain-games',
+    html: page({
+      lang: lang, url: url,
+      alts: ALL_LANGS.map(function (l) { return { lang: l, href: SITE + LX[l].base + '/brain-games/' }; }),
+      title: C.brainTitle + ' · ' + C.brand,
+      desc: lead,
+      siteName: C.siteName,
+      image: fs.existsSync(path.join(ROOT, 'images', 'brain-og' + LX[lang].tail + '.png')) ? 'brain-og' + LX[lang].tail + '.png' : null,
+      body: body
+    })
+  };
+}
+
 /* ================= 만들기 ================= */
 
 function rmrf(p) {
@@ -554,6 +696,9 @@ ALL_LANGS.forEach(function (lang) {
   var pp = printPage(lang, C, games);
   write(pp.dir, pp.html);
   made.push(pp.dir + '/');
+  var bp = brainPage(lang, C, games);
+  write(bp.dir, bp.html);
+  made.push(bp.dir + '/');
   /* 문제지 안내 페이지에는 그림이 다 모여 있다 */
   shots[pp.dir + '/'] = games.filter(function (g) { return shot(g.id, lang); }).map(function (g) {
     return { f: shot(g.id, lang).f, alt: shotAlt(g.name, lang) };

@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v83';                // sw.js 의 VERSION 과 함께 올린다
+  var APP_VERSION = 'v84';                // sw.js 의 VERSION 과 함께 올린다
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -868,7 +868,15 @@ window.App = (function () {
       아무것도 정해지지 않은 처음 오신 분만 입구 고르기 화면을 본다. */
   function settleMode() {
     var q = /[?&]mode=(play|care)\b/.exec(location.search);
-    if (q) { Store.setSetting('mode', q[1]); return; }
+    if (q) {
+      Store.setSetting('mode', q[1]);
+      /* 주소에서 mode 를 지운다 — 남아 있으면 설정에서 입구를 바꿔 다시 열 때 도로 이 입구가 된다 */
+      if (window.history && history.replaceState) {
+        var rest = location.search.replace(/([?&])mode=(play|care)\b&?/, '$1').replace(/[?&]$/, '');
+        try { history.replaceState(null, '', location.pathname + rest + location.hash); } catch (e) {}
+      }
+      return;
+    }
     if (Store.settings().mode) return;
     /* 2026-11-01 이전부터 쓰시던 분은 묻지 않고 그대로 인지 훈련으로 연다 —
        매일 오시는 어르신께 낯선 고르기 화면이 갑자기 나오면 안 된다. */
