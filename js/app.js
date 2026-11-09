@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v84';                // sw.js 의 VERSION 과 함께 올린다
+  var APP_VERSION = 'v85';                // sw.js 의 VERSION 과 함께 올린다
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -15,6 +15,7 @@ window.App = (function () {
   }
   var ALL_GAMES = Object.keys(window.Games || {});
   var GAMES = ALL_GAMES;                 // 말을 고를 때 다시 추린다 (relist)
+  var NEED_ENTRY = false;                // 새 버전에서 입구를 아직 고르지 않았으면 대문을 보여 준다
 
   /* ================= 입구 둘 =================
    * 'care' 인지 훈련 — 처음부터 있던 새록. 어르신·보호자를 위한 곳이다.
@@ -258,7 +259,7 @@ window.App = (function () {
 
   /* ================= 입구 고르기 ================= */
 
-  /* 두 입구를 처음 화면에 나란히 둔다. 고른 뒤에는 다시 묻지 않는다.
+  /* 두 입구를 처음 화면에 나란히 둔다. 버전이 바뀌면 한 번 더 고르게 한다.
      인지 훈련은 지금까지의 새록 그대로이고, 두뇌 게임은 누구나를 위한 새 입구다. */
   var DOOR_ART = {
     play: '<svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round">' +
@@ -304,6 +305,7 @@ window.App = (function () {
   function enterMode(m) {
     var same = mode() === m;              // 고르기 전에도 인지 훈련으로 열려 있다
     Store.setSetting('mode', m);
+    Store.setSetting('entryVersion', APP_VERSION); // 이번 버전에서 입구를 골랐음을 기억한다
     if (same) { go('home'); return; }
     location.hash = 'home';
     location.reload();
@@ -864,12 +866,13 @@ window.App = (function () {
       : T('스도쿠·낱말찾기·숫자 계산·단어 순서·상식퀴즈·색칠 공부·틀린그림찾기를 매일 조금씩. 날짜별 점수가 기록되는 치매 예방 두뇌 훈련 앱'));
   }
 
-  /** 입구를 정한다 — 주소에 ?mode= 가 있으면 그것, 이미 쓰시던 분은 인지 훈련.
-      아무것도 정해지지 않은 처음 오신 분만 입구 고르기 화면을 본다. */
+  /** 새 버전마다 대문에서 입구를 다시 고른다. 점수·다른 설정은 그대로 둔다.
+      검색·공유 주소에 ?mode= 가 있으면 해당 입구로 바로 들어간다. */
   function settleMode() {
     var q = /[?&]mode=(play|care)\b/.exec(location.search);
     if (q) {
       Store.setSetting('mode', q[1]);
+      Store.setSetting('entryVersion', APP_VERSION);
       /* 주소에서 mode 를 지운다 — 남아 있으면 설정에서 입구를 바꿔 다시 열 때 도로 이 입구가 된다 */
       if (window.history && history.replaceState) {
         var rest = location.search.replace(/([?&])mode=(play|care)\b&?/, '$1').replace(/[?&]$/, '');
@@ -877,9 +880,9 @@ window.App = (function () {
       }
       return;
     }
+    NEED_ENTRY = Store.settings().entryVersion !== APP_VERSION;
+    if (NEED_ENTRY) return;
     if (Store.settings().mode) return;
-    /* 2026-11-01 이전부터 쓰시던 분은 묻지 않고 그대로 인지 훈련으로 연다 —
-       매일 오시는 어르신께 낯선 고르기 화면이 갑자기 나오면 안 된다. */
     if (Object.keys(Store.allRecords()).length || Store.settings().introDone) Store.setSetting('mode', 'care');
   }
 
@@ -918,7 +921,7 @@ window.App = (function () {
     var start = (location.hash || '').replace('#', '');
     if (['door', 'home', 'records'].concat(GAMES).indexOf(start) < 0) start = 'home';
     /* 게임으로 바로 들어오는 주소(#sudoku 등)는 고르기를 건너뛴다 — 핀·검색 페이지에서 온 분 */
-    if (start === 'home' && !Store.settings().mode) start = 'door';
+    if (start === 'home' && (NEED_ENTRY || !Store.settings().mode)) start = 'door';
     go(start);
   }
 
