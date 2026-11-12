@@ -923,9 +923,20 @@ window.Print = (function () {
   }
 
   /** 만들어진 종이를 인쇄 창에 올리고, 창이 닫힌 뒤에 지운다 */
+  /* 종이마다 맨 아래 여백에 주소 한 줄 — 2026-11-12 에 더했다.
+   * 내려받은 문제지가 복지관·가족에게 돌면서 다시 찾아오는 길이 된다
+   * (내려받기가 방문 횟수보다 많았다). 문제지 칸 안이 아니라 종이 여백(@page)에 찍으므로
+   * 문제 자리를 조금도 차지하지 않고, 한 장짜리가 두 장으로 넘어가는 일도 없다.
+   * 크롬·엣지와 그것으로 만든 PDF 에서 나온다. (여백 글을 못 찍는 브라우저에서는 그냥 빠진다) */
+  function footStyle() {
+    var t = T('더 많은 무료 문제지와 두뇌 게임 · playsaerok.com').replace(/"/g, '');
+    return '<style>@media print{@page{@bottom-center{content:"' + t + '";' +
+      'font-family:Manrope,"Gothic A1",sans-serif;font-size:8.5pt;font-weight:700;color:#555;}}}</style>';
+  }
+
   function printHtml(html) {
     var root = document.getElementById('printRoot');
-    root.innerHTML = html;
+    root.innerHTML = footStyle() + html;
 
     var cleared = false;
     function cleanup() {
@@ -1017,7 +1028,7 @@ window.Print = (function () {
   function sheets(game, o) {
     var make = SHEETS[game];
     if (!make) return '';
-    return make({
+    return footStyle() + make({
       level: o && o.level, count: (o && o.count) || 1,
       answer: !!(o && o.answer), picId: (o && o.picId) || 'random',
       themeId: (o && o.themeId) || null

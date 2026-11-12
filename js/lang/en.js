@@ -105,6 +105,8 @@ window.I18N.dict.en = {
   '가로줄·세로줄·굵은 선으로 나뉜 구역마다 동그라미를 하나씩 그리세요. 동그라미끼리는 대각선으로도 닿으면 안 됩니다.': 'Draw one circle in every row, every column and every region outlined in bold. Circles may not touch each other, even diagonally.',
   '퀸 놓기 정답': 'Queens — answers',
 
+  '더 많은 무료 문제지와 두뇌 게임 · playsaerok.com': 'More free printable puzzles & brain games · playsaerok.com',   /* 문제지 아래 여백 (2026-11-12) */
+
   /* ---------- 앱 설치 안내 ---------- */
   '홈 화면에 설치되었습니다.': 'Added to your home screen.',
   '여기서는 설치할 수 없습니다': 'Cannot install here',
