@@ -1572,6 +1572,10 @@ html[data-cursor="lg"], html[data-cursor="lg"] * {
     font-size: 20pt; font-weight: 800; line-height: 14mm; vertical-align: middle;
   }
   .pw-box.ans { color: #444; }
+  .ps-wo tr.is-long .pw-q { font-size: 21pt; letter-spacing: .03em; }
+  .ps-wo tr.is-long .pw-box { width: 10.5mm; height: 10.5mm; line-height: 10.5mm; font-size: 16pt; margin: 0 .6mm; }
+  .ps-wo tr.is-xlong .pw-q { font-size: 17pt; letter-spacing: .02em; }
+  .ps-wo tr.is-xlong .pw-box { width: 8.5mm; height: 8.5mm; line-height: 8.5mm; font-size: 13pt; margin: 0 .5mm; }
 
   /* 찾을 낱말은 글자판 위에 놓는다 — 먼저 읽고 판을 보게 */
   .ps-ws-words {
@@ -1655,7 +1659,9 @@ html[data-cursor="lg"], html[data-cursor="lg"] * {
   .ps-mc .mc-board { width: 42mm; }
   /* 7칸짜리는 두 칸으로 놓아 크게 — 작으면 어르신이 못 보신다 */
   .ps-mcwrap--big { grid-template-columns: repeat(2, 1fr); gap: 4mm; }
-  .ps-mcwrap--big .mc-board { width: 55mm; }
+  /* 아래 .ps-mc .mc-board { width: 100% } 보다 앞서야 해서 한 단계 더 좁혀 적는다
+     (예전에는 이 줄이 져서 판이 칸을 꽉 채워 커지고, 한 장이 두 장으로 넘쳤다) */
+  .ps-mcwrap--big .ps-mc .mc-board { width: 50mm; }
   .ps-mcwrap--big .mc-num, .ps-mcwrap--big .mc-sym { font-size: 12pt; }
   .ps-mc .mc-board {
     display: grid; grid-template-columns: repeat(var(--c), 1fr);
@@ -1739,7 +1745,7 @@ html[data-cursor="lg"], html[data-cursor="lg"] * {
   .ps-ngitem { border: 1pt solid #000; border-radius: 2mm; padding: 3mm; break-inside: avoid; }
   .ps-ngq { margin: 0 0 1mm; font-size: 10pt; font-weight: 800; }
   .ps-ngsvg { display: block; width: 100%; max-width: 82mm; height: auto; margin: 0 auto; color: #000; }
-  .ps-nggrid--one .ps-ngsvg { max-width: 105mm; }
+  .ps-nggrid--one .ps-ngsvg { max-width: 90mm; }   /* 10칸 두 판이 A4 한 장에 들어가게 */
   /* ---- 퀸 놓기 ---- (네모로직과 같은 넉 판 틀을 쓴다) */
   .ps-qnsvg { display: block; width: 100%; max-width: 76mm; height: auto; margin: 0 auto;
     -webkit-print-color-adjust: exact; print-color-adjust: exact; }

@@ -107,6 +107,9 @@ window.I18N.dict.en = {
 
   '더 많은 무료 문제지와 두뇌 게임 · playsaerok.com': 'More free printable puzzles & brain games · playsaerok.com',   /* 문제지 아래 여백 (2026-11-12) */
 
+  '크리스마스트리': 'Christmas tree',   /* 색칠 그림 (2026-11-13) */
+  '선물 상자': 'Gift box',
+
   /* ---------- 앱 설치 안내 ---------- */
   '홈 화면에 설치되었습니다.': 'Added to your home screen.',
   '여기서는 설치할 수 없습니다': 'Cannot install here',

@@ -156,7 +156,9 @@ window.Print = (function () {
       var boxes = it.w.split('').map(function (ch) {
         return '<span class="pw-box' + (answer ? ' ans' : '') + '">' + (answer ? esc(ch) : '') + '</span>';
       }).join('');
-      return '<tr>' +
+      /* 영어처럼 긴 낱말은 네모를 작게 — 한 줄에 다 안 들어가면 두 줄로 꺾여 A4 를 넘친다 */
+      var len = it.w.length;
+      return '<tr' + (len >= 8 ? ' class="is-xlong"' : len >= 6 ? ' class="is-long"' : '') + '>' +
         '<td class="pw-q">' + esc(it.s) + '</td>' +
         '<td class="pw-arrow">···▸</td>' +
         '<td class="pw-a">' + boxes + '</td>' +

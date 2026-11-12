@@ -195,4 +195,130 @@ LANGS.forEach(function (lang) {
   });
 });
 
+/* ================= 묶음 문제지 (2026-11-13) =================
+ * 게임 하나·단계 하나짜리 파일과 달리, 여러 게임을 섞어 한 파일로 묶는다.
+ *  - 크리스마스·겨울 묶음 — 영어권에서 11~12월에 가장 많이 찾는 활동지
+ *  - 30일 묶음 — 하루 한 장씩 30일. 요양 기관·가족이 '하루 한 장씩 드리면 되는' 것을 찾는다.
+ *    맨 앞에 30칸 체크표, 정답은 모두 맨 뒤.
+ * 이것만 다시 만들려면  G=packs node tools/build-pdf.js
+ * 파일 이름은 늘 같다 — 검색용 페이지(build-seo.js 의 PACKS)가 이 이름으로 찾는다.
+ */
+var PACK_COPY = {
+  ko: { xmas: '크리스마스·겨울 두뇌 활동지', xmasSub: '낱말찾기 · 색칠 공부 · 미로 · 스도쿠',
+        d30: '30일 두뇌 훈련 문제지', d30Sub: '하루 한 장씩, 여러 게임을 골고루',
+        easy: '쉬움', normal: '보통', day: '{n}일째', check: '다 푼 날에 표시하세요',
+        how: '하루에 한 장씩 풀어 보세요. 정답은 맨 뒤에 모아 두었습니다.',
+        contents: '들어 있는 것' },
+  en: { xmas: 'Christmas & Winter Brain Activities', xmasSub: 'Word search · colour by number · mazes · sudoku',
+        d30: '30-Day Brain Activity Pack', d30Sub: 'One page a day, a different puzzle each day',
+        easy: 'Easy', normal: 'Medium', day: 'Day {n}', check: 'Tick each day when it is done',
+        how: 'Do one page a day. All the answers are at the back.',
+        contents: 'Inside' },
+  ja: { xmas: 'クリスマス・冬の脳トレプリント', xmasSub: 'ぬり絵 · 迷路 · ナンプレ · 計算',
+        d30: '30日間 脳トレプリント', d30Sub: '1日1枚、毎日ちがうパズル',
+        easy: 'やさしい', normal: 'ふつう', day: '{n}日目', check: '解いた日に印をつけましょう',
+        how: '1日1枚ずつ解いてみましょう。答えは最後にまとめてあります。',
+        contents: '入っているもの' }
+};
+
+/** 표지 한 장 — 제목·설명, 30일 묶음이면 체크표 */
+function packCover(C, title, sub, checks) {
+  var grid = '';
+  if (checks) {
+    grid = '<p style="margin:9mm 0 3mm;font-size:12pt;font-weight:800">' + esc(C.check) + '</p>' +
+      '<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:2.5mm">';
+    for (var i = 1; i <= checks; i++) {
+      grid += '<div style="border:1pt solid #000;border-radius:2mm;height:19mm;display:flex;flex-direction:column;' +
+        'align-items:center;justify-content:space-between;padding:1.5mm 0 2mm;font-size:10pt;font-weight:700">' +
+        esc(C.day.replace('{n}', i)) + '<span style="width:7mm;height:7mm;border:1pt solid #000;border-radius:1mm"></span></div>';
+    }
+    grid += '</div>';
+  }
+  return '<section class="ps-sheet ps-cover" style="text-align:center;padding-top:16mm">' +
+    '<p style="margin:0;font-size:12pt;font-weight:800;letter-spacing:.2em">SAEROK · playsaerok.com</p>' +
+    '<h1 style="margin:8mm 0 0;font-size:30pt;line-height:1.2;font-weight:900">' + esc(title) + '</h1>' +
+    '<p style="margin:5mm 0 0;font-size:15pt;font-weight:700">' + esc(sub) + '</p>' +
+    '<p style="margin:7mm 0 0;font-size:12pt">' + esc(C.how) + '</p>' +
+    grid +
+    '</section>';
+}
+
+/** 문제지 제목 옆 단계 글씨에 「3일째」 를 덧붙인다 — 칸을 더 쓰지 않으려고 제목 줄 안에 넣는다 */
+function tagDay(html, label) {
+  return html.replace(/(<span class="ps-title">[^<]*)<em>([^<]*)<\/em>/g, '$1<em>$2 · ' + esc(label) + '</em>');
+}
+
+function writePdf(lang, name, title, inner) {
+  var tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'saerok-pdf-'));
+  var f = path.join(tmp, 'sheet.html');
+  fs.writeFileSync(f, docHtml(lang, title, inner));
+  var out = path.join(OUT, lang, name);
+  try {
+    cp.execFileSync(chrome, ['--headless=new', '--disable-gpu', '--hide-scrollbars',
+      '--no-pdf-header-footer', '--virtual-time-budget=20000',
+      '--print-to-pdf=' + out, 'file:///' + f.replace(/\\/g, '/')],
+      { stdio: 'ignore', timeout: 240000 });
+  } catch (e) {}
+  try { fs.rmSync(tmp, { recursive: true, force: true }); } catch (e) {}
+  if (fs.existsSync(out)) {
+    var kb = Math.round(fs.statSync(out).size / 1024);
+    made.push(lang + '/' + name + ' (' + kb + 'KB)');
+    console.log('  ' + lang + '/' + name + '  ' + kb + 'KB');
+  } else {
+    console.log('  실패: ' + lang + '/' + name);
+  }
+}
+
+if (!ONLY || ONLY === 'packs') LANGS.forEach(function (lang) {
+  var w = load(lang), C = PACK_COPY[lang];
+  fs.mkdirSync(path.join(OUT, lang), { recursive: true });
+  function sheet(id, o) {
+    var G = w.Games[id];
+    if (!G || !G.makeForPrint || (G.langs && G.langs.indexOf(lang) < 0)) return '';
+    var lv = o.level;
+    if (!G.levels || !G.levels[lv]) { var ord = G.levelOrder || []; lv = ord[Math.min(ord.length - 1, 2)]; }
+    try {
+      return w.Print.sheets(id, { level: lv, count: 1, answer: true, picId: o.picId || 'random', themeId: o.themeId || null });
+    } catch (e) { return ''; }
+  }
+
+  /* ---- 크리스마스·겨울 ---- */
+  var X = [
+    ['wordsearch', { level: 'easy', themeId: 'christmas' }],
+    ['coloring', { level: 'normal', picId: 'xtree' }],
+    ['wordsearch', { level: 'easy', themeId: 'winter' }],
+    ['coloring', { level: 'normal', picId: 'gift' }],
+    ['maze', { level: 'easy' }],
+    ['coloring', { level: 'normal', picId: 'snowman' }],
+    ['wordsearch', { level: 'normal', themeId: 'christmas' }],
+    ['sudoku', { level: 'easy' }],
+    ['math', { level: 'easy' }]                        /* 일본어는 낱말찾기가 없어 이것으로 채운다 */
+  ];
+  var xs = X.map(function (x) { return sheet(x[0], x[1]); }).filter(Boolean);
+  if (lang !== 'ja') xs = xs.slice(0, 8);
+  var xTitle = C.xmas;
+  writePdf(lang, 'christmas-winter-pack.pdf', xTitle,
+    packCover(C, xTitle, C.xmasSub, 0) + answersLast(xs.join('')));
+
+  /* ---- 30일 ---- */
+  var POOL = ['sudoku', 'math', 'maze', 'wordsearch', 'spot', 'mathcross', 'coloring', 'shapecount',
+              'numsearch', 'wordorder', 'dot2dot', 'nonogram', 'clock', 'numrule', 'queens', 'copyfig',
+              'numpair', 'numpath', 'shadow'];
+  POOL = POOL.filter(function (id) {
+    var G = w.Games[id];
+    return G && G.makeForPrint && (!G.langs || G.langs.indexOf(lang) >= 0);
+  });
+  [['easy', ['step2', 'easy']], ['normal', ['easy', 'normal']]].forEach(function (pk) {
+    var days = [];
+    for (var d = 1; d <= 30; d++) {
+      var id = POOL[(d - 1) % POOL.length];
+      var html = sheet(id, { level: pk[1][d % 2] });
+      if (html) days.push(tagDay(html, C.day.replace('{n}', d)));
+    }
+    var title = C.d30 + ' (' + C[pk[0]] + ')';
+    writePdf(lang, '30day-pack-' + pk[0] + '.pdf', title,
+      packCover(C, title, C.d30Sub, 30) + answersLast(days.join('')));
+  });
+});
+
 console.log('\nPDF ' + made.length + '개를 만들었습니다.');

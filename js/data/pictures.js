@@ -1607,6 +1607,110 @@ window.PICTURES = (function () {
   }
 
 
+  /* ================= 크리스마스트리 (2026-11-13) =================
+   * 영어권에서 11~12월에 가장 많이 찾는 색칠 그림이라 겨울 묶음 문제지와 함께 더했다.
+   * 층을 아래부터 그려 위층이 아래층을 덮는다 — 번호는 덮이지 않고 보이는 띠 가운데에 적는다. */
+  function xtree(ctx, d) {
+    var out = [], i, k;
+    var C = [
+      { bg: 1, tiers: 2, orn: 0, gifts: 0, frame: 0 },
+      { bg: 2, tiers: 3, orn: 2, gifts: 0, frame: 0 },
+      { bg: 2, tiers: 3, orn: 4, gifts: 1, frame: 1 },
+      { bg: 3, tiers: 4, orn: 6, gifts: 2, frame: 2 },
+      { bg: 3, tiers: 4, orn: 8, gifts: 2, frame: 3 }
+    ][d - 1];
+    var I = C.frame ? [9, 9, 91, 91] : [3, 3, 97, 97];
+    var hz = 86, NT = C.tiers;     /* T 는 말 바꾸기 함수라 이름을 피한다 */
+
+    var bgA = ctx.pref([8, 3]), bgB = ctx.col(6);
+    for (i = 0; i < C.bg; i++) {
+      var y0 = I[1] + (hz - I[1]) * i / C.bg, y1 = I[1] + (hz - I[1]) * (i + 1) / C.bg;
+      out.push(reg(rect(I[0], y0, I[2], y1), i % 2 ? bgB : bgA, [I[0] + 6, (y0 + y1) / 2]));
+    }
+    out.push(reg(rect(I[0], hz, I[2], I[3]), ctx.pref([8, 2]), [I[0] + 6, (hz + I[3]) / 2]));
+
+    /* 줄기 — 땅에 살짝 묻히게 */
+    out.push(reg(rect(45, 72, 55, 89), ctx.pref([9, 5]), [50, 81]));
+
+    /* 층 — 아래층부터 */
+    var tier = function (k2) {
+      return { top: 14 + k2 * (44 / NT), bot: 14 + (k2 + 1) * (44 / NT) + 16, w: 13 + (k2 + 1) * (24 / NT) };
+    };
+    var green = ctx.pref([4, 8]);
+    for (k = NT - 1; k >= 0; k--) {
+      var t = tier(k);
+      var labY = k ? (tier(k - 1).bot + t.bot) / 2 : (t.top + t.bot) / 2 + 5;
+      out.push(reg(poly([[50, t.top], [50 + t.w, t.bot], [50 - t.w, t.bot]]), green, [50, labY]));
+    }
+
+    /* 장식 공 — 가운데 번호를 피해 양옆에 */
+    var ornA = ctx.pref([1, 7]), ornB = ctx.pref([2, 3, 6]);
+    for (i = 0; i < C.orn; i++) {
+      var tk = tier(NT - 1 - (i >> 1) % NT);
+      var side = i % 2 ? 1 : -1;
+      out.push(reg(circlePath(50 + side * tk.w * 0.5, tk.bot - 5, 2.8), i % 2 ? ornB : ornA,
+        [50 + side * tk.w * 0.5, tk.bot - 5]));
+    }
+
+    /* 선물 상자 — 나무 양옆 땅 위 */
+    var giftSpots = [[I[0] + 4, I[0] + 18], [I[2] - 18, I[2] - 4]];
+    for (i = 0; i < C.gifts; i++) {
+      var gx = giftSpots[i];
+      out.push(reg(rect(gx[0], 76, gx[1], 88), i ? ctx.pref([3, 6]) : ctx.pref([1, 7]), [gx[0] + 3.5, 82]));
+      out.push(reg(rect((gx[0] + gx[1]) / 2 - 1.5, 76, (gx[0] + gx[1]) / 2 + 1.5, 88), ctx.pref([2, 5]),
+        [(gx[0] + gx[1]) / 2, 85]));
+    }
+
+    /* 꼭대기 별 */
+    out.push(reg(starPath(50, 11, 7, 0.45, 5, 0), ctx.pref([2, 5]), [50, 12]));
+
+    frameRegions(out, ctx, C.frame);
+    return { regions: out, strokes: [] };
+  }
+
+  /* ================= 선물 상자 (2026-11-13) ================= */
+  function gift(ctx, d) {
+    var out = [], i;
+    var C = [
+      { bg: 1, band: 0, dots: 0, frame: 0 },
+      { bg: 2, band: 0, dots: 0, frame: 0 },
+      { bg: 2, band: 1, dots: 0, frame: 1 },
+      { bg: 3, band: 1, dots: 4, frame: 2 },
+      { bg: 3, band: 1, dots: 8, frame: 3 }
+    ][d - 1];
+    var I = C.frame ? [9, 9, 91, 91] : [3, 3, 97, 97];
+
+    var bgA = ctx.pref([8, 7]), bgB = ctx.col(4);
+    for (i = 0; i < C.bg; i++) {
+      var y0 = I[1] + (I[3] - I[1]) * i / C.bg, y1 = I[1] + (I[3] - I[1]) * (i + 1) / C.bg;
+      out.push(reg(rect(I[0], y0, I[2], y1), i % 2 ? bgB : bgA, [I[0] + 6, (y0 + y1) / 2]));
+    }
+
+    var boxC = ctx.pref([1, 3, 6]), lidC = ctx.pref([3, 1, 6]), ribC = ctx.pref([2, 5]);
+    out.push(reg(rect(22, 44, 78, 86), boxC, [34, 52]));                 /* 몸통 */
+    out.push(reg(rect(18, 34, 82, 45), lidC, [30, 39.5]));                /* 뚜껑 */
+    out.push(reg(rect(46, 34, 54, 86), ribC, [50, 76]));                  /* 세로 띠 */
+    if (C.band) out.push(reg(rect(22, 59, 78, 65), ribC, [68, 62]));     /* 가로 띠 */
+
+    /* 점무늬 — 번호와 띠를 피한 자리 */
+    var DOTS = [[30, 74], [39, 81], [62, 73], [71, 80], [62, 51], [71, 54], [29, 81], [39, 71]];
+    var dotC = ctx.pref([2, 7, 8]);
+    for (i = 0; i < C.dots; i++) {
+      out.push(reg(circlePath(DOTS[i][0], DOTS[i][1], 2.6), dotC, DOTS[i]));
+    }
+
+    /* 리본 고리 둘과 매듭 */
+    var bowC = ctx.pref([5, 2, 7]);
+    var L = [[49, 33], [37, 19], [31, 25], [35, 32]];
+    var R = L.map(function (p) { return [100 - p[0], p[1]]; });
+    out.push(reg(poly(L), bowC, [37, 27]));
+    out.push(reg(poly(R), bowC, [63, 27]));
+    out.push(reg(circlePath(50, 31, 4), ribC, [50, 31]));
+
+    frameRegions(out, ctx, C.frame);
+    return { regions: out, strokes: [] };
+  }
+
   var LIST = [
     { id: 'mandala',   name: T('고운 무늬'), make: mandala },
     { id: 'patchwork', name: T('조각보'),    make: patchwork },
@@ -1631,7 +1735,9 @@ window.PICTURES = (function () {
     { id: 'cat',        name: T('고양이'),    make: cat },
     { id: 'grape',      name: T('포도'),      make: grape },
     { id: 'lighthouse', name: T('등대'),      make: lighthouse },
-    { id: 'rainbow',    name: T('무지개'),    make: rainbow }
+    { id: 'rainbow',    name: T('무지개'),    make: rainbow },
+    { id: 'xtree',      name: T('크리스마스트리'), make: xtree },
+    { id: 'gift',       name: T('선물 상자'), make: gift }
   ];
 
   /* ================= 만들기 ================= */

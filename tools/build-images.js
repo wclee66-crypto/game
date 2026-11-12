@@ -363,4 +363,66 @@ SHOTS.forEach(function (s) {
         s.id + '-og' + TAIL[s.lang], 1200, 630);
 });
 
+/* ---------- 묶음 문제지 안내 페이지의 그림 (2026-11-13) ----------
+ * 크리스마스 낱말찾기·트리 색칠 같은 '그 주제' 문제지 그림과, 카톡 공유용 가로 그림.
+ * 이것만 다시 찍으려면  G=packs node tools/build-images.js */
+var EXTRA = [
+  { file: 'christmas-wordsearch-worksheet', id: 'wordsearch', level: 'easy', themeId: 'christmas', no: { ja: 1 } },
+  { file: 'christmas-tree-coloring-worksheet', id: 'coloring', level: 'normal', picId: 'xtree' },
+  { file: 'gift-coloring-worksheet', id: 'coloring', level: 'normal', picId: 'gift' }
+];
+if (!ONLY.length || ONLY.indexOf('packs') >= 0) {
+  ['ko', 'en', 'ja'].forEach(function (lang) {
+    var w = loadAll(lang);
+    EXTRA.forEach(function (x) {
+      if (x.no && x.no[lang]) return;
+      var inner = w.Print.sheets(x.id, { level: x.level, count: 1, answer: false, picId: x.picId, themeId: x.themeId });
+      if (!inner) return;
+      var name = x.file + TAIL[lang];
+      var f = path.join(tmp, name + '.html');
+      fs.writeFileSync(f, sheetHtml(css, inner, lang));
+      var h = Math.max(560, Math.min(1123, measure(f) || 1000));
+      var out = path.join(OUT, name + '.png');
+      try {
+        cp.execFileSync(chrome, ['--headless=new', '--disable-gpu', '--hide-scrollbars',
+          '--force-device-scale-factor=1', '--window-size=794,' + h, '--virtual-time-budget=4000',
+          '--screenshot=' + out, 'file:///' + f.replace(/\\/g, '/')], { stdio: 'ignore', timeout: 60000 });
+        if (fs.existsSync(out)) { made.push(name + '.png'); console.log('  만듦: ' + name + '.png'); }
+      } catch (e) { console.log('  찍기 실패: ' + name); }
+    });
+
+    /* 공유 그림 — 크리스마스는 짙은 초록, 30일 묶음은 새록 초록 */
+    var C = {
+      ko: { x: '크리스마스·겨울 활동지', xs: '무료 PDF · 낱말찾기 · 색칠 · 미로', d: '30일 두뇌 훈련 문제지', ds: '하루 한 장 · 무료 PDF 묶음' },
+      en: { x: 'Christmas Activities for Seniors', xs: 'Free printable PDF · word search · colouring', d: '30-Day Brain Activity Pack', ds: 'One page a day · free printable PDF' },
+      ja: { x: 'クリスマス・冬のプリント', xs: '無料 PDF · ぬり絵 · 迷路 · ナンプレ', d: '30日間 脳トレプリント', ds: '1日1枚 · 無料 PDF' }
+    }[lang];
+    var tail = TAIL[lang];
+    var xPics = (lang === 'ja' ? ['christmas-tree-coloring-worksheet', 'gift-coloring-worksheet', 'maze-worksheet']
+                               : ['christmas-wordsearch-worksheet', 'christmas-tree-coloring-worksheet', 'gift-coloring-worksheet'])
+      .map(function (n) { return n + tail; });
+    var dPics = ['sudoku-worksheet', 'maze-worksheet', 'nonogram-worksheet'].map(function (n) { return n + tail; });
+    function og(bg, sub, t, s, pics) {
+      var cards = pics.map(function (n, i) {
+        var rot = [-7, 0, 7][i], top = [40, 14, 40][i];
+        return '<img src="' + n + '.png" style="width:236px;height:220px;object-fit:cover;object-position:top;' +
+          'border-radius:10px;background:#fff;box-shadow:0 12px 30px rgba(0,0,0,.3);' +
+          'transform:rotate(' + rot + 'deg);margin-top:' + top + 'px">';
+      }).join('');
+      return '<!DOCTYPE html><html lang="' + lang + '"><head><meta charset="utf-8">' +
+        '<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;700;800;900&family=Manrope:wght@700;800&display=swap" rel="stylesheet">' +
+        '<style>html,body{margin:0;padding:0}body{width:1200px;height:630px;background:' + bg + ';' +
+        'font-family:"Gothic A1","Manrope",sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}' +
+        '.t{font-size:60px;font-weight:900;letter-spacing:-.04em;color:#fff;margin:0}' +
+        '.s{font-size:27px;font-weight:700;color:' + sub + ';margin:10px 0 0}' +
+        '.row{display:flex;gap:22px;align-items:flex-start;margin-top:22px;height:262px}' +
+        '.f{font-size:20px;font-weight:700;color:' + sub + ';margin:22px 0 0}</style></head><body>' +
+        '<p class="t">' + t + '</p><p class="s">' + s + '</p><div class="row">' + cards + '</div>' +
+        '<p class="f">playsaerok.com</p></body></html>';
+    }
+    shoot(og('#1F6B45', '#CFE9D9', C.x, C.xs, xPics), 'christmas-og' + tail, 1200, 630);
+    shoot(og('#0E7A4D', '#CFEBDD', C.d, C.ds, dPics), '30day-og' + tail, 1200, 630);
+  });
+}
+
 console.log('\n그림 ' + made.length + '장을 images/ 에 넣었습니다.');

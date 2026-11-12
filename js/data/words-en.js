@@ -42,7 +42,10 @@ window.WORD_THEMES_EN = [
   { id: 'tool', name: 'Tools', words: ['SAW', 'NAIL', 'ROPE', 'DRILL', 'SCREW', 'RULER', 'BRUSH', 'HAMMER', 'PLIERS', 'WRENCH', 'CHISEL', 'LADDER', 'SHOVEL', 'SPANNER'] },
   { id: 'travel', name: 'Travel', words: ['MAP', 'PATH', 'TRIP', 'TOUR', 'HOTEL', 'BEACH', 'TICKET', 'CAMERA', 'CRUISE', 'AIRPORT', 'LUGGAGE', 'JOURNEY', 'STATION', 'PASSPORT'] },
   { id: 'health', name: 'Health', words: ['REST', 'WALK', 'DIET', 'SLEEP', 'HEART', 'BONES', 'PULSE', 'BREATH', 'MUSCLE', 'VITAMIN', 'CHECKUP', 'EXERCISE', 'MEDICINE', 'HOSPITAL'] },
-  { id: 'party', name: 'Celebration', words: ['GIFT', 'CARD', 'PARTY', 'FEAST', 'GUEST', 'TOAST', 'DANCE', 'CANDLE', 'RIBBON', 'PARADE', 'BALLOON', 'PRESENT', 'WEDDING', 'BIRTHDAY'] }
+  { id: 'party', name: 'Celebration', words: ['GIFT', 'CARD', 'PARTY', 'FEAST', 'GUEST', 'TOAST', 'DANCE', 'CANDLE', 'RIBBON', 'PARADE', 'BALLOON', 'PRESENT', 'WEDDING', 'BIRTHDAY'] },
+  /* 겨울·크리스마스 (2026-11-13) — 영어권에서 11~12월에 가장 많이 찾는 낱말찾기 주제 */
+  { id: 'christmas', name: 'Christmas', words: ['ELF', 'TOY', 'BOW', 'STAR', 'BELL', 'GIFT', 'HOLLY', 'CAROL', 'ANGEL', 'SANTA', 'SLEIGH', 'WREATH', 'STOCKING', 'REINDEER'] },
+  { id: 'winter', name: 'Winter', words: ['ICE', 'SKI', 'SNOW', 'COLD', 'SLED', 'SCARF', 'FROST', 'IGLOO', 'BOOTS', 'COCOA', 'ICICLE', 'MITTEN', 'BLANKET', 'BLIZZARD'] }
 ];
 
 /* 빈칸을 메울 글자 — 영어에서 흔한 글자가 더 자주 나오도록 겹쳐 적었다.

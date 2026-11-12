@@ -162,7 +162,28 @@ var COPY = {
       ['가입해야 하나요?', '아니요. 주소를 열면 바로 시작됩니다. 점수는 이 기기에만 저장됩니다.'],
       ['휴대폰에서도 되나요?', '네. 휴대폰·태블릿·컴퓨터 어디서나 됩니다. 홈 화면에 앱처럼 설치하면 인터넷 없이도 열립니다.'],
       ['어르신용 쉬운 게임도 있나요?', '네. 첫 화면에서 「인지 훈련」을 고르시면 큰 글씨와 쉬운 단계, 무료 인쇄 문제지가 있습니다.']
-    ]
+    ],
+    /* 묶음 문제지 (2026-11-13) */
+    packsTitle: '묶음 문제지 (PDF)',
+    packsLead: '여러 게임을 한 파일에 모았습니다. 정답은 모두 맨 뒤에 있습니다.',
+    packs: {
+      xmas: ['크리스마스·겨울 활동지', '크리스마스·겨울 낱말찾기, 트리·선물 상자·눈사람 색칠, 미로, 스도쿠'],
+      d30e: ['30일 두뇌 훈련 문제지 (쉬움)', '하루 한 장씩 30일 · 맨 앞에 30칸 체크표'],
+      d30n: ['30일 두뇌 훈련 문제지 (보통)', '하루 한 장씩 30일 · 맨 앞에 30칸 체크표']
+    },
+    xmasTitle: '크리스마스·겨울 어르신 활동지 — 무료 인쇄 PDF',
+    xmasLead: '크리스마스와 겨울을 주제로 한 낱말찾기, 크리스마스트리·선물 상자·눈사람 색칠 공부, 미로와 스도쿠를 ' +
+              '한 파일에 모았습니다. 요양원·주간보호센터의 연말 활동이나 가족과 함께하는 시간에 그대로 쓰실 수 있습니다.',
+    d30Title: '30일 두뇌 훈련 문제지 — 하루 한 장, 무료 인쇄 PDF',
+    d30Lead: '하루에 한 장씩 30일 동안 풀 수 있도록 스도쿠·숫자 계산·미로·낱말찾기·색칠 공부 등 여러 게임을 골고루 섞었습니다. ' +
+             '맨 앞 장의 30칸 체크표에 다 푼 날을 표시하면 꾸준함이 눈에 보입니다.',
+    packWhoH: '이렇게 쓰세요',
+    packWho: [
+      '파일을 내려받아 그대로 인쇄하시면 됩니다. 회원가입이나 이메일이 필요 없습니다.',
+      '정답은 맨 뒤에 모아 두었습니다. 문제지만 나눠 드리고 정답은 따로 두실 수 있습니다.',
+      '같은 문제가 싫으시면 홈의 「문제 인쇄」에서 누를 때마다 새 문제를 만드실 수 있습니다.'
+    ],
+    packDl: 'PDF 내려받기'
   },
   en: {
     brand: 'Saerok',
@@ -226,7 +247,27 @@ var COPY = {
       ['Do I need an account?', 'No. Open the page and start playing. Your scores are stored only on your device.'],
       ['Does it work on a phone?', 'Yes — on phones, tablets and computers. Add it to your home screen and it even works offline.'],
       ['Are there easier games for seniors?', 'Yes. Choose “Senior Brain Training” on the first screen for large print, gentle levels and free printable worksheets.']
-    ]
+    ],
+    packsTitle: 'Activity packs (PDF)',
+    packsLead: 'Several puzzles gathered in one file. All the answers are at the back.',
+    packs: {
+      xmas: ['Christmas & Winter Activity Pack', 'Christmas and winter word searches, colour-by-number Christmas tree, gift box and snowman, a maze and sudoku'],
+      d30e: ['30-Day Brain Activity Pack (Easy)', 'One page a day for 30 days · a 30-day tick chart at the front'],
+      d30n: ['30-Day Brain Activity Pack (Medium)', 'One page a day for 30 days · a 30-day tick chart at the front']
+    },
+    xmasTitle: 'Free Printable Christmas Activities for Seniors (PDF)',
+    xmasLead: 'Christmas and winter word searches, colour-by-number Christmas tree, gift box and snowman, plus a maze and sudoku — ' +
+              'all in one free PDF. Ready to print for care homes, day centres, memory care or a family afternoon.',
+    d30Title: '30-Day Brain Activity Pack — One Printable Page a Day (Free PDF)',
+    d30Lead: 'Thirty days of puzzles, one page a day: sudoku, mental math, mazes, word search, colour by number and more, mixed so every day is different. ' +
+             'Tick off each day on the chart at the front and watch the habit grow.',
+    packWhoH: 'How to use it',
+    packWho: [
+      'Download the file and print. No sign-up, no email.',
+      'All the answers are at the back, so you can hand out the puzzles and keep the answers.',
+      'Want new puzzles? Use “Print puzzles” on the site to make a fresh set every time.'
+    ],
+    packDl: 'Download PDF'
   },
   ja: {
     brand: 'サエロク',
@@ -288,7 +329,27 @@ var COPY = {
       ['登録は必要ですか？', 'いいえ。開けばすぐに始まります。得点はこの端末にだけ保存されます。'],
       ['スマホでも遊べますか？', 'はい。スマホ・タブレット・パソコンのどれでも遊べます。ホーム画面に追加すれば、ネットがなくても開けます。'],
       ['高齢の方向けのやさしいゲームもありますか？', 'はい。最初の画面で「認知トレーニング」をえらぶと、大きな文字とやさしい段階、無料の印刷プリントがあります。']
-    ]
+    ],
+    packsTitle: 'まとめプリント (PDF)',
+    packsLead: 'いくつものパズルを1つのファイルにまとめました。答えはすべて最後にあります。',
+    packs: {
+      xmas: ['クリスマス・冬のプリント集', 'クリスマスツリー・プレゼント・雪だるまのぬり絵、迷路、ナンプレ、計算'],
+      d30e: ['30日間 脳トレプリント (やさしい)', '1日1枚を30日 · 最初のページに30日チェック表'],
+      d30n: ['30日間 脳トレプリント (ふつう)', '1日1枚を30日 · 最初のページに30日チェック表']
+    },
+    xmasTitle: 'クリスマス・冬の高齢者向けプリント — 無料 PDF',
+    xmasLead: 'クリスマスツリー・プレゼント・雪だるまのぬり絵、迷路、ナンプレ、計算を1つの無料 PDF にまとめました。' +
+              '介護施設やデイサービスの年末レクリエーション、ご家族との時間にそのまま使えます。',
+    d30Title: '30日間 脳トレプリント — 1日1枚、無料 PDF',
+    d30Lead: '1日1枚ずつ30日間解けるように、ナンプレ・計算・迷路・ぬり絵などをまんべんなく混ぜました。' +
+             '最初のページのチェック表に解いた日の印をつけると、続けた日々が目に見えます。',
+    packWhoH: '使い方',
+    packWho: [
+      'ダウンロードしてそのまま印刷してください。登録もメールもいりません。',
+      '答えは最後にまとめてあります。問題だけ配って答えは手元に置けます。',
+      '新しい問題がほしいときは、ホームの「プリント印刷」で毎回新しく作れます。'
+    ],
+    packDl: 'PDF をダウンロード'
   }
 };
 
@@ -569,6 +630,7 @@ function printPage(lang, C, games) {
     '<p class="doc__lead">' + esc(C.printLead) + '</p>\n' +
     '<p class="doc__cta"><a class="doc__btn" href="/' + LX[lang].qs + '">' + C.play + '</a></p>\n' +
     '<p>' + esc(C.printWho) + '</p>\n' +
+    packsBlock(lang, C, null, true) +
     pdfBlock(lang, C, games.filter(function (g) { return g.canPrint; })) +
     (gallery ? '<h2>' + C.shotList + '</h2>\n<div class="doc__tiles">' + gallery + '</div>\n' : '') +
     '<h2>' + C.printList + '</h2>\n<ul class="doc__lv">' + list + '</ul>\n' +
@@ -662,6 +724,91 @@ function brainPage(lang, C, games) {
   };
 }
 
+/* ================= 묶음 문제지 (2026-11-13) ================= *
+ * tools/build-pdf.js 가 만드는 묶음 파일들. 파일이 없으면 그 자리는 통째로 빠진다.
+ * 문제지 안내(/print/) 맨 위에 모아 두고, 크리스마스·30일 묶음은 따로 한 장씩 안내 페이지를 둔다
+ * (사람들이 'christmas activities for seniors printable', '30 day brain activity pack' 으로 찾는다). */
+var PACKS = [
+  { key: 'xmas', file: 'christmas-winter-pack.pdf', page: 'christmas-worksheets' },
+  { key: 'd30e', file: '30day-pack-easy.pdf', page: '30-day-worksheets' },
+  { key: 'd30n', file: '30day-pack-normal.pdf', page: '30-day-worksheets' }
+];
+
+function packKb(lang, file) {
+  try { return Math.round(fs.statSync(path.join(ROOT, 'pdf', lang, file)).size / 1024); } catch (e) { return 0; }
+}
+
+/** 묶음 내려받기 단추들 — keys 를 주면 그것만 */
+function packsBlock(lang, C, keys, withHead) {
+  var rows = PACKS.filter(function (pk) { return !keys || keys.indexOf(pk.key) >= 0; }).map(function (pk) {
+    var kb = packKb(lang, pk.file);
+    if (!kb) return '';
+    var href = '/pdf/' + lang + '/' + pk.file;
+    pdfUrls.push(href);
+    var t = C.packs[pk.key];
+    return '<div class="doc__dlrow"><h3><a href="' + LX[lang].base + '/' + pk.page + '/">' + esc(t[0]) + '</a></h3>' +
+      '<p class="doc__note">' + esc(t[1]) + '</p>' +
+      '<div class="doc__dls"><a class="doc__dl" href="' + href + '" download="' + esc(t[0].replace(/[\\/:*?"<>|]/g, '') + '.pdf') + '">' +
+        '<b>PDF</b><span>' + esc(C.packDl) + '</span><em>' + kb + 'KB</em></a></div></div>';
+  }).join('');
+  if (!rows) return '';
+  return (withHead ? '<h2 id="packs">' + esc(C.packsTitle) + '</h2>\n<p>' + esc(C.packsLead) + '</p>\n' : '') +
+    '<div class="doc__dlwrap">' + rows + '</div>\n';
+}
+
+/** 묶음 하나의 안내 페이지 — kind: 'xmas' | 'd30' */
+function packPage(lang, C, games, kind) {
+  var base = LX[lang].base;
+  var slug = kind === 'xmas' ? 'christmas-worksheets' : '30-day-worksheets';
+  var url = SITE + base + '/' + slug + '/';
+  var title = kind === 'xmas' ? C.xmasTitle : C.d30Title;
+  var lead = kind === 'xmas' ? C.xmasLead : C.d30Lead;
+  var keys = kind === 'xmas' ? ['xmas'] : ['d30e', 'd30n'];
+  var tail = LX[lang].tail;
+
+  /* 그림 — 크리스마스는 그 주제 문제지, 30일은 여러 게임 문제지 */
+  var picIds = kind === 'xmas'
+    ? (lang === 'ja' ? ['christmas-tree-coloring', 'gift-coloring'] : ['christmas-wordsearch', 'christmas-tree-coloring', 'gift-coloring'])
+    : ['sudoku', 'maze', 'nonogram', 'math'];
+  var pics = picIds.map(function (id) {
+    var f = id + '-worksheet' + tail + '.png', d = pngSize(f);
+    return d ? { f: f, w: d.w, h: d.h, alt: title } : null;
+  }).filter(Boolean);
+  var gallery = pics.map(function (p) {
+    return '<span class="doc__tile"><img src="/images/' + p.f + '" width="' + p.w + '" height="' + p.h + '" loading="lazy" alt="' + esc(p.alt) + '"></span>';
+  }).join('');
+  var who = C.packWho.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('');
+  var og = (kind === 'xmas' ? 'christmas-og' : '30day-og') + tail + '.png';
+
+  var body =
+    header(C, lang, altsOf(slug, lang)) +
+    '<main class="doc__main">\n' +
+    '<h1>' + esc(title) + '</h1>\n' +
+    '<p class="doc__lead">' + esc(lead) + '</p>\n' +
+    packsBlock(lang, C, keys, false) +
+    (gallery ? '<h2>' + C.shotList + '</h2>\n<div class="doc__tiles">' + gallery + '</div>\n' : '') +
+    '<h2>' + esc(C.packWhoH) + '</h2>\n<ul class="doc__lv">' + who + '</ul>\n' +
+    '<p class="doc__cta"><a class="doc__btn" href="/' + LX[lang].qs + '">' + C.play + '</a>' +
+      '<a class="doc__btn doc__btn--ghost" href="' + base + '/print/">' + C.printPage + '</a></p>\n' +
+    '<p class="doc__note">' + esc(C.story) + '</p>\n' +
+    '</main>\n' +
+    footer(C, lang, games, null);
+
+  return {
+    dir: base + '/' + slug, pics: pics,
+    html: page({
+      lang: lang, url: url,
+      alts: ALL_LANGS.map(function (l) { return { lang: l, href: SITE + LX[l].base + '/' + slug + '/' }; }),
+      title: title + ' · ' + C.brand,
+      desc: lead,
+      siteName: C.siteName,
+      image: fs.existsSync(path.join(ROOT, 'images', og)) ? og : null,
+      imageAlt: title,
+      body: body
+    })
+  };
+}
+
 /* ================= 만들기 ================= */
 
 function rmrf(p) {
@@ -699,6 +846,12 @@ ALL_LANGS.forEach(function (lang) {
   var bp = brainPage(lang, C, games);
   write(bp.dir, bp.html);
   made.push(bp.dir + '/');
+  ['xmas', 'd30'].forEach(function (kind) {
+    var kp = packPage(lang, C, games, kind);
+    write(kp.dir, kp.html);
+    made.push(kp.dir + '/');
+    shots[kp.dir + '/'] = kp.pics.map(function (p) { return { f: p.f, alt: p.alt }; });
+  });
   /* 문제지 안내 페이지에는 그림이 다 모여 있다 */
   shots[pp.dir + '/'] = games.filter(function (g) { return shot(g.id, lang); }).map(function (g) {
     return { f: shot(g.id, lang).f, alt: shotAlt(g.name, lang) };
