@@ -521,6 +521,75 @@ PINS.push(playPin('pin-131-hard-queens', 'Hard Queens<br>Puzzles 9×9',
   'The crown logic puzzle at full size · free online',
   'queens', { level: 'hard' }, '퀸 놓기 어려움 (일반인용)'));
 
+/* ---- 크리스마스·겨울과 30일 묶음 (132~) — 2026-11-13 ----
+ * 영어권에서 11~12월에 가장 많이 찾는 활동지. 핀은 그 묶음 PDF 를 내려받는 안내 페이지로 데려간다
+ * (그 약속을 보고 누른 사람이 바로 파일을 받을 수 있어야 한다). */
+var XMAS = SITE + '/en/christmas-worksheets/', D30 = SITE + '/en/30-day-worksheets/';
+function packPin(p, link) { p.link = link; return p; }
+PINS.push(packPin(one('pin-132-christmas-word-search', 'Free Printable<br>Christmas Word Search',
+  'For seniors · large print · part of a free PDF pack',
+  'wordsearch', { level: 'easy', themeId: 'christmas' }, '크리스마스 낱말찾기'), XMAS));
+PINS.push(packPin(one('pin-133-christmas-tree-colour', 'Christmas Tree<br>Colour by Number',
+  'Big, simple shapes for adults and seniors · free PDF',
+  'coloring', { level: 'normal', picId: 'xtree' }, '크리스마스트리 색칠'), XMAS));
+PINS.push(packPin({
+  file: 'pin-134-christmas-activities-seniors',
+  title: 'Free Christmas<br>Activities for Seniors',
+  sub: 'Printable PDF pack · word search, colouring, mazes',
+  ko: '크리스마스 묶음 소개 (넉 장)',
+  sheets: [
+    { game: 'wordsearch', opt: { level: 'easy', themeId: 'christmas' } },
+    { game: 'coloring', opt: { level: 'normal', picId: 'xtree' } },
+    { game: 'coloring', opt: { level: 'normal', picId: 'gift' } },
+    { game: 'wordsearch', opt: { level: 'easy', themeId: 'winter' } }
+  ]
+}, XMAS));
+PINS.push(packPin(one('pin-135-winter-word-search', 'Free Printable<br>Winter Word Search',
+  'Snow, frost, mittens and more · for seniors',
+  'wordsearch', { level: 'easy', themeId: 'winter' }, '겨울 낱말찾기'), XMAS));
+PINS.push(packPin(one('pin-136-gift-box-colour', 'Gift Box<br>Colour by Number',
+  'A festive colouring page for adults · free PDF',
+  'coloring', { level: 'normal', picId: 'gift' }, '선물 상자 색칠'), XMAS));
+PINS.push(packPin(one('pin-137-snowman-colour', 'Snowman<br>Colour by Number',
+  'Easy winter colouring for seniors · free PDF',
+  'coloring', { level: 'easy', picId: 'snowman' }, '눈사람 색칠'), XMAS));
+PINS.push(packPin({
+  file: 'pin-138-carers-christmas',
+  title: 'Christmas Activities<br>for Care Homes',
+  sub: 'Free printable pack · answers at the back',
+  ko: '요양원용 크리스마스 묶음 (넉 장)',
+  sheets: [
+    { game: 'coloring', opt: { level: 'normal', picId: 'snowman' } },
+    { game: 'wordsearch', opt: { level: 'easy', themeId: 'christmas' } },
+    { game: 'maze', opt: { level: 'easy' } },
+    { game: 'coloring', opt: { level: 'easy', picId: 'xtree' } }
+  ]
+}, XMAS));
+PINS.push(packPin({
+  file: 'pin-139-30-day-brain-pack',
+  title: '30-Day Brain<br>Activity Pack',
+  sub: 'One printable page a day · free PDF for seniors',
+  ko: '30일 묶음 소개 (넉 장)',
+  sheets: [
+    { game: 'sudoku', opt: { level: 'easy' } },
+    { game: 'maze', opt: { level: 'easy' } },
+    { game: 'math', opt: { level: 'easy' } },
+    { game: 'nonogram', opt: { level: 'easy' } }
+  ]
+}, D30));
+PINS.push(packPin({
+  file: 'pin-140-daily-dementia-activities',
+  title: 'Daily Activities<br>for Dementia',
+  sub: '30 days, one page a day · free printable PDF',
+  ko: '30일 묶음 — 치매 활동지로 소개 (넉 장)',
+  sheets: [
+    { game: 'coloring', opt: { level: 'easy', picId: 'flower' } },
+    { game: 'wordsearch', opt: { level: 'easy', themeId: 'animal' } },
+    { game: 'clock', opt: { level: 'easy' } },
+    { game: 'spot', opt: { level: 'easy' } }
+  ]
+}, D30));
+
 /* 핀마다 어디로 데려갈지 — 그 게임 화면으로 바로 들어가게 한다 */
 var GOTO = {
   sudoku: '#sudoku', wordsearch: '#wordsearch', math: '#math',
