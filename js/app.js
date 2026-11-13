@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v87';                // sw.js 의 VERSION 과 함께 올린다
+  var APP_VERSION = 'v88';                // sw.js 의 VERSION 과 함께 올린다
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -15,7 +15,12 @@ window.App = (function () {
   }
   var ALL_GAMES = Object.keys(window.Games || {});
   var GAMES = ALL_GAMES;                 // 말을 고를 때 다시 추린다 (relist)
-  var NEED_ENTRY = false;                // 새 버전에서 입구를 아직 고르지 않았으면 대문을 보여 준다
+  var NEED_ENTRY = false;                // 입구를 아직 고르지 않았으면 대문을 보여 준다
+  /* 대문(입구 고르기)을 다시 보여 드려야 할 만큼 큰 변화가 있을 때만 이 숫자를 올린다.
+     2026-11-09 에는 버전이 바뀔 때마다 대문을 다시 보였는데, 고칠 때마다 버전이 오르니
+     매일 오시는 어르신이 날마다 고르기 화면을 만나 헷갈리셨다. 2026-11-13 에 떼어 냈다 (사용자가 정함).
+     예전 방식으로 한 번이라도 고르신 분(entryVersion 이 있는 분)은 이미 고르신 것으로 친다. */
+  var ENTRY_ROUND = 1;
 
   /* ================= 입구 둘 =================
    * 'care' 인지 훈련 — 처음부터 있던 새록. 어르신·보호자를 위한 곳이다.
@@ -305,7 +310,7 @@ window.App = (function () {
   function enterMode(m) {
     var same = mode() === m;              // 고르기 전에도 인지 훈련으로 열려 있다
     Store.setSetting('mode', m);
-    Store.setSetting('entryVersion', APP_VERSION); // 이번 버전에서 입구를 골랐음을 기억한다
+    Store.setSetting('entryRound', ENTRY_ROUND);   // 입구를 골랐음을 기억한다
     if (same) { go('home'); return; }
     location.hash = 'home';
     location.reload();
@@ -478,6 +483,8 @@ window.App = (function () {
         /* 다른 입구로 가는 길 — 잘못 들어오신 분이 설정을 뒤지지 않아도 되게 */
         '<button class="linkbtn" id="hmDoor">' +
           (play ? T('어르신용 인지 훈련으로 가기') : T('누구나 하는 두뇌 게임으로 가기')) + '</button>' +
+        /* 쿠팡 파트너스 상품 소개 — 홈 맨 아래, 단추들과 넉넉히 떨어뜨려 둔다 (잘못 눌리지 않게) */
+        Shop.card(mode()) +
       '</section>';
 
     view.querySelectorAll('[data-go]').forEach(function (b) {
@@ -866,13 +873,13 @@ window.App = (function () {
       : T('스도쿠·낱말찾기·숫자 계산·단어 순서·상식퀴즈·색칠 공부·틀린그림찾기를 매일 조금씩. 날짜별 점수가 기록되는 치매 예방 두뇌 훈련 앱'));
   }
 
-  /** 새 버전마다 대문에서 입구를 다시 고른다. 점수·다른 설정은 그대로 둔다.
+  /** 처음 한 번(또는 ENTRY_ROUND 를 올렸을 때) 대문에서 입구를 고른다. 점수·다른 설정은 그대로 둔다.
       검색·공유 주소에 ?mode= 가 있으면 해당 입구로 바로 들어간다. */
   function settleMode() {
     var q = /[?&]mode=(play|care)\b/.exec(location.search);
     if (q) {
       Store.setSetting('mode', q[1]);
-      Store.setSetting('entryVersion', APP_VERSION);
+      Store.setSetting('entryRound', ENTRY_ROUND);
       /* 주소에서 mode 를 지운다 — 남아 있으면 설정에서 입구를 바꿔 다시 열 때 도로 이 입구가 된다 */
       if (window.history && history.replaceState) {
         var rest = location.search.replace(/([?&])mode=(play|care)\b&?/, '$1').replace(/[?&]$/, '');
@@ -880,7 +887,8 @@ window.App = (function () {
       }
       return;
     }
-    NEED_ENTRY = Store.settings().entryVersion !== APP_VERSION;
+    var st = Store.settings();
+    NEED_ENTRY = (st.entryRound || (st.entryVersion ? 1 : 0)) < ENTRY_ROUND;
     if (NEED_ENTRY) return;
     if (Store.settings().mode) return;
     if (Object.keys(Store.allRecords()).length || Store.settings().introDone) Store.setSetting('mode', 'care');

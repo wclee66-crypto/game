@@ -1489,11 +1489,33 @@ html[data-cursor="lg"], html[data-cursor="lg"] * {
 }
 .score__auto { margin: .9rem 0 0; font-size: .85rem; font-weight: 700; color: var(--accent-d); }
 
+/* ================= 어르신께 도움이 되는 물건 (쿠팡 파트너스) =================
+   홈 맨 아래. 위의 글자 단추와 넉넉히 떨어뜨려 잘못 눌리지 않게 한다. */
+.shop { margin-top: 2.6rem; padding-top: 1.4rem; border-top: 1px solid var(--line); }
+.shopcard {
+  display: flex; align-items: center; gap: .9rem;
+  padding: .9rem 1rem; margin-top: .55rem;
+  background: var(--surf); border: 1px solid var(--line); border-radius: var(--r);
+  color: var(--ink); text-decoration: none;
+}
+.shopcard:active { background: var(--surf-2); }
+.shopcard__pic {
+  flex: none; width: 76px; height: 76px; border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg); border: 1px solid var(--line); color: var(--ink-2); overflow: hidden;
+}
+.shopcard__pic img { width: 100%; height: 100%; object-fit: contain; }
+.shopcard__txt { display: flex; flex-direction: column; gap: .22rem; min-width: 0; }
+.shopcard__name { font-size: 1.02rem; font-weight: 800; }
+.shopcard__sub { font-size: .86rem; color: var(--ink-2); line-height: 1.45; }
+.shopcard__go { font-size: .9rem; font-weight: 700; color: var(--accent-d); margin-top: .15rem; }
+.shop__note { margin: .6rem .2rem 0; font-size: .74rem; color: var(--ink-3); line-height: 1.5; }
+
 @media print {
   @page { size: A4 portrait; margin: 12mm; }
 
   html, body { background: #fff !important; color: #000 !important; font-size: 12pt; }
-  .grain, .appbar, .view, .tabbar, .modal-root, .toast { display: none !important; }
+  .grain, .appbar, .view, .tabbar, .modal-root, .toast, .shop { display: none !important; }
 
   #printRoot { display: block; }
 
