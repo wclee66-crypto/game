@@ -22,6 +22,29 @@ window.Games.sudoku = (function () {
   };
   var ORDER = ['step1', 'step2', 'easy', 'normal', 'hard'];
 
+  /* 누구나 하는 두뇌 게임(play) 입구에서는 한 단계씩 어렵게 둔다 (2026-11-13 사용자가 정함).
+     어르신용 4칸 판은 일반인에게 너무 쉽다. 단계 이름·보너스는 그대로 두고 판만 바꾼다.
+     입구는 고를 때 화면을 통째로 다시 여므로, 파일을 읽을 때 한 번 정하면 된다.
+     (?mode= 주소로 처음 들어온 경우는 아직 저장 전이라 주소부터 본다)
+     종이 문제지·PDF 는 어르신용 판 그대로다 — 두뇌 게임 입구에는 인쇄가 없다. */
+  var PLAY = /[?&]mode=play\b/.test(location.search) ||
+    (!/[?&]mode=care\b/.test(location.search) && (Store.settings().mode === 'play'));
+  if (PLAY) {
+    LEVELS.step1.n = 6; LEVELS.step1.br = 2; LEVELS.step1.bc = 3; LEVELS.step1.givens = 16; LEVELS.step1.limit = 420;
+    LEVELS.step1.note = T('6칸 판 · 숫자 1~6');
+    LEVELS.step2.n = 9; LEVELS.step2.br = 3; LEVELS.step2.bc = 3; LEVELS.step2.givens = 40; LEVELS.step2.limit = 600;
+    LEVELS.step2.note = T('9칸 판 · 숫자 40개로 시작');
+    LEVELS.easy.givens = 33;   LEVELS.easy.limit = 720;   LEVELS.easy.note = T('9칸 판 · 숫자 33개로 시작');
+    LEVELS.normal.givens = 28; LEVELS.normal.limit = 1080; LEVELS.normal.note = T('9칸 판 · 숫자 28개로 시작');
+    LEVELS.hard.givens = 24;   LEVELS.hard.limit = 1500;  LEVELS.hard.note = T('9칸 판 · 숫자 24개로 시작');
+  }
+
+  /** 저장해 둔 판이 지금 단계표와 맞는가 — 입구를 바꾸면 같은 단계라도 판 크기가 달라진다 */
+  function fits(sess) {
+    var L = sess && LEVELS[sess.level];
+    return !!(L && sess.puzzle && sess.puzzle.length === L.n * L.n);
+  }
+
   var S = null;      // 현재 게임 상태
   var root = null;
   var timer = null;
@@ -94,6 +117,18 @@ window.Games.sudoku = (function () {
   }
 
   function makePuzzle(level) {
+    /* 숫자를 아주 적게 남기는 판(두뇌 게임 입구 '어려움')은 한 번에 목표까지 못 지울 때가 있어
+       몇 번 다시 짜 보고 가장 적게 남은 판을 쓴다 */
+    var best = null;
+    for (var t = 0; t < 6; t++) {
+      var m = makeOnce(level), left = m.puzzle.filter(function (v) { return v; }).length;
+      if (!best || left < best.left) best = { left: left, made: m };
+      if (left <= LEVELS[level].givens) break;
+    }
+    return best.made;
+  }
+
+  function makeOnce(level) {
     var L = LEVELS[level], N = L.n;
     var sol = new Array(N * N).fill(0);
     fill(sol, 0, L);
@@ -162,7 +197,7 @@ window.Games.sudoku = (function () {
         ('<h2 class="intro__title">' + T('스도쿠') + '</h2>') +
         ('<p class="intro__desc">' + T('가로줄·세로줄·굵은 네모 칸마다') + '<br>' + T('숫자가 한 번씩만 들어갑니다.') + '<br><small>' + T('처음이시면 1단계부터 해 보세요.') + '</small></p>') +
         (best ? ('<p class="intro__best">' + T('나의 최고 기록') + ' <b>') + UI.comma(best.score) + (T('점') + '</b></p>') : '') +
-        (sess && LEVELS[sess.level]
+        (sess && fits(sess)
           ? ('<button class="btn btn--accent btn--big" id="sdResume">' + T('이어서 하기') + ' <small>') +
             LEVELS[sess.level].name + ' · ' + UI.fmtTime(sess.elapsed) + (T(' 경과') + '</small></button>')
           : '') +
@@ -509,7 +544,7 @@ window.Games.sudoku = (function () {
       stopTimer();
       persist();
     },
-    hasProgress: function () { return !!Store.getSession('sudoku'); },
+    hasProgress: function () { return fits(Store.getSession('sudoku')); },
     levels: LEVELS,
     levelOrder: ORDER,
     /** 인쇄용으로 새 문제를 하나 만들어 준다 (화면 상태와 무관) */

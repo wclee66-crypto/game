@@ -4,7 +4,8 @@
  * 구글 광고와 달리 그냥 링크 하나라서 쿠키도, 동의 창도 필요 없다.
  *
  * 지키는 것 (CLAUDE.md '광고가 들어갈 자리')
- *   - 홈 맨 아래에만 둔다. 게임을 푸는 도중에는 절대 나오지 않는다.
+ *   - 홈 화면 맨 위(새록 제목과 설정 단추 사이)에 작은 단추로 둔다 (2026-11-13 사용자가 정함).
+ *     홈에서만 보이고, 게임을 푸는 도중에는 절대 나오지 않는다.
  *   - 인쇄 문제지에는 나오지 않는다 (css 의 @media print 에서 감춘다).
  *   - 한국어 화면에서만 보인다. 쿠팡은 한국에서만 배송된다.
  *   - 두 입구 모두 나오되, 두뇌 게임(play) 입구에서는 '어르신' 을 뺀 문구(playTitle·playSub)를 쓴다.
@@ -27,6 +28,8 @@ window.Shop = (function () {
       link: 'https://link.coupang.com/a/iDGlEFauxU',
       img: 'https://t1c.coupangcdn.com/thumbnails/remote/212x212ex/image/retail/images/2023/03/03/11/3/1740bd4a-6332-461f-b90f-c5318ad43434.jpg',
       title: '손목이 편한 세로 마우스',
+      short: '손목 편한 마우스',   /* 맨 위 작은 단추에 들어가는 짧은 이름 */
+      wide: '손가락 힘이 약해도 편하게 쓰는 마우스',  /* PC 화면에서 이름 아래 한 줄 */
       sub: '어르신들은 손가락 힘이 약해 마우스를 쓰기가 힘들고 금방 피곤해지십니다. 이 마우스는 악수하듯 손을 세워 쥐어, 힘을 덜 들이고도 편하게 쓰실 수 있습니다.',
       /* 두뇌 게임(play) 입구에서는 '어르신' 을 빼고 누구나 쓰는 물건으로 소개한다 (사용자가 정함) */
       playSub: '마우스를 오래 쓰면 손목과 손가락이 금방 피곤해집니다. 이 마우스는 악수하듯 손을 세워 쥐어, 힘을 덜 들이고도 편하게 쓸 수 있습니다.'
@@ -55,19 +58,46 @@ window.Shop = (function () {
     });
   }
 
-  /** 홈 맨 아래에 붙일 카드 */
+  function pic(it) {
+    return it.img
+      ? '<img src="' + esc(it.img) + '" alt="" loading="lazy" onerror="this.parentNode.innerHTML=Shop.mouse">'
+      : MOUSE;
+  }
+
+  /** 화면 맨 위(새록 제목과 설정 단추 사이)의 작은 상품 단추 — 2026-11-13 사용자가 홈 맨 아래에서 옮김.
+      홈 화면에서만 보이고, 게임·기록·설정 화면에서는 감춘다 (app.js 의 go 가 켜고 끈다).
+      게임을 푸는 도중에 광고가 눈에 들어오면 집중이 끊기기 때문이다. */
+  function top() {
+    if (!ready()) return '';
+    var it = list()[0];
+    return '<a class="topshop" href="' + esc(it.link) + '" target="_blank" rel="sponsored noopener"' +
+        ' aria-label="' + esc(T(it.title) + ' · ' + T('쿠팡에서 보기')) + '">' +
+      '<span class="topshop__pic">' + pic(it) + '</span>' +
+      '<span class="topshop__txt">' +
+        '<span class="topshop__name">' + T(it.short || it.title) + '</span>' +
+        '<span class="topshop__ad">' + T('쿠팡 광고') + '</span>' +
+        /* 넓은 화면(PC)에서만 보이는 긴 이름과 한 줄 설명 */
+        '<span class="topshop__wide">' + T(it.title) + '</span>' +
+        '<span class="topshop__wsub">' + T(it.wide || '') + ' · ' + T('쿠팡 광고') + '</span>' +
+      '</span>' +
+      '<span class="topshop__go">' + T('쿠팡에서 보기') + ' ›</span>' +
+    '</a>';
+  }
+
+  /** 휴대폰에서 홈 맨 아래에 붙일 카드 — 휴대폰은 맨 위가 좁아 제목을 가리므로 아래에 둔다 (2026-11-13 사용자가 정함).
+      넓은 화면에서는 css 가 감추고 맨 위 단추(top)를 쓴다. */
   function card(mode) {
     if (!ready()) return '';
     var play = mode === 'play';
     var head = play ? T('생활에 도움이 되는 물건') : T('어르신께 도움이 되는 물건');
-    return '<section class="shop" aria-label="' + esc(head) + '">' +
+    return '<section class="shop shop--phone" aria-label="' + esc(head) + '">' +
       '<h2 class="sec">' + head + '</h2>' +
       list().map(function (it) {
         var title = (play && it.playTitle) || it.title;
         var sub = (play && it.playSub) || it.sub;
         return '<a class="shopcard" href="' + esc(it.link) + '" target="_blank" rel="sponsored noopener">' +
           '<span class="shopcard__pic">' +
-            (it.img ? '<img src="' + esc(it.img) + '" alt="" loading="lazy" onerror="this.parentNode.innerHTML=Shop.mouse">' : MOUSE) +
+            pic(it) +
           '</span>' +
           '<span class="shopcard__txt">' +
             '<span class="shopcard__name">' + T(title) + '</span>' +
@@ -80,5 +110,12 @@ window.Shop = (function () {
     '</section>';
   }
 
-  return { ready: ready, card: card, mouse: MOUSE };
+  /** 홈 맨 아래의 알림 한 줄 — 법(공정위)이 정한 문구라 링크가 있는 화면에 반드시 둔다.
+      쿠팡 안내도 '글의 위나 아래처럼 쉽게 알아볼 수 있는 자리' 면 된다고 한다. */
+  function note() {
+    if (!ready()) return '';
+    return '<p class="shop__note">' + T('화면 맨 위의 상품 링크는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.') + '</p>';
+  }
+
+  return { ready: ready, top: top, card: card, note: note, mouse: MOUSE };
 })();

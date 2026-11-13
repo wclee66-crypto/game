@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v88';                // sw.js 의 VERSION 과 함께 올린다
+  var APP_VERSION = 'v89';                // sw.js 의 VERSION 과 함께 올린다
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -229,6 +229,9 @@ window.App = (function () {
       t.classList.toggle('is-on', t.dataset.route === tabRoute);
     });
     document.getElementById('btnBack').hidden = (route === 'home' || route === 'door');
+    /* 쿠팡 상품 단추는 홈에서만 — 게임을 푸는 도중에는 광고를 보이지 않는다 */
+    var ts = document.getElementById('topShop');
+    if (ts) ts.hidden = !(route === 'home' && ts.innerHTML);
     /* 입구 고르기 화면에는 아래 탭을 두지 않는다 — 아직 어느 쪽인지 고르지 않았으므로 */
     document.body.classList.toggle('is-door', route === 'door');
 
@@ -483,8 +486,9 @@ window.App = (function () {
         /* 다른 입구로 가는 길 — 잘못 들어오신 분이 설정을 뒤지지 않아도 되게 */
         '<button class="linkbtn" id="hmDoor">' +
           (play ? T('어르신용 인지 훈련으로 가기') : T('누구나 하는 두뇌 게임으로 가기')) + '</button>' +
-        /* 쿠팡 파트너스 상품 소개 — 홈 맨 아래, 단추들과 넉넉히 떨어뜨려 둔다 (잘못 눌리지 않게) */
-        Shop.card(mode()) +
+        /* 쿠팡 파트너스 — 넓은 화면은 맨 위 단추(Shop.top) + 여기 알림 한 줄,
+           휴대폰은 여기 카드(알림 문구 포함). 어느 쪽을 보일지는 css 가 화면 너비로 고른다. */
+        Shop.card(mode()) + Shop.note() +
       '</section>';
 
     view.querySelectorAll('[data-go]').forEach(function (b) {
@@ -865,6 +869,8 @@ window.App = (function () {
       inst.querySelector('.appbar__inst-txt').textContent = T('앱 설치');
       inst.setAttribute('aria-label', T('앱으로 설치하기'));
     }
+    var ts = document.getElementById('topShop');
+    if (ts) ts.innerHTML = Shop.top();    // 한국어가 아니면 빈칸 → go 가 감춘 채로 둔다
     var play = mode() === 'play';
     document.title = play ? T('새록 · 두뇌 게임') : T('새록 · 두뇌 훈련');
     var meta = document.querySelector('meta[name="description"]');

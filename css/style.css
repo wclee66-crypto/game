@@ -71,6 +71,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
   display: grid; place-items: center;
 }
 .appbar__back { width: 2.1rem; padding: 0; font-size: 1rem; }
+/* 설정 단추 — 2026-11-13 사용자 요청으로 키웠다. 작은 톱니는 어르신 눈과 손에 잘 안 잡힌다 */
+.appbar__gear { width: 2.9rem; height: 2.9rem; padding: 0; font-size: 1.5rem; }
 .appbar__back:active, .appbar__gear:active { background: var(--line-2); }
 .appbar__title { flex: 1; min-width: 0; }
 /* 좁은 화면·큰 글씨에서 줄이 바뀌어도 낱말 가운데(맞추/기)를 자르지 않는다 */
@@ -1489,8 +1491,40 @@ html[data-cursor="lg"], html[data-cursor="lg"] * {
 }
 .score__auto { margin: .9rem 0 0; font-size: .85rem; font-weight: 700; color: var(--accent-d); }
 
-/* ================= 어르신께 도움이 되는 물건 (쿠팡 파트너스) =================
-   홈 맨 아래. 위의 글자 단추와 넉넉히 떨어뜨려 잘못 눌리지 않게 한다. */
+/* ================= 쿠팡 파트너스 상품 단추 (화면 맨 위) =================
+   새록 제목과 설정 단추 사이. 설정 단추와 넉넉히 떨어뜨려 잘못 눌리지 않게 한다.
+   알림 문구(.shop__note)는 홈 맨 아래에 한 줄로 둔다. */
+.appbar__shop { flex: none; margin-right: .5rem; }
+.appbar__shop[hidden] { display: none; }
+.topshop {
+  display: flex; align-items: center; gap: .5rem;
+  height: 2.9rem; padding: 0 .85rem 0 .3rem;
+  background: var(--surf); border: 1px solid var(--line-2); border-radius: 999px;
+  color: var(--ink); text-decoration: none;
+}
+.topshop:active { background: var(--surf-2); }
+.topshop__pic {
+  flex: none; width: 2.2rem; height: 2.2rem; border-radius: 50%; overflow: hidden;
+  background: #fff; display: grid; place-items: center; color: var(--ink-2);
+}
+.topshop__pic img { width: 100%; height: 100%; object-fit: contain; }
+.topshop__pic svg { width: 1.6rem; height: 1.6rem; }
+.topshop__txt { display: flex; flex-direction: column; line-height: 1.15; }
+.topshop__name { font-size: .86rem; font-weight: 800; white-space: nowrap; }
+.topshop__ad { font-size: .66rem; font-weight: 600; color: var(--ink-3); white-space: nowrap; }
+.topshop__wide, .topshop__wsub, .topshop__go { display: none; }
+/* PC 처럼 넓은 화면에서는 단추를 넓혀 이름·설명·「쿠팡에서 보기」를 다 보인다 (2026-11-13 사용자 요청) */
+@media (min-width: 900px) {
+  .appbar__shop { flex: 0 1 30rem; margin-right: 1rem; }
+  .topshop { width: 100%; height: 3.3rem; padding: 0 1.1rem 0 .35rem; gap: .7rem; }
+  .topshop__pic { width: 2.6rem; height: 2.6rem; }
+  .topshop__txt { flex: 1; min-width: 0; gap: .1rem; }
+  .topshop__name, .topshop__ad { display: none; }
+  .topshop__wide { display: block; font-size: .95rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .topshop__wsub { display: block; font-size: .74rem; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .topshop__go { display: block; flex: none; font-size: .85rem; font-weight: 800; color: var(--accent-d); white-space: nowrap; }
+}
+/* 휴대폰용 홈 맨 아래 카드 (넓은 화면에서는 감춘다) */
 .shop { margin-top: 2.6rem; padding-top: 1.4rem; border-top: 1px solid var(--line); }
 .shopcard {
   display: flex; align-items: center; gap: .9rem;
@@ -1509,13 +1543,23 @@ html[data-cursor="lg"], html[data-cursor="lg"] * {
 .shopcard__name { font-size: 1.02rem; font-weight: 800; }
 .shopcard__sub { font-size: .86rem; color: var(--ink-2); line-height: 1.45; }
 .shopcard__go { font-size: .9rem; font-weight: 700; color: var(--accent-d); margin-top: .15rem; }
-.shop__note { margin: .6rem .2rem 0; font-size: .74rem; color: var(--ink-3); line-height: 1.5; }
+.shop .shop__note { margin: .6rem .2rem 0; padding-top: 0; border-top: 0; }
+.shop__note { margin: 2rem .2rem 0; padding-top: 1rem; border-top: 1px solid var(--line); font-size: .74rem; color: var(--ink-3); line-height: 1.5; }
+/* 휴대폰(600px 아래): 맨 위 단추와 알림 한 줄을 감추고 아래 카드만.
+   넓은 화면: 아래 카드를 감추고 맨 위 단추 + 알림 한 줄. */
+@media (max-width: 599px) {
+  .appbar__shop { display: none !important; }
+  .home > .shop__note { display: none; }
+}
+@media (min-width: 600px) {
+  .shop--phone { display: none; }
+}
 
 @media print {
   @page { size: A4 portrait; margin: 12mm; }
 
   html, body { background: #fff !important; color: #000 !important; font-size: 12pt; }
-  .grain, .appbar, .view, .tabbar, .modal-root, .toast, .shop { display: none !important; }
+  .grain, .appbar, .view, .tabbar, .modal-root, .toast, .shop, .shop__note { display: none !important; }
 
   #printRoot { display: block; }
 
