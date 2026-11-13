@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v89';                // sw.js 의 VERSION 과 함께 올린다
+  var APP_VERSION = 'v90';                // sw.js 의 VERSION 과 함께 올린다
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -406,6 +406,39 @@ window.App = (function () {
     });
   }
 
+  /* 새록 유튜브 채널(새록새록퀴즈) — 2026-11-13 사용자가 열어 홈에 소개하기로 함.
+     영상이 한국어뿐이라 한국어 화면에서만 보인다. 새 창으로 열어 새록 화면은 그대로 남긴다.
+     자리는 '최근 일주일' 아래 — 게임 목록보다 앞에 두면 게임을 하러 온 분의 눈을 뺏는다. */
+  var YT_URL = 'https://www.youtube.com/@%EC%83%88%EB%A1%9D%EC%83%88%EB%A1%9D%ED%80%B4%EC%A6%88';
+  function ytCard() {
+    if (I18N.get() !== 'ko') return '';
+    /* 유튜브 채널 배너를 본떠 글자로 그린다 — 그림을 붙이면 휴대폰에서 글씨가 깨알만 해지고,
+       입구마다 바탕색(초록·남색)을 바꿀 수 없다. 바탕색은 css 가 입구(data-mode)를 보고 고른다. */
+    return '<a class="ytban" href="' + YT_URL + '" target="_blank" rel="noopener"' +
+        ' aria-label="' + T('유튜브 새록새록퀴즈 채널 열기') + '">' +
+      '<span class="ytban__spark ytban__spark--a" aria-hidden="true">✦</span>' +
+      '<span class="ytban__spark ytban__spark--b" aria-hidden="true">✦</span>' +
+      /* 새록 새싹 잎을 크게, 옅게 — 채널 배너의 지구본·전구 자리 */
+      '<svg class="ytban__leaf" viewBox="0 0 100 100" aria-hidden="true"><g fill="#fff">' +
+        '<path d="M45 80 Q40.8 58.8 22 48 Q26.2 69.3 45 80 Z" opacity=".55"></path>' +
+        '<path d="M56 80 Q75.2 66.4 77 43 Q57.8 56.6 56 80 Z" opacity=".78"></path>' +
+        '<path d="M50 81 Q61.5 49 50 17 Q38.5 49 50 81 Z"></path></g></svg>' +
+      '<span class="ytban__body">' +
+        '<span class="ytban__kicker">' +
+          '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="1.5" y="4.5" width="21" height="15" rx="4.5" fill="#FF3B30"></rect><path d="M10 8.6v6.8l5.8-3.4z" fill="#fff"></path></svg>' +
+          T('새록 유튜브 채널') +
+        '</span>' +
+        '<span class="ytban__title">' + T('새록새록퀴즈') + '</span>' +
+        '<span class="ytban__pill">' + T('역사 · 과학 · 우리말 · 상식 · 기억력 게임') + '</span>' +
+        '<span class="ytban__tag">' + T('보고, 맞히고, 머리가 새록새록 깨어나는 시간') + '</span>' +
+      '</span>' +
+      '<span class="ytban__go">' +
+        '<span class="ytban__play" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M8 5.5v13l11-6.5z" fill="currentColor"></path></svg></span>' +
+        '<span class="ytban__golbl">' + T('영상 보기') + '</span>' +
+      '</span>' +
+    '</a>';
+  }
+
   function renderHome() {
     var today = Store.dayKey();
     var best = Store.dayBest(today);
@@ -472,6 +505,8 @@ window.App = (function () {
           UI.barChart(chartData, chartMax) +
           ('<p class="card__foot">' + T('막대는 그날의 총점입니다. 같은 게임을 여러 번 하면 가장 높은 점수만 더해집니다.') + '</p>') +
         '</div>' +
+
+        ytCard() +
 
         '<div class="row2">' +
           ('<button class="btn btn--ghost" id="hmRules">' + T('점수 규칙 한눈에') + '</button>') +
