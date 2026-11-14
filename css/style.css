@@ -1561,10 +1561,13 @@ html[data-mode="play"] .ytban { --yb-1: #2E47C9; --yb-2: #16225E; --yb-ink: #101
 /* ================= 쿠팡 파트너스 상품 단추 (화면 맨 위) =================
    새록 제목과 설정 단추 사이. 설정 단추와 넉넉히 떨어뜨려 잘못 눌리지 않게 한다.
    알림 문구(.shop__note)는 홈 맨 아래에 한 줄로 둔다. */
-.appbar__shop { flex: none; margin-right: .5rem; }
+/* 단추가 줄어들 수 있게 해 두고(min-width:0), 「새록」 제목은 늘 보이게 자리를 지킨다 —
+   화면 폭이 어중간하면 단추가 제목을 덮었다 (2026-11-14 고침) */
+.appbar__shop { flex: 0 1 auto; min-width: 0; margin-right: .5rem; }
+.appbar__title { min-width: 6.5rem; }
 .appbar__shop[hidden] { display: none; }
 .topshop {
-  display: flex; align-items: center; gap: .5rem;
+  display: flex; align-items: center; gap: .5rem; min-width: 0; overflow: hidden;
   height: 2.9rem; padding: 0 .85rem 0 .3rem;
   background: var(--surf); border: 1px solid var(--line-2); border-radius: 999px;
   color: var(--ink); text-decoration: none;
@@ -1576,13 +1579,14 @@ html[data-mode="play"] .ytban { --yb-1: #2E47C9; --yb-2: #16225E; --yb-ink: #101
 }
 .topshop__pic img { width: 100%; height: 100%; object-fit: contain; }
 .topshop__pic svg { width: 1.6rem; height: 1.6rem; }
-.topshop__txt { display: flex; flex-direction: column; line-height: 1.15; }
-.topshop__name { font-size: .86rem; font-weight: 800; white-space: nowrap; }
+.topshop__txt { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
+.topshop__name { font-size: .86rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .topshop__ad { font-size: .66rem; font-weight: 600; color: var(--ink-3); white-space: nowrap; }
 .topshop__wide, .topshop__wsub, .topshop__go { display: none; }
-/* PC 처럼 넓은 화면에서는 단추를 넓혀 이름·설명·「쿠팡에서 보기」를 다 보인다 (2026-11-13 사용자 요청) */
-@media (min-width: 900px) {
-  .appbar__shop { flex: 0 1 30rem; margin-right: 1rem; }
+/* PC 처럼 넓은 화면에서는 단추를 넓혀 이름·설명·「쿠팡에서 보기」를 다 보인다 (2026-11-13 사용자 요청)
+   1100px 아래에서 넓히면 글자가 「손목이 …」처럼 잘려서, 그 아래는 짧은 단추를 쓴다 */
+@media (min-width: 1100px) {
+  .appbar__shop { flex: 0 1 30rem; min-width: 0; margin-right: 1rem; }
   .topshop { width: 100%; height: 3.3rem; padding: 0 1.1rem 0 .35rem; gap: .7rem; }
   .topshop__pic { width: 2.6rem; height: 2.6rem; }
   .topshop__txt { flex: 1; min-width: 0; gap: .1rem; }
