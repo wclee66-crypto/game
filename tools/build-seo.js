@@ -431,6 +431,7 @@ function page(o) {
 '<meta charset="utf-8">\n' +
 '<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
 '<meta name="naver-site-verification" content="f0a6ed93a3d035f79ca2cdc2ab93f8002d5d9ad0">\n' +
+'<meta name="google-adsense-account" content="ca-pub-7612136827411712">\n' +
 '<title>' + esc(o.title) + '</title>\n' +
 '<meta name="description" content="' + esc(o.desc) + '">\n' +
 '<link rel="canonical" href="' + o.url + '">\n' +
@@ -494,7 +495,8 @@ function footer(C, lang, games, hereId) {
     '<footer class="doc__foot">\n' +
     '  <a href="/' + LX[lang].qs + '">' + C.home + '</a> · ' +
     '<a href="' + LX[lang].base + '/print/">' + C.printPage + '</a> · ' +
-    '<a href="' + LX[lang].base + '/brain-games/">' + C.brainLink + '</a>\n' +
+    '<a href="' + LX[lang].base + '/brain-games/">' + C.brainLink + '</a> · ' +
+    '<a href="' + LX[lang].base + '/privacy/">' + PRIVACY[lang].title + '</a>\n' +
     '  <p>' + C.free + '</p>\n' +
     '</footer>\n';
 }
@@ -809,6 +811,83 @@ function packPage(lang, C, games, kind) {
   };
 }
 
+/* ================= 개인정보 처리방침 =================
+ * 2026-11-19 구글 애드센스를 신청하면서 만들었다 — 애드센스는 이 안내가 있어야 승인해 준다.
+ * 사실만 적는다: 계정이 없고, 점수는 이 기기에만 있고, 서버로 보내는 것은
+ * 방문 통계(구글 애널리틱스)·건의하기(Web3Forms)·광고(애드센스)뿐이다.
+ * 기능을 더해 밖으로 보내는 것이 생기면 이 글도 함께 고친다.
+ */
+var PRIVACY = {
+  ko: {
+    title: '개인정보 처리방침',
+    lead: '새록은 가입 없이 쓰는 무료 두뇌 훈련 홈페이지입니다. 어떤 정보를 어디에 두는지 숨김없이 적어 둡니다.',
+    date: '시행일: 2026년 11월 19일',
+    parts: [
+      ['가입·로그인이 없습니다', ['이름·전화번호·주소 같은 개인정보를 받지 않습니다.']],
+      ['점수와 설정은 이 기기에만 저장됩니다', ['게임 점수, 글씨 크기 같은 설정은 쓰시는 기기의 브라우저 저장 공간에만 남고, 새록의 서버로 보내지 않습니다. (새록에는 서버가 없습니다)', '브라우저 기록을 지우면 점수도 함께 지워집니다. 설정의 「내보내기」로 따로 보관하실 수 있습니다.']],
+      ['방문 통계 (구글 애널리틱스)', ['몇 분이 어느 페이지를 보셨는지 알기 위해 Google 애널리틱스를 씁니다. 이를 위해 쿠키를 쓰며, 이름이나 연락처는 알 수 없는 익명 통계(방문한 페이지, 기기 종류, 대략적인 지역 등)만 모입니다.', '원하지 않으시면 Google 애널리틱스 차단 부가 기능(tools.google.com/dlpage/gaoptout)을 쓰실 수 있습니다.']],
+      ['광고 (구글 애드센스)', ['새록은 무료로 운영하기 위해 Google 애드센스 광고를 보여 드릴 수 있습니다. 광고는 게임을 푸는 화면과 인쇄 문제지에는 넣지 않습니다.', 'Google을 포함한 제3자 광고 업체는 쿠키를 사용하여 이 사이트나 다른 사이트를 방문한 기록을 바탕으로 광고를 보여 줍니다.', 'Google은 광고 쿠키를 써서 사용자의 방문 기록에 맞는 광고를 보여 줄 수 있습니다. 맞춤 광고를 원하지 않으시면 Google 광고 설정(adssettings.google.com)에서 끄실 수 있습니다. 다른 업체의 맞춤 광고는 www.aboutads.info 에서 끄실 수 있습니다.']],
+      ['건의하기', ['「건의하기」로 보내 주신 글과 (적으신 경우) 이메일 주소는 Web3Forms 서비스를 거쳐 운영자 메일로 전달됩니다. 답장을 드리는 데에만 쓰고 다른 곳에 쓰지 않습니다.']],
+      ['쿠팡 파트너스·유튜브 링크', ['홈 화면의 상품 링크는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다. 링크를 누르시면 쿠팡으로 이동하며, 그곳에서는 쿠팡의 개인정보 처리방침이 적용됩니다.', '유튜브 채널 링크를 누르시면 유튜브로 이동하며, 그곳에서는 Google의 정책이 적용됩니다.']],
+      ['문의', ['궁금하신 점은 홈 화면 아래의 「건의하기」로 보내 주세요.']]
+    ]
+  },
+  en: {
+    title: 'Privacy Policy',
+    lead: 'Saerok is a free brain-training website you can use without signing up. Here is exactly what is stored and where.',
+    date: 'Effective date: November 19, 2026',
+    parts: [
+      ['No accounts, no sign-in', ['We never ask for your name, phone number or address.']],
+      ['Your scores stay on your device', ['Scores and settings (such as text size) are saved only in your own browser and are never sent to a Saerok server. (Saerok has no server.)', 'Clearing your browser data also clears your scores. You can keep a copy with "Export" in Settings.']],
+      ['Visitor statistics (Google Analytics)', ['We use Google Analytics to see how many people visit and which pages they read. It uses cookies and collects anonymous statistics only (pages visited, device type, approximate region). It cannot tell us your name or contact details.', 'You can opt out with the Google Analytics Opt-out Browser Add-on (tools.google.com/dlpage/gaoptout).']],
+      ['Advertising (Google AdSense)', ['To keep Saerok free, we may show Google AdSense ads. Ads are never placed on the game screens or on printed worksheets.', 'Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this website or other websites.', "Google's use of advertising cookies enables it and its partners to serve ads based on your visits to this and other sites. You can opt out of personalized advertising in Google Ads Settings (adssettings.google.com), and opt out of other vendors' personalized ads at www.aboutads.info."]],
+      ['Suggestions', ['Messages sent with "Suggest" (and your email, if you add one) are delivered to us by the Web3Forms service. We use them only to reply to you.']],
+      ['Contact', ['Please use "Suggest" at the bottom of the home screen.']]
+    ]
+  },
+  ja: {
+    title: 'プライバシーポリシー',
+    lead: 'セロクは登録なしで使える無料の脳トレサイトです。どんな情報をどこに保存するかを、そのままお知らせします。',
+    date: '施行日：2026年11月19日',
+    parts: [
+      ['登録・ログインはありません', ['お名前・電話番号・住所などの個人情報はいただきません。']],
+      ['点数と設定はこの端末にだけ保存されます', ['ゲームの点数や文字の大きさなどの設定は、お使いのブラウザの中にだけ保存され、セロクのサーバーには送られません。（セロクにはサーバーがありません）', 'ブラウザの履歴を消すと点数も消えます。設定の「書き出し」で保管できます。']],
+      ['アクセス統計（Google アナリティクス）', ['何人がどのページを見たかを知るために Google アナリティクスを使っています。Cookie を使い、名前や連絡先が分からない匿名の統計（見たページ、端末の種類、おおよその地域など）だけを集めます。', '望まない場合は Google アナリティクス オプトアウト アドオン（tools.google.com/dlpage/gaoptout）をお使いください。']],
+      ['広告（Google アドセンス）', ['無料で運営するため、Google アドセンスの広告を表示することがあります。広告はゲームを解く画面と印刷プリントには入れません。', 'Google などの第三者配信事業者は Cookie を使用して、このサイトや他のサイトへの過去のアクセス情報に基づいて広告を配信します。', 'パーソナライズ広告は Google 広告設定（adssettings.google.com）で無効にできます。他社のパーソナライズ広告は www.aboutads.info で無効にできます。']],
+      ['ご意見', ['「ご意見」から送られた文章と（書かれた場合は）メールアドレスは、Web3Forms を通じて運営者に届きます。お返事のためにだけ使います。']],
+      ['お問い合わせ', ['ホーム画面下の「ご意見」からお送りください。']]
+    ]
+  }
+};
+
+function privacyPage(lang, C, games) {
+  var P = PRIVACY[lang], base = LX[lang].base;
+  var url = SITE + base + '/privacy/';
+  var parts = P.parts.map(function (pt) {
+    return '<h2>' + esc(pt[0]) + '</h2>\n' + pt[1].map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('\n');
+  }).join('\n');
+  var body =
+    header(C, lang, altsOf('privacy', lang)) +
+    '<main class="doc__main">\n' +
+    '<h1>' + esc(P.title) + '</h1>\n' +
+    '<p class="doc__lead">' + esc(P.lead) + '</p>\n' +
+    parts + '\n' +
+    '<p class="doc__note">' + esc(P.date) + '</p>\n' +
+    '</main>\n' +
+    footer(C, lang, games, null);
+  return {
+    dir: base + '/privacy',
+    html: page({
+      lang: lang, url: url,
+      alts: ALL_LANGS.map(function (l) { return { lang: l, href: SITE + LX[l].base + '/privacy/' }; }),
+      title: P.title + ' · ' + C.brand,
+      desc: P.lead,
+      siteName: C.siteName,
+      body: body
+    })
+  };
+}
+
 /* ================= 만들기 ================= */
 
 function rmrf(p) {
@@ -846,6 +925,9 @@ ALL_LANGS.forEach(function (lang) {
   var bp = brainPage(lang, C, games);
   write(bp.dir, bp.html);
   made.push(bp.dir + '/');
+  var pv = privacyPage(lang, C, games);
+  write(pv.dir, pv.html);
+  made.push(pv.dir + '/');
   ['xmas', 'd30'].forEach(function (kind) {
     var kp = packPage(lang, C, games, kind);
     write(kp.dir, kp.html);

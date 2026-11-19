@@ -267,6 +267,7 @@ window.I18N.dict.en = {
 
   /* ---------- 건의하기 ---------- */
   '건의하기': 'Send a suggestion',
+  '개인정보 처리방침': 'Privacy Policy',
   '새록에 넣었으면 하는 게임이나, 고쳤으면 하는 곳을 적어 주세요.':
     'Tell us about a game you would like to see, or anything you think should be better.',
   '하고 싶은 말': 'Your message',
