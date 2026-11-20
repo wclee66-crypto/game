@@ -37,16 +37,16 @@ window.Games.cardmatch = (function () {
 
   /* pairs 짝 수 · cols 한 줄 카드 수 · rounds 판 수 · peek 처음에 펼쳐 보여 주는 초 */
   var LEVELS = {
-    step1:  { name: T('첫걸음'), step: 1, pairs: 3,  cols: 3, rounds: 2, peek: 4, limit: 240, bonus: 0,
+    step1:  { name: T('첫걸음'), step: 1, pairs: 2, cols: 2, rounds: 2, peek: 4, limit: 240, bonus: 0,
+              note: T('카드 {n}장', { n: 4 }) },
+    step2:  { name: T('가볍게'), step: 2, pairs: 3, cols: 3, rounds: 2, peek: 3, limit: 270, bonus: 0,
               note: T('카드 {n}장', { n: 6 }) },
-    step2:  { name: T('가볍게'), step: 2, pairs: 4,  cols: 4, rounds: 2, peek: 3, limit: 270, bonus: 0,
+    easy:   { name: T('쉬움'),   step: 3, pairs: 4, cols: 4, rounds: 2, peek: 2, limit: 330, bonus: 0,
               note: T('카드 {n}장', { n: 8 }) },
-    easy:   { name: T('쉬움'),   step: 3, pairs: 6,  cols: 4, rounds: 2, peek: 2, limit: 330, bonus: 0,
-              note: T('카드 {n}장', { n: 12 }) },
-    normal: { name: T('보통'),   step: 4, pairs: 8,  cols: 4, rounds: 2, peek: 0, limit: 420, bonus: 100,
-              note: T('카드 {n}장', { n: 16 }) },
-    hard:   { name: T('어려움'), step: 5, pairs: 10, cols: 5, rounds: 2, peek: 0, limit: 480, bonus: 250,
-              note: T('카드 {n}장', { n: 20 }) }
+    normal: { name: T('보통'),   step: 4, pairs: 5, cols: 5, rounds: 2, peek: 0, limit: 420, bonus: 100,
+              note: T('카드 {n}장', { n: 10 }) },
+    hard:   { name: T('어려움'), step: 5, pairs: 6, cols: 4, rounds: 2, peek: 0, limit: 480, bonus: 250,
+              note: T('카드 {n}장', { n: 12 }) }
   };
   var ORDER = ['step1', 'step2', 'easy', 'normal', 'hard'];
 
@@ -177,7 +177,7 @@ window.Games.cardmatch = (function () {
           ('<div class="hud__item"><span class="hud__lbl">' + T('난이도') + '</span><b>') + L.name + '</b></div>' +
           ('<div class="hud__item"><span class="hud__lbl">' + T('남은 시간') + '</span><b id="cmTime">0:00</b></div>') +
           ('<div class="hud__item"><span class="hud__lbl">' + T('판') + '</span><b>') + (S.r + 1) + '/' + S.decks.length + '</b></div>' +
-          ('<div class="hud__item"><span class="hud__lbl">' + T('찾은 짝') + '</span><b id="cmFound">') + (S.doneIdx.length / 2) + '/' + L.pairs + '</b></div>' +
+          ('<div class="hud__item"><span class="hud__lbl">' + T('찾은 짝') + '</span><b id="cmFound">') + (S.doneIdx.length / 2) + '/' + (deck.length / 2) + '</b></div>' +
         '</div>' +
 
         ('<p class="mt-hint" id="cmMsg">' + (peek ? T('카드 자리를 잘 봐 두세요') : T('카드를 두 장씩 눌러 같은 그림을 찾으세요')) + '</p>') +
@@ -266,9 +266,9 @@ window.Games.cardmatch = (function () {
     S.doneIdx.push(a.i, b.i);
     S.found++;
     var L = lv(), got = S.doneIdx.length / 2;
-    els.found.textContent = got + '/' + L.pairs;
+    els.found.textContent = got + '/' + (S.decks[S.r].length / 2);
 
-    if (got < L.pairs) {
+    if (got < (S.decks[S.r].length / 2)) {
       els.msg.innerHTML = '<b class="mt-ok">' + T('짝을 찾았어요!') + '</b>';
       UI.beep('ok');
       persist();
@@ -316,7 +316,7 @@ window.Games.cardmatch = (function () {
 
   function score() {
     var L = lv();
-    var total = L.pairs * L.rounds;
+    var total = S.decks.reduce(function (sum, deck) { return sum + deck.length / 2; }, 0);
     var found = Math.min(total, S.found);
     var right = Math.round(600 * found / total);
     var all = S.r >= L.rounds;
@@ -379,7 +379,7 @@ window.Games.cardmatch = (function () {
     rules: {
       title: T('짝 맞추기 점수 규칙'),
       lines: [
-        [T('난이도'), T('카드가 늘어납니다 — 1단계 6장 · 2단계 8장 · 3단계 12장 · 4단계 16장 · 5단계 20장')],
+        [T('난이도'), T('카드가 늘어납니다 — 1단계 4장 · 2단계 6장 · 3단계 8장 · 4단계 10장 · 5단계 12장')],
         [T('하는 법'), T('카드를 두 장씩 엽니다. 같은 그림이면 그대로 남고, 다르면 다시 덮입니다')],
         [T('미리 보기'), T('1~3단계는 판을 시작할 때 모든 카드를 몇 초 동안 보여 줍니다')],
         [T('짝 찾기 점수'), T('최대 600점 · 찾은 짝 수에 비례')],

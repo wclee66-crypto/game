@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v94';                // sw.js 의 VERSION 과 함께 올린다
+  var APP_VERSION = 'v98';
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -33,7 +33,7 @@ window.App = (function () {
   /* 두뇌 게임 입구에서는 인지 활동 성격이 짙은 것을 뺀다 —
      일반 사람에게는 너무 쉬워 '어린이용인가' 하고 나가게 된다.
      (그림자 맞추기는 2026-11-01 사용자가 '인지활동 수준'이라 하여 더 뺐다) */
-  var PLAY_HIDE = ['clock', 'copyfig', 'dot2dot', 'shadow'];
+  var PLAY_HIDE = ['clock', 'copyfig', 'dot2dot', 'shadow','changedpic','cupball'];
   /* 퍼즐 맛이 진한 것부터 — 처음 온 사람이 '제대로 된 두뇌 게임'이라 느끼게 */
   var PLAY_ORDER = ['sudoku', 'nonogram', 'queens', 'cardmatch', 'mathcross', 'numpath', 'numrule', 'wordsearch', 'maze', 'spot',
                     'numpair', 'math', 'wordorder', 'quiz', 'shapecount', 'numsearch', 'altlink',
@@ -389,6 +389,26 @@ window.App = (function () {
 
   /* ================= 게임 고르기 ================= */
 
+  function careGroups() {
+    var groups = [
+      [T('숫자와 계산'), 'math mathcross sudoku numrule clock'],
+      [T('기억하기'), 'changedpic cupball cardmatch listen'],
+      [T('말과 상식'), 'wordsearch wordorder quiz'],
+      [T('찾고 비교하기'), 'spot shadow numpair numsearch shapecount'],
+      [T('그리기와 길 찾기'), 'maze copyfig coloring dot2dot numpath altlink nonogram queens']
+    ];
+    var symbols = ['<rect x="5" y="2" width="14" height="20" rx="3"/><path d="M8 7h8M8 12h2m4 0h2m-8 5h2m4 0h2"/>',
+      '<path d="M4 7v5h5M4 12a8 8 0 1 1 2.4 5.7M12 7v5l3 2"/>',
+      '<path d="M3 4h7l2 2 2-2h7v15h-7l-2 2-2-2H3zM12 6v15"/>',
+      '<circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/>',
+      '<path d="m4 16 12-12 4 4L8 20l-5 1zM13 7l4 4"/>'];
+    return groups.map(function (group,i) {
+      var ids = group[1].split(' ').filter(function (id) { return GAMES.indexOf(id) >= 0; });
+      return '<details name="care-group" class="care-kind kind-'+i+'"><summary><span class="kind-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+symbols[i]+'</svg></span><strong>'+group[0]+'</strong>' +
+        '</summary><div class="gamelist">' + ids.map(gameCard).join('') + '</div></details>';
+    }).join('');
+  }
+
   function renderPicker() {
     var best = Store.dayBest();
     var done = GAMES.filter(function (g) { return best[g] != null; }).length;
@@ -397,7 +417,7 @@ window.App = (function () {
       '<section class="picker">' +
         '<p class="picker__lead">' + T('오늘 <b>{n}가지</b>를 하셨습니다.', { n: done }) + ' ' +
           (T('골고루 하실수록 좋습니다.') + '</p>') +
-        '<div class="gamelist">' + GAMES.map(gameCard).join('') + '</div>' +
+        (mode() === 'care' ? careGroups() : '<div class="gamelist">' + GAMES.map(gameCard).join('') + '</div>') +
         ('<p class="tipline">' + T('게임은 앞으로 계속 늘어납니다.') + '<br>' + T('새 게임이 생기면 이 화면에 나타납니다.') + '</p>') +
       '</section>';
 
@@ -492,13 +512,13 @@ window.App = (function () {
 
         (play
           ? '<h2 class="sec">' + T('오늘의 도전') + '<span class="sec__note">' + T('날마다 바뀝니다') + '</span></h2>'
-          : '<h2 class="sec">' + T('오늘의 게임') + '</h2>') +
-        '<div class="gamelist">' + homeList.map(gameCard).join('') + '</div>' +
+          : '<h2 class="sec">' + T('게임 고르기') + '</h2>') +
+        (play ? '<div class="gamelist">' + homeList.map(gameCard).join('') + '</div>' : careGroups()) +
         (restList.length
           ? '<h2 class="sec">' + T('나머지 게임') + '</h2>' +
             '<div class="gamelist">' + restList.map(gameCard).join('') + '</div>'
           : '') +
-        (shown < GAMES.length
+        (play && shown < GAMES.length
           ? '<button class="btn btn--ghost btn--wide" id="hmMore">' + T('게임 모두 보기 ({n}가지)', { n: GAMES.length }) + '</button>'
           : '') +
 
