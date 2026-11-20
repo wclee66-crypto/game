@@ -125,6 +125,17 @@ button { font: inherit; color: inherit; cursor: pointer; }
   border-radius: var(--r);
   padding: 1rem;
 }
+.home-game-heading, .home-foot {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: .3rem 1rem;
+}
+.home-game-heading { margin: 1.5rem .1rem .6rem; }
+.home-game-heading .sec { margin: 0; }
+.home-game-heading p { margin: 0; color: var(--ink-2); font-size: .78rem; line-height: 1.5; }
+.home-foot { align-items: center; }
+.home-foot:not(:empty) { margin: 1rem .2rem 0; border-top: 1px solid var(--line); padding-top: .5rem; }
+.home-foot .shop__note { margin: 0; padding: 0; border: 0; }
+.home-foot .linkbtn { margin: 0 0 0 auto; min-height: 44px; color: var(--ink-2); }
 .card__foot { margin: .75rem 0 0; font-size: .72rem; color: var(--ink-3); line-height: 1.5; }
 .empty { text-align: center; color: var(--ink-3); padding: 2.2rem 1rem; line-height: 1.8; }
 
@@ -1632,7 +1643,7 @@ html[data-mode="play"] .ytban { --yb-1: #2E47C9; --yb-2: #16225E; --yb-ink: #101
    넓은 화면: 아래 카드를 감추고 맨 위 단추 + 알림 한 줄. */
 @media (max-width: 599px) {
   .appbar__shop { display: none !important; }
-  .home > .shop__note { display: none; }
+  .home-foot .shop__note { display: none; }
 }
 @media (min-width: 600px) {
   .shop--phone { display: none; }

@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v102';
+  var APP_VERSION = 'v103';
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -512,7 +512,8 @@ window.App = (function () {
 
         (play
           ? '<h2 class="sec">' + T('오늘의 도전') + '<span class="sec__note">' + T('날마다 바뀝니다') + '</span></h2>'
-          : '<h2 class="sec">' + T('게임 고르기') + '</h2>') +
+          : '<div class="home-game-heading"><h2 class="sec">' + T('게임 고르기') + '</h2><p>' +
+            T('매일 조금씩, 여러 종목을 골고루 하는 것이 두뇌 건강에 좋습니다.') + '</p></div>') +
         (play ? '<div class="gamelist">' + homeList.map(gameCard).join('') + '</div>' : careGroups()) +
         (restList.length
           ? '<h2 class="sec">' + T('나머지 게임') + '</h2>' +
@@ -533,11 +534,7 @@ window.App = (function () {
           ('<button class="btn btn--ghost" id="hmRecords">' + T('기록 자세히') + '</button>') +
         '</div>' +
 
-        (Suggest.ready() ? ('<button class="linkbtn" id="hmSuggest">' + T('건의하기') + '</button>') : '') +
-
-        ('<p class="tipline">' + (play
-          ? T('오늘의 도전은 날마다 바뀝니다. 내일 또 만나요.')
-          : T('매일 조금씩, 여러 종목을 골고루 하는 것이 두뇌 건강에 좋습니다.')) + '</p>') +
+        (play ? '<p class="tipline">' + T('오늘의 도전은 날마다 바뀝니다. 내일 또 만나요.') + '</p>' : '') +
         /* 다른 입구로 가는 길 — 잘못 들어오신 분이 설정을 뒤지지 않아도 되게 */
         '<button type="button" class="home-door doorcard--' + (play ? 'care' : 'play') + '" id="hmDoor">' +
           '<span class="home-door__icon" aria-hidden="true">' + DOOR_ART[play ? 'care' : 'play'] + '</span><strong>' +
@@ -547,7 +544,10 @@ window.App = (function () {
         '<a class="linkbtn" href="' + (I18N.get() === 'ko' ? '' : '/' + I18N.get()) + '/privacy/">' + T('개인정보 처리방침') + '</a>' +
         /* 쿠팡 파트너스 — 넓은 화면은 맨 위 단추(Shop.top) + 여기 알림 한 줄,
            휴대폰은 여기 카드(알림 문구 포함). 어느 쪽을 보일지는 css 가 화면 너비로 고른다. */
-        Shop.card(mode()) + ytCard() + Shop.note() +
+        Shop.card(mode()) + ytCard() +
+        '<div class="home-foot">' + Shop.note() +
+          (Suggest.ready() ? '<button class="linkbtn" id="hmSuggest">' + T('건의하기') + '</button>' : '') +
+        '</div>' +
       '</section>';
 
     view.querySelectorAll('[data-go]').forEach(function (b) {
