@@ -126,10 +126,16 @@
         }
         timer=setTimeout(move,650);
       });
-      if(id==='cupball'||id==='changedpic') startButton.className='btn vm-start';
+      if(id==='cupball'||id==='changedpic'){
+        startButton.className='btn vm-start';
+        var actions=document.createElement('div'); actions.className='vm-study-actions';
+        root.appendChild(actions); actions.appendChild(startButton);
+        startButton.addEventListener('click',function(){actions.remove();},{once:true});
+      }
     }
     function ask(order){
-      state.phase='ask';save();
+      var restoreSolved=state.phase==='solved';
+      if(!restoreSolved){state.phase='ask';save();}
       if(id==='cupball'){
         if(!order){
           var row=board(); row.classList.add('vm-covered');
@@ -148,6 +154,8 @@
         feedback.dataset.correct=String(solved);
         feedback.textContent=solved?T('정답입니다!'):T('틀렸습니다. 다시 골라 보세요.');
         if(solved){
+          state.phase='solved';save();
+          if(order) order[Number(state.answer)-1].classList.add('vm-lifted');
           root.querySelectorAll('.vm-picture-card, .vm-cup-hit, .vm-answer').forEach(function(b){b.disabled=true;});
           replay.remove();
           button(state.round<5?T('다음 문제'):T('결과 보기'),advance).className='btn vm-start';
@@ -172,12 +180,13 @@
         });
       }else if(id!=='changedpic') state.choices.forEach(function(x){button(x,function(){choose(x);}).classList.add('vm-answer');});
       var replay=button(T('다시 보기'),study);
+      if(restoreSolved) choose(state.answer);
     }
     function intro(){root.innerHTML='';line(T(question));names.forEach(function(name,i){
       button(T('{n}단계',{n:i+1})+' · '+T(name),function(){start(i,1);});});}
     window.Games[id]={id:id,name:T(title),tagline:T(question),rules:{title:T(title),lines:[[T('하는 법'),T(question)]]},
       hasProgress:function(){return !!Store.getSession(id);},mount:function(el){el.innerHTML='';root=document.createElement('section');root.className='vm-game';el.appendChild(root);state=Store.getSession(id);
-        if(!state)intro();else if(state.phase==='ask')ask();else study();},unmount:function(){clearTimeout(timer);}};
+        if(!state)intro();else if(state.phase==='ask'||state.phase==='solved')ask();else study();},unmount:function(){clearTimeout(timer);}};
   }
   create('changedpic','바뀐 그림 찾기','새로 나타난 그림을 골라 주세요.');
   create('cupball','컵 속 공 찾기','공이 숨은 컵을 눌러 주세요.');

@@ -1961,6 +1961,13 @@ html[data-mode="play"] .ytban { --yb-1: #2E47C9; --yb-2: #16225E; --yb-ink: #101
 .vm-cups.vm-covered .vm-cup-shell { bottom:.25rem; }
 .vm-ball { position:absolute; bottom:.3rem; width:1.75rem; height:1.75rem; border-radius:50%; background:radial-gradient(circle at 32% 28%,#fff3a0,#ffd341 48%,#e8a810); border:1px solid #875e00; }
 .vm-game .vm-start { display:flex; justify-content:center; margin:.75rem auto; width:min(100%,12rem); background:var(--accent-d); color:white; }
+@media(max-width:680px),(max-height:800px){
+  .vm-game { margin-block:.35rem; padding-block:.5rem; }
+  .vm-game > p { margin-block:.35rem; }
+  .vm-game .vm-board,.vm-game .vm-picture-grid { margin-block:.55rem; }
+  .vm-study-actions { position:sticky; bottom:calc(max(var(--tabbar-h),3.4rem) + env(safe-area-inset-bottom)); z-index:3; padding:.2rem; background:var(--bg); border-radius:.7rem; }
+  .vm-study-actions .vm-start { margin:.15rem auto; }
+}
 .vm-levels { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:.4rem; }
 .vm-levels .btn:disabled { opacity:.5; cursor:default; }
 .vm-cups:not(.vm-covered) .vm-cup-shell { bottom:2.25rem; }
