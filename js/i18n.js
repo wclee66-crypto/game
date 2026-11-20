@@ -36,7 +36,11 @@ window.I18N = (function () {
 
   /** 이 기기의 브라우저 말을 보고 첫 말을 고른다 */
   function guess() {
-    var n = (navigator.language || navigator.userLanguage || 'ko').toLowerCase();
+    /* 구글 검색 로봇은 늘 영어 설정으로 들어와, 홈을 영어 화면으로 읽고 검색 결과에도
+     * 영어 제목·설명을 올렸다 (2026-11-21). 로봇에게는 이 주소(/)의 기본 말인 한국어를 준다.
+     * 사람은 그대로 브라우저 말을 따른다. 영어 쪽은 /en/ 페이지와 ?lang=en 이 맡는다. */
+    if (/Googlebot|Google-InspectionTool/i.test(navigator.userAgent || '')) return 'ko';
+    var n =(navigator.language || navigator.userLanguage || 'ko').toLowerCase();
     for (var i = 0; i < LANGS.length; i++) {
       if (n.indexOf(LANGS[i].code) === 0) return LANGS[i].code;
     }
