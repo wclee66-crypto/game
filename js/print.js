@@ -969,11 +969,13 @@ window.Print = (function () {
    * 내려받은 문제지가 복지관·가족에게 돌면서 다시 찾아오는 길이 된다
    * (내려받기가 방문 횟수보다 많았다). 문제지 칸 안이 아니라 종이 여백(@page)에 찍으므로
    * 문제 자리를 조금도 차지하지 않고, 한 장짜리가 두 장으로 넘어가는 일도 없다.
-   * 크롬·엣지와 그것으로 만든 PDF 에서 나온다. (여백 글을 못 찍는 브라우저에서는 그냥 빠진다) */
+   * 크롬·엣지와 그것으로 만든 PDF 에서 나온다. (여백 글을 못 찍는 브라우저에서는 그냥 빠진다)
+   * 2026-11-20 글자를 8.5pt → 13pt 로 키웠다 ('너무 작다'는 사용자 말). 여백이 12mm(≈34pt)라
+   * 한 줄 13pt(≈6mm)는 문제 자리를 침범하지 않는다. 더 키우려면 여백 높이를 넘지 않게 본다. */
   function footStyle() {
     var t = T('더 많은 무료 문제지와 두뇌 게임 · playsaerok.com').replace(/"/g, '');
     return '<style>@media print{@page{@bottom-center{content:"' + t + '";' +
-      'font-family:Manrope,"Gothic A1",sans-serif;font-size:8.5pt;font-weight:700;color:#555;}}}</style>';
+      'font-family:Manrope,"Gothic A1",sans-serif;font-size:13pt;font-weight:800;color:#222;}}}</style>';
   }
 
   function printHtml(html) {
