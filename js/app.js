@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v100';
+  var APP_VERSION = 'v101';
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -430,7 +430,7 @@ window.App = (function () {
      2026-11-14 채널 이름이 「새록새록퀴즈」→「새록퀴즈」로 바뀌었다. 주소는 @이름 대신
      채널 고유 번호(UC…)로 적는다 — 이름·@주소를 또 바꿔도 링크가 끊기지 않는다.
      영상이 한국어뿐이라 한국어 화면에서만 보인다. 새 창으로 열어 새록 화면은 그대로 남긴다.
-     자리는 '최근 일주일' 아래 — 게임 목록보다 앞에 두면 게임을 하러 온 분의 눈을 뺏는다. */
+     홈 하단의 상품 링크 안내문 바로 위에 둔다. */
   var YT_URL = 'https://www.youtube.com/channel/UCYP6EIWB2qyx0W5QAFOnasA';
   function ytCard() {
     if (I18N.get() !== 'ko') return '';
@@ -528,8 +528,6 @@ window.App = (function () {
           ('<p class="card__foot">' + T('막대는 그날의 총점입니다. 같은 게임을 여러 번 하면 가장 높은 점수만 더해집니다.') + '</p>') +
         '</div>' +
 
-        ytCard() +
-
         '<div class="row2">' +
           ('<button class="btn btn--ghost" id="hmRules">' + T('점수 규칙 한눈에') + '</button>') +
           ('<button class="btn btn--ghost" id="hmRecords">' + T('기록 자세히') + '</button>') +
@@ -547,7 +545,7 @@ window.App = (function () {
         '<a class="linkbtn" href="' + (I18N.get() === 'ko' ? '' : '/' + I18N.get()) + '/privacy/">' + T('개인정보 처리방침') + '</a>' +
         /* 쿠팡 파트너스 — 넓은 화면은 맨 위 단추(Shop.top) + 여기 알림 한 줄,
            휴대폰은 여기 카드(알림 문구 포함). 어느 쪽을 보일지는 css 가 화면 너비로 고른다. */
-        Shop.card(mode()) + Shop.note() +
+        Shop.card(mode()) + ytCard() + Shop.note() +
       '</section>';
 
     view.querySelectorAll('[data-go]').forEach(function (b) {
