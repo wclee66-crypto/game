@@ -272,6 +272,11 @@ body.is-door .view { max-width: 900px; padding-bottom: calc(env(safe-area-inset-
 }
 .doorcard--play { --c: var(--door-play); --cs: var(--door-play-s); }
 .doorcard--care { --c: var(--door-care); --cs: var(--door-care-s); }
+.home-door { display:flex; align-items:center; gap:.8rem; width:100%; max-width:34rem; min-height:3.8rem; margin:1rem auto; padding:.7rem 1rem; border:1px solid var(--c); border-radius:var(--r-lg); background:var(--cs); color:var(--ink); font:inherit; font-size:1.12rem; text-align:start; cursor:pointer; }
+.home-door strong { flex:1; min-width:0; overflow-wrap:anywhere; }
+.home-door__icon { display:grid; place-items:center; flex:none; width:2.5rem; height:2.5rem; background:var(--c); border-radius:.8rem; }
+.home-door__icon svg { width:1.75rem; height:1.75rem; }
+.home-door:hover,.home-door:focus-visible { outline:2px solid var(--c); outline-offset:2px; }
 /* 오른쪽 위의 큰 동그라미 — 두 칸을 색으로 먼저 구별하게 한다 */
 .doorcard::before {
   content: ''; position: absolute; right: -3rem; top: -3rem;

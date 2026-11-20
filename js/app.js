@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v101';
+  var APP_VERSION = 'v102';
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -539,8 +539,10 @@ window.App = (function () {
           ? T('오늘의 도전은 날마다 바뀝니다. 내일 또 만나요.')
           : T('매일 조금씩, 여러 종목을 골고루 하는 것이 두뇌 건강에 좋습니다.')) + '</p>') +
         /* 다른 입구로 가는 길 — 잘못 들어오신 분이 설정을 뒤지지 않아도 되게 */
-        '<button class="linkbtn" id="hmDoor">' +
-          (play ? T('어르신용 인지 훈련으로 가기') : T('누구나 하는 두뇌 게임으로 가기')) + '</button>' +
+        '<button type="button" class="home-door doorcard--' + (play ? 'care' : 'play') + '" id="hmDoor">' +
+          '<span class="home-door__icon" aria-hidden="true">' + DOOR_ART[play ? 'care' : 'play'] + '</span><strong>' +
+          (play ? T('어르신용 인지 훈련으로 가기') : T('누구나 하는 두뇌 게임으로 가기')) +
+          '</strong><span aria-hidden="true">→</span></button>' +
         /* 개인정보 처리방침 — 애드센스 심사가 첫 화면에서 찾는다 (2026-11-19) */
         '<a class="linkbtn" href="' + (I18N.get() === 'ko' ? '' : '/' + I18N.get()) + '/privacy/">' + T('개인정보 처리방침') + '</a>' +
         /* 쿠팡 파트너스 — 넓은 화면은 맨 위 단추(Shop.top) + 여기 알림 한 줄,
