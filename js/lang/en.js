@@ -1286,6 +1286,24 @@ window.I18N.dict.en = {
   '숫자 이어가기 정답': 'Number Path — answers',
   '1부터 마지막 숫자까지 가로·세로로 맞닿게 빈칸을 채우세요.': 'Fill the blanks so the numbers from 1 to the last one touch up, down, left, or right.',
 
+  /* ---- 번갈아 잇기 ---- */
+  '번갈아 잇기': 'Alternate Link',
+  '번갈아 잇기 점수 규칙': 'Alternate Link scoring',
+  '번갈아 잇기 {n}단계 완료!': 'Alternate Link — Level {n} complete!',
+  '숫자와 글자를 번갈아 잇기': 'Link numbers and letters in turn',
+  '숫자와 글자를 번갈아 가며 차례대로 눌러 잇습니다.': 'Tap numbers and letters in turn, in order.',
+  '1 → {a} → 2 → {b} → 3 …': '1 → {a} → 2 → {b} → 3 …',
+  '숫자 {n}개 · 글자 {n}개': '{n} numbers · {n} letters',
+  '다음 차례를 알려 주지 않음': 'next one not shown',
+  '다음 차례': 'Next up',
+  '지금 찾을 것: {x}': 'Find now: {x}',
+  '숫자와 글자가 늘어납니다 — 1단계 3쌍 · 2단계 5쌍 · 3단계 8쌍 · 4단계 10쌍 · 5단계 12쌍': 'More numbers and letters each level — Level 1: 3 pairs · Level 2: 5 · Level 3: 8 · Level 4: 10 · Level 5: 12',
+  '1 → 가 → 2 → 나 → 3 … 처럼 숫자와 글자를 번갈아 차례대로 누릅니다. 맞으면 그 칸이 초록으로 바뀝니다': 'Tap numbers and letters in turn — 1 → A → 2 → B → 3 … A correct tap turns the cell green',
+  '1~3단계는 판 위에 다음에 누를 것을 크게 보여 줍니다. 4·5단계는 보여 주지 않습니다': 'Levels 1–3 show what to tap next in large type. Levels 4 and 5 do not',
+  '최대 600점 · 찾은 칸 수에 비례': 'Up to 600 points · in proportion to the cells found',
+  '없음 — 잘못 누르면 그 칸이 잠깐 붉어지고 지금 찾을 것을 알려 드립니다': 'None — a wrong tap flashes red briefly and tells you what to find now',
+  '숫자(동그라미)와 글자(네모)를 번갈아 차례대로 찾아 연필로 이으세요.': 'Find the numbers (circles) and letters (squares) in turn, in order, and connect them with a pencil.',
+
   '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="지우개">':
     '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="Eraser">'
 };

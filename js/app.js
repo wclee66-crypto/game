@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v92';                // sw.js 의 VERSION 과 함께 올린다
+  var APP_VERSION = 'v93';                // sw.js 의 VERSION 과 함께 올린다
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -36,7 +36,7 @@ window.App = (function () {
   var PLAY_HIDE = ['clock', 'copyfig', 'dot2dot', 'shadow'];
   /* 퍼즐 맛이 진한 것부터 — 처음 온 사람이 '제대로 된 두뇌 게임'이라 느끼게 */
   var PLAY_ORDER = ['sudoku', 'nonogram', 'queens', 'cardmatch', 'mathcross', 'numpath', 'numrule', 'wordsearch', 'maze', 'spot',
-                    'numpair', 'math', 'wordorder', 'quiz', 'shapecount', 'numsearch',
+                    'numpair', 'math', 'wordorder', 'quiz', 'shapecount', 'numsearch', 'altlink',
                     'listen', 'coloring'];
 
   function relist() {

@@ -553,6 +553,45 @@ window.Print = (function () {
     return pages.join('');
   }
 
+  /* ---------------- 번갈아 잇기 ---------------- */
+
+  /** 판 한 장을 SVG 로 — 숫자는 동그라미, 글자는 (옅게 칠한) 네모라 흑백으로 인쇄해도 구별된다 */
+  function alSvg(grid, size) {
+    var u = 20, W = size * u, out = [], i, r, c, v, cx, cy;
+    var fs = size >= 6 ? 8.5 : size >= 5 ? 9.5 : 11;
+    for (i = 0; i < grid.length; i++) {
+      r = Math.floor(i / size); c = i % size; v = grid[i];
+      if (!v) continue;
+      cx = c * u + u / 2; cy = r * u + u / 2;
+      if (v > 0) out.push('<circle cx="' + cx + '" cy="' + cy + '" r="' + (u / 2 - 1.2) + '" fill="none" stroke="#000" stroke-width="1"/>');
+      else out.push('<rect x="' + (c * u + 1.6) + '" y="' + (r * u + 1.6) + '" width="' + (u - 3.2) + '" height="' + (u - 3.2) +
+        '" rx="2.5" fill="#E8E8E8" stroke="#000" stroke-width="1.3"/>');
+      out.push('<text x="' + cx + '" y="' + (cy + fs * 0.36) + '" text-anchor="middle" font-size="' + fs +
+        '" font-weight="800" fill="#000">' + esc(Games.altlink.label(v)) + '</text>');
+    }
+    return '<svg class="ps-nssvg" viewBox="-1 -1 ' + (W + 2) + ' ' + (W + 2) + '" xmlns="http://www.w3.org/2000/svg">' + out.join('') + '</svg>';
+  }
+
+  /* 정답지는 만들지 않는다 — 숫자 찾기와 같다. 답이 '번갈아 차례대로'라서 적을 것이 없다. */
+  function altlinkSheets(o) {
+    var pages = [];
+    for (var n = 0; n < o.count; n++) {
+      var b = Games.altlink.makeForPrint(o.level, 4);
+      var no = o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : '';
+      pages.push('<section class="ps-sheet">' +
+        sheetHead(T('번갈아 잇기'), b.levelName + no,
+          T('숫자(동그라미)와 글자(네모)를 번갈아 차례대로 찾아 연필로 이으세요.')) +
+        '<div class="ps-nsgrid">' + b.grids.map(function (g, i) {
+          return '<div class="ps-nsitem">' +
+            '<p class="ps-nsq">' + (i + 1) + '. ' + esc(Games.altlink.rule()) + '</p>' +
+            alSvg(g, b.size) +
+            '</div>';
+        }).join('') + '</div>' +
+      '</section>');
+    }
+    return pages.join('');
+  }
+
   /* ---------------- 규칙 찾기 ---------------- */
 
   /** 숫자 배열 한 줄 — 빈칸 자리만 네모 상자(pm-box, 숫자 계산과 같은 모양)로 그린다 */
@@ -905,7 +944,8 @@ window.Print = (function () {
     numpath: numpathSheets,
     cardmatch: cardmatchSheets,
     nonogram: nonogramSheets,
-    queens: queensSheets
+    queens: queensSheets,
+    altlink: altlinkSheets
   };
 
   /* 인쇄 내용은 **인쇄 창이 닫힌 뒤에** 지운다.

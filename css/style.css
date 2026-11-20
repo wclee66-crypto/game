@@ -796,6 +796,12 @@ button.install:active { transform: scale(.99); }
   .ns-grid--6 .ns-cell { font-size: 1.7rem; }
 }
 
+/* ================= 번갈아 잇기 (숫자 찾기 판을 그대로 쓴다) ================= */
+/* 숫자는 동그라미, 글자는 네모 — 색만으로 구별하지 않는다 */
+.ns-cell.al-num { border-radius: 50%; }
+.ns-cell.al-let:not(.is-done):not(.is-bad) { background: var(--accent-s); border: 2px solid var(--accent); }
+.al-empty { display: block; aspect-ratio: 1; min-width: 0; }
+
 /* ================= 단어 순서 바로잡기 ================= */
 
 .wo-card {
