@@ -590,13 +590,26 @@ PINS.push(packPin({
   ]
 }, D30));
 
+/* ---- 번갈아 잇기 (2026-11-20 에 더함, 141~143번) ----
+ * 영어권에서 'trail making' · 'connect numbers and letters' 로 찾는 사람이 많다.
+ * 의학 효과를 단정하는 말은 쓰지 않는다 — 검사 이름을 닮았다는 것만 밝힌다. */
+PINS.push(one('pin-141-number-letter-trail', 'Free Printable Number<br>and Letter Trail Puzzle',
+  'Connect 1 - A - 2 - B - 3 in order · a step up from number search · play online or print',
+  'altlink', { level: 'easy' }, '번갈아 잇기'));
+PINS.push(one('pin-142-number-letter-trail-dementia', 'Printable Number and Letter<br>Trail for Dementia Patients',
+  'A small grid with just a few of each · a gentle focus activity',
+  'altlink', { level: 'step1' }, '번갈아 잇기 — 치매용'));
+PINS.push(playPin('pin-143-trail-making-puzzle', 'Free Trail Making<br>Puzzle Online',
+  'Link numbers and letters in turn · five levels · play in your browser',
+  'altlink', { level: 'hard' }, '번갈아 잇기 (일반인용)'));
+
 /* 핀마다 어디로 데려갈지 — 그 게임 화면으로 바로 들어가게 한다 */
 var GOTO = {
   sudoku: '#sudoku', wordsearch: '#wordsearch', math: '#math',
   wordorder: '#wordorder', coloring: '#coloring', spot: '#spot',
   maze: '#maze', mathcross: '#mathcross', copyfig: '#copyfig', dot2dot: '#dot2dot',
   shapecount: '#shapecount', clock: '#clock', numsearch: '#numsearch', shadow: '#shadow',
-  numpair: '#numpair', numrule: '#numrule', numpath: '#numpath'
+  numpair: '#numpair', numrule: '#numrule', numpath: '#numpath', altlink: '#altlink'
 };
 PINS.forEach(function (p) {
   if (!p.link) p.link = SITE + '/?lang=en' + (GOTO[p.sheet.game] || '');
@@ -843,7 +856,7 @@ PINS.forEach(function (p) {
     /* 어느 서랍에 넣을지 — 색칠·틀린그림은 A(치매 활동지), 나머지는 B(두뇌 게임) */
     var g = (p.sheet && p.sheet.game) || '';
     p.board = p.play ? 'D' : p.file.indexOf('carers') >= 0 ? 'C'
-            : (!g || g === 'coloring' || g === 'spot' || g === 'copyfig' || g === 'dot2dot' || g === 'shapecount' || g === 'clock' || g === 'numsearch' || g === 'shadow' || g === 'numpair' || g === 'numrule' || g === 'numpath') ? 'A' : 'B';
+            : (!g || g === 'coloring' || g === 'spot' || g === 'copyfig' || g === 'dot2dot' || g === 'shapecount' || g === 'clock' || g === 'numsearch' || g === 'shadow' || g === 'numpair' || g === 'numrule' || g === 'numpath' || g === 'altlink') ? 'A' : 'B';
     p.desc = describe(p);
     made.push(p);
     console.log('  만듦: ' + p.file + '.png');
