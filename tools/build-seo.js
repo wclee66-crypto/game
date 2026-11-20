@@ -109,6 +109,17 @@ var COPY = {
     levels: '난이도 5단계',
     scoring: '점수 규칙',
     free: '모두 무료입니다. 회원가입도 필요 없습니다.',
+    /* 게임 페이지마다 검색 결과에 나오는 제목·설명·첫 문단을 다르게 한다 (2026-11-21).
+     * 예전에는 모든 게임이 같은 소개글로 시작해, 구글이 페이지를 서로 같은 것으로 보았다. */
+    gameTitle: function (g) { return g.name + (g.canPrint ? ' 무료 인쇄 문제지 · 어르신 두뇌 훈련 · ' : ' · ') + '새록'; },
+    gameDesc: function (g) {
+      return g.name + ' 무료 인쇄 문제지 — ' + sent(g.tagline) + ' 어르신 치매 예방 두뇌 훈련, 난이도 5단계, ' +
+        (g.canPrint ? '가입 없이 PDF로 받아 바로 출력하실 수 있습니다.' : '가입 없이 바로 시작하실 수 있습니다.');
+    },
+    gameIntro: function (g) {
+      return '「' + g.name + '」 — ' + sent(g.tagline) + ' 난이도가 5단계라 처음 하시는 어르신부터 익숙하신 분까지 맞춰 하실 수 있습니다. ' +
+        (g.canPrint ? '문제지를 A4 용지에 무료로 인쇄하거나 PDF로 내려받아 종이로도 푸실 수 있습니다.' : '가입 없이 휴대폰과 컴퓨터에서 바로 하실 수 있습니다.');
+    },
     intro: '새록은 초기 치매 및 인지 장애 개선에 도움이 되는 게임을 무료로 이용하실 수 있는 ' +
            '두뇌 훈련 놀이터입니다. 컴퓨터·태블릿·휴대폰 어디서나 열리고, ' +
            '화면이 불편하시면 문제를 인쇄하여 사용하실 수도 있습니다.',
@@ -195,6 +206,15 @@ var COPY = {
     levels: 'Five levels',
     scoring: 'Scoring',
     free: 'Everything is free. No sign-up.',
+    gameTitle: function (g) { return g.name + (g.canPrint ? ' — Free Printable Puzzle for Seniors | Saerok' : ' | Saerok'); },
+    gameDesc: function (g) {
+      return g.name + ' — free printable puzzle for seniors. ' + sent(g.tagline) + ' Five levels, no sign-up' +
+        (g.canPrint ? ', download the PDF or print an A4 sheet.' : '.');
+    },
+    gameIntro: function (g) {
+      return g.name + ' — ' + sent(g.tagline) + ' It has five levels, from a gentle first step to a real challenge. ' +
+        (g.canPrint ? 'Print the worksheet on A4 paper for free, or download it as a PDF.' : 'Play free in your browser, no sign-up.');
+    },
     intro: 'Saerok is a brain-training playground where games that help with early dementia and ' +
            'mild cognitive decline are free to play. It works on a computer, a tablet or a phone, ' +
            'and if the screen is hard to use you can print the puzzles instead.',
@@ -279,6 +299,15 @@ var COPY = {
     levels: 'レベルは 5 段階',
     scoring: '点数のルール',
     free: 'すべて無料です。登録もいりません。',
+    gameTitle: function (g) { return g.name + (g.canPrint ? ' 無料プリント｜高齢者の脳トレ｜サエロク' : '｜サエロク'); },
+    gameDesc: function (g) {
+      return g.name + ' — 高齢者向けの無料脳トレ。' + sent(g.tagline) + '5段階のレベル、登録不要' +
+        (g.canPrint ? '、PDFをダウンロードして A4 で印刷できます。' : '。');
+    },
+    gameIntro: function (g) {
+      return '「' + g.name + '」 — ' + sent(g.tagline) + '初めての方から慣れた方まで、5段階のレベルで遊べます。' +
+        (g.canPrint ? 'プリントは A4 用紙に無料で印刷でき、PDF でも保存できます。' : '登録なしで、スマホやパソコンからすぐ遊べます。');
+    },
     intro: 'サエロクは、初期の認知症や軽い物忘れの予防に役立つゲームを無料で遊べる脳トレの広場です。' +
            'パソコン・タブレット・スマホのどれでも開け、画面が使いにくいときは問題を印刷して紙で解くこともできます。',
     printTitle: '高齢者向け 無料脳トレプリント',
@@ -421,6 +450,12 @@ function esc(s) {
 /** 페이지 한 장의 뼈대.
  *  o.alts: [{lang, href}] — 이 페이지의 말별 주소들 (자기 자신 포함).
  *  구글이 나라에 맞는 말의 페이지를 보여 주게 하는 표시다. */
+/* 한 줄 소개 끝에 마침표를 하나만 붙인다 (이미 있으면 그대로) */
+function sent(t) {
+  t = String(t || '').replace(/[.。\s]+$/, '');
+  return t + (/[぀-ヿ一-鿿]/.test(t) ? '。' : '.');
+}
+
 function page(o) {
   var alt = (o.alts || []).map(function (a) {
     return '<link rel="alternate" hreflang="' + a.lang + '" href="' + a.href + '">';
@@ -579,7 +614,7 @@ function gamePage(g, lang, C, games) {
     '<p class="doc__cta"><a class="doc__btn" href="' + appUrl + '">' + C.play + '</a>' +
       (g.canPrint ? '<a class="doc__btn doc__btn--ghost" href="' + base + '/print/">' + C.printPage + '</a>' : '') +
     '</p>\n' +
-    '<p>' + esc(C.intro) + '</p>\n' +
+    '<p>' + esc(C.gameIntro(g)) + '</p>\n' +
     shotFigure(g.id, g.name, lang, C) +
     (g.canPrint ? pdfBlock(lang, C, [g]) : '') +
     (lv ? '<h2>' + C.levels + '</h2>\n<ul class="doc__lv">' + lv + '</ul>\n' : '') +
@@ -593,8 +628,8 @@ function gamePage(g, lang, C, games) {
     html: page({
       lang: lang, url: url,
       alts: avail.map(function (l) { return { lang: l, href: SITE + LX[l].base + '/' + g.id + '/' }; }),
-      title: g.name + ' · ' + C.siteName,
-      desc: g.tagline + ' — ' + C.free,
+      title: C.gameTitle(g),
+      desc: C.gameDesc(g),
       siteName: C.siteName,
       image: shot(g.id, lang) && ogName(g.id, lang),        /* 그 게임 카드가 카톡에 나오게 */
       imageAlt: shotAlt(g.name, lang),
@@ -647,7 +682,8 @@ function printPage(lang, C, games) {
     html: page({
       lang: lang, url: url,
       alts: ALL_LANGS.map(function (l) { return { lang: l, href: SITE + LX[l].base + '/print/' }; }),
-      title: C.printTitle + ' · ' + C.brand,
+      /* 한국어는 사람들이 실제로 치는 말(치매 예방 · 무료 인쇄 · PDF)을 제목에 넣는다 (2026-11-21) */
+      title: lang === 'ko' ? '어르신 치매 예방 무료 인쇄 문제지 · A4 PDF 내려받기 · ' + C.brand : C.printTitle + ' · ' + C.brand,
       desc: C.printLead,
       siteName: C.siteName,
       body: body
