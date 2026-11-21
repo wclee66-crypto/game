@@ -1,0 +1,125 @@
+.health-home {
+  margin: 1.35rem 0 0;
+  padding: clamp(.85rem, 3vw, 1.5rem);
+  background: var(--surf);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+}
+.health-heading, .health-brand, .health-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: .5rem 1rem;
+}
+.health-heading { margin-bottom: .8rem; }
+.health-heading h2 { margin: 0; font-size: 1.2rem; }
+.health-heading > span, .health-brand > span {
+  font-size: .78rem;
+  color: var(--ink-2);
+}
+.health-shortcuts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .7rem;
+}
+.health-shortcut {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(.55rem, 2vw, 1rem);
+  padding: .9rem;
+  min-height: 5.2rem;
+  background: var(--bg);
+  border: 1px solid var(--accent-b);
+  border-radius: 16px;
+  color: var(--accent-d);
+  text-decoration: none;
+}
+.health-shortcut--video { background: var(--bg); border-color: var(--line-2); color: var(--ink); }
+.health-shortcut:hover, .health-nav a:hover { background: var(--accent-b); }
+.health-shortcut--video:hover { background: var(--surf); }
+.health-shortcut strong, .health-shortcut small { display: block; }
+.health-shortcut strong { font-size: 1.05rem; line-height: 1.4; }
+.health-shortcut small { margin-top: .25rem; color: var(--ink-2); font-size: .8rem; line-height: 1.5; }
+.health-icon {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: .7rem;
+  color: var(--accent-d);
+  background: var(--accent-s);
+}
+.health-shortcut--video .health-icon { background: none; width: 3.15rem; }
+.health-youtube {
+  display: grid;
+  place-items: center;
+  width: 2.85rem;
+  height: 1.95rem;
+  border-radius: .55rem;
+  background: #e60000;
+}
+.health-youtube::before {
+  content: "";
+  margin-left: .15rem;
+  border: .36rem solid transparent;
+  border-right: 0;
+  border-left: .6rem solid #fff;
+}
+.health-icon svg { width: 1.45rem; height: 1.45rem; }
+.health-chevron { font-size: 1.5rem; }
+.health-brand, .health-page { width: min(100% - 2rem, 72rem); margin-inline: auto; }
+.health-brand { justify-content: flex-start; min-height: 4.5rem; border-bottom: 1px solid var(--line); }
+.health-brand strong { font-size: 1.2rem; }
+.health-brand > span { margin-left: auto; }
+.health-page { padding: 1.2rem 0 2.5rem; }
+.health-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3rem;
+  padding: .5rem .85rem;
+  border-radius: .65rem;
+  color: var(--accent-d);
+  background: var(--accent-s);
+  font-weight: 800;
+  text-decoration: none;
+}
+.health-shortcut:focus-visible, .health-nav a:focus-visible, .health-resource:focus-visible {
+  outline: 3px solid var(--accent-d);
+  outline-offset: 3px;
+}
+.health-page h1 { font-size: clamp(1.7rem, 3.5vw, 2.45rem); margin: 1.1rem 0 .25rem; }
+.health-sample { margin: 0 0 1rem; color: var(--ink-2); }
+.health-videos, .health-articles { list-style: none; margin: 0; padding: 0; display: grid; gap: .9rem; }
+.health-videos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.health-video, .health-article { border: 1px solid var(--line); border-radius: 16px; background: var(--bg); }
+.health-video { overflow: hidden; }
+.health-resource { display: block; height: 100%; color: inherit; text-decoration: none; border-radius: inherit; }
+.health-resource:hover { background: var(--surf); }
+.health-resource:focus-visible { outline-offset: -4px; }
+.health-cover {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  display: grid;
+  place-items: center;
+  background-color: var(--accent-s);
+  background-position: center;
+  background-size: cover;
+}
+.health-duration {
+  position: absolute; right: .45rem; bottom: .45rem;
+  padding: .15rem .45rem; border-radius: .3rem;
+  background: #151515; color: #fff; font-size: .82rem; font-weight: 800;
+}
+.health-video-copy { padding: .8rem; }
+.health-page h2 { font-size: 1.05rem; line-height: 1.45; margin: 0; word-break: keep-all; overflow-wrap: anywhere; }
+.health-video-copy p, .health-article p { margin: .35rem 0 0; color: var(--ink-2); line-height: 1.55; }
+.health-article .health-resource { display: flex; gap: .8rem; padding: 1rem; }
+.health-article .health-icon { flex: none; }
+.health-topic { display: block; color: var(--accent-d); font-size: .8rem; font-weight: 800; margin-bottom: .25rem; }
+.health-article small { display: block; color: var(--ink-2); margin-top: .45rem; }
+.health-action { display: block; margin-top: .65rem; color: var(--accent-d); font-weight: 800; }
+@media (max-width: 880px) { .health-videos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 590px) { .health-shortcuts, .health-videos { grid-template-columns: 1fr; } }
+@media print { .health-home { display: none; } }

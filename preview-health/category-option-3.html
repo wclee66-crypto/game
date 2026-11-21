@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko" data-fs="md">
+<head>
+<base href="/">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="description" content="스도쿠·낱말찾기·숫자 계산·단어 순서·상식퀴즈·색칠 공부·틀린그림찾기를 매일 조금씩. 날짜별 점수가 기록되는 치매 예방 두뇌 훈련 앱">
+<!-- 검색 등록용 소유 확인 — 지우면 등록이 풀립니다 -->
+<meta name="naver-site-verification" content="f0a6ed93a3d035f79ca2cdc2ab93f8002d5d9ad0">
+<meta name="google-adsense-account" content="ca-pub-7612136827411712">
+<title>새록 · 두뇌 훈련</title>
+<link rel="canonical" href="https://playsaerok.com/">
+<!-- 카톡·페이스북에 주소를 보낼 때 나오는 그림과 글 -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="새록">
+<meta property="og:title" content="새록 · 치매 예방 두뇌 훈련">
+<meta property="og:description" content="스도쿠·낱말찾기·숫자 계산·색칠 공부를 매일 조금씩. 문제지는 A4 용지에 무료로 인쇄하실 수 있습니다.">
+<meta property="og:url" content="https://playsaerok.com/">
+<meta property="og:image" content="https://playsaerok.com/images/saerok-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="새록 — 어르신 치매 예방 두뇌 훈련 무료 인쇄 문제지">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32">
+<link rel="icon" href="icons/favicon-64.png" sizes="64x64">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="새록">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800;900&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="/preview-health/category-option-3.css">
+<link rel="stylesheet" href="css/health.css">
+</head>
+<body>
+
+<header class="appbar" id="appbar">
+  <button class="appbar__back" id="btnBack" hidden aria-label="뒤로">←</button>
+  <svg class="seal" viewBox="0 0 100 100" aria-hidden="true">
+    <rect width="100" height="100" rx="26" fill="currentColor"></rect>
+    <g fill="#fff">
+      <path d="M45 80 Q40.8 58.8 22 48 Q26.2 69.3 45 80 Z" opacity=".55"></path>
+      <path d="M56 80 Q75.2 66.4 77 43 Q57.8 56.6 56 80 Z" opacity=".78"></path>
+      <path d="M50 81 Q61.5 49 50 17 Q38.5 49 50 81 Z"></path>
+    </g>
+  </svg>
+  <div class="appbar__title">
+    <h1 id="appTitle">새록</h1>
+    <p id="appSub">매일 조금씩, 기억이 새록새록</p>
+  </div>
+  <div class="appbar__shop" id="topShop" hidden></div>
+  <button class="appbar__inst" id="btnInstall" aria-label="앱으로 설치하기" hidden><span class="appbar__inst-ico">⤓</span><span class="appbar__inst-txt">앱 설치</span></button>
+  <button class="appbar__gear" id="btnSettings" aria-label="설정">⚙</button>
+</header>
+
+<main id="view" class="view" tabindex="-1"></main>
+
+<nav class="tabbar" id="tabbar" aria-label="게임 전환">
+  <button class="tab" data-route="home"><span class="tab__lbl">홈</span></button>
+  <button class="tab" data-route="games"><span class="tab__lbl">게임 고르기</span></button>
+  <button class="tab" data-route="records"><span class="tab__lbl">나의 기록</span></button>
+</nav>
+
+<div class="modal-root" id="modalRoot" hidden></div>
+<div class="toast" id="toast" hidden></div>
+
+<!-- 건의하기 — Netlify 가 배포할 때 이 form 을 읽어 받는 곳을 만든다.
+     화면에는 보이지 않고, 실제 입력은 설정 창에서 받아 이리로 보낸다.
+     bot-field 는 사람 눈에 안 보이는 미끼 칸이다 (자동 광고 글 거르기). -->
+<!-- 인쇄(PDF 저장) 전용 영역 — 화면에는 보이지 않고 인쇄할 때만 나타난다 -->
+<div id="printRoot" aria-hidden="true"></div>
+
+<script src="js/storage.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/lang/en.js"></script>
+<script src="js/lang/ja.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/data/quiz-data.js"></script>
+<script src="js/data/quiz-data-en.js"></script>
+<script src="js/data/words.js"></script>
+<script src="js/data/words-en.js"></script>
+<script src="js/data/order-words.js"></script>
+<script src="js/data/order-words-en.js"></script>
+<script src="js/data/pictures.js"></script>
+<script src="js/data/listen-data.js"></script>
+<script src="js/games/sudoku.js"></script>
+<script src="js/games/wordsearch.js"></script>
+<script src="js/games/math.js"></script>
+<script src="js/games/wordorder.js"></script>
+<script src="js/games/quiz.js"></script>
+<script src="js/games/coloring.js"></script>
+<script src="js/games/spot.js"></script>
+<script src="js/games/maze.js"></script>
+<script src="js/games/mathcross.js"></script>
+<script src="js/games/copyfig.js"></script>
+<script src="js/games/dot2dot.js"></script>
+<script src="js/games/shapecount.js"></script>
+<script src="js/games/clock.js"></script>
+<script src="js/games/listen.js"></script>
+<script src="js/games/numsearch.js"></script>
+<script src="js/games/shadow.js"></script>
+<script src="js/games/numpair.js"></script>
+<script src="js/games/numrule.js"></script>
+<script src="js/games/numpath.js"></script>
+<script src="js/games/cardmatch.js?v=97"></script>
+<script src="js/games/nonogram.js"></script>
+<script src="js/games/queens.js"></script>
+<script src="js/games/altlink.js"></script>
+<script src="js/games/visualmemory.js"></script>
+<script src="js/print.js"></script>
+<script src="js/suggest.js"></script>
+<script src="js/shop.js"></script>
+<script src="js/app.js"></script>
+<script>
+window.addEventListener('load', function () {
+  document.title = '새록 · 3안 선명한 색상';
+  var categories = document.querySelector('.home-game-heading');
+  if (categories) {
+    categories.style.scrollMarginTop = '5rem';
+    categories.scrollIntoView({ block: 'start' });
+  }
+});
+</script>
+</body>
+</html>
+

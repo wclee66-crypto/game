@@ -1,0 +1,28 @@
+.care-kind { margin-block: .55rem; }
+.care-kind summary {
+  min-height: 4.1rem;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--wash) 78%, white),
+    var(--wash)
+  );
+  border: 1px solid color-mix(in srgb, var(--kind) 23%, var(--wash));
+  border-bottom: 3px solid color-mix(in srgb, var(--kind) 30%, var(--wash));
+  border-radius: .85rem;
+}
+.care-kind .kind-icon { background: var(--kind); color: white; }
+.kind-copy strong { color: var(--kind); }
+.care-kind .kind-desc {
+  color: var(--ink);
+  font-weight: 600;
+}
+.care-kind summary::after { border-color: var(--kind); }
+.care-kind summary:hover,
+.care-kind[open] summary {
+  background: var(--wash);
+  border-color: color-mix(in srgb, var(--kind) 36%, var(--wash));
+}
+.care-kind summary:active {
+  translate: 0 1px;
+  background: color-mix(in srgb, var(--wash) 95%, var(--kind));
+}
