@@ -308,36 +308,36 @@ body.is-door .view { max-width: 900px; padding-bottom: calc(env(safe-area-inset-
 .doorcard__go { border-radius: 999px; font-weight: 800; white-space: nowrap; }
 
 /* 큰 카드 — 인지 훈련 */
-.doorcard--care {
+.doorcard.doorcard--care {
   flex-direction: column; align-items: flex-start; gap: .55rem;
   padding: 1.5rem 1.4rem 1.4rem; background: var(--c); border: 2px solid var(--c); border-radius: var(--r-lg); color: #fff;
 }
-.doorcard--care::before {
+.doorcard.doorcard--care::before {
   content: ''; position: absolute; right: -3.5rem; top: -3.5rem;
   width: 11rem; height: 11rem; border-radius: 50%; background: rgba(255,255,255,.12);
 }
-.doorcard--care > * { position: relative; }
-.doorcard--care .doorcard__art { width: 3.6rem; height: 3.6rem; border-radius: 16px; background: rgba(255,255,255,.2); }
-.doorcard--care .doorcard__art svg { width: 2.5rem; height: 2.5rem; }
-.doorcard--care .doorcard__who { font-size: .9rem; color: #fff; opacity: .95; }
-.doorcard--care .doorcard__name { font-size: 2.1rem; color: #fff; }
-.doorcard--care .doorcard__desc { font-size: 1.02rem; color: #fff; opacity: .97; }
-.doorcard--care .doorcard__go { margin-top: .5rem; padding: .85rem 1.5rem; background: #fff; color: var(--c); font-size: 1.15rem; }
-.doorcard--care:hover, .doorcard--care:focus-visible { filter: brightness(.95); outline: none; }
+.doorcard.doorcard--care > * { position: relative; }
+.doorcard.doorcard--care .doorcard__art { width: 3.6rem; height: 3.6rem; border-radius: 16px; background: rgba(255,255,255,.2); }
+.doorcard.doorcard--care .doorcard__art svg { width: 2.5rem; height: 2.5rem; }
+.doorcard.doorcard--care .doorcard__who { font-size: .9rem; color: #fff; opacity: .95; }
+.doorcard.doorcard--care .doorcard__name { font-size: 2.1rem; color: #fff; }
+.doorcard.doorcard--care .doorcard__desc { font-size: 1.02rem; color: #fff; opacity: .97; }
+.doorcard.doorcard--care .doorcard__go { margin-top: .5rem; padding: .85rem 1.5rem; background: #fff; color: var(--c); font-size: 1.15rem; }
+.doorcard.doorcard--care:hover, .doorcard.doorcard--care:focus-visible { filter: brightness(.95); outline: none; }
 
 /* 작은 카드 — 두뇌 게임 */
-.doorcard--play {
+.doorcard.doorcard--play {
   flex-direction: row; align-items: center; justify-content: space-between; gap: .9rem; flex-wrap: wrap;
   padding: 1rem 1.1rem; background: var(--bg); border: 2px solid var(--line); border-radius: var(--r-lg);
 }
-.doorcard--play .doorcard__main { display: flex; align-items: center; gap: .85rem; flex: 1 1 15rem; min-width: 0; }
-.doorcard--play .doorcard__art { width: 2.8rem; height: 2.8rem; border-radius: 13px; background: var(--c); }
-.doorcard--play .doorcard__art svg { width: 1.9rem; height: 1.9rem; }
-.doorcard--play .doorcard__who { font-size: .76rem; color: var(--c); }
-.doorcard--play .doorcard__name { font-size: 1.2rem; color: var(--ink); }
-.doorcard--play .doorcard__desc { font-size: .84rem; color: var(--ink-2); line-height: 1.5; }
-.doorcard--play .doorcard__go { padding: .6rem 1.1rem; background: transparent; border: 2px solid var(--c); color: var(--c); font-size: .92rem; }
-.doorcard--play:hover, .doorcard--play:focus-visible { border-color: var(--c); outline: none; }
+.doorcard.doorcard--play .doorcard__main { display: flex; align-items: center; gap: .85rem; flex: 1 1 15rem; min-width: 0; }
+.doorcard.doorcard--play .doorcard__art { width: 2.8rem; height: 2.8rem; border-radius: 13px; background: var(--c); }
+.doorcard.doorcard--play .doorcard__art svg { width: 1.9rem; height: 1.9rem; }
+.doorcard.doorcard--play .doorcard__who { font-size: .76rem; color: var(--c); }
+.doorcard.doorcard--play .doorcard__name { font-size: 1.2rem; color: var(--ink); }
+.doorcard.doorcard--play .doorcard__desc { font-size: .84rem; color: var(--ink-2); line-height: 1.5; }
+.doorcard.doorcard--play .doorcard__go { padding: .6rem 1.1rem; background: transparent; border: 2px solid var(--c); color: var(--c); font-size: .92rem; }
+.doorcard.doorcard--play:hover, .doorcard.doorcard--play:focus-visible { border-color: var(--c); outline: none; }
 .door__foot { margin: 1.2rem .3rem 0; font-size: .76rem; line-height: 1.6; color: var(--ink-3); text-align: center; word-break: keep-all; }
 
 /* ================= 두뇌 게임 입구 (누구나) =================
