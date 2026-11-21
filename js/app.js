@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v103';
+  var APP_VERSION = 'v104';
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -461,6 +461,22 @@ window.App = (function () {
     '</a>';
   }
 
+  function healthLinks() {
+    return '<section class="health-home" aria-labelledby="health-title">' +
+      '<div class="health-heading"><h2 id="health-title">' + T('인지 건강 자료') + '</h2></div>' +
+      '<div class="health-shortcuts">' +
+        '<a class="health-shortcut health-shortcut--video" href="health/?kind=video">' +
+          '<span class="health-icon"><span class="health-youtube" aria-hidden="true"></span></span>' +
+          '<span><strong>' + T('관련 영상 보기') + '</strong><small>' + T('유튜브 · 전문의 인터뷰와 건강강좌') + '</small></span>' +
+          '<span class="health-chevron" aria-hidden="true">›</span></a>' +
+        '<a class="health-shortcut" href="health/?kind=article">' +
+          '<span class="health-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+          '<path d="M12 6C9 4 6 4 3 5v14c3-1 6-1 9 1 3-2 6-2 9-1V5c-3-1-6-1-9 1zm0 0v14M6 9h3m6 0h3M6 13h3m6 0h3"/></svg></span>' +
+          '<span><strong>' + T('관련 글 읽기') + '</strong><small>' + T('인지 건강에 관한 글을 읽어보세요') + '</small></span>' +
+          '<span class="health-chevron" aria-hidden="true">›</span></a>' +
+      '</div></section>';
+  }
+
   function renderHome() {
     var today = Store.dayKey();
     var best = Store.dayBest(today);
@@ -528,6 +544,7 @@ window.App = (function () {
           UI.barChart(chartData, chartMax) +
           ('<p class="card__foot">' + T('막대는 그날의 총점입니다. 같은 게임을 여러 번 하면 가장 높은 점수만 더해집니다.') + '</p>') +
         '</div>' +
+        (!play && I18N.get() === 'ko' ? healthLinks() : '') +
 
         '<div class="row2">' +
           ('<button class="btn btn--ghost" id="hmRules">' + T('점수 규칙 한눈에') + '</button>') +

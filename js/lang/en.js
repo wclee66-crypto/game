@@ -1334,6 +1334,12 @@ window.I18N.dict.en = {
   '없음 — 잘못 누르면 그 칸이 잠깐 붉어지고 지금 찾을 것을 알려 드립니다': 'None — a wrong tap flashes red briefly and tells you what to find now',
   '숫자(동그라미)와 글자(네모)를 번갈아 차례대로 찾아 연필로 이으세요.': 'Find the numbers (circles) and letters (squares) in turn, in order, and connect them with a pencil.',
 
+  '인지 건강 자료': 'Cognitive health resources',
+  '관련 영상 보기': 'Watch videos',
+  '유튜브 · 전문의 인터뷰와 건강강좌': 'YouTube · Specialist interviews and health talks',
+  '관련 글 읽기': 'Read articles',
+  '인지 건강에 관한 글을 읽어보세요': 'Find articles about cognitive health',
+
   '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="지우개">':
     '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="Eraser">'
 };
