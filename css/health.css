@@ -21,7 +21,7 @@
 .health-shortcuts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: .7rem;
+  gap: .8rem;
 }
 .health-shortcut {
   display: grid;
@@ -31,31 +31,28 @@
   padding: .9rem;
   min-height: 5.2rem;
   background: var(--bg);
-  border: 1px solid var(--accent-b);
-  border-bottom: 4px solid color-mix(in srgb, var(--accent-d) 35%, var(--accent-b));
-  border-radius: 16px;
-  color: var(--accent-d);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r);
+  color: var(--ink);
   text-decoration: none;
 }
-.health-shortcut--video {
-  border-color: var(--line-2);
-  border-bottom-color: color-mix(in srgb, var(--ink-2) 33%, var(--line-2));
-  color: var(--ink);
+.health-shortcut:hover {
+  border-color: var(--accent);
 }
-.health-shortcut:hover, .health-nav a:hover { background: var(--accent-b); }
-.health-shortcut--video:hover { background: var(--surf); }
 .health-shortcut:active {
-  translate: 0 2px;
-  border-bottom-color: var(--accent-b);
+  border-color: var(--accent-d);
   background: var(--accent-s);
-}
-.health-shortcut--video:active { border-bottom-color: var(--line-2); background: var(--surf-2); }
-@media (prefers-reduced-motion: reduce) {
-  .health-shortcut:active { translate: none; }
 }
 .health-shortcut strong, .health-shortcut small { display: block; }
 .health-shortcut strong { font-size: 1.05rem; line-height: 1.4; }
-.health-shortcut small { margin-top: .25rem; color: var(--ink-2); font-size: .8rem; line-height: 1.5; }
+.health-shortcut small {
+  margin-top: .25rem;
+  color: var(--ink-2);
+  font-size: .8rem;
+  line-height: 1.5;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
 .health-icon {
   display: grid;
   place-items: center;
@@ -82,7 +79,17 @@
   border-left: .6rem solid #fff;
 }
 .health-icon svg { width: 1.45rem; height: 1.45rem; }
-.health-chevron { font-size: 1.5rem; }
+.health-chevron {
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--surf);
+  color: var(--accent-d);
+  font-size: 1.5rem;
+  line-height: 1;
+}
 .health-brand, .health-page { width: min(100% - 2rem, 72rem); margin-inline: auto; }
 .health-brand { justify-content: flex-start; min-height: 4.5rem; border-bottom: 1px solid var(--line); }
 .health-brand strong { font-size: 1.2rem; }
@@ -99,6 +106,7 @@
   font-weight: 800;
   text-decoration: none;
 }
+.health-nav a:hover { background: var(--accent-b); }
 .health-shortcut:focus-visible, .health-nav a:focus-visible, .health-resource:focus-visible {
   outline: 3px solid var(--accent-d);
   outline-offset: 3px;
