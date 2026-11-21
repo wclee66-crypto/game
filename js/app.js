@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v107';
+  var APP_VERSION = 'v108';
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -391,20 +391,23 @@ window.App = (function () {
 
   function careGroups() {
     var groups = [
-      [T('숫자와 계산'), 'math mathcross sudoku numrule clock'],
-      [T('기억하기'), 'changedpic cupball cardmatch listen'],
-      [T('말과 상식'), 'wordsearch wordorder quiz'],
-      [T('찾고 비교하기'), 'spot shadow numpair numsearch shapecount'],
-      [T('그리기와 길 찾기'), 'maze copyfig coloring dot2dot numpath altlink nonogram queens']
+      [T('숫자와 계산'), 'math mathcross sudoku numrule clock', T('덧셈·뺄셈과 숫자 규칙')],
+      [T('기억하기'), 'changedpic cupball cardmatch listen', T('그림 기억, 컵 속 공, 카드 짝 맞추기')],
+      [T('말과 상식'), 'wordsearch wordorder quiz', T('낱말 찾기, 단어 순서, 상식 퀴즈')],
+      [T('찾고 비교하기'), 'spot shadow numpair numsearch shapecount', T('틀린 그림과 같은 모양·숫자 찾기')],
+      [T('그리기와 길 찾기'), 'maze copyfig coloring dot2dot numpath altlink nonogram queens', T('점 잇기, 색칠하기, 미로 찾기')]
     ];
     var symbols = ['<rect x="5" y="2" width="14" height="20" rx="3"/><path d="M8 7h8M8 12h2m4 0h2m-8 5h2m4 0h2"/>',
       '<path d="M4 7v5h5M4 12a8 8 0 1 1 2.4 5.7M12 7v5l3 2"/>',
       '<path d="M3 4h7l2 2 2-2h7v15h-7l-2 2-2-2H3zM12 6v15"/>',
       '<circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/>',
       '<path d="m4 16 12-12 4 4L8 20l-5 1zM13 7l4 4"/>'];
-    return groups.map(function (group,i) {
+    return groups.map(function (group, i) {
       var ids = group[1].split(' ').filter(function (id) { return GAMES.indexOf(id) >= 0; });
-      return '<details name="care-group" class="care-kind kind-'+i+'"><summary><span class="kind-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+symbols[i]+'</svg></span><strong>'+group[0]+'</strong>' +
+      if (!ids.length) return '';
+      return '<details name="care-group" class="care-kind kind-' + i + '"><summary>' +
+        '<span class="kind-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + symbols[i] + '</svg></span>' +
+        '<span class="kind-copy"><strong>' + group[0] + '</strong><span class="kind-desc">' + group[2] + '</span></span>' +
         '</summary><div class="gamelist">' + ids.map(gameCard).join('') + '</div></details>';
     }).join('');
   }
