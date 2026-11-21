@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v110';
+  var APP_VERSION = 'v111';
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -551,7 +551,7 @@ window.App = (function () {
         '</div>' +
         (!play ? healthLinks() : '') +
 
-        '<div class="row2">' +
+        '<div class="row2 home-actions">' +
           ('<button class="btn btn--ghost" id="hmRules">' + T('점수 규칙 한눈에') + '</button>') +
           ('<button class="btn btn--ghost" id="hmRecords">' + T('기록 자세히') + '</button>') +
         '</div>' +
