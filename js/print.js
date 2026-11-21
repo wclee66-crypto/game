@@ -111,22 +111,27 @@ window.Print = (function () {
 
   /* ---------------- 숫자 계산 ---------------- */
 
-  /** 식 안의 □ 자리, 또는 식 끝의 답 자리에 네모 상자를 놓는다.
-   *  ans 를 주면 그 안에 답을 적는다(정답지). */
+  /** 숫자와 기호를 칸마다 놓아 같은 위치의 숫자·기호·답칸이 세로로 맞게 한다. */
   function mathRow(it, ans) {
-    var box = '<span class="pm-box' + (ans != null ? ' pm-a' : '') + '">' + (ans != null ? ans : '') + '</span>';
-    if (it.q.indexOf('□') >= 0) {
-      return '<span class="pm-q">' + esc(it.q).replace('□', '</span>' + box + '<span class="pm-q">') + '</span>';
-    }
-    return '<span class="pm-q">' + esc(it.q) + ' =</span>' + box;
+    var parts = it.q.split(' ');
+    if (!it.noeq) parts.push('=', '□');
+    return '<li>' + parts.map(function (part, index) {
+      var col = part === '=' ? ' pm-equals' : (index === parts.length - 1 ? ' pm-result' : '');
+      if (part === '□') {
+        return '<span class="pm-box' + col + (ans != null ? ' pm-a' : '') + '">' +
+          (ans != null ? esc(ans) : '') + '</span>';
+      }
+      return '<span class="pm-q' + col + '">' + esc(part) + '</span>';
+    }).join('') + '</li>';
   }
 
   function mathSheets(o) {
     var pages = [];
     for (var n = 0; n < o.count; n++) {
       var b = Games.math.makeForPrint(o.level, 30);   /* 두 칸 × 열다섯 줄 — 한 장이 꽉 찬다 */
-      var body = '<ol class="ps-math">' + b.items.map(function (it) {
-        return '<li>' + mathRow(it) + '</li>';
+      var list = '<ol class="ps-math ps-math--calc' + (o.level === 'hard' ? ' ps-math--chain' : '') + '">';
+      var body = list + b.items.map(function (it) {
+        return mathRow(it);
       }).join('') + '</ol>';
 
       pages.push('<section class="ps-sheet ps-sheet--left">' +
@@ -138,8 +143,8 @@ window.Print = (function () {
       if (o.answer) {
         pages.push('<section class="ps-sheet ps-sheet--left ps-sheet--ans">' +
           sheetHead(T('숫자 계산 정답'), b.levelName + (o.count > 1 ? ' · ' + T('{n}번', { n: n + 1 }) : ''), '') +
-          '<ol class="ps-math">' + b.items.map(function (it) {
-            return '<li>' + mathRow(it, it.a) + '</li>';
+          list + b.items.map(function (it) {
+            return mathRow(it, it.a);
           }).join('') + '</ol>' +
         '</section>');
       }
@@ -371,6 +376,7 @@ window.Print = (function () {
           seg('mxCount', [['2', T('2장')], ['4', T('4장')], ['6', T('6장')], ['10', T('10장')]], '4') + '</div>' +
         ('<div class="set"><span class="set__lbl">' + T('정답지') + '</span>') +
           seg('mxAns', [['no', T('없이')], ['yes', T('함께')]], 'no') + '</div>' +
+        issuerField() +
       '</div>';
 
     var m = UI.modal({
@@ -378,7 +384,9 @@ window.Print = (function () {
       body: body,
       actions: [
         { label: T('취소') },
-        { label: T('만들기'), kind: 'accent', onClick: function () { printHtml(mixedSheets(pick)); } }
+        { label: T('만들기'), kind: 'accent', onClick: function () {
+          printHtml(mixedSheets(pick), m.card.querySelector('.print-issuer').value);
+        } }
       ]
     });
 
@@ -596,12 +604,12 @@ window.Print = (function () {
 
   /** 숫자 배열 한 줄 — 빈칸 자리만 네모 상자(pm-box, 숫자 계산과 같은 모양)로 그린다 */
   function nrRow(it, showAns) {
-    return it.seq.map(function (v, i) {
+    return '<li style="--nr-cells:' + it.seq.length + '">' + it.seq.map(function (v, i) {
       var cell = i === it.blank
         ? '<span class="pm-box' + (showAns ? ' pm-a' : '') + '">' + (showAns ? it.a : '') + '</span>'
         : '<span class="pm-q">' + v + '</span>';
-      return i > 0 ? '<span class="pm-q">, </span>' + cell : cell;
-    }).join('');
+      return '<span class="pnr-cell">' + cell + '</span>';
+    }).join('') + '</li>';
   }
 
   function numruleSheets(o) {
@@ -612,13 +620,13 @@ window.Print = (function () {
 
       pages.push('<section class="ps-sheet ps-sheet--left">' +
         sheetHead(T('규칙 찾기'), b.levelName + no, T('빈칸에 들어갈 숫자를 적으세요.')) +
-        '<ol class="ps-math ps-nr">' + b.items.map(function (it) { return '<li>' + nrRow(it) + '</li>'; }).join('') + '</ol>' +
+        '<ol class="ps-math ps-nr">' + b.items.map(function (it) { return nrRow(it); }).join('') + '</ol>' +
       '</section>');
 
       if (o.answer) {
         pages.push('<section class="ps-sheet ps-sheet--left ps-sheet--ans">' +
           sheetHead(T('규칙 찾기 정답'), b.levelName + no, '') +
-          '<ol class="ps-math ps-nr">' + b.items.map(function (it) { return '<li>' + nrRow(it, true) + '</li>'; }).join('') + '</ol>' +
+          '<ol class="ps-math ps-nr">' + b.items.map(function (it) { return nrRow(it, true); }).join('') + '</ol>' +
         '</section>');
       }
     }
@@ -961,7 +969,7 @@ window.Print = (function () {
       UI.toast(T('이 게임은 아직 종이로 만들 수 없습니다.'));
       return;
     }
-    printHtml(make(o));
+    printHtml(make(o), o.issuer);
   }
 
   /** 만들어진 종이를 인쇄 창에 올리고, 창이 닫힌 뒤에 지운다 */
@@ -978,9 +986,19 @@ window.Print = (function () {
       'font-family:Manrope,"Gothic A1",sans-serif;font-size:13pt;font-weight:800;color:#222;}}}</style>';
   }
 
-  function printHtml(html) {
+  function printHtml(html, issuer) {
     var root = document.getElementById('printRoot');
     root.innerHTML = footStyle() + html;
+
+    var name = (issuer || '').trim();
+    if (name) {
+      root.querySelectorAll('.ps-sheet').forEach(function (sheet) {
+        var label = document.createElement('p');
+        label.className = 'ps-issuer';
+        label.textContent = T('발행 기관 · {name}', { name: name });
+        sheet.insertBefore(label, sheet.firstChild);
+      });
+    }
 
     var cleared = false;
     function cleanup() {
@@ -999,6 +1017,13 @@ window.Print = (function () {
   }
 
   /* ---------------- 설정 창 ---------------- */
+
+  function issuerField() {
+    return '<label class="set set--stack"><span class="set__lbl">' + T('발행 기관명 (선택)') + '</span>' +
+      '<input class="print-issuer" type="text" maxlength="48" autocomplete="off" placeholder="' +
+      esc(T('예: 일산주간보호센터')) + '">' +
+      '<span class="set__hint">' + T('입력한 기관명은 문제지와 정답지 위쪽에 인쇄됩니다.') + '</span></label>';
+  }
 
   function seg(id, items, current) {
     return '<div class="seg" id="' + id + '">' +
@@ -1032,6 +1057,7 @@ window.Print = (function () {
           seg('prCount', [['1', T('1장')], ['2', T('2장')], ['4', T('4장')]], '1') + '</div>' +
         '<div class="set"><span class="set__lbl">' + (cl ? T('완성 견본') : T('정답지')) + '</span>' +
           seg('prAns', [['no', T('없이')], ['yes', T('함께')]], 'no') + '</div>' +
+        issuerField() +
       '</div>' +
       (cl
         ? ('<p class="modal__msg small">' + T('“완성 견본”을 함께로 두면 도안 다음 장에 다 칠한 모습이 색으로 인쇄됩니다.') + ' ') +
@@ -1044,7 +1070,10 @@ window.Print = (function () {
       body: body,
       actions: [
         { label: T('취소') },
-        { label: T('만들기'), kind: 'accent', onClick: function () { run(game, pick); } }
+        { label: T('만들기'), kind: 'accent', onClick: function () {
+          pick.issuer = m.card.querySelector('.print-issuer').value;
+          run(game, pick);
+        } }
       ]
     });
 

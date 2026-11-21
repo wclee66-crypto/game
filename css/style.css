@@ -1419,13 +1419,13 @@ html[data-fs="xl"] .cl-num { font-size: 4.6px; }
 .sg-field:first-child { margin-top: 0; }
 .sg-lbl { display: block; font-size: .84rem; font-weight: 800; margin-bottom: .35rem; }
 .sg-lbl em { font-style: normal; font-weight: 600; color: var(--ink-3); }
-.sg-text, .sg-mail {
+.sg-text, .sg-mail, .print-issuer {
   width: 100%; border: 1px solid var(--line); border-radius: var(--r-sm);
   background: var(--surf); color: var(--ink);
   font-family: inherit; font-size: 1rem; line-height: 1.6; padding: .7rem .8rem;
 }
 .sg-text { height: 8rem; resize: vertical; }
-.sg-text:focus, .sg-mail:focus { outline: none; border-color: var(--accent); background: var(--bg); }
+.sg-text:focus, .sg-mail:focus, .print-issuer:focus { outline: none; border-color: var(--accent); background: var(--bg); }
 .sg-note { margin: .8rem 0 0; font-size: .74rem; color: var(--ink-3); line-height: 1.6; }
 .sg-bad { margin: .5rem 0 0; font-size: .78rem; font-weight: 700; color: var(--bad); }
 
@@ -1661,6 +1661,11 @@ html[data-mode="play"] .ytban { --yb-1: #2E47C9; --yb-2: #16225E; --yb-ink: #101
   .ps-sheet { page-break-after: always; break-after: page; text-align: center; }
   .ps-sheet:last-child { page-break-after: auto; break-after: auto; }
 
+  .ps-issuer {
+    margin: 0 0 2mm; text-align: right; font-size: 11pt; font-weight: 700;
+    line-height: 1.3; overflow-wrap: anywhere;
+  }
+
   .ps-head {
     display: flex; align-items: flex-end; justify-content: space-between;
     border-bottom: 2px solid #000; padding-bottom: 3mm; margin-bottom: 4mm;
@@ -1718,15 +1723,42 @@ html[data-mode="play"] .ytban { --yb-1: #2E47C9; --yb-2: #16225E; --yb-ink: #101
   }
   .pm-a { color: #000; }
 
-  /* 10문제가 A4 한 장을 꽉 채우도록 줄 높이와 글씨를 크게 잡았다 (한 줄 약 23mm) */
+  .ps-math--calc li {
+    display: grid; grid-template-columns: 7mm 17mm 5mm 17mm 5mm 17mm;
+    gap: 0 2.5mm; text-align: center; font-variant-numeric: tabular-nums;
+  }
+  /* 세 수를 계산하는 식도 등호와 결과는 같은 열에 둔다. */
+  .ps-math--chain li {
+    grid-template-columns: 7mm 14mm 4mm 14mm 4mm 14mm 4mm 14mm;
+    gap: 0 1.5mm;
+  }
+  .ps-math--calc li::before { text-align: right; }
+  .ps-math--calc .pm-box { width: 100%; min-width: 0; }
+  .ps-math--calc .pm-equals { grid-column: -3; }
+  .ps-math--calc .pm-result { grid-column: -2; }
+
+  /* 규칙 찾기는 여섯 수와 빈칸도 두 열의 폭 안에 들어가게 한다. */
+  .ps-nr li {
+    display: grid; grid-template-columns: 7mm repeat(var(--nr-cells), minmax(0, 1fr));
+    gap: 0 1.5mm; font-size: 15pt; font-variant-numeric: tabular-nums;
+  }
+  .ps-nr li::before { text-align: right; }
+  .pnr-cell { position: relative; text-align: center; }
+  .pnr-cell:not(:last-child)::after {
+    content: ","; position: absolute; inset-inline-start: 100%; bottom: 0;
+    font-size: 10pt;
+  }
+  .pnr-cell .pm-box { width: 100%; min-width: 0; }
+
+  /* 기관명이 들어가도 열 문제가 한 장에 들어갈 만큼 위아래 여백을 둔다. */
   .ps-wo { border-collapse: collapse; width: 100%; margin: 0 auto; }
   .ps-wo td {
-    border: 0.7pt solid #000; padding: 4.5mm 2mm;
+    border: 0.7pt solid #000; padding: 3.5mm 2mm;
     text-align: center; vertical-align: middle;
   }
   .ps-wo td.pw-q { width: 40%; font-size: 26pt; font-weight: 800; letter-spacing: .06em; }
   .ps-wo td.pw-arrow { width: 12%; font-size: 15pt; letter-spacing: .1em; }
-  .ps-wo td.pw-a { width: 48%; }
+  .ps-wo td.pw-a { width: 48%; text-align: left; padding-inline-start: 3mm; }
   .pw-box {
     display: inline-block; width: 14mm; height: 14mm; margin: 0 1.2mm;
     border: 0.7pt solid #888; border-radius: 1.5mm;
@@ -1817,20 +1849,18 @@ html[data-mode="play"] .ytban { --yb-1: #2E47C9; --yb-2: #16225E; --yb-ink: #101
     display: grid; place-items: center;
     border: 1pt solid #000; border-radius: 2mm; padding: 3mm 2.5mm;
   }
-  .ps-mc .mc-board { width: 42mm; }
   /* 7칸짜리는 두 칸으로 놓아 크게 — 작으면 어르신이 못 보신다 */
   .ps-mcwrap--big { grid-template-columns: repeat(2, 1fr); gap: 4mm; }
-  /* 아래 .ps-mc .mc-board { width: 100% } 보다 앞서야 해서 한 단계 더 좁혀 적는다
-     (예전에는 이 줄이 져서 판이 칸을 꽉 채워 커지고, 한 장이 두 장으로 넘쳤다) */
-  .ps-mcwrap--big .ps-mc .mc-board { width: 50mm; }
+  .ps-mcwrap--big .ps-mc .mc-board { width: min(100%, 50mm); }
   .ps-mcwrap--big .mc-num, .ps-mcwrap--big .mc-sym { font-size: 12pt; }
   .ps-mc .mc-board {
-    display: grid; grid-template-columns: repeat(var(--c), 1fr);
-    gap: 1mm; width: 100%;
+    display: grid; grid-template-columns: repeat(var(--c), minmax(0, 1fr));
+    grid-template-rows: repeat(var(--c), minmax(0, 1fr));
+    gap: 1mm; width: min(100%, 42mm); aspect-ratio: 1;
   }
   .ps-mc .mc-gap { display: block; aspect-ratio: 1; }
   .ps-mc .mc-num, .ps-mc .mc-sym {
-    display: grid; place-items: center; aspect-ratio: 1;
+    display: grid; place-items: center; min-width: 0; min-height: 0;
     border: 0.9pt solid #000; border-radius: 1.2mm;
     font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 12pt;
     font-style: normal; line-height: 1; color: #000; background: #fff;
@@ -1863,7 +1893,7 @@ html[data-mode="play"] .ytban { --yb-1: #2E47C9; --yb-2: #16225E; --yb-ink: #101
     gap: 4mm; margin-top: 3mm;
   }
   .ps-scitem { border: 1pt solid #000; border-radius: 2mm; padding: 2.5mm 2.5mm 1.5mm; }
-  .ps-scsvg { display: block; width: 100%; height: auto; color: #000; }
+  .ps-scsvg { display: block; width: 100%; max-width: 77mm; height: auto; margin: 0 auto; color: #000; }
   .ps-scq { margin: 1.5mm 0 0; font-size: 10.5pt; font-weight: 700; text-align: center; }
   .ps-scbox {
     display: inline-block; min-width: 11mm; min-height: 6.5mm; vertical-align: middle;
