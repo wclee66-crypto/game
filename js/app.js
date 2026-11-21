@@ -284,25 +284,30 @@ window.App = (function () {
 
   function renderDoor() {
     var door = function (m, who, name, desc, go) {
-      return '<button class="doorcard doorcard--' + m + '" data-mode="' + m + '">' +
-        '<span class="doorcard__art">' + DOOR_ART[m] + '</span>' +
+      var text = '<span class="doorcard__text">' +
         '<span class="doorcard__who">' + who + '</span>' +
         '<span class="doorcard__name">' + name + '</span>' +
         '<span class="doorcard__desc">' + desc + '</span>' +
-        '<span class="doorcard__go">' + go + ' →</span>' +
+      '</span>';
+      var art = '<span class="doorcard__art">' + DOOR_ART[m] + '</span>';
+      /* 두뇌 게임은 그림과 글을 한 줄에 묶어, 좁은 화면에서도 단추가 아래로 내려가게 한다 */
+      var inner = m === 'play' ? '<span class="doorcard__main">' + art + text + '</span>' : art + text;
+      return '<button class="doorcard doorcard--' + m + '" data-mode="' + m + '">' +
+        inner + '<span class="doorcard__go">' + go + ' →</span>' +
       '</button>';
     };
+    /* 이 홈페이지의 본래 목적은 인지 훈련이므로 위에 크게, 두뇌 게임은 아래에 작게 둔다 */
     view.innerHTML =
       '<section class="door">' +
         '<h2 class="door__h">' + T('어떤 두뇌 훈련을 찾으세요?') + '</h2>' +
         '<p class="door__lead">' + T('게임은 모두 무료이고, 가입하지 않아도 됩니다.') + '</p>' +
         '<div class="door__list">' +
-          door('play', T('누구나'), T('두뇌 게임'),
-            T('스도쿠·계산 퍼즐·미로 같은 퍼즐을 매일 10분씩. 날마다 바뀌는 오늘의 도전이 기다립니다.'),
-            T('두뇌 게임 하기')) +
           door('care', T('어르신 · 보호자 · 요양 기관'), T('인지 훈련'),
             T('큰 글씨와 쉬운 단계로 천천히. 치매 예방을 돕는 놀이와 무료 인쇄 문제지가 있습니다.'),
             T('인지 훈련 하기')) +
+          door('play', T('누구나'), T('두뇌 게임'),
+            T('스도쿠·계산 퍼즐·미로 같은 퍼즐을 매일 10분씩. 날마다 바뀌는 오늘의 도전이 기다립니다.'),
+            T('두뇌 게임 하기')) +
         '</div>' +
         '<p class="door__foot">' + T('나중에 설정(⚙)에서 언제든 바꾸실 수 있습니다. 점수 기록은 함께 쓰입니다.') + '</p>' +
       '</section>';
