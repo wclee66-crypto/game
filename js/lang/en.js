@@ -1339,6 +1339,15 @@ window.I18N.dict.en = {
   '유튜브 · 전문의 인터뷰와 건강강좌': 'YouTube · Specialist interviews and health talks',
   '관련 글 읽기': 'Read articles',
   '인지 건강에 관한 글을 읽어보세요': 'Find articles about cognitive health',
+  '인지 건강 영상': 'Cognitive health videos',
+  '인지 건강 글': 'Cognitive health articles',
+  '인지 훈련 홈': 'Brain training home',
+  '자료 화면 이동': 'Resource navigation',
+  '영상을 누르면 유튜브가 새 탭에서 열립니다.': 'Videos open on YouTube in a new tab.',
+  '글을 누르면 제공 기관의 원문이 새 탭에서 열립니다.': 'Articles open on the source website in a new tab.',
+  '재생 시간 {time}': 'Duration {time}',
+  '유튜브에서 보기': 'Watch on YouTube',
+  '원문 읽기': 'Read at source',
 
   '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="지우개">':
     '<button class="cl-color cl-color--eraser" data-c="-1" aria-label="Eraser">'

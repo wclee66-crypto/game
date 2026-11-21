@@ -42,36 +42,42 @@
     ['가족과 돌봄', '치매환자의 가족을 위한 정보', '치매 진단 이후 돌봄 정보를 찾아볼 수 있는 보호자용 안내입니다.', '질병관리청 국가건강정보포털', 'https://health.kdca.go.kr/healthinfo/biz/health/gnrlzHealthInfo/gnrlzHealthInfo/gnrlzHealthInfoView.do?cntnts_sn=6858'],
     ['상담 안내', '치매상담콜센터 1899-9988', '치매와 가족 돌봄을 상담할 수 있습니다. 운영 시간은 안내 페이지에서 확인하실 수 있습니다.', '중앙치매센터', 'https://www.nid.or.kr/support/callcenter.aspx']
   ];
-  var home = '/?mode=care#home';
-  function route(kind) { return '?kind=' + kind; }
+  var search = new URLSearchParams(location.search);
+  var locale = search.get('locale');
+  var localized = locale === 'en' || locale === 'ja';
+  I18N.set(localized ? locale : 'ko');
+  var home = localized ? '/?mode=care&amp;lang=' + locale + '#home' : '/?mode=care#home';
+  function route(kind) { return '?kind=' + kind + (localized ? '&amp;locale=' + locale : ''); }
   function icon(kind) {
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + paths[kind] + '</svg>';
   }
   var catalog = document.getElementById('health-catalog');
   if (catalog) {
-    var video = new URLSearchParams(location.search).get('kind') !== 'article';
-    var title = video ? '인지 건강 영상' : '인지 건강 글';
-    document.title = title + ' · 새록';
-    catalog.innerHTML = '<nav class="health-nav" aria-label="자료 화면 이동"><a href="' + home +
-      '">← 인지 훈련 홈</a><a href="' + route(video ? 'article' : 'video') + '">' +
-      (video ? '관련 글 읽기' : '관련 영상 보기') + '</a></nav><h1>' + title +
-      '</h1><p class="health-sample">' + (video ? '영상을 누르면 유튜브가 새 탭에서 열립니다.' : '글을 누르면 제공 기관의 원문이 새 탭에서 열립니다.') + '</p>' +
-      '<ul class="' + (video ? 'health-videos' : 'health-articles') + '">' + (video ? videos : articles).map(function (item) {
+    var video = search.get('kind') !== 'article';
+    var title = video ? T('인지 건강 영상') : T('인지 건강 글');
+    var items = localized ? HealthCatalogLocales[locale][video ? 'videos' : 'articles'] : (video ? videos : articles);
+    document.title = title + ' · ' + T('새록');
+    document.getElementById('health-brand').textContent = T('새록');
+    catalog.innerHTML = '<nav class="health-nav" aria-label="' + T('자료 화면 이동') + '"><a href="' + home +
+      '">← ' + T('인지 훈련 홈') + '</a><a href="' + route(video ? 'article' : 'video') + '">' +
+      (video ? T('관련 글 읽기') : T('관련 영상 보기')) + '</a></nav><h1>' + title +
+      '</h1><p class="health-sample">' + (video ? T('영상을 누르면 유튜브가 새 탭에서 열립니다.') : T('글을 누르면 제공 기관의 원문이 새 탭에서 열립니다.')) + '</p>' +
+      '<ul class="' + (video ? 'health-videos' : 'health-articles') + '">' + items.map(function (item) {
         if (video) {
           return '<li class="health-video"><a class="health-resource" target="_blank" rel="noopener noreferrer" ' +
             'href="https://www.youtube.com/watch?v=' + item[3] + '">' +
             '<div class="health-cover" style="background-image:url(https://i.ytimg.com/vi/' + item[3] + '/hqdefault.jpg)">' +
             '<span class="health-youtube" aria-hidden="true"></span>' +
-            (item[4] ? '<span class="health-duration" aria-label="재생 시간 ' + item[4] + '">' + item[4] + '</span>' : '') + '</div>' +
+            (item[4] ? '<span class="health-duration" aria-label="' + T('재생 시간 {time}', { time: item[4] }) + '">' + item[4] + '</span>' : '') + '</div>' +
             '<div class="health-video-copy"><span class="health-topic">' + item[0] + '</span><h2>' + item[1] +
             '</h2><p>' + item[2] + '</p>' + (item[5] ? '<p>' + item[5] + '</p>' : '') +
-            '<span class="health-action">유튜브에서 보기 ↗</span></div></a></li>';
+            '<span class="health-action">' + T('유튜브에서 보기') + ' ↗</span></div></a></li>';
         }
         return '<li class="health-article"><a class="health-resource" target="_blank" rel="noopener noreferrer" href="' +
           item[4].replace(/&/g, '&amp;') + '"><span class="health-icon">' + icon('article') +
           '</span><div><span class="health-topic">' + item[0] + '</span><h2>' + item[1] +
           '</h2><p>' + item[2] + '</p><small>' + item[3] +
-          '</small><span class="health-action">원문 읽기 ↗</span></div></a></li>';
+          '</small><span class="health-action">' + T('원문 읽기') + ' ↗</span></div></a></li>';
       }).join('') + '</ul>';
   }
 })();

@@ -114,6 +114,8 @@
 }
 .health-video-copy { padding: .8rem; }
 .health-page h2 { font-size: 1.05rem; line-height: 1.45; margin: 0; word-break: keep-all; overflow-wrap: anywhere; }
+:lang(ja) .health-page h2 { word-break: normal; line-break: strict; line-height: 1.55; }
+:lang(ja) .health-catalog { font-family: "Yu Gothic", "Hiragino Sans", Meiryo, sans-serif; }
 .health-video-copy p, .health-article p { margin: .35rem 0 0; color: var(--ink-2); line-height: 1.55; }
 .health-article .health-resource { display: flex; gap: .8rem; padding: 1rem; }
 .health-article .health-icon { flex: none; }
