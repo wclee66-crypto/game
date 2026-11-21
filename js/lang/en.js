@@ -415,6 +415,7 @@ window.I18N.dict.en = {
   '이어서 하기': 'Continue',
   '종이로 풀 문제 만들기': 'Make a paper worksheet',
   'A4 인쇄 · PDF 저장': 'A4 print · save as PDF',
+  '매번 새 문제가 나옵니다.': 'New puzzles every time.',
   '점수 규칙 보기': 'See the scoring rules',
   '시간': 'Time',
   '실수': 'Mistakes',

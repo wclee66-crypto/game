@@ -182,6 +182,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .printcard svg { color: var(--accent-d); }
 .printcard__name { font-weight: 800; font-size: 1.06rem; letter-spacing: -.03em; color: var(--accent-d); word-break: keep-all; }
 .printcard__sub { font-size: .68rem; font-weight: 700; color: var(--ink-3); }
+.printcard__note { font-size: .76rem; font-weight: 700; line-height: 1.4; color: var(--accent-d); }
 /* 좁은 화면에서는 배지가 날짜 아랫줄로 통째로 내려간다 — 글자가 꺾이지 않게 */
 .today__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .3rem .5rem; }
 .today__date { font-size: .78rem; color: var(--ink-2); font-weight: 600; white-space: nowrap; }

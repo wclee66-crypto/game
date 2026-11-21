@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v105';
+  var APP_VERSION = 'v106';
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -524,6 +524,7 @@ window.App = (function () {
             '</svg>' +
             '<span class="printcard__name">' + T('문제 인쇄') + '</span>' +
             '<span class="printcard__sub">' + T('A4 인쇄 · PDF 저장') + '</span>' +
+            '<span class="printcard__note">' + T('매번 새 문제가 나옵니다.') + '</span>' +
           '</button>' +
         '</div>' +
 
