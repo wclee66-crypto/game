@@ -403,6 +403,8 @@ window.Games.cardmatch = (function () {
     hasProgress: function () { return !!Store.getSession('cardmatch'); },
     levels: LEVELS,
     levelOrder: ORDER,
+    pictureIds: IDS.slice(),
+    pictureSvg: iconSvg,
     /** 인쇄용 — 오려서 쓰는 카드 한 벌. 요양 기관에서 탁자 위에 펼쳐 놓고 함께 한다 */
     makeForPrint: function (level) {
       var key = LEVELS[level] ? level : 'easy';

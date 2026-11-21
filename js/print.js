@@ -307,9 +307,11 @@ window.Print = (function () {
   /** 종이로 뽑을 수 있는 게임 목록 (지금 고른 말로 할 수 있는 것만) */
   function printable() {
     var out = [];
+    var mode = Store.settings().mode === 'play' ? 'play' : 'care';
     Object.keys(window.Games).forEach(function (id) {
       var G = window.Games[id];
       if (!G.makeForPrint || !SHEETS[id]) return;
+      if (G.modes && G.modes.indexOf(mode) < 0) return;
       var L = G.langs;
       if (L && L.indexOf(I18N.get()) < 0) return;      /* 그 말로 못 하는 게임은 뺀다 */
       out.push(id);
@@ -932,6 +934,27 @@ window.Print = (function () {
     return pages.join('');
   }
 
+  function changedPictureSheets(o) {
+    var G = Games.changedpicplay, pages = [];
+    function grid(pictures, cols, changes) {
+      return '<div class="ps-change-grid" style="--cols:' + cols + '">' + pictures.map(function (picture, i) {
+        var marked = changes.indexOf(i) >= 0;
+        return '<div class="ps-change-cell' + (marked ? ' is-changed' : '') + '">' + Games.cardmatch.pictureSvg(picture) + '</div>';
+      }).join('') + '</div>';
+    }
+    for (var i = 0; i < o.count; i++) {
+      var b = G.makeForPrint(o.level);
+      pages.push('<section class="ps-sheet">' + sheetHead(G.name, b.levelName,
+        T('두 그림판을 비교해서 바뀐 자리 {n}곳에 동그라미를 그려 보세요.', { n: b.changes.length })) +
+        '<p class="ps-change-label">' + T('처음 그림판') + '</p>' + grid(b.before, b.cols, []) +
+        '<p class="ps-change-label">' + T('나중 그림판') + '</p>' + grid(b.after, b.cols, []) + '</section>');
+      if (o.answer) pages.push('<section class="ps-sheet ps-sheet--ans">' +
+        sheetHead(T('바뀐 그림 찾기 정답'), b.levelName, T('굵은 테두리로 표시한 곳이 바뀐 자리입니다.')) +
+        grid(b.after, b.cols, b.changes) + '</section>');
+    }
+    return pages.join('');
+  }
+
   var SHEETS = {
     sudoku: sudokuSheets,
     wordsearch: wordsearchSheets,
@@ -951,6 +974,7 @@ window.Print = (function () {
     numrule: numruleSheets,
     numpath: numpathSheets,
     cardmatch: cardmatchSheets,
+    changedpicplay: changedPictureSheets,
     nonogram: nonogramSheets,
     queens: queensSheets,
     altlink: altlinkSheets

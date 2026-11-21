@@ -1,7 +1,7 @@
 /* 새록 — 화면 전환과 홈·기록 화면 */
 window.App = (function () {
 
-  var APP_VERSION = 'v113';
+  var APP_VERSION = 'v114';
 
   /* 게임 목록은 index.html 에서 불러온 순서 그대로 저절로 만들어진다.
    * 새 게임을 넣을 때 여기에 이름을 적을 필요가 없다 —
@@ -35,13 +35,17 @@ window.App = (function () {
      (그림자 맞추기는 2026-11-01 사용자가 '인지활동 수준'이라 하여 더 뺐다) */
   var PLAY_HIDE = ['clock', 'copyfig', 'dot2dot', 'shadow', 'changedpic', 'cupball', 'coloring'];
   /* 퍼즐 맛이 진한 것부터 — 처음 온 사람이 '제대로 된 두뇌 게임'이라 느끼게 */
-  var PLAY_ORDER = ['sudoku', 'nonogram', 'queens', 'cardmatch', 'mathcross', 'numpath', 'numrule', 'wordsearch', 'maze', 'spot',
+  var PLAY_ORDER = ['sudoku', 'nonogram', 'queens', 'cardmatch', 'changedpicplay', 'mathcross', 'numpath', 'numrule', 'wordsearch', 'maze', 'spot',
                     'numpair', 'math', 'wordorder', 'quiz', 'shapecount', 'numsearch', 'altlink', 'listen'];
 
   function relist() {
     var code = I18N.get();
-    GAMES = ALL_GAMES.filter(function (g) { return playableIn(g, code); });
-    if (mode() === 'play') {
+    var entry = mode();
+    GAMES = ALL_GAMES.filter(function (g) {
+      var game = Games[g];
+      return (!game.modes || game.modes.indexOf(entry) >= 0) && playableIn(g, code);
+    });
+    if (entry === 'play') {
       var at = function (g) { var i = PLAY_ORDER.indexOf(g); return i < 0 ? 99 : i; };
       GAMES = GAMES.filter(function (g) { return PLAY_HIDE.indexOf(g) < 0; })
         .map(function (g, i) { return { g: g, i: i }; })

@@ -78,7 +78,7 @@ function loadGames(lang) {
   run('js/data/pictures.js');
   run('js/data/listen-data.js');
 
-  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig', 'dot2dot', 'shapecount', 'clock', 'listen', 'numsearch', 'shadow', 'numpair', 'numrule', 'numpath', 'cardmatch', 'nonogram', 'queens', 'altlink'].forEach(function (id) {
+  ['sudoku', 'wordsearch', 'math', 'wordorder', 'quiz', 'coloring', 'spot', 'maze', 'mathcross', 'copyfig', 'dot2dot', 'shapecount', 'clock', 'listen', 'numsearch', 'shadow', 'numpair', 'numrule', 'numpath', 'cardmatch', 'nonogram', 'queens', 'altlink', 'changedpicplay'].forEach(function (id) {
     run('js/games/' + id + '.js');
   });
 
@@ -90,6 +90,7 @@ function loadGames(lang) {
       id: id, name: G.name, tagline: G.tagline || '',
       rules: G.rules, levels: G.levels, order: G.levelOrder || [],
       canPrint: !!G.makeForPrint,
+      modes: G.modes || null,
       langs: G.langs || null                                  /* 어느 말에서 되는 게임인가 */
     });
   });
@@ -433,13 +434,17 @@ function shotAlt(name, lang) {
 }
 
 /** 그림이 있으면 페이지에 붙일 조각을 돌려준다 */
-function shotFigure(id, name, lang, C) {
+function shotFigure(id, name, lang, C, aboveFold) {
   var sh = shot(id, lang);
   if (!sh) return '';
+  var caption = aboveFold ? (lang === 'ja' ? 'プリントの見本（画像を選ぶと拡大）' : 'Select the sample to enlarge it') : C.shotCap;
+  var image = '/images/' + sh.f;
   return '<figure class="doc__shot">\n' +
-    '  <img src="/images/' + sh.f + '" width="' + sh.w + '" height="' + sh.h + '" loading="lazy" ' +
-      'alt="' + esc(shotAlt(name, lang)) + '">\n' +
-    '  <figcaption>' + esc(C.shotCap) + '</figcaption>\n' +
+    '  ' + (aboveFold ? '<a href="' + image + '">' : '') +
+    '<img src="' + image + '" width="' + sh.w + '" height="' + sh.h + '" ' +
+      (aboveFold ? 'fetchpriority="high" ' : 'loading="lazy" ') +
+      'alt="' + esc(shotAlt(name, lang)) + '">' + (aboveFold ? '</a>' : '') + '\n' +
+    '  <figcaption>' + esc(caption) + '</figcaption>\n' +
     '</figure>\n';
 }
 
@@ -586,6 +591,16 @@ function pdfBlock(lang, C, list) {
     '<p class="doc__note">' + esc(C.pdfFresh) + '</p>\n';
 }
 
+/* 핀 등에서 문제지 하나로 바로 들어오면, 견본과 PDF를 첫 화면에서 함께 본다. */
+function worksheetLanding(g, lang, C) {
+  if (lang === 'ko' || !g.canPrint || !shot(g.id, lang)) return '';
+  var downloads = pdfBlock(lang, C, [g]);
+  if (!downloads) return '';
+  return '<section class="doc__worksheet" aria-labelledby="download">\n' +
+    '<div class="doc__worksheet-preview">' + shotFigure(g.id, g.name, lang, C, true) + '</div>\n' +
+    '<div class="doc__worksheet-downloads">' + downloads + '</div>\n</section>\n';
+}
+
 /* ================= 게임 한 장 ================= */
 
 function gamePage(g, lang, C, games) {
@@ -594,7 +609,8 @@ function gamePage(g, lang, C, games) {
   /* 이 게임이 되는 말들끼리만 서로 가리킨다 */
   var avail = ALL_LANGS.filter(function (l) { return playable(g, l); });
   var alts = altsOf(g.id, lang, avail);
-  var appUrl = '/' + LX[lang].qs + '#' + g.id;
+  var playOnly = g.modes && g.modes.indexOf('care') < 0;
+  var appUrl = playOnly ? playHref(lang, g.id) : '/' + LX[lang].qs + '#' + g.id;
 
   var lv = g.order.map(function (k) {
     var L = g.levels[k];
@@ -606,20 +622,23 @@ function gamePage(g, lang, C, games) {
     return '<tr><th>' + esc(l[0]) + '</th><td>' + esc(l[1]) + '</td></tr>';
   }).join('');
 
+  var landing = worksheetLanding(g, lang, C);
+  var worksheetName = lang === 'ja' ? g.name + 'の無料プリント' : 'Free ' + g.name + ' Worksheets';
   var body =
     header(C, lang, alts) +
     '<main class="doc__main">\n' +
-    '<h1>' + esc(g.name) + '</h1>\n' +
+    '<h1>' + esc(landing ? worksheetName : g.name) + '</h1>\n' +
     '<p class="doc__lead">' + esc(g.tagline) + '</p>\n' +
+    landing +
     '<p class="doc__cta"><a class="doc__btn" href="' + appUrl + '">' + C.play + '</a>' +
-      (g.canPrint ? '<a class="doc__btn doc__btn--ghost" href="' + base + '/print/">' + C.printPage + '</a>' : '') +
+      (g.canPrint && !playOnly ? '<a class="doc__btn doc__btn--ghost" href="' + base + '/print/">' + C.printPage + '</a>' : '') +
     '</p>\n' +
-    '<p>' + esc(C.gameIntro(g)) + '</p>\n' +
-    shotFigure(g.id, g.name, lang, C) +
-    (g.canPrint ? pdfBlock(lang, C, [g]) : '') +
+    (playOnly ? '' : '<p>' + esc(C.gameIntro(g)) + '</p>\n') +
+    (landing ? '' : shotFigure(g.id, g.name, lang, C)) +
+    (g.canPrint && !landing ? pdfBlock(lang, C, [g]) : '') +
     (lv ? '<h2>' + C.levels + '</h2>\n<ul class="doc__lv">' + lv + '</ul>\n' : '') +
     (rules ? '<h2>' + C.scoring + '</h2>\n<table class="doc__tbl"><tbody>' + rules + '</tbody></table>\n' : '') +
-    '<p class="doc__note">' + esc(C.story) + '</p>\n' +
+    (playOnly ? '' : '<p class="doc__note">' + esc(C.story) + '</p>\n') +
     '</main>\n' +
     footer(C, lang, games, g.id);
 
@@ -628,8 +647,8 @@ function gamePage(g, lang, C, games) {
     html: page({
       lang: lang, url: url,
       alts: avail.map(function (l) { return { lang: l, href: SITE + LX[l].base + '/' + g.id + '/' }; }),
-      title: C.gameTitle(g),
-      desc: C.gameDesc(g),
+      title: playOnly ? g.name + ' · ' + C.brand : C.gameTitle(g),
+      desc: playOnly ? g.tagline : C.gameDesc(g),
       siteName: C.siteName,
       image: shot(g.id, lang) && ogName(g.id, lang),        /* 그 게임 카드가 카톡에 나오게 */
       imageAlt: shotAlt(g.name, lang),
@@ -657,19 +676,26 @@ function printPage(lang, C, games) {
     return '<a class="doc__tile" href="' + base + '/' + g.id + '/">' +
       '<img src="/images/' + sh.f + '" width="' + sh.w + '" height="' + sh.h + '" loading="lazy" ' +
         'alt="' + esc(shotAlt(g.name, lang)) + '">' +
-      '<span>' + esc(g.name) + '</span></a>';
+      '<span>' + esc(g.name) + '</span>' +
+      (lang !== 'ko' && g.order.some(function (_, i) { return pdfKb(lang, g.id, i + 1) > 0; })
+        ? '<small>' + (lang === 'en' ? 'Preview and PDFs' : '見本とPDF') + '</small>' : '') + '</a>';
   }).join('');
+  var previews = gallery ? '<h2' + (lang === 'ko' ? '' : ' id="worksheet-gallery"') + '>' + C.shotList +
+    '</h2>\n<div class="doc__tiles">' + gallery + '</div>\n' : '';
+  var firstLink = lang === 'en' ? 'Browse worksheets' : 'プリントを選ぶ';
 
   var body =
     header(C, lang, alts) +
     '<main class="doc__main">\n' +
     '<h1>' + esc(C.printTitle) + '</h1>\n' +
     '<p class="doc__lead">' + esc(C.printLead) + '</p>\n' +
-    '<p class="doc__cta"><a class="doc__btn" href="/' + LX[lang].qs + '">' + C.play + '</a></p>\n' +
+    '<p class="doc__cta">' + (lang !== 'ko' && previews ? '<a class="doc__btn" href="#worksheet-gallery">' + firstLink + '</a>' : '') +
+      '<a class="doc__btn' + (lang !== 'ko' && previews ? ' doc__btn--ghost' : '') + '" href="/' + LX[lang].qs + '">' + C.play + '</a></p>\n' +
+    (lang !== 'ko' ? previews : '') +
     '<p>' + esc(C.printWho) + '</p>\n' +
     packsBlock(lang, C, null, true) +
     pdfBlock(lang, C, games.filter(function (g) { return g.canPrint; })) +
-    (gallery ? '<h2>' + C.shotList + '</h2>\n<div class="doc__tiles">' + gallery + '</div>\n' : '') +
+    (lang === 'ko' ? previews : '') +
     '<h2>' + C.printList + '</h2>\n<ul class="doc__lv">' + list + '</ul>\n' +
     '<h2>' + C.printHow + '</h2>\n<ol class="doc__lv">' + steps + '</ol>\n' +
     '<p>' + esc(C.printNote) + '</p>\n' +
@@ -716,7 +742,7 @@ function brainPage(lang, C, games) {
   var url = SITE + base + '/brain-games/';
   var alts = altsOf('brain-games', lang);
   var at = function (g) { var i = PLAY.order.indexOf(g.id); return i < 0 ? 99 : i; };
-  var list = games.filter(function (g) { return PLAY.hide.indexOf(g.id) < 0; })
+  var list = games.filter(function (g) { return (!g.modes || g.modes.indexOf('play') >= 0) && PLAY.hide.indexOf(g.id) < 0; })
     .sort(function (a, b) { return at(a) - at(b); });
 
   var items = list.map(function (g) {
@@ -947,25 +973,26 @@ ALL_LANGS.forEach(function (lang) {
   var loaded = loadGames(lang);
   var C = COPY[lang];
   var games = loaded.games;
+  var careGames = games.filter(function (g) { return !g.modes || g.modes.indexOf('care') >= 0; });
 
   games.forEach(function (g) {
-    var p = gamePage(g, lang, C, games);
+    var p = gamePage(g, lang, C, careGames);
     write(p.dir, p.html);
     made.push(p.dir + '/');
     var sh = shot(g.id, lang);
     if (sh) shots[p.dir + '/'] = [{ f: sh.f, alt: shotAlt(g.name, lang) }];
   });
-  var pp = printPage(lang, C, games);
+  var pp = printPage(lang, C, careGames);
   write(pp.dir, pp.html);
   made.push(pp.dir + '/');
   var bp = brainPage(lang, C, games);
   write(bp.dir, bp.html);
   made.push(bp.dir + '/');
-  var pv = privacyPage(lang, C, games);
+  var pv = privacyPage(lang, C, careGames);
   write(pv.dir, pv.html);
   made.push(pv.dir + '/');
   ['xmas', 'd30'].forEach(function (kind) {
-    var kp = packPage(lang, C, games, kind);
+    var kp = packPage(lang, C, careGames, kind);
     write(kp.dir, kp.html);
     made.push(kp.dir + '/');
     shots[kp.dir + '/'] = kp.pics.map(function (p) { return { f: p.f, alt: p.alt }; });
