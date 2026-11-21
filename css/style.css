@@ -242,6 +242,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
 /* 하다 만 게임 — 초록 테두리만 */
 .gcard.is-resume { background: var(--bg); border-color: var(--accent-b); }
 
+.gcard:is(:hover, :focus-visible) { border-color: var(--accent-d); }
+.gcard:focus-visible { outline: 2px solid var(--accent-d); outline-offset: 2px; }
+
 .gcard__body { flex: 1; min-width: 0; display: block; }
 /* 좁은 화면·큰 글씨에서 줄이 바뀌어도 낱말 가운데(기억하/기)를 자르지 않는다 */
 .gcard__name {
