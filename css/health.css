@@ -32,13 +32,27 @@
   min-height: 5.2rem;
   background: var(--bg);
   border: 1px solid var(--accent-b);
+  border-bottom: 4px solid color-mix(in srgb, var(--accent-d) 35%, var(--accent-b));
   border-radius: 16px;
   color: var(--accent-d);
   text-decoration: none;
 }
-.health-shortcut--video { background: var(--bg); border-color: var(--line-2); color: var(--ink); }
+.health-shortcut--video {
+  border-color: var(--line-2);
+  border-bottom-color: color-mix(in srgb, var(--ink-2) 33%, var(--line-2));
+  color: var(--ink);
+}
 .health-shortcut:hover, .health-nav a:hover { background: var(--accent-b); }
 .health-shortcut--video:hover { background: var(--surf); }
+.health-shortcut:active {
+  translate: 0 2px;
+  border-bottom-color: var(--accent-b);
+  background: var(--accent-s);
+}
+.health-shortcut--video:active { border-bottom-color: var(--line-2); background: var(--surf-2); }
+@media (prefers-reduced-motion: reduce) {
+  .health-shortcut:active { translate: none; }
+}
 .health-shortcut strong, .health-shortcut small { display: block; }
 .health-shortcut strong { font-size: 1.05rem; line-height: 1.4; }
 .health-shortcut small { margin-top: .25rem; color: var(--ink-2); font-size: .8rem; line-height: 1.5; }
